@@ -8,6 +8,9 @@
 
 #import "SelectSceneViewController.h"
 
+#import "ServerAdapter.h"
+
+
 @interface SelectSceneViewController ()
 
 @end
