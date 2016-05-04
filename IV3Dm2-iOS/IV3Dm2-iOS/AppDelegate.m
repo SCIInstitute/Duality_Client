@@ -12,11 +12,30 @@
 
 @end
 
+
 @implementation AppDelegate
 
+@synthesize window;
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    m_tabBarViewController = [[TabBarViewController alloc] init];
+    
+    // Create window and content view (to hold other views)
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+
+    // Set background color
+    [window setBackgroundColor:[UIColor blackColor]];
+    
+    if ([window respondsToSelector:@selector(setRootViewController:)]) {
+        window.rootViewController = m_tabBarViewController;
+    } else {
+        [window addSubview:m_tabBarViewController.view];
+    }
+    
+    // Add subview to window to reference the tabbarcontroller
+    [window makeKeyAndVisible];
+    
     return YES;
 }
 

@@ -6,11 +6,17 @@
 //  Copyright © 2016 Scientific Computing and Imaging Institute. All rights reserved.
 //
 
+#import "TabBarViewController.h"
+
 #import <UIKit/UIKit.h>
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@interface AppDelegate : NSObject <UIApplicationDelegate>
+{
+    UIWindow * window;
+    TabBarViewController* m_tabBarViewController;
+}
 
-@property (strong, nonatomic) UIWindow *window;
+@property (strong, nonatomic) IBOutlet UIWindow *window;
 
 
 @end

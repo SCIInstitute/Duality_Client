@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FirstViewController : UIViewController
+@interface SelectSceneViewController : UITableViewController
 
+- (id) init;
 
 @end
 

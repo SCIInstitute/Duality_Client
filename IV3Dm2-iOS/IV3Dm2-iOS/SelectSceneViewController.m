@@ -1,22 +1,27 @@
 //
-//  SecondViewController.m
+//  FirstViewController.m
 //  IV3Dm2-iOS
 //
 //  Created by David McCann on 5/4/16.
 //  Copyright © 2016 Scientific Computing and Imaging Institute. All rights reserved.
 //
 
-#import "SecondViewController.h"
+#import "SelectSceneViewController.h"
 
-@interface SecondViewController ()
+@interface SelectSceneViewController ()
 
 @end
 
-@implementation SecondViewController
+@implementation SelectSceneViewController
+
+- (id) init {
+    self = [super initWithStyle:UITableViewStyleGrouped];
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+    self.title = @"Hello World";
 }
 
 - (void)didReceiveMemoryWarning {
