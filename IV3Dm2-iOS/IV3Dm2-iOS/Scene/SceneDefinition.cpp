@@ -7,3 +7,11 @@
 SceneDefinition::SceneDefinition(const std::string& name)
     : m_name(name) {}
 
+SceneDefinition SceneDefinition::fromJson(const JsonCpp::Value& root) {
+    std::string name = root["name"].asString();
+    return SceneDefinition(name);
+}
+
+std::string SceneDefinition::name() const {
+    return m_name;
+}

@@ -12,35 +12,35 @@
 
 @implementation TabBarViewController
 
-- (id)init {
+- (id)initWithSceneDefinitionProvider:(SceneDefinitionProvider*)provider {
     self = [super init];
     if (self) {
-        [self setupUI];
+        m_selectSceneViewController = [[SelectSceneViewController alloc] initWithSceneDefinitionProvider:provider];
+        m_settingsViewController = [[SettingsViewController alloc] init];
+        [self createNavigationControllers];
     }
     return self;
 }
 
-- (void) setupUI {
-    // Create nav-controller for local use
-    UINavigationController *navController;
-    
-    // New array to contain the view controllers
+- (void) createNavigationControllers {
+    // Array to contain the view controllers
     NSMutableArray *viewControllersArray = [[NSMutableArray alloc] init];
-    UITabBarItem* tabBarItem;
+    UINavigationController* navController;
     
-    m_selectSceneViewController = [[SelectSceneViewController alloc] init];
-    navController = [[UINavigationController alloc] initWithRootViewController:m_selectSceneViewController];
-    tabBarItem =  [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Select Scene", @"Title of the Select Scene tab") image:[UIImage imageNamed:@"data.png"] tag:0];
-    navController.tabBarItem = tabBarItem;
+    navController = [self createNavigationController:m_selectSceneViewController withTitle:@"Select Scene"];
     [viewControllersArray addObject:navController];
 
-    m_settingsViewController = [[SettingsViewController alloc] init];
-    navController = [[UINavigationController alloc] initWithRootViewController:m_settingsViewController];
-    tabBarItem =  [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Settings", @"Title of the Settings tab") image:[UIImage imageNamed:@"data.png"] tag:0];
-    navController.tabBarItem = tabBarItem;
+    navController = [self createNavigationController:m_settingsViewController withTitle:@"Settings"];
     [viewControllersArray addObject:navController];
     
     self.viewControllers = viewControllersArray;
+}
+
+- (UINavigationController*) createNavigationController:(UIViewController*)viewController withTitle:(NSString*)title {
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    UITabBarItem* tabBarItem  = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(title, @"Title of the tab") image:[UIImage imageNamed:@"data.png"] tag:0];
+    navController.tabBarItem = tabBarItem;
+    return navController;
 }
 
 @end

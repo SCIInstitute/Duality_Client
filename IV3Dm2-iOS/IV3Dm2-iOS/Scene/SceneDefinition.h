@@ -6,9 +6,12 @@
 
 #include <string>
 
+#include "jsoncpp/json.h"
+
 class SceneDefinition {
 public:
     SceneDefinition(const std::string& name);
+    static SceneDefinition fromJson(const JsonCpp::Value& root);
     
     std::string name() const;
     

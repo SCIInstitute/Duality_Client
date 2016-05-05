@@ -4,10 +4,13 @@
 
 #import "TabBarViewController.h"
 
+#include "ServerAdapter.h"
+
 @interface AppDelegate : NSObject <UIApplicationDelegate>
 {
     UIWindow * window;
     TabBarViewController* m_tabBarViewController;
+    ServerAdapter* m_serverAdapter;
 }
 
 @property (strong, nonatomic) IBOutlet UIWindow *window;

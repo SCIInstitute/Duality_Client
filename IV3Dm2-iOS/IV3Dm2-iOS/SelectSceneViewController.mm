@@ -4,8 +4,7 @@
 
 #import "SelectSceneViewController.h"
 
-#import "ServerAdapter.h"
-
+#include "SceneDefinitionProvider.h"
 
 @interface SelectSceneViewController ()
 
@@ -13,8 +12,9 @@
 
 @implementation SelectSceneViewController
 
-- (id) init {
+- (id)initWithSceneDefinitionProvider:(SceneDefinitionProvider*)provider {
     self = [super initWithStyle:UITableViewStyleGrouped];
+    m_definitions = provider->fetchDefinitions();
     return self;
 }
 
@@ -25,7 +25,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 50;
+    return m_definitions.size();
 }
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -37,7 +37,8 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
-    cell.textLabel.text = @"All work and no play makes David a dull boy";
+    const SceneDefinition& definition = m_definitions[indexPath.row];
+    cell.textLabel.text = [NSString stringWithUTF8String:definition.name().c_str()];
     
     return cell;
 }

@@ -12,6 +12,13 @@ ServerAdapter::ServerAdapter() {
 }
 
 std::vector<SceneDefinition> ServerAdapter::fetchDefinitions() {
+    m_rpcClient->send("ListScenes", JsonCpp::Value());
+    auto reply = m_rpcClient->receive().first;
+
     std::vector<SceneDefinition> result;
+    for (int i = 0; i < reply.size(); ++i) {
+        result.push_back(SceneDefinition::fromJson(reply[i]));
+    }
+    
     return result;
 }

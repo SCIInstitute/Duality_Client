@@ -4,6 +4,8 @@
 
 #import "AppDelegate.h"
 
+#include "mocca/net/ConnectionFactorySelector.h"
+
 @interface AppDelegate ()
 
 @end
@@ -15,7 +17,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    m_tabBarViewController = [[TabBarViewController alloc] init];
+    mocca::net::ConnectionFactorySelector::addDefaultFactories();
+    
+    m_serverAdapter = new ServerAdapter();
+    m_tabBarViewController = [[TabBarViewController alloc] initWithSceneDefinitionProvider:m_serverAdapter];
     
     // Create window and content view (to hold other views)
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
