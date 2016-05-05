@@ -65,6 +65,9 @@
 		8E6DCEE51CDBBD000091D5AB /* LogManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E6DCEDE1CDBBD000091D5AB /* LogManager.cpp */; };
 		8E6DCEE61CDBBD000091D5AB /* StreamLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E6DCEDF1CDBBD000091D5AB /* StreamLog.cpp */; };
 		8E6DCEE71CDBBD000091D5AB /* TextLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E6DCEE01CDBBD000091D5AB /* TextLog.cpp */; };
+		8E6DCEED1CDBDB2D0091D5AB /* DownloadNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E6DCEEC1CDBDB2D0091D5AB /* DownloadNode.cpp */; };
+		8E6DCEEF1CDBDCA70091D5AB /* GroupNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E6DCEEE1CDBDCA70091D5AB /* GroupNode.cpp */; };
+		8E6DCEF21CDBE0170091D5AB /* SceneDefinitionParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E6DCEF01CDBE0170091D5AB /* SceneDefinitionParser.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -140,6 +143,14 @@
 		8E6DCEDF1CDBBD000091D5AB /* StreamLog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StreamLog.cpp; sourceTree = "<group>"; };
 		8E6DCEE01CDBBD000091D5AB /* TextLog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextLog.cpp; sourceTree = "<group>"; };
 		8E6DCEE81CDBBD610091D5AB /* SceneDefinitionProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SceneDefinitionProvider.h; path = Scene/SceneDefinitionProvider.h; sourceTree = "<group>"; };
+		8E6DCEE91CDBD7B00091D5AB /* SceneNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SceneNode.h; path = Scene/SceneNode.h; sourceTree = "<group>"; };
+		8E6DCEEA1CDBD8760091D5AB /* DownloadNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DownloadNode.h; path = Scene/DownloadNode.h; sourceTree = "<group>"; };
+		8E6DCEEB1CDBD8980091D5AB /* GroupNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GroupNode.h; sourceTree = "<group>"; };
+		8E6DCEEC1CDBDB2D0091D5AB /* DownloadNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DownloadNode.cpp; path = Scene/DownloadNode.cpp; sourceTree = "<group>"; };
+		8E6DCEEE1CDBDCA70091D5AB /* GroupNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GroupNode.cpp; path = Scene/GroupNode.cpp; sourceTree = "<group>"; };
+		8E6DCEF01CDBE0170091D5AB /* SceneDefinitionParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SceneDefinitionParser.cpp; path = Scene/SceneDefinitionParser.cpp; sourceTree = "<group>"; };
+		8E6DCEF11CDBE0170091D5AB /* SceneDefinitionParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SceneDefinitionParser.h; path = Scene/SceneDefinitionParser.h; sourceTree = "<group>"; };
+		8E6DCEF41CDBE2B30091D5AB /* Error.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Error.h; path = Common/Error.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -176,6 +187,7 @@
 		8E2AF9D01CDA762900AC6CEC /* IV3Dm2-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				8E6DCEF31CDBE28D0091D5AB /* Common */,
 				8E6DCED51CDBBC2C0091D5AB /* Communication */,
 				8E6DCED01CDBBAB40091D5AB /* Scene Definition */,
 				8E2AF9D41CDA762900AC6CEC /* AppDelegate.h */,
@@ -369,7 +381,14 @@
 			children = (
 				8E6DCED41CDBBB940091D5AB /* SceneDefinition.h */,
 				8E6DCED21CDBBB670091D5AB /* SceneDefinition.cpp */,
+				8E6DCEF11CDBE0170091D5AB /* SceneDefinitionParser.h */,
+				8E6DCEF01CDBE0170091D5AB /* SceneDefinitionParser.cpp */,
 				8E6DCEE81CDBBD610091D5AB /* SceneDefinitionProvider.h */,
+				8E6DCEE91CDBD7B00091D5AB /* SceneNode.h */,
+				8E6DCEEA1CDBD8760091D5AB /* DownloadNode.h */,
+				8E6DCEEC1CDBDB2D0091D5AB /* DownloadNode.cpp */,
+				8E6DCEEB1CDBD8980091D5AB /* GroupNode.h */,
+				8E6DCEEE1CDBDCA70091D5AB /* GroupNode.cpp */,
 			);
 			name = "Scene Definition";
 			sourceTree = "<group>";
@@ -396,6 +415,14 @@
 			);
 			name = log;
 			path = ../mocca/mocca/src/log;
+			sourceTree = "<group>";
+		};
+		8E6DCEF31CDBE28D0091D5AB /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				8E6DCEF41CDBE2B30091D5AB /* Error.h */,
+			);
+			name = Common;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -485,6 +512,7 @@
 				8E2AF9D61CDA762900AC6CEC /* AppDelegate.mm in Sources */,
 				8E2AF9FD1CDAB4D300AC6CEC /* Filesystem.cpp in Sources */,
 				8E2AFA311CDAB4E100AC6CEC /* Method.cpp in Sources */,
+				8E6DCEEF1CDBDCA70091D5AB /* GroupNode.cpp in Sources */,
 				8E2AFA3C1CDAB4E100AC6CEC /* TCPConnectionFactory.cpp in Sources */,
 				8E2AF9F71CDAB4BD00AC6CEC /* Thread.cpp in Sources */,
 				8E2AFA331CDAB4E100AC6CEC /* RpcClient.cpp in Sources */,
@@ -513,9 +541,11 @@
 				8E2AFA351CDAB4E100AC6CEC /* QueueConnection.cpp in Sources */,
 				8E2AFA221CDAB4E100AC6CEC /* ConnectionFactorySelector.cpp in Sources */,
 				8E6DCEE61CDBBD000091D5AB /* StreamLog.cpp in Sources */,
+				8E6DCEED1CDBDB2D0091D5AB /* DownloadNode.cpp in Sources */,
 				8E2AF9F41CDAB4BD00AC6CEC /* CommandLineParser.cpp in Sources */,
 				8E2AFA251CDAB4E100AC6CEC /* SizePrefixedProtocol.cpp in Sources */,
 				8E2AFA231CDAB4E100AC6CEC /* Endpoint.cpp in Sources */,
+				8E6DCEF21CDBE0170091D5AB /* SceneDefinitionParser.cpp in Sources */,
 				8E2AF9FE1CDAB4D300AC6CEC /* Path.cpp in Sources */,
 				8E2AFA261CDAB4E100AC6CEC /* WebSocketProtocol.cpp in Sources */,
 				8E2AFA3B1CDAB4E100AC6CEC /* TCPConnectionAcceptor.cpp in Sources */,
