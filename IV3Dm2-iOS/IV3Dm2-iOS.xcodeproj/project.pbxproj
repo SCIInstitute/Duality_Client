@@ -53,10 +53,18 @@
 		8E2AFA4F1CDAB4ED00AC6CEC /* jsoncpp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E2AFA481CDAB4ED00AC6CEC /* jsoncpp.cpp */; };
 		8E2AFA501CDAB4ED00AC6CEC /* license.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8E2AFA4A1CDAB4ED00AC6CEC /* license.txt */; };
 		8E2AFA511CDAB4ED00AC6CEC /* sha1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E2AFA4B1CDAB4ED00AC6CEC /* sha1.cpp */; };
-		8E2AFA541CDAB90100AC6CEC /* ServerAdapter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8E2AFA531CDAB90100AC6CEC /* ServerAdapter.mm */; };
 		8E2AFA561CDAC18400AC6CEC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E2AFA551CDAC18400AC6CEC /* Foundation.framework */; };
 		8E2AFA581CDAC18C00AC6CEC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E2AFA571CDAC18C00AC6CEC /* UIKit.framework */; };
 		8E6DCEC91CDB971B0091D5AB /* SettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8E6DCEC81CDB971B0091D5AB /* SettingsViewController.mm */; };
+		8E6DCED31CDBBB670091D5AB /* SceneDefinition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E6DCED21CDBBB670091D5AB /* SceneDefinition.cpp */; };
+		8E6DCED81CDBBCB90091D5AB /* ServerAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E6DCED61CDBBCB90091D5AB /* ServerAdapter.cpp */; };
+		8E6DCEE11CDBBD000091D5AB /* CallbackLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E6DCEDA1CDBBD000091D5AB /* CallbackLog.cpp */; };
+		8E6DCEE21CDBBD000091D5AB /* ConsoleLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E6DCEDB1CDBBD000091D5AB /* ConsoleLog.cpp */; };
+		8E6DCEE31CDBBD000091D5AB /* HTMLLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E6DCEDC1CDBBD000091D5AB /* HTMLLog.cpp */; };
+		8E6DCEE41CDBBD000091D5AB /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E6DCEDD1CDBBD000091D5AB /* Log.cpp */; };
+		8E6DCEE51CDBBD000091D5AB /* LogManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E6DCEDE1CDBBD000091D5AB /* LogManager.cpp */; };
+		8E6DCEE61CDBBD000091D5AB /* StreamLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E6DCEDF1CDBBD000091D5AB /* StreamLog.cpp */; };
+		8E6DCEE71CDBBD000091D5AB /* TextLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E6DCEE01CDBBD000091D5AB /* TextLog.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -116,12 +124,22 @@
 		8E2AFA4A1CDAB4ED00AC6CEC /* license.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = license.txt; sourceTree = "<group>"; };
 		8E2AFA4B1CDAB4ED00AC6CEC /* sha1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sha1.cpp; sourceTree = "<group>"; };
 		8E2AFA4C1CDAB4ED00AC6CEC /* sha1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha1.h; sourceTree = "<group>"; };
-		8E2AFA521CDAB8AD00AC6CEC /* ServerAdapter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ServerAdapter.h; sourceTree = "<group>"; };
-		8E2AFA531CDAB90100AC6CEC /* ServerAdapter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ServerAdapter.mm; sourceTree = "<group>"; };
 		8E2AFA551CDAC18400AC6CEC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		8E2AFA571CDAC18C00AC6CEC /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		8E6DCEC71CDB97080091D5AB /* SettingsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		8E6DCEC81CDB971B0091D5AB /* SettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SettingsViewController.mm; sourceTree = "<group>"; };
+		8E6DCED21CDBBB670091D5AB /* SceneDefinition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SceneDefinition.cpp; path = Scene/SceneDefinition.cpp; sourceTree = "<group>"; };
+		8E6DCED41CDBBB940091D5AB /* SceneDefinition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SceneDefinition.h; path = Scene/SceneDefinition.h; sourceTree = "<group>"; };
+		8E6DCED61CDBBCB90091D5AB /* ServerAdapter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ServerAdapter.cpp; path = Communication/ServerAdapter.cpp; sourceTree = "<group>"; };
+		8E6DCED71CDBBCB90091D5AB /* ServerAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ServerAdapter.h; path = Communication/ServerAdapter.h; sourceTree = "<group>"; };
+		8E6DCEDA1CDBBD000091D5AB /* CallbackLog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CallbackLog.cpp; sourceTree = "<group>"; };
+		8E6DCEDB1CDBBD000091D5AB /* ConsoleLog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConsoleLog.cpp; sourceTree = "<group>"; };
+		8E6DCEDC1CDBBD000091D5AB /* HTMLLog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HTMLLog.cpp; sourceTree = "<group>"; };
+		8E6DCEDD1CDBBD000091D5AB /* Log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Log.cpp; sourceTree = "<group>"; };
+		8E6DCEDE1CDBBD000091D5AB /* LogManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LogManager.cpp; sourceTree = "<group>"; };
+		8E6DCEDF1CDBBD000091D5AB /* StreamLog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StreamLog.cpp; sourceTree = "<group>"; };
+		8E6DCEE01CDBBD000091D5AB /* TextLog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextLog.cpp; sourceTree = "<group>"; };
+		8E6DCEE81CDBBD610091D5AB /* SceneDefinitionProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SceneDefinitionProvider.h; path = Scene/SceneDefinitionProvider.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,11 +158,10 @@
 		8E2AF9C51CDA762900AC6CEC = {
 			isa = PBXGroup;
 			children = (
-				8E2AFA571CDAC18C00AC6CEC /* UIKit.framework */,
-				8E2AFA551CDAC18400AC6CEC /* Foundation.framework */,
-				8E2AF9EE1CDAB4AC00AC6CEC /* mocca */,
 				8E2AF9D01CDA762900AC6CEC /* IV3Dm2-iOS */,
+				8E2AF9EE1CDAB4AC00AC6CEC /* mocca */,
 				8E2AF9CF1CDA762900AC6CEC /* Products */,
+				8E6DCECF1CDBBA320091D5AB /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -159,6 +176,8 @@
 		8E2AF9D01CDA762900AC6CEC /* IV3Dm2-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				8E6DCED51CDBBC2C0091D5AB /* Communication */,
+				8E6DCED01CDBBAB40091D5AB /* Scene Definition */,
 				8E2AF9D41CDA762900AC6CEC /* AppDelegate.h */,
 				8E2AF9D51CDA762900AC6CEC /* AppDelegate.mm */,
 				8E2AF9D71CDA762900AC6CEC /* SelectSceneViewController.h */,
@@ -168,10 +187,7 @@
 				8E2AF9EB1CDAA68100AC6CEC /* TabBarViewController.h */,
 				8E2AF9EC1CDAA7B500AC6CEC /* TabBarViewController.mm */,
 				8E2AF9E21CDA762900AC6CEC /* LaunchScreen.storyboard */,
-				8E2AF9E51CDA762900AC6CEC /* Info.plist */,
 				8E2AF9D11CDA762900AC6CEC /* Supporting Files */,
-				8E2AFA521CDAB8AD00AC6CEC /* ServerAdapter.h */,
-				8E2AFA531CDAB90100AC6CEC /* ServerAdapter.mm */,
 			);
 			path = "IV3Dm2-iOS";
 			sourceTree = "<group>";
@@ -179,6 +195,7 @@
 		8E2AF9D11CDA762900AC6CEC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				8E2AF9E51CDA762900AC6CEC /* Info.plist */,
 				8E2AF9D21CDA762900AC6CEC /* main.mm */,
 			);
 			name = "Supporting Files";
@@ -188,6 +205,7 @@
 			isa = PBXGroup;
 			children = (
 				8E2AF9EF1CDAB4BD00AC6CEC /* base */,
+				8E6DCED91CDBBD000091D5AB /* log */,
 				8E2AF9F81CDAB4D300AC6CEC /* fs */,
 				8E2AF9FF1CDAB4E100AC6CEC /* net */,
 				8E2AFA3E1CDAB4ED00AC6CEC /* thirdparty */,
@@ -337,6 +355,49 @@
 			path = sha1;
 			sourceTree = "<group>";
 		};
+		8E6DCECF1CDBBA320091D5AB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8E2AFA571CDAC18C00AC6CEC /* UIKit.framework */,
+				8E2AFA551CDAC18400AC6CEC /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		8E6DCED01CDBBAB40091D5AB /* Scene Definition */ = {
+			isa = PBXGroup;
+			children = (
+				8E6DCED41CDBBB940091D5AB /* SceneDefinition.h */,
+				8E6DCED21CDBBB670091D5AB /* SceneDefinition.cpp */,
+				8E6DCEE81CDBBD610091D5AB /* SceneDefinitionProvider.h */,
+			);
+			name = "Scene Definition";
+			sourceTree = "<group>";
+		};
+		8E6DCED51CDBBC2C0091D5AB /* Communication */ = {
+			isa = PBXGroup;
+			children = (
+				8E6DCED61CDBBCB90091D5AB /* ServerAdapter.cpp */,
+				8E6DCED71CDBBCB90091D5AB /* ServerAdapter.h */,
+			);
+			name = Communication;
+			sourceTree = "<group>";
+		};
+		8E6DCED91CDBBD000091D5AB /* log */ = {
+			isa = PBXGroup;
+			children = (
+				8E6DCEDA1CDBBD000091D5AB /* CallbackLog.cpp */,
+				8E6DCEDB1CDBBD000091D5AB /* ConsoleLog.cpp */,
+				8E6DCEDC1CDBBD000091D5AB /* HTMLLog.cpp */,
+				8E6DCEDD1CDBBD000091D5AB /* Log.cpp */,
+				8E6DCEDE1CDBBD000091D5AB /* LogManager.cpp */,
+				8E6DCEDF1CDBBD000091D5AB /* StreamLog.cpp */,
+				8E6DCEE01CDBBD000091D5AB /* TextLog.cpp */,
+			);
+			name = log;
+			path = ../mocca/mocca/src/log;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -408,8 +469,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				8E2AFA271CDAB4E100AC6CEC /* FramingConnection.cpp in Sources */,
+				8E6DCEE71CDBBD000091D5AB /* TextLog.cpp in Sources */,
 				8E2AFA291CDAB4E100AC6CEC /* FramingConnectionFactory.cpp in Sources */,
 				8E2AFA341CDAB4E100AC6CEC /* ValueType.cpp in Sources */,
+				8E6DCEE41CDBBD000091D5AB /* Log.cpp in Sources */,
 				8E2AF9FC1CDAB4D300AC6CEC /* File.cpp in Sources */,
 				8E2AFA4D1CDAB4ED00AC6CEC /* AES.cpp in Sources */,
 				8E2AFA301CDAB4E100AC6CEC /* JsonKeys.cpp in Sources */,
@@ -424,27 +487,32 @@
 				8E2AFA311CDAB4E100AC6CEC /* Method.cpp in Sources */,
 				8E2AFA3C1CDAB4E100AC6CEC /* TCPConnectionFactory.cpp in Sources */,
 				8E2AF9F71CDAB4BD00AC6CEC /* Thread.cpp in Sources */,
-				8E2AFA541CDAB90100AC6CEC /* ServerAdapter.mm in Sources */,
 				8E2AFA331CDAB4E100AC6CEC /* RpcClient.cpp in Sources */,
 				8E2AFA4F1CDAB4ED00AC6CEC /* jsoncpp.cpp in Sources */,
+				8E6DCED81CDBBCB90091D5AB /* ServerAdapter.cpp in Sources */,
 				8E2AFA2F1CDAB4E100AC6CEC /* Dispatcher.cpp in Sources */,
 				8E2AFA281CDAB4E100AC6CEC /* FramingConnectionAcceptor.cpp in Sources */,
 				8E2AFA241CDAB4E100AC6CEC /* FramingUtils.cpp in Sources */,
 				8E2AF9F51CDAB4BD00AC6CEC /* Encryption.cpp in Sources */,
 				8E2AFA2C1CDAB4E100AC6CEC /* LoopbackConnectionFactory.cpp in Sources */,
+				8E6DCEE31CDBBD000091D5AB /* HTMLLog.cpp in Sources */,
 				8E2AFA3A1CDAB4E100AC6CEC /* TCPConnection.cpp in Sources */,
 				8E2AFA321CDAB4E100AC6CEC /* MethodDescription.cpp in Sources */,
 				8E2AFA371CDAB4E100AC6CEC /* QueueConnectionFactory.cpp in Sources */,
 				8E2AFA391CDAB4E100AC6CEC /* Sockets.cpp in Sources */,
 				8E2AF9D91CDA762900AC6CEC /* SelectSceneViewController.mm in Sources */,
 				8E2AFA2A1CDAB4E100AC6CEC /* LoopbackConnection.cpp in Sources */,
+				8E6DCEE11CDBBD000091D5AB /* CallbackLog.cpp in Sources */,
 				8E2AFA2E1CDAB4E100AC6CEC /* Message.cpp in Sources */,
 				8E2AFA211CDAB4E100AC6CEC /* ConnectionAggregator.cpp in Sources */,
+				8E6DCEE51CDBBD000091D5AB /* LogManager.cpp in Sources */,
+				8E6DCEE21CDBBD000091D5AB /* ConsoleLog.cpp in Sources */,
 				8E2AF9D31CDA762900AC6CEC /* main.mm in Sources */,
 				8E2AFA2B1CDAB4E100AC6CEC /* LoopbackConnectionAcceptor.cpp in Sources */,
 				8E2AFA2D1CDAB4E100AC6CEC /* LoopbackConnectionSpawner.cpp in Sources */,
 				8E2AFA351CDAB4E100AC6CEC /* QueueConnection.cpp in Sources */,
 				8E2AFA221CDAB4E100AC6CEC /* ConnectionFactorySelector.cpp in Sources */,
+				8E6DCEE61CDBBD000091D5AB /* StreamLog.cpp in Sources */,
 				8E2AF9F41CDAB4BD00AC6CEC /* CommandLineParser.cpp in Sources */,
 				8E2AFA251CDAB4E100AC6CEC /* SizePrefixedProtocol.cpp in Sources */,
 				8E2AFA231CDAB4E100AC6CEC /* Endpoint.cpp in Sources */,
@@ -452,6 +520,7 @@
 				8E2AFA261CDAB4E100AC6CEC /* WebSocketProtocol.cpp in Sources */,
 				8E2AFA3B1CDAB4E100AC6CEC /* TCPConnectionAcceptor.cpp in Sources */,
 				8E2AFA511CDAB4ED00AC6CEC /* sha1.cpp in Sources */,
+				8E6DCED31CDBBB670091D5AB /* SceneDefinition.cpp in Sources */,
 				8E2AFA361CDAB4E100AC6CEC /* QueueConnectionAcceptor.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

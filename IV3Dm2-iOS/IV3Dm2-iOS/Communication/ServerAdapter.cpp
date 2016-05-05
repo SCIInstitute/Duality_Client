@@ -1,7 +1,3 @@
-//
-//  ServerAdapter.m
-//  IV3Dm2-iOS
-//
 //  Created by David McCann on 5/4/16.
 //  Copyright © 2016 Scientific Computing and Imaging Institute. All rights reserved.
 //
@@ -12,5 +8,10 @@
 
 ServerAdapter::ServerAdapter() {
     mocca::net::Endpoint ep("tcp.prefixed", "192.168.1.222", "10123");
-    m_rpcClient = new mocca::net::RpcClient(ep);
+    m_rpcClient = std::make_unique<mocca::net::RpcClient>(ep);
+}
+
+std::vector<SceneDefinition> ServerAdapter::fetchDefinitions() {
+    std::vector<SceneDefinition> result;
+    return result;
 }

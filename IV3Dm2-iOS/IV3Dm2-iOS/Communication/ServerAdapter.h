@@ -1,10 +1,8 @@
-//
-//  ServerAdapter.h
-//  IV3Dm2-iOS
-//
 //  Created by David McCann on 5/4/16.
 //  Copyright © 2016 Scientific Computing and Imaging Institute. All rights reserved.
 //
+
+#include "SceneDefinitionProvider.h"
 
 namespace mocca  {
     namespace net {
@@ -12,10 +10,12 @@ namespace mocca  {
     }
 }
 
-class ServerAdapter {
+class ServerAdapter : public SceneDefinitionProvider {
 public:
     ServerAdapter();
     
+    std::vector<SceneDefinition> fetchDefinitions() override;
+    
 private:
-    mocca::net::RpcClient* m_rpcClient;
+    std::unique_ptr<mocca::net::RpcClient> m_rpcClient;
 };
