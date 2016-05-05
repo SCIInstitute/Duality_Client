@@ -16,8 +16,8 @@ std::vector<SceneDefinition> ServerAdapter::fetchDefinitions() {
     auto reply = m_rpcClient->receive().first;
 
     std::vector<SceneDefinition> result;
-    for (int i = 0; i < reply.size(); ++i) {
-        result.push_back(SceneDefinition::fromJson(reply[i]));
+    for (auto it = reply.begin(); it != reply.end(); ++it) {
+        result.push_back(SceneDefinition::fromJson(*it));
     }
     
     return result;

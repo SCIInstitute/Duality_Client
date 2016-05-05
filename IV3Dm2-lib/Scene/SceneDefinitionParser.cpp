@@ -4,7 +4,7 @@
 
 #include "SceneDefinitionParser.h"
 
-#include "Error.h"
+#include "Common/Error.h"
 #include "DownloadNode.h"
 #include "GroupNode.h"
 

@@ -2,7 +2,7 @@
 //  Copyright © 2016 Scientific Computing and Imaging Institute. All rights reserved.
 //
 
-#include "SceneDefinitionProvider.h"
+#include "Scene/SceneDefinitionProvider.h"
 
 namespace mocca  {
     namespace net {
