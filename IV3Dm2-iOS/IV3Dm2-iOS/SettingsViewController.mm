@@ -2,16 +2,13 @@
 //  Copyright © 2016 Scientific Computing and Imaging Institute. All rights reserved.
 //
 
-#import "SelectSceneViewController.h"
+#import "SettingsViewController.h"
 
-#import "ServerAdapter.h"
-
-
-@interface SelectSceneViewController ()
+@interface SettingsViewController ()
 
 @end
 
-@implementation SelectSceneViewController
+@implementation SettingsViewController
 
 - (id) init {
     self = [super initWithStyle:UITableViewStyleGrouped];
@@ -44,7 +41,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"Select Scene";
+    self.title = @"Settings";
 }
 
 - (void)didReceiveMemoryWarning {

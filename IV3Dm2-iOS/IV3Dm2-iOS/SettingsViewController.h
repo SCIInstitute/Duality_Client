@@ -4,9 +4,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SelectSceneViewController : UITableViewController
+@interface SettingsViewController : UITableViewController
 
 - (id) init;
 
 @end
-

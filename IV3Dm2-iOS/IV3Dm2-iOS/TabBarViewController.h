@@ -7,12 +7,14 @@
 //
 
 #import "SelectSceneViewController.h"
+#import "SettingsViewController.h"
 
 #import <UIKit/UIKit.h>
 
 @interface TabBarViewController : UITabBarController {
 @private
     SelectSceneViewController* m_selectSceneViewController;
+    SettingsViewController* m_settingsViewController;
 }
 
 - (id)init;

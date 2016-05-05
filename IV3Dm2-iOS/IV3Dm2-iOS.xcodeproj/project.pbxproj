@@ -56,6 +56,7 @@
 		8E2AFA541CDAB90100AC6CEC /* ServerAdapter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8E2AFA531CDAB90100AC6CEC /* ServerAdapter.mm */; };
 		8E2AFA561CDAC18400AC6CEC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E2AFA551CDAC18400AC6CEC /* Foundation.framework */; };
 		8E2AFA581CDAC18C00AC6CEC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E2AFA571CDAC18C00AC6CEC /* UIKit.framework */; };
+		8E6DCEC91CDB971B0091D5AB /* SettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8E6DCEC81CDB971B0091D5AB /* SettingsViewController.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -119,6 +120,8 @@
 		8E2AFA531CDAB90100AC6CEC /* ServerAdapter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ServerAdapter.mm; sourceTree = "<group>"; };
 		8E2AFA551CDAC18400AC6CEC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		8E2AFA571CDAC18C00AC6CEC /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		8E6DCEC71CDB97080091D5AB /* SettingsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
+		8E6DCEC81CDB971B0091D5AB /* SettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SettingsViewController.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +163,8 @@
 				8E2AF9D51CDA762900AC6CEC /* AppDelegate.mm */,
 				8E2AF9D71CDA762900AC6CEC /* SelectSceneViewController.h */,
 				8E2AF9D81CDA762900AC6CEC /* SelectSceneViewController.mm */,
+				8E6DCEC71CDB97080091D5AB /* SettingsViewController.h */,
+				8E6DCEC81CDB971B0091D5AB /* SettingsViewController.mm */,
 				8E2AF9EB1CDAA68100AC6CEC /* TabBarViewController.h */,
 				8E2AF9EC1CDAA7B500AC6CEC /* TabBarViewController.mm */,
 				8E2AF9E21CDA762900AC6CEC /* LaunchScreen.storyboard */,
@@ -413,6 +418,7 @@
 				8E2AFA4E1CDAB4ED00AC6CEC /* base64.cpp in Sources */,
 				8E2AF9ED1CDAA7B500AC6CEC /* TabBarViewController.mm in Sources */,
 				8E2AFA381CDAB4E100AC6CEC /* QueueConnectionSpawner.cpp in Sources */,
+				8E6DCEC91CDB971B0091D5AB /* SettingsViewController.mm in Sources */,
 				8E2AF9D61CDA762900AC6CEC /* AppDelegate.mm in Sources */,
 				8E2AF9FD1CDAB4D300AC6CEC /* Filesystem.cpp in Sources */,
 				8E2AFA311CDAB4E100AC6CEC /* Method.cpp in Sources */,

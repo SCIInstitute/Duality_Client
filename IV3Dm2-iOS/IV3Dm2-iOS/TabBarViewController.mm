@@ -30,7 +30,13 @@
     
     m_selectSceneViewController = [[SelectSceneViewController alloc] init];
     navController = [[UINavigationController alloc] initWithRootViewController:m_selectSceneViewController];
-    tabBarItem =  [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Select Scene", @"Title of the Dataset tab") image:[UIImage imageNamed:@"data.png"] tag:0];
+    tabBarItem =  [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Select Scene", @"Title of the Select Scene tab") image:[UIImage imageNamed:@"data.png"] tag:0];
+    navController.tabBarItem = tabBarItem;
+    [viewControllersArray addObject:navController];
+
+    m_settingsViewController = [[SettingsViewController alloc] init];
+    navController = [[UINavigationController alloc] initWithRootViewController:m_settingsViewController];
+    tabBarItem =  [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"Settings", @"Title of the Settings tab") image:[UIImage imageNamed:@"data.png"] tag:0];
     navController.tabBarItem = tabBarItem;
     [viewControllersArray addObject:navController];
     
