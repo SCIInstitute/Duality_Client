@@ -10,7 +10,7 @@ Scene::Scene(SceneMetadata metadata, std::unique_ptr<SceneNode> sceneRoot)
     : m_metadata(std::move(metadata))
     , m_sceneRoot(std::move(sceneRoot)) {}
 
-Scene Scene::fromJson(const JsonCpp::Value& root) {
+std::unique_ptr<Scene> Scene::fromJson(const JsonCpp::Value& root) {
     return SceneParser::parseScene(root);
 }
 

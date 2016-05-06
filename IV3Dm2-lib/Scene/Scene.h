@@ -15,7 +15,7 @@
 class Scene {
 public:
     Scene(SceneMetadata metadata, std::unique_ptr<SceneNode> sceneRoot);
-    static Scene fromJson(const JsonCpp::Value& root);
+    static std::unique_ptr<Scene> fromJson(const JsonCpp::Value& root);
     
     SceneMetadata metadata() const noexcept;
     const SceneNode& rootNode() const noexcept;
