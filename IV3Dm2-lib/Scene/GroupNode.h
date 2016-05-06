@@ -15,6 +15,8 @@ public:
 
     void updateDataset(const DatasetProvider& datasetProvider) override;
 
+    std::unique_ptr<SceneNode> clone() const override;
+
     void addChild(std::unique_ptr<SceneNode> child);
     const NodeVec& children() const noexcept;
 
