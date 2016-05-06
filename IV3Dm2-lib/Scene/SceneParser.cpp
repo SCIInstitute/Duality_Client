@@ -15,10 +15,10 @@ SceneMetadata SceneParser::parseMetadata(const JsonCpp::Value& root) {
     return SceneMetadata(std::move(name), std::move(description));
 }
 
-Scene SceneParser::parseScene(const JsonCpp::Value& root) {
+std::unique_ptr<Scene> SceneParser::parseScene(const JsonCpp::Value& root) {
     auto metadata = parseMetadata(root["metadata"]);
     auto sceneRoot = parseNode(root["scene"]);
-    return Scene(std::move(metadata), std::move(sceneRoot));
+    return std::make_unique<Scene>(std::move(metadata), std::move(sceneRoot));
 }
 
 std::unique_ptr<SceneNode> SceneParser::parseNode(const JsonCpp::Value& node) {
