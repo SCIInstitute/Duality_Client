@@ -3,6 +3,7 @@
 //
 
 #include "Scene/SceneDefinitionProvider.h"
+#include "Scene/DatasetProvider.h"
 
 namespace mocca  {
     namespace net {
@@ -10,12 +11,16 @@ namespace mocca  {
     }
 }
 
-class ServerAdapter : public SceneDefinitionProvider {
+class ServerAdapter : public SceneDefinitionProvider, DatasetProvider {
 public:
     ServerAdapter();
     
-    std::vector<SceneDefinition> fetchDefinitions() override;
+    // SceneDefinitionProvider interface
+    std::vector<SceneDefinition> fetchDefinitions() const override;
     
+    // DatasetProvider interface
+    std::unique_ptr<Dataset> downloadDataset(const std::string& path) const override;
+
 private:
     std::unique_ptr<mocca::net::RpcClient> m_rpcClient;
 };

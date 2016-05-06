@@ -3,9 +3,17 @@
 //
 
 #include "DownloadNode.h"
+#include "DatasetProvider.h"
 
-DownloadNode::DownloadNode(const std::string& path)
-    : m_path(path) {}
+DownloadNode::DownloadNode(std::string path)
+    : m_path(std::move(path)) {}
+
+void DownloadNode::updateDataset(const DatasetProvider& datasetProvider)
+{
+    if (m_dataset == nullptr) {
+        m_dataset = datasetProvider.downloadDataset(m_path);
+    }
+}
 
 std::string DownloadNode::path() const {
     return m_path;

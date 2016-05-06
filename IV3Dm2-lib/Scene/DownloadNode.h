@@ -7,13 +7,19 @@
 #include "SceneNode.h"
 
 #include <string>
+#include <memory>
+
+class Dataset;
 
 class DownloadNode : public SceneNode {
 public:
-    DownloadNode(const std::string& path);
+    DownloadNode(std::string path);
+
+    void updateDataset(const DatasetProvider& datasetProvider) override;
 
     std::string path() const;
 
 private:
     std::string m_path;
+    std::unique_ptr<Dataset> m_dataset;
 };

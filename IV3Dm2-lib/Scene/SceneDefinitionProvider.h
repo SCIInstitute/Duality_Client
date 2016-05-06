@@ -10,5 +10,5 @@
 
 class SceneDefinitionProvider {
 public:
-    virtual std::vector<SceneDefinition> fetchDefinitions() = 0;
+    virtual std::vector<SceneDefinition> fetchDefinitions() const = 0;
 };
