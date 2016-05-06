@@ -11,7 +11,7 @@
 class SceneParser {
 public:
     static SceneMetadata parseMetadata(const JsonCpp::Value& root);
-    static std::unique_ptr<Scene> parseScene(const JsonCpp::Value& root);
+    static Scene parseScene(const JsonCpp::Value& root);
     
 private:
     static std::unique_ptr<SceneNode> parseNode(const JsonCpp::Value& node);

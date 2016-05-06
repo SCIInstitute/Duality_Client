@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <memory>
+
 class DatasetProvider;
 
 class SceneNode {
@@ -12,4 +14,6 @@ public:
 
     virtual void updateDataset(const DatasetProvider& datasetProvider) = 0;
     //virtual void render(Renderer& renderer) const = 0;
+
+    virtual std::unique_ptr<SceneNode> clone() const = 0;
 };

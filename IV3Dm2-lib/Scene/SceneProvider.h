@@ -10,5 +10,5 @@
 
 class SceneProvider {
 public:
-    virtual std::vector<std::unique_ptr<Scene>> listScenes() const = 0;
+    virtual std::vector<Scene> listScenes() const = 0;
 };

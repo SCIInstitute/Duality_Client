@@ -25,8 +25,8 @@ TEST_F(SceneParserTest, DownloadNode) {
   root["scene"]["type"] = "download";
   root["scene"]["path"] = "/some/file";
 
-  auto result = SceneParser::parseScene(root);
-  const auto& node = result->rootNode();
+  Scene result = SceneParser::parseScene(root);
+  const auto& node = result.rootNode();
   ASSERT_TRUE(dynamic_cast<const DownloadNode*>(&node) != nullptr);
   ASSERT_EQ("/some/file", dynamic_cast<const DownloadNode&>(node).path());
 }
@@ -39,8 +39,8 @@ TEST_F(SceneParserTest, GroupNode) {
     root["scene"]["children"][1]["type"] = "download";
     root["scene"]["children"][1]["path"] = "/some/file2";
 
-    auto result = SceneParser::parseScene(root);
-    const auto& rootNode = result->rootNode();
+    Scene result = SceneParser::parseScene(root);
+    const auto& rootNode = result.rootNode();
     ASSERT_TRUE(dynamic_cast<const GroupNode*>(&rootNode) != nullptr);
 
     const auto& children = dynamic_cast<const GroupNode&>(rootNode).children();

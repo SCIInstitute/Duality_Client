@@ -12,11 +12,11 @@ ServerAdapter::ServerAdapter() {
     m_rpcClient = std::make_unique<mocca::net::RpcClient>(ep);
 }
 
-std::vector<std::unique_ptr<Scene>> ServerAdapter::listScenes() const {
+std::vector<Scene> ServerAdapter::listScenes() const {
     m_rpcClient->send("listScenes", JsonCpp::Value());
     auto reply = m_rpcClient->receive().first;
 
-    std::vector<std::unique_ptr<Scene>> result;
+    std::vector<Scene> result;
     for (auto it = reply.begin(); it != reply.end(); ++it) {
         result.push_back(Scene::fromJson(*it));
     }
