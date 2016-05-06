@@ -7,8 +7,8 @@
 #include "SceneDefinitionParser.h"
 
 SceneDefinition::SceneDefinition(std::string name, std::unique_ptr<SceneNode> sceneRoot)
-: m_name(std::move(name)),
-  m_sceneRoot(std::move(sceneRoot)) {}
+    : m_name(std::move(name))
+    , m_sceneRoot(std::move(sceneRoot)) {}
 
 SceneDefinition SceneDefinition::fromJson(const JsonCpp::Value& root) {
     return SceneDefinitionParser::parse(root);
@@ -16,4 +16,8 @@ SceneDefinition SceneDefinition::fromJson(const JsonCpp::Value& root) {
 
 std::string SceneDefinition::name() const noexcept {
     return m_name;
+}
+
+const SceneNode& SceneDefinition::rootNode() const noexcept {
+    return *m_sceneRoot;
 }

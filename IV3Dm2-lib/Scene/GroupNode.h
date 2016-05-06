@@ -12,10 +12,10 @@
 class GroupNode : public SceneNode {
 public:
     using NodeVec = std::vector<std::unique_ptr<SceneNode>>;
-    
+
     void addChild(std::unique_ptr<SceneNode> child);
     const NodeVec& children() const noexcept;
-    
+
 private:
     NodeVec m_children;
 };

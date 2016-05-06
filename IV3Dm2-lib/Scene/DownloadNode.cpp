@@ -5,5 +5,8 @@
 #include "DownloadNode.h"
 
 DownloadNode::DownloadNode(const std::string& path)
-    : m_path(path)
-{}
+    : m_path(path) {}
+
+std::string DownloadNode::path() const {
+    return m_path;
+}

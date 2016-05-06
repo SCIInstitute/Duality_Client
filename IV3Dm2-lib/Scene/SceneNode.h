@@ -6,5 +6,5 @@
 
 class SceneNode {
 public:
-    
+    virtual ~SceneNode() {}
 };

@@ -17,6 +17,7 @@ public:
     static SceneDefinition fromJson(const JsonCpp::Value& root);
     
     std::string name() const noexcept;
+    const SceneNode& rootNode() const noexcept;
     
 private:
     std::string m_name;
