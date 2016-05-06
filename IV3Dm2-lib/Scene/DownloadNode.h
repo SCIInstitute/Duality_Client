@@ -11,7 +11,9 @@
 class DownloadNode : public SceneNode {
 public:
     DownloadNode(const std::string& path);
-    
+
+    std::string path() const;
+
 private:
     std::string m_path;
 };
