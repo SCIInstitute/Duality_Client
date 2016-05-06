@@ -2,7 +2,7 @@
 //  Copyright © 2016 Scientific Computing and Imaging Institute. All rights reserved.
 //
 
-#include "DatasetProvider.h"
+#include "Communication/DatasetProvider.h"
 #include "DownloadNode.h"
 
 DownloadNode::DownloadNode(std::string path)
@@ -10,7 +10,7 @@ DownloadNode::DownloadNode(std::string path)
 
 DownloadNode::DownloadNode(const DownloadNode& other)
     : m_path(other.m_path)
-    , m_dataset(other.m_dataset->clone()) {}
+    , m_dataset(other.m_dataset ? other.m_dataset->clone() : nullptr) {}
 
 void DownloadNode::updateDataset(const DatasetProvider& datasetProvider) {
     if (m_dataset == nullptr) {

@@ -2,8 +2,8 @@
 //  Copyright © 2016 Scientific Computing and Imaging Institute. All rights reserved.
 //
 
-#include "Scene/SceneProvider.h"
-#include "Scene/DatasetProvider.h"
+#include "SceneProvider.h"
+#include "DatasetProvider.h"
 
 namespace mocca  {
     namespace net {

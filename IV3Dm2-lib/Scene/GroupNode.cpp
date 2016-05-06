@@ -11,7 +11,7 @@ void GroupNode::updateDataset(const DatasetProvider& datasetProvider) {
 }
 
 std::unique_ptr<SceneNode> GroupNode::clone() const {
-    auto newNode = std::unique_ptr<GroupNode>();
+    auto newNode = std::make_unique<GroupNode>();
     for (auto& child : m_children) {
         newNode->addChild(child->clone());
     }
