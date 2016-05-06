@@ -4,9 +4,9 @@
 
 #include "GroupNode.h"
 
-void GroupNode::updateDataset(const DatasetProvider& datasetProvider) {
+void GroupNode::updateDatasets(const DatasetProvider& datasetProvider) {
     for (auto& child : m_children) {
-        child->updateDataset(datasetProvider);
+        child->updateDatasets(datasetProvider);
     }
 }
 

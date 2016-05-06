@@ -13,7 +13,7 @@ class GroupNode : public SceneNode {
 public:
     using NodeVec = std::vector<std::unique_ptr<SceneNode>>;
 
-    void updateDataset(const DatasetProvider& datasetProvider) override;
+    void updateDatasets(const DatasetProvider& datasetProvider) override;
 
     std::unique_ptr<SceneNode> clone() const override;
 

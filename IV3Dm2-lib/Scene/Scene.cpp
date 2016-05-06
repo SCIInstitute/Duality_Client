@@ -25,3 +25,7 @@ SceneMetadata Scene::metadata() const noexcept {
 const SceneNode& Scene::rootNode() const noexcept {
     return *m_sceneRoot;
 }
+
+void Scene::updateDatasets(const DatasetProvider& provider) {
+    m_sceneRoot->updateDatasets(provider);
+}

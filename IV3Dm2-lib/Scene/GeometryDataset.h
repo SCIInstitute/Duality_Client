@@ -1,11 +1,25 @@
 #pragma once
 
 #include "Dataset.h"
+#include "G3D.h"
 
 class GeometryDataset : public Dataset {
 public:
-    GeometryDataset(const std::vector<uint8_t>& binaryData);
+    GeometryDataset(AbstractReader& reader);
 
     // virtual void render(Renderer& renderer) const override;
-    std::unique_ptr<Dataset> clone() override;
+
+private:
+    void assignShortcutPointers();
+    
+private:
+    std::unique_ptr<G3D::GeometrySoA> m_geometry;
+
+    // vertex attributes
+    float* m_positions;
+    float* m_normals;
+    float* m_tangents;
+    float* m_colors;
+    float* m_texcoords;
+    float* m_alphas;
 };

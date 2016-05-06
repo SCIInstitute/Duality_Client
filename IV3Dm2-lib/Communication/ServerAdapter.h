@@ -4,14 +4,9 @@
 
 #include "SceneProvider.h"
 #include "DatasetProvider.h"
+#include "mocca/net/rpc/RpcClient.h"
 
-namespace mocca  {
-    namespace net {
-        class RpcClient;
-    }
-}
-
-class ServerAdapter : public SceneProvider, DatasetProvider {
+class ServerAdapter : public SceneProvider, public DatasetProvider {
 public:
     ServerAdapter();
     
