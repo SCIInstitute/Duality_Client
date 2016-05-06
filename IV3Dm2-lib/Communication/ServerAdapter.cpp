@@ -2,6 +2,7 @@
 //  Copyright © 2016 Scientific Computing and Imaging Institute. All rights reserved.
 //
 
+#include "Scene/Dataset.h"
 #include "ServerAdapter.h"
 
 #include "mocca/net/rpc/RpcClient.h"
@@ -11,7 +12,7 @@ ServerAdapter::ServerAdapter() {
     m_rpcClient = std::make_unique<mocca::net::RpcClient>(ep);
 }
 
-std::vector<SceneDefinition> ServerAdapter::fetchDefinitions() {
+std::vector<SceneDefinition> ServerAdapter::fetchDefinitions() const {
     m_rpcClient->send("ListScenes", JsonCpp::Value());
     auto reply = m_rpcClient->receive().first;
 
@@ -19,6 +20,13 @@ std::vector<SceneDefinition> ServerAdapter::fetchDefinitions() {
     for (auto it = reply.begin(); it != reply.end(); ++it) {
         result.push_back(SceneDefinition::fromJson(*it));
     }
-    
     return result;
+}
+
+std::unique_ptr<Dataset> ServerAdapter::downloadDataset(const std::string& path) const {
+    JsonCpp::Value params;
+    params["path"] = path;
+    m_rpcClient->send("Download", params);
+    auto reply = m_rpcClient->receive();
+    return Dataset::create(*reply.second[0]);
 }

@@ -4,6 +4,12 @@
 
 #include "GroupNode.h"
 
+void GroupNode::updateDataset(const DatasetProvider& datasetProvider) {
+    for (auto& child : m_children) {
+        child->updateDataset(datasetProvider);
+    }
+}
+
 void GroupNode::addChild(std::unique_ptr<SceneNode> child) {
     m_children.push_back(std::move(child));
 }

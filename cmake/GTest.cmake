@@ -1,5 +1,5 @@
 SET(gtest_force_shared_crt ON CACHE BOOL "Always use msvcrt.dll" FORCE)
-ADD_SUBDIRECTORY(gmock)
+ADD_SUBDIRECTORY(gtest)
 ENABLE_TESTING()
 INCLUDE_DIRECTORIES(${gmock_SOURCE_DIR}/include ${gmock_SOURCE_DIR})
 INCLUDE_DIRECTORIES(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
