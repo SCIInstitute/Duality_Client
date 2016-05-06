@@ -2,7 +2,7 @@
 //  Copyright © 2016 Scientific Computing and Imaging Institute. All rights reserved.
 //
 
-#include "Scene/SceneDefinitionProvider.h"
+#include "Scene/SceneProvider.h"
 #include "Scene/DatasetProvider.h"
 
 namespace mocca  {
@@ -11,13 +11,14 @@ namespace mocca  {
     }
 }
 
-class ServerAdapter : public SceneDefinitionProvider, DatasetProvider {
+class ServerAdapter : public SceneProvider, DatasetProvider {
 public:
     ServerAdapter();
     
     // SceneDefinitionProvider interface
-    std::vector<SceneDefinition> fetchDefinitions() const override;
-    
+    std::vector<SceneMetadata> listMetadata() const override;
+    Scene getScene(const std::string& name) const override;
+
     // DatasetProvider interface
     std::unique_ptr<Dataset> downloadDataset(const std::string& path) const override;
 

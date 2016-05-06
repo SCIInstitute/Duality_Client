@@ -4,13 +4,14 @@
 
 #pragma once
 
-#include "SceneDefinition.h"
+#include "Scene.h"
 
 #include "jsoncpp/json.h"
 
-class SceneDefinitionParser {
+class SceneParser {
 public:
-    static SceneDefinition parse(const JsonCpp::Value& root);
+    static SceneMetadata parseMetadata(const JsonCpp::Value& root);
+    static Scene parseScene(const JsonCpp::Value& root);
     
 private:
     static std::unique_ptr<SceneNode> parseNode(const JsonCpp::Value& node);

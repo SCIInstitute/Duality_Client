@@ -4,11 +4,12 @@
 
 #pragma once
 
-#include "SceneDefinition.h"
+#include "Scene.h"
 
 #include <vector>
 
-class SceneDefinitionProvider {
+class SceneProvider {
 public:
-    virtual std::vector<SceneDefinition> fetchDefinitions() const = 0;
+    virtual std::vector<SceneMetadata> listMetadata() const = 0;
+    virtual Scene getScene(const std::string& name) const = 0;
 };

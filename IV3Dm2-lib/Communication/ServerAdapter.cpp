@@ -12,21 +12,29 @@ ServerAdapter::ServerAdapter() {
     m_rpcClient = std::make_unique<mocca::net::RpcClient>(ep);
 }
 
-std::vector<SceneDefinition> ServerAdapter::fetchDefinitions() const {
-    m_rpcClient->send("ListScenes", JsonCpp::Value());
+std::vector<SceneMetadata> ServerAdapter::listMetadata() const {
+    m_rpcClient->send("listMetadata", JsonCpp::Value());
     auto reply = m_rpcClient->receive().first;
 
-    std::vector<SceneDefinition> result;
+    std::vector<SceneMetadata> result;
     for (auto it = reply.begin(); it != reply.end(); ++it) {
-        result.push_back(SceneDefinition::fromJson(*it));
+        result.push_back(SceneMetadata::fromJson(*it));
     }
     return result;
+}
+
+Scene ServerAdapter::getScene(const std::string& name) const {
+    JsonCpp::Value params;
+    params["name"] = name;
+    m_rpcClient->send("getScene", params);
+    auto reply = m_rpcClient->receive().first;
+    return Scene::fromJson(reply);
 }
 
 std::unique_ptr<Dataset> ServerAdapter::downloadDataset(const std::string& path) const {
     JsonCpp::Value params;
     params["path"] = path;
-    m_rpcClient->send("Download", params);
+    m_rpcClient->send("download", params);
     auto reply = m_rpcClient->receive();
     return Dataset::create(*reply.second[0]);
 }
