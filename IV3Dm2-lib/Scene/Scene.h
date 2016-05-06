@@ -22,6 +22,8 @@ public:
     SceneMetadata metadata() const noexcept;
     const SceneNode& rootNode() const noexcept;
 
+    void updateDatasets(const DatasetProvider& provider);
+
 private:
     SceneMetadata m_metadata;
     std::unique_ptr<SceneNode> m_sceneRoot;

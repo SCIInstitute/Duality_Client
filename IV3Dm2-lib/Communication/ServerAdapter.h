@@ -2,16 +2,11 @@
 //  Copyright © 2016 Scientific Computing and Imaging Institute. All rights reserved.
 //
 
-#include "Scene/SceneProvider.h"
-#include "Scene/DatasetProvider.h"
+#include "SceneProvider.h"
+#include "DatasetProvider.h"
+#include "mocca/net/rpc/RpcClient.h"
 
-namespace mocca  {
-    namespace net {
-        class RpcClient;
-    }
-}
-
-class ServerAdapter : public SceneProvider, DatasetProvider {
+class ServerAdapter : public SceneProvider, public DatasetProvider {
 public:
     ServerAdapter();
     

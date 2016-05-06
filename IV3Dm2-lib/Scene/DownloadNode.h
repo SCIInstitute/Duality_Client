@@ -14,9 +14,8 @@ class Dataset;
 class DownloadNode : public SceneNode {
 public:
     DownloadNode(std::string path);
-    DownloadNode(const DownloadNode& other);
 
-    void updateDataset(const DatasetProvider& datasetProvider) override;
+    void updateDatasets(const DatasetProvider& datasetProvider) override;
 
     std::unique_ptr<SceneNode> clone() const override;
 
@@ -24,5 +23,5 @@ public:
 
 private:
     std::string m_path;
-    std::unique_ptr<Dataset> m_dataset;
+    std::shared_ptr<Dataset> m_dataset;
 };

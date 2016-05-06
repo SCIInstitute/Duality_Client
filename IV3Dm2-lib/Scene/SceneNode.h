@@ -12,7 +12,7 @@ class SceneNode {
 public:
     virtual ~SceneNode() {}
 
-    virtual void updateDataset(const DatasetProvider& datasetProvider) = 0;
+    virtual void updateDatasets(const DatasetProvider& datasetProvider) = 0;
     //virtual void render(Renderer& renderer) const = 0;
 
     virtual std::unique_ptr<SceneNode> clone() const = 0;

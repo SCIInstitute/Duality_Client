@@ -12,7 +12,7 @@ Scene::Scene(SceneMetadata metadata, std::unique_ptr<SceneNode> sceneRoot)
 
 Scene::Scene(const Scene& other)
     : m_metadata(other.m_metadata)
-    , m_sceneRoot(other.m_sceneRoot->clone()) {}
+    , m_sceneRoot(other.m_sceneRoot ? other.m_sceneRoot->clone() : nullptr) {}
 
 Scene Scene::fromJson(const JsonCpp::Value& root) {
     return SceneParser::parseScene(root);
@@ -24,4 +24,8 @@ SceneMetadata Scene::metadata() const noexcept {
 
 const SceneNode& Scene::rootNode() const noexcept {
     return *m_sceneRoot;
+}
+
+void Scene::updateDatasets(const DatasetProvider& provider) {
+    m_sceneRoot->updateDatasets(provider);
 }

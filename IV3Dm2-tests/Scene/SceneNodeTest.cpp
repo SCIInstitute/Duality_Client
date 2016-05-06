@@ -24,5 +24,5 @@ TEST_F(SceneNodeTest, DownloadNode) {
     EXPECT_CALL(mock, downloadDataset("path2")).Times(1);
     EXPECT_CALL(mock, downloadDataset("path3")).Times(1);
 
-    root.updateDataset(mock);
+    root.updateDatasets(mock);
 }

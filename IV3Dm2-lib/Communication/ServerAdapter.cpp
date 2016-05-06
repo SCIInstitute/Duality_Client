@@ -5,8 +5,6 @@
 #include "Scene/Dataset.h"
 #include "ServerAdapter.h"
 
-#include "mocca/net/rpc/RpcClient.h"
-
 ServerAdapter::ServerAdapter() {
     mocca::net::Endpoint ep("tcp.prefixed", "192.168.1.222", "10123");
     m_rpcClient = std::make_unique<mocca::net::RpcClient>(ep);

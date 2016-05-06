@@ -1,6 +1,6 @@
 #include "gmock/gmock.h"
 
-#include "Scene/DatasetProvider.h"
+#include "Communication/DatasetProvider.h"
 
 class DatasetProviderMock : public DatasetProvider {
 public:
