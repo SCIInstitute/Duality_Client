@@ -15,9 +15,8 @@ class ServerAdapter : public SceneProvider, DatasetProvider {
 public:
     ServerAdapter();
     
-    // SceneDefinitionProvider interface
-    std::vector<SceneMetadata> listMetadata() const override;
-    Scene getScene(const std::string& name) const override;
+    // SceneProvider interface
+    std::vector<Scene> listScenes() const override;
 
     // DatasetProvider interface
     std::unique_ptr<Dataset> downloadDataset(const std::string& path) const override;
