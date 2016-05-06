@@ -1,39 +1,45 @@
 #include "gtest/gtest.h"
 
-#include "Scene/SceneDefinitionParser.h"
+#include "Scene/SceneParser.h"
 #include "Scene/DownloadNode.h"
 #include "Scene/GroupNode.h"
 
-class SceneDefinitionParserTest : public ::testing::Test {
+class SceneParserTest : public ::testing::Test {
 protected:
-  SceneDefinitionParserTest() {}
+  SceneParserTest() {}
 
-  virtual ~SceneDefinitionParserTest() {}
+  virtual ~SceneParserTest() {}
 };
 
-TEST_F(SceneDefinitionParserTest, DownloadNode) {
+TEST_F(SceneParserTest, Metadata) {
+    JsonCpp::Value root;
+    root["name"] = "my scene";
+    root["description"] = "test scene";
+    SceneMetadata result = SceneParser::parseMetadata(root);
+    ASSERT_EQ("my scene", result.name());
+    ASSERT_EQ("test scene", result.description());
+}
+
+TEST_F(SceneParserTest, DownloadNode) {
   JsonCpp::Value root;
-  root["name"] = "my scene";
   root["scene"]["type"] = "download";
   root["scene"]["path"] = "/some/file";
 
-  SceneDefinition result = SceneDefinitionParser::parse(root);
-  ASSERT_EQ("my scene", result.name());
+  Scene result = SceneParser::parseScene(root);
   const auto& node = result.rootNode();
   ASSERT_TRUE(dynamic_cast<const DownloadNode*>(&node) != nullptr);
   ASSERT_EQ("/some/file", dynamic_cast<const DownloadNode&>(node).path());
 }
 
-TEST_F(SceneDefinitionParserTest, GroupNode) {
+TEST_F(SceneParserTest, GroupNode) {
     JsonCpp::Value root;
-    root["name"] = "my scene";
     root["scene"]["type"] = "group";
     root["scene"]["children"][0]["type"] = "download";
     root["scene"]["children"][0]["path"] = "/some/file1";
     root["scene"]["children"][1]["type"] = "download";
     root["scene"]["children"][1]["path"] = "/some/file2";
 
-    SceneDefinition result = SceneDefinitionParser::parse(root);
+    Scene result = SceneParser::parseScene(root);
     const auto& rootNode = result.rootNode();
     ASSERT_TRUE(dynamic_cast<const GroupNode*>(&rootNode) != nullptr);
 

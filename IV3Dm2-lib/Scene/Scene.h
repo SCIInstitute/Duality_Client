@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "SceneMetadata.h"
 #include "SceneNode.h"
 
 #include "jsoncpp/json.h"
@@ -11,15 +12,15 @@
 #include <string>
 #include <memory>
 
-class SceneDefinition {
+class Scene {
 public:
-    SceneDefinition(std::string name, std::unique_ptr<SceneNode> sceneRoot);
-    static SceneDefinition fromJson(const JsonCpp::Value& root);
+    Scene(SceneMetadata metadata, std::unique_ptr<SceneNode> sceneRoot);
+    static Scene fromJson(const JsonCpp::Value& root);
     
-    std::string name() const noexcept;
+    SceneMetadata metadata() const noexcept;
     const SceneNode& rootNode() const noexcept;
     
 private:
-    std::string m_name;
+    SceneMetadata m_metadata;
     std::unique_ptr<SceneNode> m_sceneRoot;
 };
