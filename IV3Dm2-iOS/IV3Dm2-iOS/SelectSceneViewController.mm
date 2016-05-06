@@ -4,7 +4,7 @@
 
 #import "SelectSceneViewController.h"
 
-#include "SceneDefinitionProvider.h"
+#include "SceneProvider.h"
 
 @interface SelectSceneViewController ()
 
@@ -12,9 +12,9 @@
 
 @implementation SelectSceneViewController
 
-- (id)initWithSceneDefinitionProvider:(SceneDefinitionProvider*)provider {
+- (id)initWithSceneProvider:(SceneProvider*)provider {
     self = [super initWithStyle:UITableViewStyleGrouped];
-    m_definitions = provider->fetchDefinitions();
+    m_scenes = provider->listScenes();
     return self;
 }
 
@@ -25,7 +25,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return m_definitions.size();
+    return m_scenes.size();
 }
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -34,11 +34,12 @@
     UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     
-    const SceneDefinition& definition = m_definitions[indexPath.row];
-    cell.textLabel.text = [NSString stringWithUTF8String:definition.name().c_str()];
+    SceneMetadata meta = m_scenes[indexPath.row].metadata();
+    cell.textLabel.text = [NSString stringWithUTF8String:meta.name().c_str()];
+    cell.detailTextLabel.text = [NSString stringWithUTF8String:meta.description().c_str()];
     
     return cell;
 }

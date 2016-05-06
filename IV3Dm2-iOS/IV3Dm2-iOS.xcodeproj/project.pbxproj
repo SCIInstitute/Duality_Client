@@ -14,11 +14,6 @@
 		8E2AF9ED1CDAA7B500AC6CEC /* TabBarViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8E2AF9EC1CDAA7B500AC6CEC /* TabBarViewController.mm */; };
 		8E2AFA561CDAC18400AC6CEC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E2AFA551CDAC18400AC6CEC /* Foundation.framework */; };
 		8E2AFA581CDAC18C00AC6CEC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E2AFA571CDAC18C00AC6CEC /* UIKit.framework */; };
-		8E2BF9661CDBF10A0040DC47 /* ServerAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E2BF7671CDBF10A0040DC47 /* ServerAdapter.cpp */; };
-		8E2BFA931CDBF10B0040DC47 /* DownloadNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E2BF95B1CDBF10A0040DC47 /* DownloadNode.cpp */; };
-		8E2BFA941CDBF10B0040DC47 /* GroupNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E2BF95D1CDBF10A0040DC47 /* GroupNode.cpp */; };
-		8E2BFA951CDBF10B0040DC47 /* SceneDefinition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E2BF95F1CDBF10A0040DC47 /* SceneDefinition.cpp */; };
-		8E2BFA961CDBF10B0040DC47 /* SceneDefinitionParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E2BF9611CDBF10A0040DC47 /* SceneDefinitionParser.cpp */; };
 		8E2BFB4B1CDBF1690040DC47 /* Log in Resources */ = {isa = PBXBuildFile; fileRef = 8E2BFAD11CDBF1690040DC47 /* Log */; };
 		8E2BFB4C1CDBF1690040DC47 /* LogManager.inl in Resources */ = {isa = PBXBuildFile; fileRef = 8E2BFAD41CDBF1690040DC47 /* LogManager.inl */; };
 		8E2BFB4D1CDBF1690040DC47 /* CommandLineParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E2BFB071CDBF1690040DC47 /* CommandLineParser.cpp */; };
@@ -71,6 +66,14 @@
 		8E2BFB7C1CDBF1690040DC47 /* license.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8E2BFB471CDBF1690040DC47 /* license.txt */; };
 		8E2BFB7D1CDBF1690040DC47 /* sha1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E2BFB481CDBF1690040DC47 /* sha1.cpp */; };
 		8E6DCEC91CDB971B0091D5AB /* SettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8E6DCEC81CDB971B0091D5AB /* SettingsViewController.mm */; };
+		8E827A061CDD2BD0006870B1 /* ServerAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E8279F21CDD2BD0006870B1 /* ServerAdapter.cpp */; };
+		8E827A071CDD2BD0006870B1 /* Dataset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E8279F51CDD2BD0006870B1 /* Dataset.cpp */; };
+		8E827A081CDD2BD0006870B1 /* DownloadNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E8279F81CDD2BD0006870B1 /* DownloadNode.cpp */; };
+		8E827A091CDD2BD0006870B1 /* GeometryDataset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E8279FA1CDD2BD0006870B1 /* GeometryDataset.cpp */; };
+		8E827A0A1CDD2BD0006870B1 /* GroupNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E8279FC1CDD2BD0006870B1 /* GroupNode.cpp */; };
+		8E827A0B1CDD2BD0006870B1 /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E8279FE1CDD2BD0006870B1 /* Scene.cpp */; };
+		8E827A0C1CDD2BD0006870B1 /* SceneMetadata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E827A001CDD2BD0006870B1 /* SceneMetadata.cpp */; };
+		8E827A0D1CDD2BD0006870B1 /* SceneParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E827A031CDD2BD0006870B1 /* SceneParser.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -86,19 +89,6 @@
 		8E2AF9EC1CDAA7B500AC6CEC /* TabBarViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TabBarViewController.mm; sourceTree = "<group>"; };
 		8E2AFA551CDAC18400AC6CEC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		8E2AFA571CDAC18C00AC6CEC /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		8E2BF7651CDBF10A0040DC47 /* Error.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Error.h; sourceTree = "<group>"; };
-		8E2BF7671CDBF10A0040DC47 /* ServerAdapter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ServerAdapter.cpp; sourceTree = "<group>"; };
-		8E2BF7681CDBF10A0040DC47 /* ServerAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerAdapter.h; sourceTree = "<group>"; };
-		8E2BF95B1CDBF10A0040DC47 /* DownloadNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DownloadNode.cpp; sourceTree = "<group>"; };
-		8E2BF95C1CDBF10A0040DC47 /* DownloadNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadNode.h; sourceTree = "<group>"; };
-		8E2BF95D1CDBF10A0040DC47 /* GroupNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GroupNode.cpp; sourceTree = "<group>"; };
-		8E2BF95E1CDBF10A0040DC47 /* GroupNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupNode.h; sourceTree = "<group>"; };
-		8E2BF95F1CDBF10A0040DC47 /* SceneDefinition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneDefinition.cpp; sourceTree = "<group>"; };
-		8E2BF9601CDBF10A0040DC47 /* SceneDefinition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneDefinition.h; sourceTree = "<group>"; };
-		8E2BF9611CDBF10A0040DC47 /* SceneDefinitionParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneDefinitionParser.cpp; sourceTree = "<group>"; };
-		8E2BF9621CDBF10A0040DC47 /* SceneDefinitionParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneDefinitionParser.h; sourceTree = "<group>"; };
-		8E2BF9631CDBF10A0040DC47 /* SceneDefinitionProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneDefinitionProvider.h; sourceTree = "<group>"; };
-		8E2BF9641CDBF10A0040DC47 /* SceneNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneNode.h; sourceTree = "<group>"; };
 		8E2BFABB1CDBF1690040DC47 /* BidirectionalMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BidirectionalMap.h; sourceTree = "<group>"; };
 		8E2BFABC1CDBF1690040DC47 /* CommandLineParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommandLineParser.h; sourceTree = "<group>"; };
 		8E2BFABD1CDBF1690040DC47 /* ContainerTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContainerTools.h; sourceTree = "<group>"; };
@@ -221,6 +211,26 @@
 		8E2BFB491CDBF1690040DC47 /* sha1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha1.h; sourceTree = "<group>"; };
 		8E6DCEC71CDB97080091D5AB /* SettingsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		8E6DCEC81CDB971B0091D5AB /* SettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SettingsViewController.mm; sourceTree = "<group>"; };
+		8E8279F01CDD2BD0006870B1 /* Error.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Error.h; sourceTree = "<group>"; };
+		8E8279F21CDD2BD0006870B1 /* ServerAdapter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ServerAdapter.cpp; sourceTree = "<group>"; };
+		8E8279F31CDD2BD0006870B1 /* ServerAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerAdapter.h; sourceTree = "<group>"; };
+		8E8279F51CDD2BD0006870B1 /* Dataset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Dataset.cpp; sourceTree = "<group>"; };
+		8E8279F61CDD2BD0006870B1 /* Dataset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dataset.h; sourceTree = "<group>"; };
+		8E8279F71CDD2BD0006870B1 /* DatasetProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatasetProvider.h; sourceTree = "<group>"; };
+		8E8279F81CDD2BD0006870B1 /* DownloadNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DownloadNode.cpp; sourceTree = "<group>"; };
+		8E8279F91CDD2BD0006870B1 /* DownloadNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadNode.h; sourceTree = "<group>"; };
+		8E8279FA1CDD2BD0006870B1 /* GeometryDataset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GeometryDataset.cpp; sourceTree = "<group>"; };
+		8E8279FB1CDD2BD0006870B1 /* GeometryDataset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeometryDataset.h; sourceTree = "<group>"; };
+		8E8279FC1CDD2BD0006870B1 /* GroupNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GroupNode.cpp; sourceTree = "<group>"; };
+		8E8279FD1CDD2BD0006870B1 /* GroupNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupNode.h; sourceTree = "<group>"; };
+		8E8279FE1CDD2BD0006870B1 /* Scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Scene.cpp; sourceTree = "<group>"; };
+		8E8279FF1CDD2BD0006870B1 /* Scene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scene.h; sourceTree = "<group>"; };
+		8E827A001CDD2BD0006870B1 /* SceneMetadata.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneMetadata.cpp; sourceTree = "<group>"; };
+		8E827A011CDD2BD0006870B1 /* SceneMetadata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneMetadata.h; sourceTree = "<group>"; };
+		8E827A021CDD2BD0006870B1 /* SceneNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneNode.h; sourceTree = "<group>"; };
+		8E827A031CDD2BD0006870B1 /* SceneParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneParser.cpp; sourceTree = "<group>"; };
+		8E827A041CDD2BD0006870B1 /* SceneParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneParser.h; sourceTree = "<group>"; };
+		8E827A051CDD2BD0006870B1 /* SceneProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneProvider.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -283,47 +293,13 @@
 		8E2BF7621CDBF10A0040DC47 /* IV3Dm2-lib */ = {
 			isa = PBXGroup;
 			children = (
-				8E2BF7641CDBF10A0040DC47 /* Common */,
-				8E2BF7661CDBF10A0040DC47 /* Communication */,
-				8E2BF95A1CDBF10A0040DC47 /* Scene */,
+				8E8279EF1CDD2BD0006870B1 /* Common */,
+				8E8279F11CDD2BD0006870B1 /* Communication */,
+				8E8279F41CDD2BD0006870B1 /* Scene */,
 				8E2BFAB61CDBF1690040DC47 /* mocca */,
 			);
 			name = "IV3Dm2-lib";
 			path = "../IV3Dm2-lib";
-			sourceTree = "<group>";
-		};
-		8E2BF7641CDBF10A0040DC47 /* Common */ = {
-			isa = PBXGroup;
-			children = (
-				8E2BF7651CDBF10A0040DC47 /* Error.h */,
-			);
-			path = Common;
-			sourceTree = "<group>";
-		};
-		8E2BF7661CDBF10A0040DC47 /* Communication */ = {
-			isa = PBXGroup;
-			children = (
-				8E2BF7671CDBF10A0040DC47 /* ServerAdapter.cpp */,
-				8E2BF7681CDBF10A0040DC47 /* ServerAdapter.h */,
-			);
-			path = Communication;
-			sourceTree = "<group>";
-		};
-		8E2BF95A1CDBF10A0040DC47 /* Scene */ = {
-			isa = PBXGroup;
-			children = (
-				8E2BF95B1CDBF10A0040DC47 /* DownloadNode.cpp */,
-				8E2BF95C1CDBF10A0040DC47 /* DownloadNode.h */,
-				8E2BF95D1CDBF10A0040DC47 /* GroupNode.cpp */,
-				8E2BF95E1CDBF10A0040DC47 /* GroupNode.h */,
-				8E2BF95F1CDBF10A0040DC47 /* SceneDefinition.cpp */,
-				8E2BF9601CDBF10A0040DC47 /* SceneDefinition.h */,
-				8E2BF9611CDBF10A0040DC47 /* SceneDefinitionParser.cpp */,
-				8E2BF9621CDBF10A0040DC47 /* SceneDefinitionParser.h */,
-				8E2BF9631CDBF10A0040DC47 /* SceneDefinitionProvider.h */,
-				8E2BF9641CDBF10A0040DC47 /* SceneNode.h */,
-			);
-			path = Scene;
 			sourceTree = "<group>";
 		};
 		8E2BFAB61CDBF1690040DC47 /* mocca */ = {
@@ -671,6 +647,47 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		8E8279EF1CDD2BD0006870B1 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				8E8279F01CDD2BD0006870B1 /* Error.h */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		8E8279F11CDD2BD0006870B1 /* Communication */ = {
+			isa = PBXGroup;
+			children = (
+				8E8279F21CDD2BD0006870B1 /* ServerAdapter.cpp */,
+				8E8279F31CDD2BD0006870B1 /* ServerAdapter.h */,
+			);
+			path = Communication;
+			sourceTree = "<group>";
+		};
+		8E8279F41CDD2BD0006870B1 /* Scene */ = {
+			isa = PBXGroup;
+			children = (
+				8E8279F51CDD2BD0006870B1 /* Dataset.cpp */,
+				8E8279F61CDD2BD0006870B1 /* Dataset.h */,
+				8E8279F71CDD2BD0006870B1 /* DatasetProvider.h */,
+				8E8279F81CDD2BD0006870B1 /* DownloadNode.cpp */,
+				8E8279F91CDD2BD0006870B1 /* DownloadNode.h */,
+				8E8279FA1CDD2BD0006870B1 /* GeometryDataset.cpp */,
+				8E8279FB1CDD2BD0006870B1 /* GeometryDataset.h */,
+				8E8279FC1CDD2BD0006870B1 /* GroupNode.cpp */,
+				8E8279FD1CDD2BD0006870B1 /* GroupNode.h */,
+				8E8279FE1CDD2BD0006870B1 /* Scene.cpp */,
+				8E8279FF1CDD2BD0006870B1 /* Scene.h */,
+				8E827A001CDD2BD0006870B1 /* SceneMetadata.cpp */,
+				8E827A011CDD2BD0006870B1 /* SceneMetadata.h */,
+				8E827A021CDD2BD0006870B1 /* SceneNode.h */,
+				8E827A031CDD2BD0006870B1 /* SceneParser.cpp */,
+				8E827A041CDD2BD0006870B1 /* SceneParser.h */,
+				8E827A051CDD2BD0006870B1 /* SceneProvider.h */,
+			);
+			path = Scene;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -747,36 +764,39 @@
 				8E2BFB721CDBF1690040DC47 /* QueueConnectionSpawner.cpp in Sources */,
 				8E2BFB741CDBF1690040DC47 /* TCPConnection.cpp in Sources */,
 				8E2BFB6B1CDBF1690040DC47 /* Method.cpp in Sources */,
+				8E827A0D1CDD2BD0006870B1 /* SceneParser.cpp in Sources */,
 				8E2BFB771CDBF1690040DC47 /* TCPNetworkAddress.cpp in Sources */,
 				8E2BFB5F1CDBF1690040DC47 /* SizePrefixedProtocol.cpp in Sources */,
 				8E2AF9ED1CDAA7B500AC6CEC /* TabBarViewController.mm in Sources */,
-				8E2BFA951CDBF10B0040DC47 /* SceneDefinition.cpp in Sources */,
 				8E2BFB6A1CDBF1690040DC47 /* JsonKeys.cpp in Sources */,
+				8E827A071CDD2BD0006870B1 /* Dataset.cpp in Sources */,
+				8E827A061CDD2BD0006870B1 /* ServerAdapter.cpp in Sources */,
 				8E2BFB7A1CDBF1690040DC47 /* base64.cpp in Sources */,
 				8E2BFB601CDBF1690040DC47 /* WebSocketProtocol.cpp in Sources */,
 				8E2BFB731CDBF1690040DC47 /* Sockets.cpp in Sources */,
+				8E827A0B1CDD2BD0006870B1 /* Scene.cpp in Sources */,
 				8E2BFB4E1CDBF1690040DC47 /* Encryption.cpp in Sources */,
 				8E2BFB531CDBF1690040DC47 /* Path.cpp in Sources */,
 				8E2BFB591CDBF1690040DC47 /* StreamLog.cpp in Sources */,
 				8E2BFB6C1CDBF1690040DC47 /* MethodDescription.cpp in Sources */,
 				8E2BFB6F1CDBF1690040DC47 /* QueueConnection.cpp in Sources */,
-				8E2BFA941CDBF10B0040DC47 /* GroupNode.cpp in Sources */,
+				8E827A091CDD2BD0006870B1 /* GeometryDataset.cpp in Sources */,
 				8E2BFB651CDBF1690040DC47 /* LoopbackConnectionAcceptor.cpp in Sources */,
 				8E2BFB781CDBF1690040DC47 /* NetworkTesting.cpp in Sources */,
 				8E2BFB641CDBF1690040DC47 /* LoopbackConnection.cpp in Sources */,
 				8E2BFB611CDBF1690040DC47 /* FramingConnection.cpp in Sources */,
+				8E827A0A1CDD2BD0006870B1 /* GroupNode.cpp in Sources */,
 				8E2BFB711CDBF1690040DC47 /* QueueConnectionFactory.cpp in Sources */,
 				8E2BFB6D1CDBF1690040DC47 /* RpcClient.cpp in Sources */,
 				8E2BFB521CDBF1690040DC47 /* Filesystem.cpp in Sources */,
 				8E6DCEC91CDB971B0091D5AB /* SettingsViewController.mm in Sources */,
-				8E2BFA961CDBF10B0040DC47 /* SceneDefinitionParser.cpp in Sources */,
+				8E827A0C1CDD2BD0006870B1 /* SceneMetadata.cpp in Sources */,
 				8E2BFB631CDBF1690040DC47 /* FramingConnectionFactory.cpp in Sources */,
 				8E2BFB7D1CDBF1690040DC47 /* sha1.cpp in Sources */,
 				8E2BFB761CDBF1690040DC47 /* TCPConnectionFactory.cpp in Sources */,
 				8E2BFB4D1CDBF1690040DC47 /* CommandLineParser.cpp in Sources */,
 				8E2BFB5E1CDBF1690040DC47 /* FramingUtils.cpp in Sources */,
 				8E2BFB5D1CDBF1690040DC47 /* Endpoint.cpp in Sources */,
-				8E2BF9661CDBF10A0040DC47 /* ServerAdapter.cpp in Sources */,
 				8E2BFB4F1CDBF1690040DC47 /* StringTools.cpp in Sources */,
 				8E2BFB511CDBF1690040DC47 /* File.cpp in Sources */,
 				8E2BFB691CDBF1690040DC47 /* Dispatcher.cpp in Sources */,
@@ -784,7 +804,6 @@
 				8E2BFB621CDBF1690040DC47 /* FramingConnectionAcceptor.cpp in Sources */,
 				8E2BFB541CDBF1690040DC47 /* CallbackLog.cpp in Sources */,
 				8E2BFB6E1CDBF1690040DC47 /* ValueType.cpp in Sources */,
-				8E2BFA931CDBF10B0040DC47 /* DownloadNode.cpp in Sources */,
 				8E2BFB561CDBF1690040DC47 /* HTMLLog.cpp in Sources */,
 				8E2BFB581CDBF1690040DC47 /* LogManager.cpp in Sources */,
 				8E2BFB551CDBF1690040DC47 /* ConsoleLog.cpp in Sources */,
@@ -801,6 +820,7 @@
 				8E2AF9D31CDA762900AC6CEC /* main.mm in Sources */,
 				8E2BFB681CDBF1690040DC47 /* Message.cpp in Sources */,
 				8E2BFB791CDBF1690040DC47 /* AES.cpp in Sources */,
+				8E827A081CDD2BD0006870B1 /* DownloadNode.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

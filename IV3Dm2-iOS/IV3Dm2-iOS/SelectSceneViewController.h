@@ -4,18 +4,18 @@
 
 #import <UIKit/UIKit.h>
 
-#include "SceneDefinition.h"
+#include "Scene.h"
 
 #include <vector>
 
-class SceneDefinitionProvider;
+class SceneProvider;
 
 @interface SelectSceneViewController : UITableViewController
 {
-    std::vector<SceneDefinition> m_definitions;
+    std::vector<Scene> m_scenes;
 }
 
-- (id)initWithSceneDefinitionProvider:(SceneDefinitionProvider*)provider;
+- (id)initWithSceneProvider:(SceneProvider*)provider;
 
 @end
 

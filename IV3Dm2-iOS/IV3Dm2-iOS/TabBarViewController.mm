@@ -12,10 +12,10 @@
 
 @implementation TabBarViewController
 
-- (id)initWithSceneDefinitionProvider:(SceneDefinitionProvider*)provider {
+- (id)initWithSceneProvider:(SceneProvider*)provider {
     self = [super init];
     if (self) {
-        m_selectSceneViewController = [[SelectSceneViewController alloc] initWithSceneDefinitionProvider:provider];
+        m_selectSceneViewController = [[SelectSceneViewController alloc] initWithSceneProvider:provider];
         m_settingsViewController = [[SettingsViewController alloc] init];
         [self createNavigationControllers];
     }
