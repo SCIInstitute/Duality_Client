@@ -3,6 +3,13 @@
 //
 
 #import "AppDelegate.h"
+#import "Render3DViewController.h"
+#import "SelectSceneViewController.h"
+#import "SettingsViewController.h"
+
+#include "Communication/ServerAdapter.h"
+#include "Scene/Scene.h"
+#include "Render/GeometryRenderer.h"
 
 #include "mocca/net/ConnectionFactorySelector.h"
 
@@ -20,7 +27,14 @@
     mocca::net::ConnectionFactorySelector::addDefaultFactories();
     
     m_serverAdapter = new ServerAdapter();
-    m_tabBarViewController = [[TabBarViewController alloc] initWithSceneProvider:m_serverAdapter];
+    m_scene = nullptr;
+    AbstractRenderer* renderer = new GeometryRenderer;
+    
+    Render3DViewController* renderView = [[Render3DViewController alloc] initWithScene:m_scene andRenderer:renderer];
+    SelectSceneViewController* sceneView = [[SelectSceneViewController alloc] initWithSceneProvider:m_serverAdapter];
+    SettingsViewController* settingsView = [[SettingsViewController alloc] init];
+    
+    m_tabBarViewController = [[TabBarViewController alloc] initWithRenderView:renderView andSceneView:sceneView andSettingsView:settingsView];
     
     // Create window and content view (to hold other views)
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];

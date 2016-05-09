@@ -4,13 +4,16 @@
 
 #import "TabBarViewController.h"
 
-#include "ServerAdapter.h"
+class ServerAdapter;
+class Scene;
+class AbstractRenderer;
 
 @interface AppDelegate : NSObject <UIApplicationDelegate>
 {
     UIWindow * window;
     TabBarViewController* m_tabBarViewController;
     ServerAdapter* m_serverAdapter;
+    Scene* m_scene;
 }
 
 @property (strong, nonatomic) IBOutlet UIWindow *window;

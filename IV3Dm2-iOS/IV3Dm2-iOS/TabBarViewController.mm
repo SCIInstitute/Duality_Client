@@ -12,11 +12,12 @@
 
 @implementation TabBarViewController
 
-- (id)initWithSceneProvider:(SceneProvider*)provider {
+- (id)initWithRenderView:(Render3DViewController*)renderView andSceneView:(SelectSceneViewController*)sceneView andSettingsView:(SettingsViewController*)settingsView {
     self = [super init];
     if (self) {
-        m_selectSceneViewController = [[SelectSceneViewController alloc] initWithSceneProvider:provider];
-        m_settingsViewController = [[SettingsViewController alloc] init];
+        m_render3DViewController = renderView;
+        m_selectSceneViewController = sceneView;
+        m_settingsViewController = settingsView;
         [self createNavigationControllers];
     }
     return self;
@@ -26,6 +27,9 @@
     // Array to contain the view controllers
     NSMutableArray *viewControllersArray = [[NSMutableArray alloc] init];
     UINavigationController* navController;
+
+    navController = [self createNavigationController:m_render3DViewController withTitle:@"3D View"];
+    [viewControllersArray addObject:navController];
     
     navController = [self createNavigationController:m_selectSceneViewController withTitle:@"Select Scene"];
     [viewControllersArray addObject:navController];

@@ -78,6 +78,8 @@
 		8EC192281CE12980003EBC45 /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EC192181CE12980003EBC45 /* Scene.cpp */; };
 		8EC192291CE12980003EBC45 /* SceneMetadata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EC1921A1CE12980003EBC45 /* SceneMetadata.cpp */; };
 		8EC1922A1CE12980003EBC45 /* SceneParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EC1921D1CE12980003EBC45 /* SceneParser.cpp */; };
+		8EC1922D1CE12C42003EBC45 /* Render3DViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8EC1922C1CE12C42003EBC45 /* Render3DViewController.mm */; };
+		8EC1922F1CE12FB6003EBC45 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EC1922E1CE12FB6003EBC45 /* GLKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -243,6 +245,9 @@
 		8EC1921C1CE12980003EBC45 /* SceneNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneNode.h; sourceTree = "<group>"; };
 		8EC1921D1CE12980003EBC45 /* SceneParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneParser.cpp; sourceTree = "<group>"; };
 		8EC1921E1CE12980003EBC45 /* SceneParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneParser.h; sourceTree = "<group>"; };
+		8EC1922B1CE12C31003EBC45 /* Render3DViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Render3DViewController.h; sourceTree = "<group>"; };
+		8EC1922C1CE12C42003EBC45 /* Render3DViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Render3DViewController.mm; sourceTree = "<group>"; };
+		8EC1922E1CE12FB6003EBC45 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -250,6 +255,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8EC1922F1CE12FB6003EBC45 /* GLKit.framework in Frameworks */,
 				8E2AFA581CDAC18C00AC6CEC /* UIKit.framework in Frameworks */,
 				8E2AFA561CDAC18400AC6CEC /* Foundation.framework in Frameworks */,
 			);
@@ -281,6 +287,8 @@
 			children = (
 				8E2AF9D41CDA762900AC6CEC /* AppDelegate.h */,
 				8E2AF9D51CDA762900AC6CEC /* AppDelegate.mm */,
+				8EC1922B1CE12C31003EBC45 /* Render3DViewController.h */,
+				8EC1922C1CE12C42003EBC45 /* Render3DViewController.mm */,
 				8E2AF9D71CDA762900AC6CEC /* SelectSceneViewController.h */,
 				8E2AF9D81CDA762900AC6CEC /* SelectSceneViewController.mm */,
 				8E6DCEC71CDB97080091D5AB /* SettingsViewController.h */,
@@ -654,6 +662,7 @@
 		8E6DCECF1CDBBA320091D5AB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8EC1922E1CE12FB6003EBC45 /* GLKit.framework */,
 				8E2AFA571CDAC18C00AC6CEC /* UIKit.framework */,
 				8E2AFA551CDAC18400AC6CEC /* Foundation.framework */,
 			);
@@ -797,6 +806,7 @@
 				8EC192251CE12980003EBC45 /* G3D.cpp in Sources */,
 				8E2AF9ED1CDAA7B500AC6CEC /* TabBarViewController.mm in Sources */,
 				8E2BFB6A1CDBF1690040DC47 /* JsonKeys.cpp in Sources */,
+				8EC1922D1CE12C42003EBC45 /* Render3DViewController.mm in Sources */,
 				8EC192211CE12980003EBC45 /* GeometryRenderer.cpp in Sources */,
 				8EC1921F1CE12980003EBC45 /* ServerAdapter.cpp in Sources */,
 				8E2BFB7A1CDBF1690040DC47 /* base64.cpp in Sources */,
