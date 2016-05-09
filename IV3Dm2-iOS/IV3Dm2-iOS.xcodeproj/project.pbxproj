@@ -80,6 +80,17 @@
 		8EC1922A1CE12980003EBC45 /* SceneParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EC1921D1CE12980003EBC45 /* SceneParser.cpp */; };
 		8EC1922D1CE12C42003EBC45 /* Render3DViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8EC1922C1CE12C42003EBC45 /* Render3DViewController.mm */; };
 		8EC1922F1CE12FB6003EBC45 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EC1922E1CE12FB6003EBC45 /* GLKit.framework */; };
+		8EC1927A1CE1378C003EBC45 /* ConsoleOut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EC192631CE1378C003EBC45 /* ConsoleOut.cpp */; };
+		8EC1927B1CE1378C003EBC45 /* DebugOutHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EC192651CE1378C003EBC45 /* DebugOutHandler.cpp */; };
+		8EC1927C1CE1378C003EBC45 /* GLFrameBufferObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EC192671CE1378C003EBC45 /* GLFrameBufferObject.cpp */; };
+		8EC1927D1CE1378C003EBC45 /* GLShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EC1926B1CE1378C003EBC45 /* GLShader.cpp */; };
+		8EC1927E1CE1378C003EBC45 /* Macros.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EC1926F1CE1378C003EBC45 /* Macros.cpp */; };
+		8EC1927F1CE1378C003EBC45 /* MultiplexOut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EC192711CE1378C003EBC45 /* MultiplexOut.cpp */; };
+		8EC192801CE1378C003EBC45 /* SysTools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EC192751CE1378C003EBC45 /* SysTools.cpp */; };
+		8EC192811CE1378C003EBC45 /* Threads.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EC192771CE1378C003EBC45 /* Threads.cpp */; };
+		8EC5A3911CE142570042E2C8 /* iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8EC5A3901CE142570042E2C8 /* iOS.mm */; };
+		8EC5A3941CE142770042E2C8 /* XQueryComponents.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8EC5A3931CE142770042E2C8 /* XQueryComponents.mm */; };
+		8EC5A3961CE143650042E2C8 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EC5A3951CE143650042E2C8 /* OpenGLES.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -248,6 +259,36 @@
 		8EC1922B1CE12C31003EBC45 /* Render3DViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Render3DViewController.h; sourceTree = "<group>"; };
 		8EC1922C1CE12C42003EBC45 /* Render3DViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Render3DViewController.mm; sourceTree = "<group>"; };
 		8EC1922E1CE12FB6003EBC45 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		8EC192611CE1378C003EBC45 /* AbstrDebugOut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstrDebugOut.h; sourceTree = "<group>"; };
+		8EC192621CE1378C003EBC45 /* Console.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Console.h; sourceTree = "<group>"; };
+		8EC192631CE1378C003EBC45 /* ConsoleOut.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConsoleOut.cpp; sourceTree = "<group>"; };
+		8EC192641CE1378C003EBC45 /* ConsoleOut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConsoleOut.h; sourceTree = "<group>"; };
+		8EC192651CE1378C003EBC45 /* DebugOutHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DebugOutHandler.cpp; sourceTree = "<group>"; };
+		8EC192661CE1378C003EBC45 /* DebugOutHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebugOutHandler.h; sourceTree = "<group>"; };
+		8EC192671CE1378C003EBC45 /* GLFrameBufferObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLFrameBufferObject.cpp; sourceTree = "<group>"; };
+		8EC192681CE1378C003EBC45 /* GLFrameBufferObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLFrameBufferObject.h; sourceTree = "<group>"; };
+		8EC192691CE1378C003EBC45 /* GLInclude.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLInclude.h; sourceTree = "<group>"; };
+		8EC1926A1CE1378C003EBC45 /* GLObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLObject.h; sourceTree = "<group>"; };
+		8EC1926B1CE1378C003EBC45 /* GLShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLShader.cpp; sourceTree = "<group>"; };
+		8EC1926C1CE1378C003EBC45 /* GLShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLShader.h; sourceTree = "<group>"; };
+		8EC1926D1CE1378C003EBC45 /* GPUObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPUObject.h; sourceTree = "<group>"; };
+		8EC1926E1CE1378C003EBC45 /* iOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iOS.h; sourceTree = "<group>"; };
+		8EC1926F1CE1378C003EBC45 /* Macros.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Macros.cpp; sourceTree = "<group>"; };
+		8EC192701CE1378C003EBC45 /* Macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Macros.h; sourceTree = "<group>"; };
+		8EC192711CE1378C003EBC45 /* MultiplexOut.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MultiplexOut.cpp; sourceTree = "<group>"; };
+		8EC192721CE1378C003EBC45 /* MultiplexOut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiplexOut.h; sourceTree = "<group>"; };
+		8EC192731CE1378C003EBC45 /* Singleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Singleton.h; sourceTree = "<group>"; };
+		8EC192741CE1378C003EBC45 /* StdDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StdDefines.h; sourceTree = "<group>"; };
+		8EC192751CE1378C003EBC45 /* SysTools.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SysTools.cpp; sourceTree = "<group>"; };
+		8EC192761CE1378C003EBC45 /* SysTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SysTools.h; sourceTree = "<group>"; };
+		8EC192771CE1378C003EBC45 /* Threads.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Threads.cpp; sourceTree = "<group>"; };
+		8EC192781CE1378C003EBC45 /* Threads.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Threads.h; sourceTree = "<group>"; };
+		8EC192791CE1378C003EBC45 /* Vectors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vectors.h; sourceTree = "<group>"; };
+		8EC5A38F1CE13D2D0042E2C8 /* ScreenInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScreenInfo.h; sourceTree = "<group>"; };
+		8EC5A3901CE142570042E2C8 /* iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = iOS.mm; sourceTree = "<group>"; };
+		8EC5A3921CE142770042E2C8 /* XQueryComponents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XQueryComponents.h; sourceTree = "<group>"; };
+		8EC5A3931CE142770042E2C8 /* XQueryComponents.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = XQueryComponents.mm; sourceTree = "<group>"; };
+		8EC5A3951CE143650042E2C8 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -255,6 +296,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8EC5A3961CE143650042E2C8 /* OpenGLES.framework in Frameworks */,
 				8EC1922F1CE12FB6003EBC45 /* GLKit.framework in Frameworks */,
 				8E2AFA581CDAC18C00AC6CEC /* UIKit.framework in Frameworks */,
 				8E2AFA561CDAC18400AC6CEC /* Foundation.framework in Frameworks */,
@@ -315,6 +357,7 @@
 			children = (
 				8EC191FF1CE12980003EBC45 /* Common */,
 				8EC192011CE12980003EBC45 /* Communication */,
+				8EC192601CE1378C003EBC45 /* IVDA */,
 				8EC192061CE12980003EBC45 /* Render */,
 				8EC1920B1CE12980003EBC45 /* Scene */,
 				8E2BFAB61CDBF1690040DC47 /* mocca */,
@@ -662,6 +705,7 @@
 		8E6DCECF1CDBBA320091D5AB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8EC5A3951CE143650042E2C8 /* OpenGLES.framework */,
 				8EC1922E1CE12FB6003EBC45 /* GLKit.framework */,
 				8E2AFA571CDAC18C00AC6CEC /* UIKit.framework */,
 				8E2AFA551CDAC18400AC6CEC /* Foundation.framework */,
@@ -695,6 +739,7 @@
 				8EC192081CE12980003EBC45 /* AbstractRenderer.h */,
 				8EC192091CE12980003EBC45 /* GeometryRenderer.cpp */,
 				8EC1920A1CE12980003EBC45 /* GeometryRenderer.h */,
+				8EC5A38F1CE13D2D0042E2C8 /* ScreenInfo.h */,
 			);
 			path = Render;
 			sourceTree = "<group>";
@@ -723,6 +768,41 @@
 				8EC1921E1CE12980003EBC45 /* SceneParser.h */,
 			);
 			path = Scene;
+			sourceTree = "<group>";
+		};
+		8EC192601CE1378C003EBC45 /* IVDA */ = {
+			isa = PBXGroup;
+			children = (
+				8EC192611CE1378C003EBC45 /* AbstrDebugOut.h */,
+				8EC192621CE1378C003EBC45 /* Console.h */,
+				8EC192631CE1378C003EBC45 /* ConsoleOut.cpp */,
+				8EC192641CE1378C003EBC45 /* ConsoleOut.h */,
+				8EC192651CE1378C003EBC45 /* DebugOutHandler.cpp */,
+				8EC192661CE1378C003EBC45 /* DebugOutHandler.h */,
+				8EC192671CE1378C003EBC45 /* GLFrameBufferObject.cpp */,
+				8EC192681CE1378C003EBC45 /* GLFrameBufferObject.h */,
+				8EC192691CE1378C003EBC45 /* GLInclude.h */,
+				8EC1926A1CE1378C003EBC45 /* GLObject.h */,
+				8EC1926B1CE1378C003EBC45 /* GLShader.cpp */,
+				8EC1926C1CE1378C003EBC45 /* GLShader.h */,
+				8EC1926D1CE1378C003EBC45 /* GPUObject.h */,
+				8EC1926E1CE1378C003EBC45 /* iOS.h */,
+				8EC5A3901CE142570042E2C8 /* iOS.mm */,
+				8EC1926F1CE1378C003EBC45 /* Macros.cpp */,
+				8EC192701CE1378C003EBC45 /* Macros.h */,
+				8EC192711CE1378C003EBC45 /* MultiplexOut.cpp */,
+				8EC192721CE1378C003EBC45 /* MultiplexOut.h */,
+				8EC192731CE1378C003EBC45 /* Singleton.h */,
+				8EC192741CE1378C003EBC45 /* StdDefines.h */,
+				8EC192751CE1378C003EBC45 /* SysTools.cpp */,
+				8EC192761CE1378C003EBC45 /* SysTools.h */,
+				8EC192771CE1378C003EBC45 /* Threads.cpp */,
+				8EC192781CE1378C003EBC45 /* Threads.h */,
+				8EC192791CE1378C003EBC45 /* Vectors.h */,
+				8EC5A3921CE142770042E2C8 /* XQueryComponents.h */,
+				8EC5A3931CE142770042E2C8 /* XQueryComponents.mm */,
+			);
+			path = IVDA;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -798,10 +878,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				8E2BFB7B1CDBF1690040DC47 /* jsoncpp.cpp in Sources */,
+				8EC1927B1CE1378C003EBC45 /* DebugOutHandler.cpp in Sources */,
 				8E2BFB721CDBF1690040DC47 /* QueueConnectionSpawner.cpp in Sources */,
 				8E2BFB741CDBF1690040DC47 /* TCPConnection.cpp in Sources */,
 				8E2BFB6B1CDBF1690040DC47 /* Method.cpp in Sources */,
 				8E2BFB771CDBF1690040DC47 /* TCPNetworkAddress.cpp in Sources */,
+				8EC1927E1CE1378C003EBC45 /* Macros.cpp in Sources */,
+				8EC5A3941CE142770042E2C8 /* XQueryComponents.mm in Sources */,
+				8EC1927C1CE1378C003EBC45 /* GLFrameBufferObject.cpp in Sources */,
 				8E2BFB5F1CDBF1690040DC47 /* SizePrefixedProtocol.cpp in Sources */,
 				8EC192251CE12980003EBC45 /* G3D.cpp in Sources */,
 				8E2AF9ED1CDAA7B500AC6CEC /* TabBarViewController.mm in Sources */,
@@ -819,6 +903,7 @@
 				8E2BFB531CDBF1690040DC47 /* Path.cpp in Sources */,
 				8EC192261CE12980003EBC45 /* GeometryDataset.cpp in Sources */,
 				8E2BFB591CDBF1690040DC47 /* StreamLog.cpp in Sources */,
+				8EC1927A1CE1378C003EBC45 /* ConsoleOut.cpp in Sources */,
 				8E2BFB6C1CDBF1690040DC47 /* MethodDescription.cpp in Sources */,
 				8E2BFB6F1CDBF1690040DC47 /* QueueConnection.cpp in Sources */,
 				8E2BFB651CDBF1690040DC47 /* LoopbackConnectionAcceptor.cpp in Sources */,
@@ -829,6 +914,7 @@
 				8E2BFB6D1CDBF1690040DC47 /* RpcClient.cpp in Sources */,
 				8E2BFB521CDBF1690040DC47 /* Filesystem.cpp in Sources */,
 				8E6DCEC91CDB971B0091D5AB /* SettingsViewController.mm in Sources */,
+				8EC192801CE1378C003EBC45 /* SysTools.cpp in Sources */,
 				8E2BFB631CDBF1690040DC47 /* FramingConnectionFactory.cpp in Sources */,
 				8E2BFB7D1CDBF1690040DC47 /* sha1.cpp in Sources */,
 				8E2BFB761CDBF1690040DC47 /* TCPConnectionFactory.cpp in Sources */,
@@ -849,10 +935,14 @@
 				8E2BFB551CDBF1690040DC47 /* ConsoleLog.cpp in Sources */,
 				8E2BFB5A1CDBF1690040DC47 /* TextLog.cpp in Sources */,
 				8E2BFB671CDBF1690040DC47 /* LoopbackConnectionSpawner.cpp in Sources */,
+				8EC192811CE1378C003EBC45 /* Threads.cpp in Sources */,
 				8EC192201CE12980003EBC45 /* AbstractRenderer.cpp in Sources */,
 				8E2AF9D61CDA762900AC6CEC /* AppDelegate.mm in Sources */,
+				8EC5A3911CE142570042E2C8 /* iOS.mm in Sources */,
+				8EC1927D1CE1378C003EBC45 /* GLShader.cpp in Sources */,
 				8E2BFB571CDBF1690040DC47 /* Log.cpp in Sources */,
 				8E2BFB751CDBF1690040DC47 /* TCPConnectionAcceptor.cpp in Sources */,
+				8EC1927F1CE1378C003EBC45 /* MultiplexOut.cpp in Sources */,
 				8E2AF9D91CDA762900AC6CEC /* SelectSceneViewController.mm in Sources */,
 				8E2BFB701CDBF1690040DC47 /* QueueConnectionAcceptor.cpp in Sources */,
 				8EC192231CE12980003EBC45 /* Dataset.cpp in Sources */,

@@ -28,9 +28,8 @@
     
     m_serverAdapter = new ServerAdapter();
     m_scene = nullptr;
-    AbstractRenderer* renderer = new GeometryRenderer;
     
-    Render3DViewController* renderView = [[Render3DViewController alloc] initWithScene:m_scene andRenderer:renderer];
+    Render3DViewController* renderView = [[Render3DViewController alloc] initWithScene:m_scene];
     SelectSceneViewController* sceneView = [[SelectSceneViewController alloc] initWithSceneProvider:m_serverAdapter];
     SettingsViewController* settingsView = [[SettingsViewController alloc] init];
     

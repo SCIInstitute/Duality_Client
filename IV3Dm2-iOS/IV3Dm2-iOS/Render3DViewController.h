@@ -5,6 +5,8 @@
 #import <UIKit/UIKit.h>
 #import <GLKit/GLKit.h>
 
+#include <memory>
+
 class Scene;
 class AbstractRenderer;
 
@@ -12,9 +14,11 @@ class AbstractRenderer;
 {
 @protected
     Scene* m_scene;
-    AbstractRenderer* m_renderer;
+    std::unique_ptr<AbstractRenderer> m_renderer;
 }
 
--(id) initWithScene:(Scene*)scene andRenderer:(AbstractRenderer*)renderer;
+-(id) initWithScene:(Scene*)scene;
+
+@property (nonatomic, retain) EAGLContext *context;
 
 @end
