@@ -20,7 +20,7 @@
     mocca::net::ConnectionFactorySelector::addDefaultFactories();
     
     m_serverAdapter = new ServerAdapter();
-    m_tabBarViewController = [[TabBarViewController alloc] initWithSceneDefinitionProvider:m_serverAdapter];
+    m_tabBarViewController = [[TabBarViewController alloc] initWithSceneProvider:m_serverAdapter];
     
     // Create window and content view (to hold other views)
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];

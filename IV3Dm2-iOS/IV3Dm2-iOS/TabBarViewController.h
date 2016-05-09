@@ -7,7 +7,7 @@
 
 #import <UIKit/UIKit.h>
 
-class SceneDefinitionProvider;
+class SceneProvider;
 
 @interface TabBarViewController : UITabBarController {
 @private
@@ -15,6 +15,6 @@ class SceneDefinitionProvider;
     SettingsViewController* m_settingsViewController;
 }
 
-- (id)initWithSceneDefinitionProvider:(SceneDefinitionProvider*)provider;
+- (id)initWithSceneProvider:(SceneProvider*)provider;
 
 @end
