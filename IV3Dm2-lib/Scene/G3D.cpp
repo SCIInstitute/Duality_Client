@@ -1,5 +1,7 @@
-#include "AbstractIO.h"
 #include "G3D.h"
+
+#include "AbstractIO.h"
+#include "Common/Error.h"
 
 #include <string>
 
@@ -246,6 +248,108 @@ void G3D::clean(GeometrySoA* geometry) {
     }
 }
 
+namespace {
+template <typename T> bool merge(G3D::GeometrySoA* dst, const G3D::GeometrySoA* const other) {
+    if (dst->info.indexSize != other->info.indexSize || dst->info.vertexType != other->info.vertexType ||
+        dst->info.primitiveType != other->info.primitiveType || dst->info.attributeSemantics != other->info.attributeSemantics ||
+        // check if one of the indices of the appended other mesh would overflow
+        // we could check all indices individually (see commented code below) but we assume that all vertices are
+        // referenced by at least one index
+        (uint64_t)dst->info.numberVertices + (uint64_t)other->info.numberVertices > std::numeric_limits<T>::max()) {
+// TODO: All but the primitiveType mismatch can be fixed, do this!
+#if 0
+      G3D::print(dst);
+      G3D::print(other);
+#endif
+        if (dst->info.indexSize != other->info.indexSize) {
+            THROW_ERROR("Different index sizes (dst: " << dst->info.indexSize << " other: " << other->info.indexSize << ")");
+        }
+        if (dst->info.vertexType != other->info.vertexType) {
+            THROW_ERROR("Different vertex types (dst: " << G3D::printVertexType(dst) << " other: " << G3D::printVertexType(other) << ")");
+        }
+        if (dst->info.primitiveType != other->info.primitiveType) {
+            THROW_ERROR("Different primitive types (dst: " << G3D::printPrimitiveType(dst) << " other: " << G3D::printPrimitiveType(other)
+                                                           << ")");
+        }
+        if (dst->info.attributeSemantics != other->info.attributeSemantics) {
+            THROW_ERROR("Different attribute semantics (dst: " << G3D::printAttributeSemantics(dst)
+                                                               << " other: " << G3D::printAttributeSemantics(other) << ")");
+        }
+        if ((uint64_t)dst->info.numberVertices + (uint64_t)other->info.numberVertices > std::numeric_limits<T>::max()) {
+            THROW_ERROR("Number of vertices required:     " << (uint64_t)dst->info.numberVertices + (uint64_t)other->info.numberVertices
+                                                            << "; Max number of vertices possible: " << std::numeric_limits<T>::max());
+        }
+        return false;
+    }
+
+#if 0
+    // this is already checked conservatively above
+    // check if one of the indices of the appended other mesh would overflow
+    const T * checkIter = (T*)other->indices;
+    for (size_t i = 0; i < other->info.numberIndices; ++i)
+    {
+      uint64_t index = *checkIter + dst->info.numberVertices;
+      if (index > std::numeric_limits<T>::max())
+        return false;
+      checkIter++;
+    }
+#endif
+
+    // merge indices: copy my indices over to new array and then append other
+    //                but add number of vertices
+    uint32_t numberIndices = dst->info.numberIndices + other->info.numberIndices;
+    T* indices = new T[numberIndices];
+
+    std::copy((T*)dst->indices, (T*)dst->indices + dst->info.numberIndices, indices);
+
+    T* indicesIter = indices + dst->info.numberIndices;
+    T* otherIndicesIter = (T*)other->indices;
+
+    // TODO: Does numberVertices always equal numberIndices?
+    for (size_t i = 0; i < other->info.numberIndices; ++i) {
+        *indicesIter = *otherIndicesIter + dst->info.numberVertices;
+        indicesIter++;
+        otherIndicesIter++;
+    }
+    dst->info.numberIndices = numberIndices;
+    delete[] dst->indices;
+    dst->indices = (uint32_t*)indices;
+
+
+    // merge vertices: simply copy both my as well as the other vertex attribs
+    //                 into a new bigger pointer
+    uint32_t numberVertices = dst->info.numberVertices + other->info.numberVertices;
+
+    for (size_t a = 0; a < dst->info.attributeSemantics.size(); ++a) {
+        size_t bytes = G3D::floats(dst->info.attributeSemantics[a]);
+
+        float* values = new float[numberVertices * bytes];
+
+        std::copy(dst->vertexAttributes[a], dst->vertexAttributes[a] + dst->info.numberVertices * bytes, values);
+
+        std::copy(other->vertexAttributes[a], other->vertexAttributes[a] + other->info.numberVertices * bytes,
+                  values + dst->info.numberVertices * bytes);
+
+        delete[] dst->vertexAttributes[a];
+        dst->vertexAttributes[a] = values;
+    }
+
+    dst->info.numberVertices = numberVertices;
+    dst->info.numberPrimitives = dst->info.numberPrimitives + other->info.numberPrimitives;
+
+    return true;
+}
+}
+
+bool G3D::merge(GeometrySoA* dst, const GeometrySoA* const other) {
+    switch (dst->info.indexSize) {
+    case sizeof(uint16_t):
+        return ::merge<uint16_t>(dst, other);
+    case sizeof(uint32_t):
+        return ::merge<uint32_t>(dst, other);
+    }
+    return false;
+}
 
 std::string G3D::printPrimitiveType(const Geometry* const geometry) {
     return ((geometry->info.primitiveType == Point) ? "Point" : (geometry->info.primitiveType == Line)

@@ -1,6 +1,7 @@
-#pragma once
+#ifndef G3D_H
+#define G3D_H
 
-#include <cstdint>
+#include "stdint.h"
 #include <iostream>
 #include <vector>
 
@@ -36,9 +37,6 @@ public:
 
         std::vector<uint32_t> attributeSemantics;
     };
-
-
-    /* FIXME: These data structures are HORRIBLE */
 
     struct Geometry {
         Geometry()
@@ -95,6 +93,7 @@ public:
     static void print(const Geometry* const geometry, std::ostream& output = std::cout);
     static void clean(GeometryAoS* geometry);
     static void clean(GeometrySoA* geometry);
+    static bool merge(GeometrySoA* a, const GeometrySoA* const b); // merge a and b into a
 
 private:
     static void writeHeader(AbstractWriter& writer, const GeometryInfo& info, const uint32_t* const vertexType = NULL);
@@ -118,6 +117,8 @@ private:
     static void cleanVertices(float* vertices);
     static void cleanVertices(std::vector<float*>& vertexAttributes);
 };
+
+#endif // G3D_H
 
 /*
  The MIT License
