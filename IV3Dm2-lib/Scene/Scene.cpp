@@ -29,3 +29,7 @@ const SceneNode& Scene::rootNode() const noexcept {
 void Scene::updateDatasets(const DatasetProvider& provider) {
     m_sceneRoot->updateDatasets(provider);
 }
+
+void Scene::render(AbstractRenderer& renderer) const {
+    m_sceneRoot->render(renderer);
+}

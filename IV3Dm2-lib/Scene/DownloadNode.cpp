@@ -14,6 +14,10 @@ void DownloadNode::updateDatasets(const DatasetProvider& datasetProvider) {
     }
 }
 
+void DownloadNode::render(AbstractRenderer& renderer) const {
+    m_dataset->render(renderer);
+}
+
 std::unique_ptr<SceneNode> DownloadNode::clone() const {
     return std::make_unique<DownloadNode>(*this);
 }

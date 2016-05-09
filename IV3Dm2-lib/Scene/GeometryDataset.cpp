@@ -1,6 +1,7 @@
 #include "GeometryDataset.h"
 
 #include "Common/Error.h"
+#include "Render/AbstractRenderer.h"
 
 GeometryDataset::GeometryDataset(AbstractReader& reader)
     : m_geometry(std::make_unique<G3D::GeometrySoA>()) {
@@ -11,6 +12,11 @@ GeometryDataset::GeometryDataset(AbstractReader& reader)
     } else {
         G3D::clean(m_geometry.get());
     }
+}
+
+void GeometryDataset::render(AbstractRenderer& renderer) const
+{
+
 }
 
 void GeometryDataset::assignShortcutPointers() {

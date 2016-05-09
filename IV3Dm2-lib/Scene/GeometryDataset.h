@@ -3,11 +3,13 @@
 #include "Dataset.h"
 #include "G3D.h"
 
+class AbstractRenderer;
+
 class GeometryDataset : public Dataset {
 public:
     GeometryDataset(AbstractReader& reader);
 
-    // virtual void render(Renderer& renderer) const override;
+    void render(AbstractRenderer& renderer) const override;
 
 private:
     void assignShortcutPointers();

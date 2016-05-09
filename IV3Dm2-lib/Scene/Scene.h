@@ -12,6 +12,9 @@
 #include <string>
 #include <memory>
 
+class DatasetProvider;
+class AbstractRenderer;
+
 class Scene {
 public:
     Scene(SceneMetadata metadata, std::unique_ptr<SceneNode> sceneRoot);
@@ -23,6 +26,7 @@ public:
     const SceneNode& rootNode() const noexcept;
 
     void updateDatasets(const DatasetProvider& provider);
+    void render(AbstractRenderer& renderer) const;
 
 private:
     SceneMetadata m_metadata;

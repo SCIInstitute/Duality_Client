@@ -10,6 +10,12 @@ void GroupNode::updateDatasets(const DatasetProvider& datasetProvider) {
     }
 }
 
+void GroupNode::render(AbstractRenderer& renderer) const {
+    for (const auto& child : m_children) {
+        child->render(renderer);
+    }
+}
+
 std::unique_ptr<SceneNode> GroupNode::clone() const {
     auto newNode = std::make_unique<GroupNode>();
     for (auto& child : m_children) {

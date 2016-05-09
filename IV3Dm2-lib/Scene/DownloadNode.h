@@ -16,6 +16,7 @@ public:
     DownloadNode(std::string path);
 
     void updateDatasets(const DatasetProvider& datasetProvider) override;
+    void render(AbstractRenderer& renderer) const;
 
     std::unique_ptr<SceneNode> clone() const override;
 
