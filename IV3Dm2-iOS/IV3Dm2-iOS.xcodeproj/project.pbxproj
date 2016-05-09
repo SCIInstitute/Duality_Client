@@ -66,6 +66,36 @@
 		8E2BFB7C1CDBF1690040DC47 /* license.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8E2BFB471CDBF1690040DC47 /* license.txt */; };
 		8E2BFB7D1CDBF1690040DC47 /* sha1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E2BFB481CDBF1690040DC47 /* sha1.cpp */; };
 		8E6DCEC91CDB971B0091D5AB /* SettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8E6DCEC81CDB971B0091D5AB /* SettingsViewController.mm */; };
+		8E95877F1CE1542F00D8CAB9 /* AbstrDebugOut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E95877E1CE1542F00D8CAB9 /* AbstrDebugOut.cpp */; };
+		8E95879F1CE1561400D8CAB9 /* bb.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 8E9587821CE1561400D8CAB9 /* bb.fsh */; };
+		8E9587A01CE1561400D8CAB9 /* bb.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 8E9587831CE1561400D8CAB9 /* bb.vsh */; };
+		8E9587A11CE1561400D8CAB9 /* geo_pc.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 8E9587841CE1561400D8CAB9 /* geo_pc.fsh */; };
+		8E9587A21CE1561400D8CAB9 /* geo_pc.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 8E9587851CE1561400D8CAB9 /* geo_pc.vsh */; };
+		8E9587A31CE1561400D8CAB9 /* geo_pn.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 8E9587861CE1561400D8CAB9 /* geo_pn.fsh */; };
+		8E9587A41CE1561400D8CAB9 /* geo_pn.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 8E9587871CE1561400D8CAB9 /* geo_pn.vsh */; };
+		8E9587A51CE1561400D8CAB9 /* geo_pna.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 8E9587881CE1561400D8CAB9 /* geo_pna.fsh */; };
+		8E9587A61CE1561400D8CAB9 /* geo_pna.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 8E9587891CE1561400D8CAB9 /* geo_pna.vsh */; };
+		8E9587A71CE1561400D8CAB9 /* geo_pnc.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 8E95878A1CE1561400D8CAB9 /* geo_pnc.fsh */; };
+		8E9587A81CE1561400D8CAB9 /* geo_pnc.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 8E95878B1CE1561400D8CAB9 /* geo_pnc.vsh */; };
+		8E9587A91CE1561400D8CAB9 /* geo_pnt.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 8E95878C1CE1561400D8CAB9 /* geo_pnt.fsh */; };
+		8E9587AA1CE1561400D8CAB9 /* geo_pnt.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 8E95878D1CE1561400D8CAB9 /* geo_pnt.vsh */; };
+		8E9587AB1CE1561400D8CAB9 /* geo_pnta.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 8E95878E1CE1561400D8CAB9 /* geo_pnta.fsh */; };
+		8E9587AC1CE1561400D8CAB9 /* geo_pnta.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 8E95878F1CE1561400D8CAB9 /* geo_pnta.vsh */; };
+		8E9587AD1CE1561400D8CAB9 /* geo_pt.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 8E9587901CE1561400D8CAB9 /* geo_pt.fsh */; };
+		8E9587AE1CE1561400D8CAB9 /* geo_pt.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 8E9587911CE1561400D8CAB9 /* geo_pt.vsh */; };
+		8E9587AF1CE1561400D8CAB9 /* quad.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 8E9587921CE1561400D8CAB9 /* quad.fsh */; };
+		8E9587B01CE1561400D8CAB9 /* quad.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 8E9587931CE1561400D8CAB9 /* quad.vsh */; };
+		8E9587B11CE1561400D8CAB9 /* sliceQuad.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 8E9587941CE1561400D8CAB9 /* sliceQuad.fsh */; };
+		8E9587B21CE1561400D8CAB9 /* sliceQuad.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 8E9587951CE1561400D8CAB9 /* sliceQuad.vsh */; };
+		8E9587B31CE1561400D8CAB9 /* vol.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 8E9587961CE1561400D8CAB9 /* vol.vsh */; };
+		8E9587B41CE1561400D8CAB9 /* vol_l.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 8E9587971CE1561400D8CAB9 /* vol_l.fsh */; };
+		8E9587B51CE1561400D8CAB9 /* vol_l_2.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 8E9587981CE1561400D8CAB9 /* vol_l_2.fsh */; };
+		8E9587B61CE1561400D8CAB9 /* vol_lti.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 8E9587991CE1561400D8CAB9 /* vol_lti.fsh */; };
+		8E9587B71CE1561400D8CAB9 /* vol_lti_2.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 8E95879A1CE1561400D8CAB9 /* vol_lti_2.fsh */; };
+		8E9587B81CE1561400D8CAB9 /* vol_nl.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 8E95879B1CE1561400D8CAB9 /* vol_nl.fsh */; };
+		8E9587B91CE1561400D8CAB9 /* vol_nl_2.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 8E95879C1CE1561400D8CAB9 /* vol_nl_2.fsh */; };
+		8E9587BA1CE1561400D8CAB9 /* vol_nlti.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 8E95879D1CE1561400D8CAB9 /* vol_nlti.fsh */; };
+		8E9587BB1CE1561400D8CAB9 /* vol_nlti_2.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 8E95879E1CE1561400D8CAB9 /* vol_nlti_2.fsh */; };
 		8EC1921F1CE12980003EBC45 /* ServerAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EC192041CE12980003EBC45 /* ServerAdapter.cpp */; };
 		8EC192201CE12980003EBC45 /* AbstractRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EC192071CE12980003EBC45 /* AbstractRenderer.cpp */; };
 		8EC192211CE12980003EBC45 /* GeometryRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EC192091CE12980003EBC45 /* GeometryRenderer.cpp */; };
@@ -228,6 +258,36 @@
 		8E2BFB491CDBF1690040DC47 /* sha1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha1.h; sourceTree = "<group>"; };
 		8E6DCEC71CDB97080091D5AB /* SettingsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		8E6DCEC81CDB971B0091D5AB /* SettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SettingsViewController.mm; sourceTree = "<group>"; };
+		8E95877E1CE1542F00D8CAB9 /* AbstrDebugOut.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AbstrDebugOut.cpp; path = ../../../IV3Dm/Classes/Tools/DebugOut/AbstrDebugOut.cpp; sourceTree = "<group>"; };
+		8E9587821CE1561400D8CAB9 /* bb.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = bb.fsh; sourceTree = "<group>"; };
+		8E9587831CE1561400D8CAB9 /* bb.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = bb.vsh; sourceTree = "<group>"; };
+		8E9587841CE1561400D8CAB9 /* geo_pc.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = geo_pc.fsh; sourceTree = "<group>"; };
+		8E9587851CE1561400D8CAB9 /* geo_pc.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = geo_pc.vsh; sourceTree = "<group>"; };
+		8E9587861CE1561400D8CAB9 /* geo_pn.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = geo_pn.fsh; sourceTree = "<group>"; };
+		8E9587871CE1561400D8CAB9 /* geo_pn.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = geo_pn.vsh; sourceTree = "<group>"; };
+		8E9587881CE1561400D8CAB9 /* geo_pna.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = geo_pna.fsh; sourceTree = "<group>"; };
+		8E9587891CE1561400D8CAB9 /* geo_pna.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = geo_pna.vsh; sourceTree = "<group>"; };
+		8E95878A1CE1561400D8CAB9 /* geo_pnc.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = geo_pnc.fsh; sourceTree = "<group>"; };
+		8E95878B1CE1561400D8CAB9 /* geo_pnc.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = geo_pnc.vsh; sourceTree = "<group>"; };
+		8E95878C1CE1561400D8CAB9 /* geo_pnt.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = geo_pnt.fsh; sourceTree = "<group>"; };
+		8E95878D1CE1561400D8CAB9 /* geo_pnt.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = geo_pnt.vsh; sourceTree = "<group>"; };
+		8E95878E1CE1561400D8CAB9 /* geo_pnta.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = geo_pnta.fsh; sourceTree = "<group>"; };
+		8E95878F1CE1561400D8CAB9 /* geo_pnta.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = geo_pnta.vsh; sourceTree = "<group>"; };
+		8E9587901CE1561400D8CAB9 /* geo_pt.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = geo_pt.fsh; sourceTree = "<group>"; };
+		8E9587911CE1561400D8CAB9 /* geo_pt.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = geo_pt.vsh; sourceTree = "<group>"; };
+		8E9587921CE1561400D8CAB9 /* quad.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = quad.fsh; sourceTree = "<group>"; };
+		8E9587931CE1561400D8CAB9 /* quad.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = quad.vsh; sourceTree = "<group>"; };
+		8E9587941CE1561400D8CAB9 /* sliceQuad.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = sliceQuad.fsh; sourceTree = "<group>"; };
+		8E9587951CE1561400D8CAB9 /* sliceQuad.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = sliceQuad.vsh; sourceTree = "<group>"; };
+		8E9587961CE1561400D8CAB9 /* vol.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = vol.vsh; sourceTree = "<group>"; };
+		8E9587971CE1561400D8CAB9 /* vol_l.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = vol_l.fsh; sourceTree = "<group>"; };
+		8E9587981CE1561400D8CAB9 /* vol_l_2.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = vol_l_2.fsh; sourceTree = "<group>"; };
+		8E9587991CE1561400D8CAB9 /* vol_lti.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = vol_lti.fsh; sourceTree = "<group>"; };
+		8E95879A1CE1561400D8CAB9 /* vol_lti_2.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = vol_lti_2.fsh; sourceTree = "<group>"; };
+		8E95879B1CE1561400D8CAB9 /* vol_nl.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = vol_nl.fsh; sourceTree = "<group>"; };
+		8E95879C1CE1561400D8CAB9 /* vol_nl_2.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = vol_nl_2.fsh; sourceTree = "<group>"; };
+		8E95879D1CE1561400D8CAB9 /* vol_nlti.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = vol_nlti.fsh; sourceTree = "<group>"; };
+		8E95879E1CE1561400D8CAB9 /* vol_nlti_2.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = vol_nlti_2.fsh; sourceTree = "<group>"; };
 		8EC192001CE12980003EBC45 /* Error.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Error.h; sourceTree = "<group>"; };
 		8EC192021CE12980003EBC45 /* DatasetProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatasetProvider.h; sourceTree = "<group>"; };
 		8EC192031CE12980003EBC45 /* SceneProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneProvider.h; sourceTree = "<group>"; };
@@ -311,6 +371,7 @@
 			children = (
 				8E2BF7621CDBF10A0040DC47 /* IV3Dm2-lib */,
 				8E2AF9D01CDA762900AC6CEC /* IV3Dm2-iOS */,
+				8E9587801CE1561400D8CAB9 /* Resources */,
 				8E2AF9CF1CDA762900AC6CEC /* Products */,
 				8E6DCECF1CDBBA320091D5AB /* Frameworks */,
 			);
@@ -713,6 +774,51 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		8E9587801CE1561400D8CAB9 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8E9587811CE1561400D8CAB9 /* Shaders */,
+			);
+			name = Resources;
+			path = "../IV3Dm2-lib/Resources";
+			sourceTree = "<group>";
+		};
+		8E9587811CE1561400D8CAB9 /* Shaders */ = {
+			isa = PBXGroup;
+			children = (
+				8E9587821CE1561400D8CAB9 /* bb.fsh */,
+				8E9587831CE1561400D8CAB9 /* bb.vsh */,
+				8E9587841CE1561400D8CAB9 /* geo_pc.fsh */,
+				8E9587851CE1561400D8CAB9 /* geo_pc.vsh */,
+				8E9587861CE1561400D8CAB9 /* geo_pn.fsh */,
+				8E9587871CE1561400D8CAB9 /* geo_pn.vsh */,
+				8E9587881CE1561400D8CAB9 /* geo_pna.fsh */,
+				8E9587891CE1561400D8CAB9 /* geo_pna.vsh */,
+				8E95878A1CE1561400D8CAB9 /* geo_pnc.fsh */,
+				8E95878B1CE1561400D8CAB9 /* geo_pnc.vsh */,
+				8E95878C1CE1561400D8CAB9 /* geo_pnt.fsh */,
+				8E95878D1CE1561400D8CAB9 /* geo_pnt.vsh */,
+				8E95878E1CE1561400D8CAB9 /* geo_pnta.fsh */,
+				8E95878F1CE1561400D8CAB9 /* geo_pnta.vsh */,
+				8E9587901CE1561400D8CAB9 /* geo_pt.fsh */,
+				8E9587911CE1561400D8CAB9 /* geo_pt.vsh */,
+				8E9587921CE1561400D8CAB9 /* quad.fsh */,
+				8E9587931CE1561400D8CAB9 /* quad.vsh */,
+				8E9587941CE1561400D8CAB9 /* sliceQuad.fsh */,
+				8E9587951CE1561400D8CAB9 /* sliceQuad.vsh */,
+				8E9587961CE1561400D8CAB9 /* vol.vsh */,
+				8E9587971CE1561400D8CAB9 /* vol_l.fsh */,
+				8E9587981CE1561400D8CAB9 /* vol_l_2.fsh */,
+				8E9587991CE1561400D8CAB9 /* vol_lti.fsh */,
+				8E95879A1CE1561400D8CAB9 /* vol_lti_2.fsh */,
+				8E95879B1CE1561400D8CAB9 /* vol_nl.fsh */,
+				8E95879C1CE1561400D8CAB9 /* vol_nl_2.fsh */,
+				8E95879D1CE1561400D8CAB9 /* vol_nlti.fsh */,
+				8E95879E1CE1561400D8CAB9 /* vol_nlti_2.fsh */,
+			);
+			path = Shaders;
+			sourceTree = "<group>";
+		};
 		8EC191FF1CE12980003EBC45 /* Common */ = {
 			isa = PBXGroup;
 			children = (
@@ -774,6 +880,7 @@
 			isa = PBXGroup;
 			children = (
 				8EC192611CE1378C003EBC45 /* AbstrDebugOut.h */,
+				8E95877E1CE1542F00D8CAB9 /* AbstrDebugOut.cpp */,
 				8EC192621CE1378C003EBC45 /* Console.h */,
 				8EC192631CE1378C003EBC45 /* ConsoleOut.cpp */,
 				8EC192641CE1378C003EBC45 /* ConsoleOut.h */,
@@ -863,10 +970,39 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8E95879F1CE1561400D8CAB9 /* bb.fsh in Resources */,
+				8E9587A71CE1561400D8CAB9 /* geo_pnc.fsh in Resources */,
+				8E9587BA1CE1561400D8CAB9 /* vol_nlti.fsh in Resources */,
+				8E9587B01CE1561400D8CAB9 /* quad.vsh in Resources */,
 				8E2BFB4C1CDBF1690040DC47 /* LogManager.inl in Resources */,
+				8E9587B41CE1561400D8CAB9 /* vol_l.fsh in Resources */,
 				8E2BFB7C1CDBF1690040DC47 /* license.txt in Resources */,
+				8E9587A61CE1561400D8CAB9 /* geo_pna.vsh in Resources */,
+				8E9587B91CE1561400D8CAB9 /* vol_nl_2.fsh in Resources */,
 				8E2BFB4B1CDBF1690040DC47 /* Log in Resources */,
+				8E9587AC1CE1561400D8CAB9 /* geo_pnta.vsh in Resources */,
+				8E9587B81CE1561400D8CAB9 /* vol_nl.fsh in Resources */,
+				8E9587AF1CE1561400D8CAB9 /* quad.fsh in Resources */,
+				8E9587AE1CE1561400D8CAB9 /* geo_pt.vsh in Resources */,
+				8E9587B61CE1561400D8CAB9 /* vol_lti.fsh in Resources */,
+				8E9587AA1CE1561400D8CAB9 /* geo_pnt.vsh in Resources */,
+				8E9587A11CE1561400D8CAB9 /* geo_pc.fsh in Resources */,
+				8E9587B71CE1561400D8CAB9 /* vol_lti_2.fsh in Resources */,
+				8E9587A81CE1561400D8CAB9 /* geo_pnc.vsh in Resources */,
 				8E2AF9E41CDA762900AC6CEC /* LaunchScreen.storyboard in Resources */,
+				8E9587B31CE1561400D8CAB9 /* vol.vsh in Resources */,
+				8E9587B11CE1561400D8CAB9 /* sliceQuad.fsh in Resources */,
+				8E9587A31CE1561400D8CAB9 /* geo_pn.fsh in Resources */,
+				8E9587AB1CE1561400D8CAB9 /* geo_pnta.fsh in Resources */,
+				8E9587AD1CE1561400D8CAB9 /* geo_pt.fsh in Resources */,
+				8E9587A41CE1561400D8CAB9 /* geo_pn.vsh in Resources */,
+				8E9587BB1CE1561400D8CAB9 /* vol_nlti_2.fsh in Resources */,
+				8E9587A21CE1561400D8CAB9 /* geo_pc.vsh in Resources */,
+				8E9587A91CE1561400D8CAB9 /* geo_pnt.fsh in Resources */,
+				8E9587A51CE1561400D8CAB9 /* geo_pna.fsh in Resources */,
+				8E9587A01CE1561400D8CAB9 /* bb.vsh in Resources */,
+				8E9587B21CE1561400D8CAB9 /* sliceQuad.vsh in Resources */,
+				8E9587B51CE1561400D8CAB9 /* vol_l_2.fsh in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -950,6 +1086,7 @@
 				8E2BFB661CDBF1690040DC47 /* LoopbackConnectionFactory.cpp in Sources */,
 				8E2BFB5B1CDBF1690040DC47 /* ConnectionAggregator.cpp in Sources */,
 				8E2AF9D31CDA762900AC6CEC /* main.mm in Sources */,
+				8E95877F1CE1542F00D8CAB9 /* AbstrDebugOut.cpp in Sources */,
 				8EC192221CE12980003EBC45 /* AbstractIO.cpp in Sources */,
 				8E2BFB681CDBF1690040DC47 /* Message.cpp in Sources */,
 				8E2BFB791CDBF1690040DC47 /* AES.cpp in Sources */,

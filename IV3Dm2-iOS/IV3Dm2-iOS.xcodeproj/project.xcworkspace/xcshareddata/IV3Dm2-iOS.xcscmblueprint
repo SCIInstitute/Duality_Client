@@ -4,11 +4,13 @@
 
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "A98D7D520906052D843D536A53DA295348B982E0" : 0,
     "0591DEF9C4F0744299C45E4B8151A499290099F3" : 0,
     "429CE2F00AAC1BB9DA5675CAF3E60DC8F9AE89C7" : 0
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "162C30FB-081D-40DA-8777-DDCA7256CE81",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "A98D7D520906052D843D536A53DA295348B982E0" : "IV3Dm\/Classes\/Tools\/",
     "0591DEF9C4F0744299C45E4B8151A499290099F3" : "IV3Dm2\/mocca\/",
     "429CE2F00AAC1BB9DA5675CAF3E60DC8F9AE89C7" : "IV3Dm2\/"
   },
@@ -25,6 +27,11 @@
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/david-mccann\/IV3Dm2",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "429CE2F00AAC1BB9DA5675CAF3E60DC8F9AE89C7"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/HPC-Group\/Tools.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "A98D7D520906052D843D536A53DA295348B982E0"
     }
   ]
 }
