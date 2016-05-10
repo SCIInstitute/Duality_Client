@@ -12,21 +12,17 @@
 #include <string>
 #include <memory>
 
-class DatasetProvider;
-class AbstractRenderer;
+class RenderDispatcher;
 
 class Scene {
 public:
     Scene(SceneMetadata metadata, std::unique_ptr<SceneNode> sceneRoot);
-    Scene(const Scene& other);
 
-    static Scene fromJson(const JsonCpp::Value& root);
-    
     SceneMetadata metadata() const noexcept;
     const SceneNode& rootNode() const noexcept;
 
-    void updateDatasets(const DatasetProvider& provider);
-    void render(AbstractRenderer& renderer) const;
+    void updateDatasets();
+    void render(RenderDispatcher& dispatcher) const;
 
 private:
     SceneMetadata m_metadata;

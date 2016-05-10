@@ -20,6 +20,7 @@ void GeometryNode::accept(AbstractDispatcher& dispatcher) {
 
 void GeometryNode::readDataset(std::shared_ptr<std::vector<uint8_t>> data) {
     ReaderFromMemory reader(reinterpret_cast<const char*>(data->data()), data->size());
+    m_geometry = std::make_unique<G3D::GeometrySoA>();
     G3D::read(reader, m_geometry.get());
     assignShortcutPointers();
 }

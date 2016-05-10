@@ -7,7 +7,6 @@
 class SceneMetadata {
 public:
     SceneMetadata(std::string name, std::string description);
-    static SceneMetadata fromJson(const JsonCpp::Value& root);
 
     std::string name() const;
     std::string description() const;

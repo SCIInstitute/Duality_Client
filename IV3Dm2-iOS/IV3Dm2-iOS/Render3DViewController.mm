@@ -2,11 +2,12 @@
 //  Copyright © 2016 Scientific Computing and Imaging Institute. All rights reserved.
 //
 
-#import "Render3DViewController.h"
 #import <Foundation/Foundation.h>
 
+#import "Render3DViewController.h"
+
 #include "IVDA/iOS.h"
-#include "Render/GeometryRenderer.h"
+#include "Render/RenderDispatcher.h"
 #include "Render/ScreenInfo.h"
 #include "Scene/Scene.h"
 
@@ -17,7 +18,7 @@
 - (id)initWithScene:(Scene*)scene {
     self = [super init];
     m_scene = scene;
-    m_renderer = nullptr;
+    m_rendererDispatcher = nullptr;
     return self;
 }
 
@@ -65,12 +66,12 @@
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    m_renderer = std::make_unique<GeometryRenderer>([self screenInfo]);
+    m_rendererDispatcher = std::make_unique<RenderDispatcher>([self screenInfo]);
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
     if (m_scene) {
-        m_scene->render(*m_renderer);
+        m_scene->render(*m_rendererDispatcher);
     }
     [view bindDrawable];
 }

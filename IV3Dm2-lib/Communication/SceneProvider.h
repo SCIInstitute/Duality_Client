@@ -5,10 +5,21 @@
 #pragma once
 
 #include "Scene/Scene.h"
+#include "Scene/SceneMetadata.h"
 
 #include <vector>
 
+class ServerAdapter;
+
 class SceneProvider {
 public:
-    virtual std::vector<Scene> listScenes() const = 0;
+    SceneProvider(const ServerAdapter& server);
+    
+    const std::vector<SceneMetadata>& listMetadata() const;
+    std::unique_ptr<Scene> getScene(const std::string& name) const;
+    
+private:
+    const ServerAdapter& m_server;
+    JsonCpp::Value m_root;
+    std::vector<SceneMetadata> m_metadata;
 };

@@ -19,9 +19,11 @@ public:
     virtual void accept(AbstractDispatcher& dispatcher) = 0;
     virtual void readDataset(std::shared_ptr<std::vector<uint8_t>> data) = 0;
 
-    void updateDataset() {
-        auto data = m_provider->fetch();
-        readDataset(data);
+    virtual void updateDataset() {
+        if (m_provider != nullptr) {
+            auto data = m_provider->fetch();
+            readDataset(data);
+        }
     }
 
 private:

@@ -5,17 +5,16 @@
 #import <UIKit/UIKit.h>
 
 #include "Scene.h"
+#include "Communication/SceneProvider.h"
 
 #include <vector>
 
-class SceneProvider;
-
 @interface SelectSceneViewController : UITableViewController
 {
-    std::vector<Scene> m_scenes;
+    std::shared_ptr<SceneProvider> m_provider;
 }
 
-- (id)initWithSceneProvider:(SceneProvider*)provider;
+- (id)initWithSceneProvider:(std::shared_ptr<SceneProvider>)provider;
 
 @end
 

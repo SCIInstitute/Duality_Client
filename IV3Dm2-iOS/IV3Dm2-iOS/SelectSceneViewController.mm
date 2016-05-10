@@ -5,17 +5,15 @@
 #import "SelectSceneViewController.h"
 #import "AppDelegate.h"
 
-#include "SceneProvider.h"
-
 @interface SelectSceneViewController ()
 
 @end
 
 @implementation SelectSceneViewController
 
-- (id)initWithSceneProvider:(SceneProvider*)provider {
+- (id)initWithSceneProvider:(std::shared_ptr<SceneProvider>)provider {
     self = [super initWithStyle:UITableViewStyleGrouped];
-    m_scenes = provider->listScenes();
+    m_provider = provider;
     return self;
 }
 
@@ -26,7 +24,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return m_scenes.size();
+    return m_provider->listMetadata().size();
 }
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -38,7 +36,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     
-    SceneMetadata meta = m_scenes[indexPath.row].metadata();
+    const SceneMetadata& meta = m_provider->listMetadata()[indexPath.row];
     cell.textLabel.text = [NSString stringWithUTF8String:meta.name().c_str()];
     cell.detailTextLabel.text = [NSString stringWithUTF8String:meta.description().c_str()];
     
@@ -46,7 +44,8 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    Scene* scene = new Scene(m_scenes[indexPath.row]);
+    auto name = m_provider->listMetadata()[indexPath.row].name();
+    Scene* scene = m_provider->getScene(name).release(); // FIXME: ugly
     AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
     [app changeScene:scene];
 }

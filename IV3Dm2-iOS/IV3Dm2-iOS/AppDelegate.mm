@@ -30,7 +30,10 @@
     m_scene = nullptr;
     
     Render3DViewController* renderView = [[Render3DViewController alloc] initWithScene:m_scene];
-    SelectSceneViewController* sceneView = [[SelectSceneViewController alloc] initWithSceneProvider:m_serverAdapter];
+
+    auto sceneProvider = std::make_shared<SceneProvider>(*m_serverAdapter);
+    SelectSceneViewController* sceneView = [[SelectSceneViewController alloc] initWithSceneProvider:sceneProvider];
+    
     SettingsViewController* settingsView = [[SettingsViewController alloc] init];
     
     m_tabBarViewController = [[TabBarViewController alloc] initWithRenderView:renderView andSceneView:sceneView andSettingsView:settingsView];
@@ -77,7 +80,7 @@
 
 - (void) changeScene:(Scene*)scene {
     m_scene = scene;
-    m_scene->updateDatasets(*m_serverAdapter);
+    m_scene->updateDatasets();
 }
 
 - (Scene*) currentScene {

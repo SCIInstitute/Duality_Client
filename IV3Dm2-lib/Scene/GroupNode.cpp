@@ -6,8 +6,17 @@
 
 #include "AbstractDispatcher.h"
 
+GroupNode::GroupNode(std::unique_ptr<DataProvider> provider)
+    : SceneNode(std::move(provider)) {}
+
 void GroupNode::accept(AbstractDispatcher& dispatcher) {
     dispatcher.dispatch(*this);
+}
+
+void GroupNode::updateDataset() {
+    for (auto& child : m_children) {
+        child->updateDataset();
+    }
 }
 
 void GroupNode::readDataset(std::shared_ptr<std::vector<uint8_t>> data) {}

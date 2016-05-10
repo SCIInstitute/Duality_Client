@@ -4,17 +4,28 @@
 
 #pragma once
 
-#include "Scene.h"
-
 #include "jsoncpp/json.h"
+
+class SceneMetadata;
+class Scene;
+class SceneNode;
+class DataProvider;
+class ServerAdapter;
 
 class SceneParser {
 public:
-    static SceneMetadata parseMetadata(const JsonCpp::Value& root);
-    static Scene parseScene(const JsonCpp::Value& root);
+    SceneParser(const JsonCpp::Value& root, const ServerAdapter& serverAdapter);
+    
+    SceneMetadata parseMetadata();
+    std::unique_ptr<Scene> parseScene();
     
 private:
-    static std::unique_ptr<SceneNode> parseNode(const JsonCpp::Value& node);
-    static std::unique_ptr<SceneNode> parseDownloadNode(const JsonCpp::Value& node);
-    static std::unique_ptr<SceneNode> parseGroupNode(const JsonCpp::Value& node);
+    std::unique_ptr<SceneNode> parseNode(const JsonCpp::Value& node);
+    std::unique_ptr<SceneNode> parseGeometry(const JsonCpp::Value& node);
+    std::unique_ptr<SceneNode> parseGroupNode(const JsonCpp::Value& node);
+    std::unique_ptr<DataProvider> parseDataSource(const JsonCpp::Value& node);
+
+private:
+    const JsonCpp::Value& m_root;
+    const ServerAdapter& m_serverAdapter;
 };

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "AbstractRenderer.h"
 #include "ScreenInfo.h"
 #include "Scene/G3D.h"
 #include "IVDA/GLFrameBufferObject.h"
@@ -8,15 +7,17 @@
 
 #include <memory>
 
-class GeometryRenderer : public AbstractRenderer {
+class GeometryNode;
+
+class GeometryRenderer {
 public:
     GeometryRenderer(ScreenInfo screenInfo);
-    void render(const GeometryDataset& dataset) override;
+    void render(const GeometryNode& dataset);
     
 private:
-    static int primitiveTypeGL(const GeometryDataset& dataset);
-    static int enableAttributeArrays(const GeometryDataset& geometry);
-    GLShader& determineActiveShader(const GeometryDataset& dataset) const;
+    static int primitiveTypeGL(const GeometryNode& dataset);
+    static int enableAttributeArrays(const GeometryNode& geometry);
+    GLShader& determineActiveShader(const GeometryNode& dataset) const;
 
 private:
     ScreenInfo m_screenInfo;

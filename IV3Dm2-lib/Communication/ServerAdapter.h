@@ -2,17 +2,22 @@
 //  Copyright © 2016 Scientific Computing and Imaging Institute. All rights reserved.
 //
 
+#pragma once
+
 #include "SceneProvider.h"
 
 #include "mocca/net/rpc/RpcClient.h"
 
-class ServerAdapter : public SceneProvider {
+#include "jsoncpp/json.h"
+
+#include <memory>
+#include <vector>
+
+class ServerAdapter {
 public:
     ServerAdapter();
     
-    // SceneProvider interface
-    std::vector<Scene> listScenes() const override;
-
+    JsonCpp::Value scenes() const;
     std::shared_ptr<std::vector<uint8_t>> download(const std::string& path) const;
 
 private:

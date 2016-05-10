@@ -13,6 +13,9 @@ class GroupNode : public SceneNode {
 public:
     using NodeVec = std::vector<std::unique_ptr<SceneNode>>;
 
+    GroupNode(std::unique_ptr<DataProvider> provider);
+    
+    void updateDataset() override;    
     void accept(AbstractDispatcher& dispatcher) override;
     void readDataset(std::shared_ptr<std::vector<uint8_t>> data) override;
 

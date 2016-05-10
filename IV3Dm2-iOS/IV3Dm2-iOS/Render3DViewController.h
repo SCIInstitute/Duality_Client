@@ -8,13 +8,13 @@
 #include <memory>
 
 class Scene;
-class AbstractRenderer;
+class RenderDispatcher;
 
 @interface Render3DViewController : GLKViewController
 {
 @protected
     Scene* m_scene;
-    std::unique_ptr<AbstractRenderer> m_renderer;
+    std::unique_ptr<RenderDispatcher> m_rendererDispatcher;
 }
 
 -(id) initWithScene:(Scene*)scene;

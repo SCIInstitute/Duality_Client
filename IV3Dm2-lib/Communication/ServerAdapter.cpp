@@ -9,15 +9,9 @@ ServerAdapter::ServerAdapter() {
     m_rpcClient = std::make_unique<mocca::net::RpcClient>(ep);
 }
 
-std::vector<Scene> ServerAdapter::listScenes() const {
+JsonCpp::Value ServerAdapter::scenes() const {
     m_rpcClient->send("listScenes", JsonCpp::Value());
-    auto reply = m_rpcClient->receive().first;
-
-    std::vector<Scene> result;
-    for (auto it = reply.begin(); it != reply.end(); ++it) {
-        result.push_back(Scene::fromJson(*it));
-    }
-    return result;
+    return m_rpcClient->receive().first;
 }
 
 std::shared_ptr<std::vector<uint8_t>> ServerAdapter::download(const std::string& path) const {

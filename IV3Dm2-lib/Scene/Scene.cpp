@@ -5,18 +5,11 @@
 #include "Scene.h"
 
 #include "SceneParser.h"
+#include "Render/RenderDispatcher.h"
 
 Scene::Scene(SceneMetadata metadata, std::unique_ptr<SceneNode> sceneRoot)
     : m_metadata(std::move(metadata))
     , m_sceneRoot(std::move(sceneRoot)) {}
-
-Scene::Scene(const Scene& other)
-    : m_metadata(other.m_metadata)
-    , m_sceneRoot(other.m_sceneRoot ? other.m_sceneRoot->clone() : nullptr) {}
-
-Scene Scene::fromJson(const JsonCpp::Value& root) {
-    return SceneParser::parseScene(root);
-}
 
 SceneMetadata Scene::metadata() const noexcept {
     return m_metadata;
@@ -26,10 +19,10 @@ const SceneNode& Scene::rootNode() const noexcept {
     return *m_sceneRoot;
 }
 
-void Scene::updateDatasets(const DatasetProvider& provider) {
-    m_sceneRoot->updateDatasets(provider);
+void Scene::updateDatasets() {
+    m_sceneRoot->updateDataset();
 }
 
-void Scene::render(AbstractRenderer& renderer) const {
-    m_sceneRoot->render(renderer);
+void Scene::render(RenderDispatcher& dispatcher) const {
+    m_sceneRoot->accept(dispatcher);
 }

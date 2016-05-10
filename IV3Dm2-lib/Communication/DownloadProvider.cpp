@@ -4,14 +4,12 @@
 
 #include "DownloadProvider.h"
 
-#include "Communication/DatasetProvider.h"
-
-DownloadProvider::DownloadProvider(std::shared_ptr<ServerAdapter> server, std::string path)
+DownloadProvider::DownloadProvider(const ServerAdapter& server, std::string path)
     : m_server(server)
     , m_path(std::move(path)) {}
 
 std::shared_ptr<std::vector<uint8_t>> DownloadProvider::fetch() {
-    m_server->download(m_path);
+    return m_server.download(m_path);
 }
 
 std::string DownloadProvider::path() const {
