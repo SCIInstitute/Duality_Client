@@ -4,25 +4,13 @@
 
 #include "GroupNode.h"
 
-void GroupNode::updateDatasets(const DatasetProvider& datasetProvider) {
-    for (auto& child : m_children) {
-        child->updateDatasets(datasetProvider);
-    }
+#include "AbstractDispatcher.h"
+
+void GroupNode::accept(AbstractDispatcher& dispatcher) {
+    dispatcher.dispatch(*this);
 }
 
-void GroupNode::render(AbstractRenderer& renderer) const {
-    for (const auto& child : m_children) {
-        child->render(renderer);
-    }
-}
-
-std::unique_ptr<SceneNode> GroupNode::clone() const {
-    auto newNode = std::make_unique<GroupNode>();
-    for (auto& child : m_children) {
-        newNode->addChild(child->clone());
-    }
-    return std::move(newNode);
-}
+void GroupNode::readDataset(std::shared_ptr<std::vector<uint8_t>> data) {}
 
 void GroupNode::addChild(std::unique_ptr<SceneNode> child) {
     m_children.push_back(std::move(child));

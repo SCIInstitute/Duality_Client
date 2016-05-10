@@ -3,18 +3,17 @@
 //
 
 #include "SceneProvider.h"
-#include "DatasetProvider.h"
+
 #include "mocca/net/rpc/RpcClient.h"
 
-class ServerAdapter : public SceneProvider, public DatasetProvider {
+class ServerAdapter : public SceneProvider {
 public:
     ServerAdapter();
     
     // SceneProvider interface
     std::vector<Scene> listScenes() const override;
 
-    // DatasetProvider interface
-    std::unique_ptr<Dataset> downloadDataset(const std::string& path) const override;
+    std::shared_ptr<std::vector<uint8_t>> download(const std::string& path) const;
 
 private:
     std::unique_ptr<mocca::net::RpcClient> m_rpcClient;

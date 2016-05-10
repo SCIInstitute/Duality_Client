@@ -4,17 +4,26 @@
 
 #pragma once
 
+#include "Communication/DataProvider.h"
+
 #include <memory>
 
-class DatasetProvider;
-class AbstractRenderer;
+class AbstractDispatcher;
 
 class SceneNode {
 public:
+    SceneNode(std::unique_ptr<DataProvider> provider)
+        : m_provider(std::move(provider)) {}
     virtual ~SceneNode() {}
 
-    virtual void updateDatasets(const DatasetProvider& datasetProvider) = 0;
-    virtual void render(AbstractRenderer& renderer) const = 0;
+    virtual void accept(AbstractDispatcher& dispatcher) = 0;
+    virtual void readDataset(std::shared_ptr<std::vector<uint8_t>> data) = 0;
 
-    virtual std::unique_ptr<SceneNode> clone() const = 0;
+    void updateDataset() {
+        auto data = m_provider->fetch();
+        readDataset(data);
+    }
+
+private:
+    std::unique_ptr<DataProvider> m_provider;
 };

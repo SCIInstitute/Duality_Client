@@ -1,62 +1,62 @@
-#include "GeometryDataset.h"
+#include "GeometryNode.h"
 
+#include "AbstractDispatcher.h"
+#include "AbstractIO.h"
 #include "Common/Error.h"
-#include "Render/AbstractRenderer.h"
 
-GeometryDataset::GeometryDataset(AbstractReader& reader)
-    : m_geometry(std::make_unique<G3D::GeometrySoA>())
+GeometryNode::GeometryNode(std::unique_ptr<DataProvider> provider)
+    : SceneNode(std::move(provider))
+    , m_geometry(nullptr)
     , m_positions(nullptr)
     , m_normals(nullptr)
     , m_tangents(nullptr)
     , m_colors(nullptr)
     , m_texcoords(nullptr)
-    , m_alphas(nullptr) {
+    , m_alphas(nullptr) {}
+
+void GeometryNode::accept(AbstractDispatcher& dispatcher) {
+    dispatcher.dispatch(*this);
+}
+
+void GeometryNode::readDataset(std::shared_ptr<std::vector<uint8_t>> data) {
+    ReaderFromMemory reader(reinterpret_cast<const char*>(data->data()), data->size());
     G3D::read(reader, m_geometry.get());
-
-    if (m_geometry->info.numberVertices > 0) {
-        assignShortcutPointers();
-    } else {
-        G3D::clean(m_geometry.get());
-    }
+    assignShortcutPointers();
 }
 
-void GeometryDataset::render(AbstractRenderer& renderer) const {
-    renderer.render(*this);
-}
-
-const G3D::GeometryInfo& GeometryDataset::geometryInfo() const {
+const G3D::GeometryInfo& GeometryNode::geometryInfo() const noexcept {
     return m_geometry->info;
 }
 
-const uint32_t* GeometryDataset::getIndices() const {
+const uint32_t* GeometryNode::getIndices() const noexcept {
     return m_geometry->indices;
 }
 
-const float* GeometryDataset::getPositions() const {
+const float* GeometryNode::getPositions() const noexcept {
     return m_positions;
 }
 
-const float* GeometryDataset::getNormals() const {
+const float* GeometryNode::getNormals() const noexcept {
     return m_normals;
 }
 
-const float* GeometryDataset::getTangents() const {
+const float* GeometryNode::getTangents() const noexcept {
     return m_tangents;
 }
 
-const float* GeometryDataset::getColors() const {
+const float* GeometryNode::getColors() const noexcept {
     return m_colors;
 }
 
-const float* GeometryDataset::getTexCoords() const {
+const float* GeometryNode::getTexCoords() const noexcept {
     return m_texcoords;
 }
 
-const float* GeometryDataset::getAlphas() const {
+const float* GeometryNode::getAlphas() const noexcept {
     return m_alphas;
 }
 
-void GeometryDataset::assignShortcutPointers() {
+void GeometryNode::assignShortcutPointers() {
     for (size_t i = 0; i < m_geometry->info.attributeSemantics.size(); ++i) {
         switch (m_geometry->info.attributeSemantics[i]) {
         case G3D::Position: {

@@ -13,10 +13,8 @@ class GroupNode : public SceneNode {
 public:
     using NodeVec = std::vector<std::unique_ptr<SceneNode>>;
 
-    void updateDatasets(const DatasetProvider& datasetProvider) override;
-    void render(AbstractRenderer& renderer) const override;
-
-    std::unique_ptr<SceneNode> clone() const override;
+    void accept(AbstractDispatcher& dispatcher) override;
+    void readDataset(std::shared_ptr<std::vector<uint8_t>> data) override;
 
     void addChild(std::unique_ptr<SceneNode> child);
     const NodeVec& children() const noexcept;
