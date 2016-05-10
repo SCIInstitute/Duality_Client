@@ -3,6 +3,7 @@
 //
 
 #import "SelectSceneViewController.h"
+#import "AppDelegate.h"
 
 #include "SceneProvider.h"
 
@@ -42,6 +43,12 @@
     cell.detailTextLabel.text = [NSString stringWithUTF8String:meta.description().c_str()];
     
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    Scene* scene = new Scene(m_scenes[indexPath.row]);
+    AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+    [app changeScene:scene];
 }
 
 - (void)viewDidLoad {

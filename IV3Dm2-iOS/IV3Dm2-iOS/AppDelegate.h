@@ -18,6 +18,8 @@ class AbstractRenderer;
 
 @property (strong, nonatomic) IBOutlet UIWindow *window;
 
+- (void) changeScene:(Scene*)scene;
+- (Scene*) currentScene;
 
 @end
 

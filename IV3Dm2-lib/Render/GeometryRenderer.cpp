@@ -7,7 +7,7 @@
 #include <OpenGLES/ES3/gl.h>
 
 GeometryRenderer::GeometryRenderer(ScreenInfo screenInfo)
-    : m_screenInfo(std::move(screenInfo))
+    : m_screenInfo(screenInfo)
     , m_fbo(std::make_unique<GLFrameBufferObject>(static_cast<unsigned int>(screenInfo.width / screenInfo.standardDownSampleFactor),
                                                   static_cast<unsigned int>(screenInfo.height / screenInfo.standardDownSampleFactor),
                                                   true)) {
@@ -67,25 +67,43 @@ GeometryRenderer::GeometryRenderer(ScreenInfo screenInfo)
 }
 
 void GeometryRenderer::render(const GeometryDataset& dataset) {
+    GL(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
+    GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+    
     auto& shader = determineActiveShader(dataset);
     shader.Enable();
 
     // FIXME: correct transformations
-    GLMatrix transform;
-    transform.loadIdentity();
+    GLMatrix mv;
+    mv.loadIdentity();
+    mv.translate(0, 0, -20);
+    
+    float fZNear = 0.01f;
+    float fZFar = 1000.0f;
+    float fFrustSize  = fZNear * (float)tanf(3.1415 / 8.0);
+    float fAspect = float(m_screenInfo.height)/float(m_screenInfo.width);
+    GLMatrix proj;
+    proj.loadIdentity();
+    proj.frustum(-fFrustSize, fFrustSize, -fFrustSize * fAspect, fFrustSize * fAspect, fZNear, fZFar);
 
-    shader.SetValue("mvpMatrix", (IVDA::Mat4f)(transform)); // FIXME: very ugly cast!!!
+    GLMatrix mvp = mv;
+    mvp.multiply(proj);
+    
+    shader.SetValue("mvpMatrix", (IVDA::Mat4f)(mvp)); // FIXME: very ugly cast!!!
 
     GL(glEnable(GL_DEPTH_TEST));
 
     int attributeCount = enableAttributeArrays(dataset);
 
+    int primitiveType = primitiveTypeGL(dataset);
     uint32_t numIndices = dataset.geometryInfo().numberIndices;
     GL(glDrawElements(primitiveType, (GLsizei)numIndices, GL_UNSIGNED_INT, dataset.getIndices()));
 
     for (int i = 0; i < attributeCount; ++i) {
         GL(glDisableVertexAttribArray(i));
     }
+    
+    m_fbo->Read(0);
 }
 
 int GeometryRenderer::primitiveTypeGL(const GeometryDataset& dataset) {
@@ -100,6 +118,7 @@ int GeometryRenderer::primitiveTypeGL(const GeometryDataset& dataset) {
         return GL_TRIANGLES; // FIXME: is this corrent?
     default:
         assert("Invalid primitive type");
+        return 0;
     }
 }
 

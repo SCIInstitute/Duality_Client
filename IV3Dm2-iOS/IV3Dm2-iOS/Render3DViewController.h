@@ -18,6 +18,7 @@ class AbstractRenderer;
 }
 
 -(id) initWithScene:(Scene*)scene;
+-(void) changeScene:(Scene*)scene;
 
 @property (nonatomic, retain) EAGLContext *context;
 

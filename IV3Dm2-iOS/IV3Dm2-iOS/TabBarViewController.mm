@@ -7,6 +7,7 @@
 //
 
 #import "TabBarViewController.h"
+#import "AppDelegate.h"
 
 #import <Foundation/Foundation.h>
 
@@ -45,6 +46,13 @@
     UITabBarItem* tabBarItem  = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(title, @"Title of the tab") image:[UIImage imageNamed:@"data.png"] tag:0];
     navController.tabBarItem = tabBarItem;
     return navController;
+}
+
+- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
+{
+    AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+    Scene* scene = [app currentScene];
+    [m_render3DViewController changeScene:scene];
 }
 
 @end

@@ -75,4 +75,13 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+- (void) changeScene:(Scene*)scene {
+    m_scene = scene;
+    m_scene->updateDatasets(*m_serverAdapter);
+}
+
+- (Scene*) currentScene {
+    return m_scene;
+}
+
 @end

@@ -4,7 +4,13 @@
 #include "Render/AbstractRenderer.h"
 
 GeometryDataset::GeometryDataset(AbstractReader& reader)
-    : m_geometry(std::make_unique<G3D::GeometrySoA>()) {
+    : m_geometry(std::make_unique<G3D::GeometrySoA>())
+    , m_positions(nullptr)
+    , m_normals(nullptr)
+    , m_tangents(nullptr)
+    , m_colors(nullptr)
+    , m_texcoords(nullptr)
+    , m_alphas(nullptr) {
     G3D::read(reader, m_geometry.get());
 
     if (m_geometry->info.numberVertices > 0) {

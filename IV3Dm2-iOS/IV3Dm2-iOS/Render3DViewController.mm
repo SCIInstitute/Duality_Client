@@ -21,6 +21,10 @@
     return self;
 }
 
+-(void) changeScene:(Scene*)scene {
+    m_scene = scene;
+}
+
 - (ScreenInfo)screenInfo {
     float scale = iOS::DetectScreenScale();
     float iPad = iOS::DetectIPad() ? 2 : 1;
@@ -28,7 +32,9 @@
     float yOffset = 0.0f;
     float windowWidth = 1.0f;
     float windowHeight = 1.0f;
-    ScreenInfo screenInfo(scale * self.view.bounds.size.width, scale * self.view.bounds.size.height, xOffset, yOffset,
+    unsigned int width = scale * self.view.bounds.size.width;
+    unsigned int height = scale * self.view.bounds.size.height;
+    ScreenInfo screenInfo(width, height, xOffset, yOffset,
                           /*m_pSettings->getUseRetinaResolution() ? 1.0 : fScale*/ scale, iPad * scale * 2, windowWidth, windowHeight);
     return screenInfo;
 }
@@ -60,6 +66,13 @@
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
     m_renderer = std::make_unique<GeometryRenderer>([self screenInfo]);
+}
+
+- (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
+    if (m_scene) {
+        m_scene->render(*m_renderer);
+    }
+    [view bindDrawable];
 }
 
 @end
