@@ -40,7 +40,7 @@ public:
 
     struct Geometry {
         Geometry()
-            : indices(NULL) {}
+            : indices(nullptr) {}
         GeometryInfo info;
 
         uint32_t* indices;
@@ -49,7 +49,7 @@ public:
     struct GeometryAoS : Geometry {
         GeometryAoS()
             : Geometry()
-            , vertices(NULL) {
+            , vertices(nullptr) {
             info.vertexType = AoS;
         }
 
@@ -96,7 +96,7 @@ public:
     static bool merge(GeometrySoA* a, const GeometrySoA* const b); // merge a and b into a
 
 private:
-    static void writeHeader(AbstractWriter& writer, const GeometryInfo& info, const uint32_t* const vertexType = NULL);
+    static void writeHeader(AbstractWriter& writer, const GeometryInfo& info, const uint32_t* const vertexType = nullptr);
     static void writeIndices(AbstractWriter& writer, const uint32_t* const indices, const GeometryInfo& info);
     static void writeVertices(AbstractWriter& writer, const float* const vertices, const GeometryInfo& info);
     static void writeVertices(AbstractWriter& writer, const std::vector<float*>& vertexAttributes, const GeometryInfo& info);

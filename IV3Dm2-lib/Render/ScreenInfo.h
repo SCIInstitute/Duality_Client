@@ -27,8 +27,8 @@ struct ScreenInfo {
                windowHeight == other.windowHeight;
     }
 
-    unsigned int renderBufferWidth() const { return width * windowWidth; }
-    unsigned int renderBufferHeight() const { return height * windowHeight; }
+    unsigned int renderBufferWidth() const { return static_cast<unsigned int>(width * windowWidth); }
+    unsigned int renderBufferHeight() const { return static_cast<unsigned int>(height * windowHeight); }
 };
 
 /*

@@ -11,6 +11,16 @@ public:
 
     void render(AbstractRenderer& renderer) const override;
 
+    const G3D::GeometryInfo& geometryInfo() const;
+    
+    const uint32_t* getIndices() const;
+    const float* getPositions() const;
+    const float* getNormals() const;
+    const float* getTangents() const;
+    const float* getColors() const;
+    const float* getTexCoords() const;
+    const float* getAlphas() const;
+
 private:
     void assignShortcutPointers();
     

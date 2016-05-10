@@ -1,10 +1,16 @@
 #include "GeometryRenderer.h"
 
+#include "Common/Error.h"
+#include "Render/GLMatrix.h"
+#include "Scene/GeometryDataset.h"
+
+#include <OpenGLES/ES3/gl.h>
+
 GeometryRenderer::GeometryRenderer(ScreenInfo screenInfo)
     : m_screenInfo(std::move(screenInfo))
-    , m_fbo(std::make_unique<GLFrameBufferObject>(screenInfo.width / screenInfo.standardDownSampleFactor,
-                                                  screenInfo.height / screenInfo.standardDownSampleFactor, true)) {
-
+    , m_fbo(std::make_unique<GLFrameBufferObject>(static_cast<unsigned int>(screenInfo.width / screenInfo.standardDownSampleFactor),
+                                                  static_cast<unsigned int>(screenInfo.height / screenInfo.standardDownSampleFactor),
+                                                  true)) {
     {
         GlShaderAttributes attributes;
         attributes.push_back("position");
@@ -61,5 +67,90 @@ GeometryRenderer::GeometryRenderer(ScreenInfo screenInfo)
 }
 
 void GeometryRenderer::render(const GeometryDataset& dataset) {
-    // TODO: implement
+    auto& shader = determineActiveShader(dataset);
+    shader.Enable();
+
+    // FIXME: correct transformations
+    GLMatrix transform;
+    transform.loadIdentity();
+
+    shader.SetValue("mvpMatrix", (IVDA::Mat4f)(transform)); // FIXME: very ugly cast!!!
+
+    GL(glEnable(GL_DEPTH_TEST));
+
+    int attributeCount = enableAttributeArrays(dataset);
+
+    uint32_t numIndices = dataset.geometryInfo().numberIndices;
+    GL(glDrawElements(primitiveType, (GLsizei)numIndices, GL_UNSIGNED_INT, dataset.getIndices()));
+
+    for (int i = 0; i < attributeCount; ++i) {
+        GL(glDisableVertexAttribArray(i));
+    }
+}
+
+int GeometryRenderer::primitiveTypeGL(const GeometryDataset& dataset) {
+    switch (dataset.geometryInfo().primitiveType) {
+    case G3D::Point:
+        return GL_POINTS;
+    case G3D::Line:
+        return GL_LINES;
+    case G3D::Triangle:
+        return GL_TRIANGLES;
+    case G3D::TriangleAdj:
+        return GL_TRIANGLES; // FIXME: is this corrent?
+    default:
+        assert("Invalid primitive type");
+    }
+}
+
+GLShader& GeometryRenderer::determineActiveShader(const GeometryDataset& dataset) const {
+    if (dataset.getNormals() && !dataset.getColors() && !dataset.getTexCoords() && !dataset.getAlphas())
+        return *m_normShader;
+    else if (dataset.getNormals() && !dataset.getColors() && !dataset.getTexCoords() && dataset.getAlphas())
+        return *m_normAlphaShader;
+    else if (dataset.getNormals() && !dataset.getColors() && dataset.getTexCoords() && dataset.getAlphas())
+        return *m_normTexAlphaShader;
+    else if (dataset.getNormals() && dataset.getColors() && !dataset.getTexCoords() && !dataset.getAlphas())
+        return *m_normColShader;
+    else if (!dataset.getNormals() && dataset.getColors() && !dataset.getTexCoords() && !dataset.getAlphas())
+        return *m_colShader;
+    else if (dataset.getNormals() && !dataset.getColors() && dataset.getTexCoords() && !dataset.getAlphas())
+        return *m_normTexShader;
+    else if (!dataset.getNormals() && !dataset.getColors() && dataset.getTexCoords() && !dataset.getAlphas())
+        return *m_texShader;
+    THROW_ERROR("Cannot determine shader for geometry dataset");
+}
+
+int GeometryRenderer::enableAttributeArrays(const GeometryDataset& dataset) {
+    int attributeIndex = 0;
+    if (dataset.getPositions()) {
+        GL(glVertexAttribPointer(attributeIndex, 3, GL_FLOAT, 0, 0, dataset.getPositions()));
+        GL(glEnableVertexAttribArray(attributeIndex++));
+    }
+    if (dataset.getNormals()) {
+        GL(glVertexAttribPointer(attributeIndex, 3, GL_FLOAT, 0, 0, dataset.getNormals()));
+        GL(glEnableVertexAttribArray(attributeIndex++));
+    }
+    if (dataset.getTangents()) {
+        GL(glVertexAttribPointer(attributeIndex, 3, GL_FLOAT, 0, 0, dataset.getTangents()));
+        GL(glEnableVertexAttribArray(attributeIndex++));
+    }
+    if (dataset.getColors()) {
+        GL(glVertexAttribPointer(attributeIndex, 4, GL_FLOAT, 0, 0, dataset.getColors()));
+        GL(glEnableVertexAttribArray(attributeIndex++));
+    }
+    // FIXME: textures
+
+    // if (dataset.getTexCoords() && dataset.getTexture())
+    //{
+    //    GL(glVertexAttribPointer(attributeIndex, 2, GL_FLOAT, 0, 0, dataset.getTexCoords()));
+    //    GL(glEnableVertexAttribArray(attributeIndex++));
+    //    dataset.getTexture()->bind();
+    //}
+    if (dataset.getAlphas()) {
+        GL(glVertexAttribPointer(attributeIndex, 1, GL_FLOAT, 0, 0, dataset.getAlphas()));
+        GL(glEnableVertexAttribArray(attributeIndex++));
+    }
+
+    return attributeIndex - 1;
 }

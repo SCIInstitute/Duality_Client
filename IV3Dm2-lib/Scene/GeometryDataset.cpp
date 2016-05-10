@@ -14,9 +14,40 @@ GeometryDataset::GeometryDataset(AbstractReader& reader)
     }
 }
 
-void GeometryDataset::render(AbstractRenderer& renderer) const
-{
+void GeometryDataset::render(AbstractRenderer& renderer) const {
+    renderer.render(*this);
+}
 
+const G3D::GeometryInfo& GeometryDataset::geometryInfo() const {
+    return m_geometry->info;
+}
+
+const uint32_t* GeometryDataset::getIndices() const {
+    return m_geometry->indices;
+}
+
+const float* GeometryDataset::getPositions() const {
+    return m_positions;
+}
+
+const float* GeometryDataset::getNormals() const {
+    return m_normals;
+}
+
+const float* GeometryDataset::getTangents() const {
+    return m_tangents;
+}
+
+const float* GeometryDataset::getColors() const {
+    return m_colors;
+}
+
+const float* GeometryDataset::getTexCoords() const {
+    return m_texcoords;
+}
+
+const float* GeometryDataset::getAlphas() const {
+    return m_alphas;
 }
 
 void GeometryDataset::assignShortcutPointers() {

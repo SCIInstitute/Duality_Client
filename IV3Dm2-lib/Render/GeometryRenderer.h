@@ -2,6 +2,7 @@
 
 #include "AbstractRenderer.h"
 #include "ScreenInfo.h"
+#include "Scene/G3D.h"
 #include "IVDA/GLFrameBufferObject.h"
 #include "IVDA/GLShader.h"
 
@@ -12,6 +13,11 @@ public:
     GeometryRenderer(ScreenInfo screenInfo);
     void render(const GeometryDataset& dataset) override;
     
+private:
+    static int primitiveTypeGL(const GeometryDataset& dataset);
+    static int enableAttributeArrays(const GeometryDataset& geometry);
+    GLShader& determineActiveShader(const GeometryDataset& dataset) const;
+
 private:
     ScreenInfo m_screenInfo;
     std::unique_ptr<GLFrameBufferObject> m_fbo;
