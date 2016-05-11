@@ -7,9 +7,9 @@
 #import "SelectSceneViewController.h"
 #import "SettingsViewController.h"
 
-#include "Communication/ServerAdapter.h"
+#include "Scene/ServerAdapter.h"
 #include "Scene/Scene.h"
-#include "Render/GeometryRenderer.h"
+#include "Scene/GeometryRenderer.h"
 
 #include "mocca/net/ConnectionFactorySelector.h"
 

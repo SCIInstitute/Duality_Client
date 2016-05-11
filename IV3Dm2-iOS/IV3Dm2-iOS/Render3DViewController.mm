@@ -7,8 +7,8 @@
 #import "Render3DViewController.h"
 
 #include "IVDA/iOS.h"
-#include "Render/RenderDispatcher.h"
-#include "Render/ScreenInfo.h"
+#include "Scene/RenderDispatcher.h"
+#include "Scene/ScreenInfo.h"
 #include "Scene/Scene.h"
 
 @implementation Render3DViewController

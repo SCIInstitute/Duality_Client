@@ -1,17 +1,17 @@
 #pragma once
 
-#include "ScreenInfo.h"
+#include "Scene/ScreenInfo.h"
 #include "Scene/G3D.h"
-#include "IVDA/GLFrameBufferObject.h"
-#include "IVDA/GLShader.h"
+#include "RendererImpl/GLFrameBufferObject.h"
+#include "RendererImpl/GLShader.h"
 
 #include <memory>
 
 class GeometryNode;
 
-class GeometryRenderer {
+class GeometryRendererImpl {
 public:
-    GeometryRenderer(ScreenInfo screenInfo);
+    GeometryRendererImpl(ScreenInfo screenInfo);
     void render(const GeometryNode& dataset);
     
 private:

@@ -4,8 +4,8 @@
 
 #import <UIKit/UIKit.h>
 
-#include "Scene.h"
-#include "Communication/SceneLoader.h"
+#include "Scene/Scene.h"
+#include "Scene/SceneLoader.h"
 
 #include <vector>
 

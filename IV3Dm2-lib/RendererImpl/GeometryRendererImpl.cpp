@@ -1,12 +1,12 @@
-#include "GeometryRenderer.h"
+#include "GeometryRendererImpl.h"
 
 #include "Common/Error.h"
-#include "Render/GLMatrix.h"
+#include "Scene/GLMatrix.h"
 #include "Scene/GeometryNode.h"
 
 #include <OpenGLES/ES3/gl.h>
 
-GeometryRenderer::GeometryRenderer(ScreenInfo screenInfo)
+GeometryRendererImpl::GeometryRendererImpl(ScreenInfo screenInfo)
     : m_screenInfo(screenInfo)
     , m_fbo(std::make_unique<GLFrameBufferObject>(static_cast<unsigned int>(screenInfo.width / screenInfo.standardDownSampleFactor),
                                                   static_cast<unsigned int>(screenInfo.height / screenInfo.standardDownSampleFactor),
@@ -66,7 +66,7 @@ GeometryRenderer::GeometryRenderer(ScreenInfo screenInfo)
     }
 }
 
-void GeometryRenderer::render(const GeometryNode& dataset) {
+void GeometryRendererImpl::render(const GeometryNode& dataset) {
     GL(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
     GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
     
@@ -106,7 +106,7 @@ void GeometryRenderer::render(const GeometryNode& dataset) {
     m_fbo->Read(0);
 }
 
-int GeometryRenderer::primitiveTypeGL(const GeometryNode& dataset) {
+int GeometryRendererImpl::primitiveTypeGL(const GeometryNode& dataset) {
     switch (dataset.geometryInfo().primitiveType) {
     case G3D::Point:
         return GL_POINTS;
@@ -122,7 +122,7 @@ int GeometryRenderer::primitiveTypeGL(const GeometryNode& dataset) {
     }
 }
 
-GLShader& GeometryRenderer::determineActiveShader(const GeometryNode& dataset) const {
+GLShader& GeometryRendererImpl::determineActiveShader(const GeometryNode& dataset) const {
     if (dataset.getNormals() && !dataset.getColors() && !dataset.getTexCoords() && !dataset.getAlphas())
         return *m_normShader;
     else if (dataset.getNormals() && !dataset.getColors() && !dataset.getTexCoords() && dataset.getAlphas())
@@ -140,7 +140,7 @@ GLShader& GeometryRenderer::determineActiveShader(const GeometryNode& dataset) c
     THROW_ERROR("Cannot determine shader for geometry dataset");
 }
 
-int GeometryRenderer::enableAttributeArrays(const GeometryNode& dataset) {
+int GeometryRendererImpl::enableAttributeArrays(const GeometryNode& dataset) {
     int attributeIndex = 0;
     if (dataset.getPositions()) {
         GL(glVertexAttribPointer(attributeIndex, 3, GL_FLOAT, 0, 0, dataset.getPositions()));
