@@ -108,7 +108,8 @@
 		8EA90AAA1CE28C61002E1298 /* SceneParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EA90A9D1CE28C61002E1298 /* SceneParser.cpp */; };
 		8EA90AAD1CE28E5E002E1298 /* DownloadProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EA90AAB1CE28E5E002E1298 /* DownloadProvider.cpp */; };
 		8EA90AB01CE2966C002E1298 /* RenderDispatcher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EA90AAF1CE2966C002E1298 /* RenderDispatcher.cpp */; };
-		8EA90AB21CE29827002E1298 /* SceneProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EA90AB11CE29827002E1298 /* SceneProvider.cpp */; };
+		8EA90AB21CE29827002E1298 /* SceneLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EA90AB11CE29827002E1298 /* SceneLoader.cpp */; };
+		8EA90DAF1CE2ADB5002E1298 /* BoundingBoxCalculator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EA90DAD1CE2ADB5002E1298 /* BoundingBoxCalculator.cpp */; };
 		8EC1922D1CE12C42003EBC45 /* Render3DViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8EC1922C1CE12C42003EBC45 /* Render3DViewController.mm */; };
 		8EC1922F1CE12FB6003EBC45 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EC1922E1CE12FB6003EBC45 /* GLKit.framework */; };
 		8EC1927A1CE1378C003EBC45 /* ConsoleOut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EC192631CE1378C003EBC45 /* ConsoleOut.cpp */; };
@@ -128,7 +129,7 @@
 		8E2AF9CE1CDA762900AC6CEC /* IV3Dm2-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "IV3Dm2-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E2AF9D21CDA762900AC6CEC /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
 		8E2AF9D41CDA762900AC6CEC /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		8E2AF9D51CDA762900AC6CEC /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
+		8E2AF9D51CDA762900AC6CEC /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = AppDelegate.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		8E2AF9D71CDA762900AC6CEC /* SelectSceneViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SelectSceneViewController.h; sourceTree = "<group>"; };
 		8E2AF9D81CDA762900AC6CEC /* SelectSceneViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SelectSceneViewController.mm; sourceTree = "<group>"; };
 		8E2AF9E31CDA762900AC6CEC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -291,9 +292,9 @@
 		8E95879E1CE1561400D8CAB9 /* vol_nlti_2.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = vol_nlti_2.fsh; sourceTree = "<group>"; };
 		8EA90A7E1CE28C61002E1298 /* Error.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Error.h; sourceTree = "<group>"; };
 		8EA90A801CE28C61002E1298 /* DataProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataProvider.h; sourceTree = "<group>"; };
-		8EA90A811CE28C61002E1298 /* SceneProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneProvider.h; sourceTree = "<group>"; };
+		8EA90A811CE28C61002E1298 /* SceneLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneLoader.h; sourceTree = "<group>"; };
 		8EA90A821CE28C61002E1298 /* ServerAdapter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ServerAdapter.cpp; sourceTree = "<group>"; };
-		8EA90A831CE28C61002E1298 /* ServerAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerAdapter.h; sourceTree = "<group>"; };
+		8EA90A831CE28C61002E1298 /* ServerAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ServerAdapter.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		8EA90A871CE28C61002E1298 /* GeometryRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GeometryRenderer.cpp; sourceTree = "<group>"; };
 		8EA90A881CE28C61002E1298 /* GeometryRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeometryRenderer.h; sourceTree = "<group>"; };
 		8EA90A891CE28C61002E1298 /* GLMatrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLMatrix.cpp; sourceTree = "<group>"; };
@@ -319,7 +320,9 @@
 		8EA90AAC1CE28E5E002E1298 /* DownloadProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadProvider.h; sourceTree = "<group>"; };
 		8EA90AAE1CE294C3002E1298 /* RenderDispatcher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RenderDispatcher.h; sourceTree = "<group>"; };
 		8EA90AAF1CE2966C002E1298 /* RenderDispatcher.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderDispatcher.cpp; sourceTree = "<group>"; };
-		8EA90AB11CE29827002E1298 /* SceneProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneProvider.cpp; sourceTree = "<group>"; };
+		8EA90AB11CE29827002E1298 /* SceneLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneLoader.cpp; sourceTree = "<group>"; };
+		8EA90DAD1CE2ADB5002E1298 /* BoundingBoxCalculator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BoundingBoxCalculator.cpp; sourceTree = "<group>"; };
+		8EA90DAE1CE2ADB5002E1298 /* BoundingBoxCalculator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoundingBoxCalculator.h; sourceTree = "<group>"; };
 		8EC1922B1CE12C31003EBC45 /* Render3DViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Render3DViewController.h; sourceTree = "<group>"; };
 		8EC1922C1CE12C42003EBC45 /* Render3DViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Render3DViewController.mm; sourceTree = "<group>"; };
 		8EC1922E1CE12FB6003EBC45 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
@@ -836,8 +839,8 @@
 				8EA90A801CE28C61002E1298 /* DataProvider.h */,
 				8EA90AAB1CE28E5E002E1298 /* DownloadProvider.cpp */,
 				8EA90AAC1CE28E5E002E1298 /* DownloadProvider.h */,
-				8EA90A811CE28C61002E1298 /* SceneProvider.h */,
-				8EA90AB11CE29827002E1298 /* SceneProvider.cpp */,
+				8EA90A811CE28C61002E1298 /* SceneLoader.h */,
+				8EA90AB11CE29827002E1298 /* SceneLoader.cpp */,
 				8EA90A821CE28C61002E1298 /* ServerAdapter.cpp */,
 				8EA90A831CE28C61002E1298 /* ServerAdapter.h */,
 			);
@@ -877,6 +880,8 @@
 				8EA90A9C1CE28C61002E1298 /* SceneNode.h */,
 				8EA90A9D1CE28C61002E1298 /* SceneParser.cpp */,
 				8EA90A9E1CE28C61002E1298 /* SceneParser.h */,
+				8EA90DAD1CE2ADB5002E1298 /* BoundingBoxCalculator.cpp */,
+				8EA90DAE1CE2ADB5002E1298 /* BoundingBoxCalculator.h */,
 			);
 			path = Scene;
 			sourceTree = "<group>";
@@ -1029,11 +1034,12 @@
 				8EC5A3941CE142770042E2C8 /* XQueryComponents.mm in Sources */,
 				8EC1927C1CE1378C003EBC45 /* GLFrameBufferObject.cpp in Sources */,
 				8E2BFB5F1CDBF1690040DC47 /* SizePrefixedProtocol.cpp in Sources */,
+				8EA90DAF1CE2ADB5002E1298 /* BoundingBoxCalculator.cpp in Sources */,
 				8E2AF9ED1CDAA7B500AC6CEC /* TabBarViewController.mm in Sources */,
 				8E2BFB6A1CDBF1690040DC47 /* JsonKeys.cpp in Sources */,
 				8EC1922D1CE12C42003EBC45 /* Render3DViewController.mm in Sources */,
 				8E2BFB7A1CDBF1690040DC47 /* base64.cpp in Sources */,
-				8EA90AB21CE29827002E1298 /* SceneProvider.cpp in Sources */,
+				8EA90AB21CE29827002E1298 /* SceneLoader.cpp in Sources */,
 				8EA90AAA1CE28C61002E1298 /* SceneParser.cpp in Sources */,
 				8E2BFB601CDBF1690040DC47 /* WebSocketProtocol.cpp in Sources */,
 				8EA90AA31CE28C61002E1298 /* AbstractIO.cpp in Sources */,

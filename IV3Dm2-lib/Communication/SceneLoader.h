@@ -11,9 +11,9 @@
 
 class ServerAdapter;
 
-class SceneProvider {
+class SceneLoader {
 public:
-    SceneProvider(const ServerAdapter& server);
+    SceneLoader(const ServerAdapter& server);
     
     const std::vector<SceneMetadata>& listMetadata() const;
     std::unique_ptr<Scene> getScene(const std::string& name) const;

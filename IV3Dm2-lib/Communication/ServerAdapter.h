@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "SceneProvider.h"
+#include "SceneLoader.h"
 
 #include "mocca/net/rpc/RpcClient.h"
 

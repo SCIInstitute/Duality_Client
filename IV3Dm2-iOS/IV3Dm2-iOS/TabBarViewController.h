@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-class SceneProvider;
+class SceneLoader;
 
 @interface TabBarViewController : UITabBarController {
 @private

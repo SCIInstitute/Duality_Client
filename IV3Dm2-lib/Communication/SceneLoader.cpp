@@ -2,13 +2,13 @@
 //  Copyright © 2016 Scientific Computing and Imaging Institute. All rights reserved.
 //
 
-#include "SceneProvider.h"
+#include "SceneLoader.h"
 
 #include "Common/Error.h"
 #include "Scene/SceneParser.h"
 #include "ServerAdapter.h"
 
-SceneProvider::SceneProvider(const ServerAdapter& server)
+SceneLoader::SceneLoader(const ServerAdapter& server)
     : m_server(server) {
     m_root = server.scenes();
     for (auto it = m_root.begin(); it != m_root.end(); ++it) {
@@ -17,11 +17,11 @@ SceneProvider::SceneProvider(const ServerAdapter& server)
     }
 }
 
-const std::vector<SceneMetadata>& SceneProvider::listMetadata() const {
+const std::vector<SceneMetadata>& SceneLoader::listMetadata() const {
     return m_metadata;
 }
 
-std::unique_ptr<Scene> SceneProvider::getScene(const std::string& name) const {
+std::unique_ptr<Scene> SceneLoader::getScene(const std::string& name) const {
     auto it = std::find_if(begin(m_metadata), end(m_metadata), [&name](const SceneMetadata& md) {
         return md.name() == name;
     });

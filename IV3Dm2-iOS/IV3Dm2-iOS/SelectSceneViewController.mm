@@ -11,7 +11,7 @@
 
 @implementation SelectSceneViewController
 
-- (id)initWithSceneProvider:(std::shared_ptr<SceneProvider>)provider {
+- (id)initWithSceneLoader:(std::shared_ptr<SceneLoader>)provider {
     self = [super initWithStyle:UITableViewStyleGrouped];
     m_provider = provider;
     return self;

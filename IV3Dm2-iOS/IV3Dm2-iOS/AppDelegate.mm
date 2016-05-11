@@ -31,8 +31,8 @@
     
     Render3DViewController* renderView = [[Render3DViewController alloc] initWithScene:m_scene];
 
-    auto sceneProvider = std::make_shared<SceneProvider>(*m_serverAdapter);
-    SelectSceneViewController* sceneView = [[SelectSceneViewController alloc] initWithSceneProvider:sceneProvider];
+    auto sceneLoader = std::make_shared<SceneLoader>(*m_serverAdapter);
+    SelectSceneViewController* sceneView = [[SelectSceneViewController alloc] initWithSceneLoader:sceneLoader];
     
     SettingsViewController* settingsView = [[SettingsViewController alloc] init];
     
