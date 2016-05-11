@@ -4,9 +4,9 @@
 
 #pragma once
 
-#include "Communication/ServerAdapter.h"
-#include "Scene.h"
-#include "SceneMetadata.h"
+#include "Scene/ServerAdapter.h"
+#include "Scene/Scene.h"
+#include "Scene/SceneMetadata.h"
 
 #include "jsoncpp/json.h"
 

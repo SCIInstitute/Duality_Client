@@ -72,6 +72,7 @@
 #include <iomanip>
 #include <limits>
 #include <vector>
+#include <algorithm>
 
 #ifdef WIN32
 #pragma warning( disable : 4995 ) // disable deprecated warning

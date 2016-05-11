@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include "Communication/DataProvider.h"
-#include "Render/GLMatrix.h"
+#include "Scene/DataProvider.h"
+#include "Scene/GLMatrix.h"
 
 #include <memory>
 #include <tuple>

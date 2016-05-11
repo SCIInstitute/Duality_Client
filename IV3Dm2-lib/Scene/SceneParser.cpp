@@ -5,11 +5,11 @@
 #include "SceneParser.h"
 
 #include "Common/Error.h"
-#include "Communication/DownloadProvider.h"
-#include "Communication/ServerAdapter.h"
-#include "GeometryNode.h"
-#include "GroupNode.h"
-#include "Scene.h"
+#include "Scene/DownloadProvider.h"
+#include "Scene/ServerAdapter.h"
+#include "Scene/GeometryNode.h"
+#include "Scene/GroupNode.h"
+#include "Scene/Scene.h"
 
 SceneParser::SceneParser(const JsonCpp::Value& root, const ServerAdapter& serverAdapter)
     : m_root(root)
@@ -39,7 +39,7 @@ std::unique_ptr<SceneNode> SceneParser::parseNode(const JsonCpp::Value& node) {
 
 std::unique_ptr<SceneNode> SceneParser::parseGeometry(const JsonCpp::Value& node) {
     auto provider = parseDataSource(node["source"]);
-    SceneNode::MatrixTriple transforms = {nullptr, nullptr, nullptr};
+    SceneNode::MatrixTriple transforms {nullptr, nullptr, nullptr};
     if (node.isMember("transforms")) {
         transforms = parseMatrices(node["transforms"]);
     }
@@ -47,7 +47,7 @@ std::unique_ptr<SceneNode> SceneParser::parseGeometry(const JsonCpp::Value& node
 }
 
 std::unique_ptr<SceneNode> SceneParser::parseGroupNode(const JsonCpp::Value& node) {
-    SceneNode::MatrixTriple transforms = {nullptr, nullptr, nullptr};
+    SceneNode::MatrixTriple transforms {nullptr, nullptr, nullptr};
     if (node.isMember("transforms")) {
         transforms = parseMatrices(node["transforms"]);
     }

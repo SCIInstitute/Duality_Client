@@ -4,8 +4,8 @@
 
 #include "Scene.h"
 
-#include "SceneParser.h"
-#include "Render/RenderDispatcher.h"
+#include "Scene/SceneParser.h"
+#include "Scene/RenderDispatcher.h"
 
 Scene::Scene(SceneMetadata metadata, std::unique_ptr<SceneNode> sceneRoot)
     : m_metadata(std::move(metadata))
