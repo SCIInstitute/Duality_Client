@@ -12,6 +12,9 @@ public:
     RenderDispatcher(const ScreenInfo& screenInfo);
     
     void setModelView(const GLMatrix* modelView);
+    
+    void setup() override;
+    void finish() override;
     void dispatch(GeometryNode& node) override;
     
 private:
