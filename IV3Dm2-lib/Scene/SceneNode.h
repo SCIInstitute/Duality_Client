@@ -39,6 +39,10 @@ public:
         return *m_provider;
     }
 
+    const MatrixTriple& transforms() const {
+        return m_transforms;
+    }
+
 private:
     std::unique_ptr<DataProvider> m_provider;
     MatrixTriple m_transforms;
