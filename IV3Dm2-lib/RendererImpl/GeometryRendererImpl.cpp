@@ -1,7 +1,6 @@
 #include "GeometryRendererImpl.h"
 
 #include "Common/Error.h"
-#include "Scene/GLMatrix.h"
 #include "Scene/GeometryNode.h"
 
 #include <OpenGLES/ES3/gl.h>
@@ -66,28 +65,12 @@ GeometryRendererImpl::GeometryRendererImpl(ScreenInfo screenInfo)
     }
 }
 
-void GeometryRendererImpl::render(const GeometryNode& dataset) {
+void GeometryRendererImpl::render(const GeometryNode& dataset, const GLMatrix& mvp) {
     GL(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
     GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
     
     auto& shader = determineActiveShader(dataset);
     shader.Enable();
-
-    // FIXME: correct transformations
-    GLMatrix mv;
-    mv.loadIdentity();
-    mv.translate(0, 0, -20);
-    
-    float fZNear = 0.01f;
-    float fZFar = 1000.0f;
-    float fFrustSize  = fZNear * (float)tanf(3.1415 / 8.0);
-    float fAspect = float(m_screenInfo.height)/float(m_screenInfo.width);
-    GLMatrix proj;
-    proj.loadIdentity();
-    proj.frustum(-fFrustSize, fFrustSize, -fFrustSize * fAspect, fFrustSize * fAspect, fZNear, fZFar);
-
-    GLMatrix mvp = mv;
-    mvp.multiply(proj);
     
     shader.SetValue("mvpMatrix", (IVDA::Mat4f)(mvp)); // FIXME: very ugly cast!!!
 
@@ -96,7 +79,7 @@ void GeometryRendererImpl::render(const GeometryNode& dataset) {
     int attributeCount = enableAttributeArrays(dataset);
 
     int primitiveType = primitiveTypeGL(dataset);
-    uint32_t numIndices = dataset.geometryInfo().numberIndices;
+    uint32_t numIndices = dataset.geometryInfo()->numberIndices;
     GL(glDrawElements(primitiveType, (GLsizei)numIndices, GL_UNSIGNED_INT, dataset.getIndices()));
 
     for (int i = 0; i < attributeCount; ++i) {
@@ -107,7 +90,7 @@ void GeometryRendererImpl::render(const GeometryNode& dataset) {
 }
 
 int GeometryRendererImpl::primitiveTypeGL(const GeometryNode& dataset) {
-    switch (dataset.geometryInfo().primitiveType) {
+    switch (dataset.geometryInfo()->primitiveType) {
     case G3D::Point:
         return GL_POINTS;
     case G3D::Line:

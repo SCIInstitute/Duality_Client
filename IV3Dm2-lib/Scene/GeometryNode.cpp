@@ -23,7 +23,7 @@ void GeometryNode::applyTransform(const Mat4f& matrix) {
         float* positions = const_cast<float*>(this->getPositions());
         if (positions != nullptr) {
             for (uint32_t i = 0; i < numVertices; ++i, positions += 3) {
-                IVDA::Vec4f position(IVDA::Vec3f(m_positions), 1);
+                IVDA::Vec4f position(IVDA::Vec3f(positions), 1);
                 position = matrix * position;
                 positions[0] = position.x;
                 positions[1] = position.y;

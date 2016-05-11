@@ -1,9 +1,10 @@
 #pragma once
 
-#include "Scene/ScreenInfo.h"
-#include "Scene/G3D.h"
 #include "RendererImpl/GLFrameBufferObject.h"
 #include "RendererImpl/GLShader.h"
+#include "Scene/G3D.h"
+#include "Scene/GLMatrix.h"
+#include "Scene/ScreenInfo.h"
 
 #include <memory>
 
@@ -12,8 +13,8 @@ class GeometryNode;
 class GeometryRendererImpl {
 public:
     GeometryRendererImpl(ScreenInfo screenInfo);
-    void render(const GeometryNode& dataset);
-    
+    void render(const GeometryNode& dataset, const GLMatrix& mvp);
+
 private:
     static int primitiveTypeGL(const GeometryNode& dataset);
     static int enableAttributeArrays(const GeometryNode& geometry);

@@ -71,7 +71,8 @@
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
     if (m_scene) {
-        m_scene->render(*m_rendererDispatcher);
+        m_rendererDispatcher->setModelView(&m_scene->modelViewMatrix());
+        m_scene->dispatch(*m_rendererDispatcher);
     }
     [view bindDrawable];
 }

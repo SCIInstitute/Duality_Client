@@ -3,7 +3,7 @@
 #if __APPLE__ && TARGET_OS_IPHONE
 GeometryRenderer::GeometryRenderer(ScreenInfo screenInfo)
     : AbsstractRenderer(std::move(screenInfo))
-    , m_impl(std::make_unique<GeometryRendererImpl>()) {}
+    , m_impl(std::make_unique<GeometryRendererImpl>(screenInfo)) {}
 #else
 GeometryRenderer::GeometryRenderer(ScreenInfo screenInfo)
     : AbsstractRenderer(std::move(screenInfo))
