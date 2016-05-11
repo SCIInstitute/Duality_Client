@@ -8,7 +8,7 @@ class AbstractDispatcher;
 
 class GeometryNode : public SceneNode {
 public:
-    GeometryNode(std::unique_ptr<DataProvider> provider, SceneNode::MatrixTriple transforms);
+    GeometryNode(std::unique_ptr<DataProvider> provider, SceneNode::MatrixTriple transforms = SceneNode::MatrixTriple{});
 
     // SceneNode interface
     void accept(AbstractDispatcher& renderer) override;

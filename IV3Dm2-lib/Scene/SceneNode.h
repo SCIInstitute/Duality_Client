@@ -18,7 +18,7 @@ public:
     // translation, rotation, scaling
     using MatrixTriple = std::tuple<std::unique_ptr<GLMatrix>, std::unique_ptr<GLMatrix>, std::unique_ptr<GLMatrix>>;
 
-    SceneNode(std::unique_ptr<DataProvider> provider, MatrixTriple transforms)
+    SceneNode(std::unique_ptr<DataProvider> provider, MatrixTriple transforms = MatrixTriple{})
         : m_provider(std::move(provider))
         , m_transforms(std::move(transforms)) {}
     virtual ~SceneNode() {}
@@ -29,7 +29,9 @@ public:
     virtual void updateDataset() {
         if (m_provider != nullptr) {
             auto data = m_provider->fetch();
-            readDataset(data);
+            if (data != nullptr) {
+                readDataset(data);
+            }
         }
     }
 

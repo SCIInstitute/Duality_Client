@@ -51,7 +51,7 @@ std::unique_ptr<SceneNode> SceneParser::parseGroupNode(const JsonCpp::Value& nod
     if (node.isMember("transforms")) {
         transforms = parseMatrices(node["transforms"]);
     }
-    auto result = std::make_unique<GroupNode>(nullptr, std::move(transforms));
+    auto result = std::make_unique<GroupNode>(std::move(transforms));
     const auto& children = node["children"];
     for (auto it = children.begin(); it != children.end(); ++it) {
         result->addChild(parseNode(*it));
