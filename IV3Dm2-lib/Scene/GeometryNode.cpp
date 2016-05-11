@@ -69,12 +69,12 @@ void GeometryNode::readDataset(std::shared_ptr<std::vector<uint8_t>> data) {
     assignShortcutPointers();
 }
 
-const G3D::GeometryInfo& GeometryNode::geometryInfo() const noexcept {
-    return m_geometry->info;
+const G3D::GeometryInfo* GeometryNode::geometryInfo() const noexcept {
+    return m_geometry != nullptr ? &m_geometry->info : nullptr;
 }
 
 const uint32_t* GeometryNode::getIndices() const noexcept {
-    return m_geometry->indices;
+    return m_geometry != nullptr ? m_geometry->indices : nullptr;
 }
 
 const float* GeometryNode::getPositions() const noexcept {

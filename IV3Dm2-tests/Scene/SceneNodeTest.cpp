@@ -7,14 +7,14 @@
 
 using namespace ::testing;
 
-class SceneNodeTest : public Test {
+class SceneTest : public Test {
 protected:
-    SceneNodeTest() {}
+    SceneTest() {}
 
-    virtual ~SceneNodeTest() {}
+    virtual ~SceneTest() {}
 };
 
-TEST_F(SceneNodeTest, UpdateDatasets) {
+TEST_F(SceneTest, UpdateDatasets) {
     SceneMetadata meta("test", "test");
     Scene scene(meta);
 
@@ -27,4 +27,8 @@ TEST_F(SceneNodeTest, UpdateDatasets) {
     scene.addNode(std::make_unique<GeometryNode>(std::move(mock2)));
 
     scene.updateDatasets();
+}
+
+TEST_F(SceneTest, DefaultModelView) {
+    // TODO: write test
 }

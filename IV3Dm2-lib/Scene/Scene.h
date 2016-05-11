@@ -4,13 +4,14 @@
 
 #pragma once
 
+#include "Scene/GLMatrix.h"
 #include "Scene/SceneMetadata.h"
 #include "Scene/SceneNode.h"
 
-#include <string>
 #include <memory>
+#include <string>
 
-class RenderDispatcher;
+class AbstractDispatcher;
 
 class Scene {
 public:
@@ -22,9 +23,15 @@ public:
     const std::vector<std::unique_ptr<SceneNode>>& nodes() const noexcept;
 
     void updateDatasets();
-    void render(RenderDispatcher& dispatcher) const;
+    void dispatch(AbstractDispatcher& dispatcher) const;
+
+    GLMatrix modelViewMatrix() const;
+
+private:
+    GLMatrix defaultModelView() const;
 
 private:
     SceneMetadata m_metadata;
     std::vector<std::unique_ptr<SceneNode>> m_nodes;
+    GLMatrix m_modelView;
 };

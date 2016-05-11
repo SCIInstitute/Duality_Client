@@ -13,7 +13,8 @@ BoundingBoxCalculator::BoundingBoxCalculator() {
 }
 
 void BoundingBoxCalculator::dispatch(GeometryNode& node) {
-    for (size_t i = 0; i < node.geometryInfo().numberIndices; ++i) {
+    if (node.geometryInfo() == nullptr) return;
+    for (size_t i = 0; i < node.geometryInfo()->numberIndices; ++i) {
         auto offset = 3 * node.getIndices()[i];
         IVDA::Vec3f pos(node.getPositions()[offset + 0], node.getPositions()[offset + 1], node.getPositions()[offset + 2]);
         m_min.StoreMin(pos);

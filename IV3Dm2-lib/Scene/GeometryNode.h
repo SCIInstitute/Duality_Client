@@ -15,7 +15,7 @@ public:
     void accept(AbstractDispatcher& renderer) override;
     void readDataset(std::shared_ptr<std::vector<uint8_t>> data) override;
 
-    const G3D::GeometryInfo& geometryInfo() const noexcept;
+    const G3D::GeometryInfo* geometryInfo() const noexcept;
     const uint32_t* getIndices() const noexcept;
     const float* getPositions() const noexcept;
     const float* getNormals() const noexcept;
@@ -23,6 +23,8 @@ public:
     const float* getColors() const noexcept;
     const float* getTexCoords() const noexcept;
     const float* getAlphas() const noexcept;
+
+
 
 private:
     void assignShortcutPointers();
