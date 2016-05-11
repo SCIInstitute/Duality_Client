@@ -12,7 +12,7 @@
 
 class DownloadProvider : public DataProvider {
 public:
-    DownloadProvider(const ServerAdapter& server, std::string path);
+    DownloadProvider(const ServerAdapter* server, std::string path);
 
     // DataProvider interface
     std::shared_ptr<std::vector<uint8_t>> fetch() override;
@@ -20,6 +20,6 @@ public:
     std::string path() const;
 
 private:
-    const ServerAdapter& m_server;
+    const ServerAdapter* m_server;
     std::string m_path;
 };

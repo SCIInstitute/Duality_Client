@@ -9,10 +9,12 @@
 #include "ServerAdapter.h"
 
 #include <algorithm>
+#include <cassert>
 
-SceneLoader::SceneLoader(const ServerAdapter& server)
+SceneLoader::SceneLoader(const ServerAdapter* server)
     : m_server(server) {
-    m_root = server.scenes();
+    assert(m_server != nullptr);
+    m_root = server->scenes();
     for (auto it = m_root.begin(); it != m_root.end(); ++it) {
         SceneParser parser(*it, m_server);
         m_metadata.push_back(parser.parseMetadata());

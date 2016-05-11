@@ -11,7 +11,7 @@
 #include "Scene/GroupNode.h"
 #include "Scene/Scene.h"
 
-SceneParser::SceneParser(const JsonCpp::Value& root, const ServerAdapter& serverAdapter)
+SceneParser::SceneParser(const JsonCpp::Value& root, const ServerAdapter* serverAdapter)
     : m_root(root)
     , m_serverAdapter(serverAdapter) {}
 

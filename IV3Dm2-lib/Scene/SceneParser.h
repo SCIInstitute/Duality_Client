@@ -18,7 +18,7 @@ class ServerAdapter;
 
 class SceneParser {
 public:
-    SceneParser(const JsonCpp::Value& root, const ServerAdapter& serverAdapter);
+    SceneParser(const JsonCpp::Value& root, const ServerAdapter* serverAdapter);
 
     SceneMetadata parseMetadata();
     std::unique_ptr<Scene> parseScene();
@@ -33,5 +33,5 @@ private:
     
 private:
     const JsonCpp::Value& m_root;
-    const ServerAdapter& m_serverAdapter;
+    const ServerAdapter* m_serverAdapter;
 };

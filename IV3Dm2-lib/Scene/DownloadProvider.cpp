@@ -4,12 +4,15 @@
 
 #include "DownloadProvider.h"
 
-DownloadProvider::DownloadProvider(const ServerAdapter& server, std::string path)
+#include <cassert>
+
+DownloadProvider::DownloadProvider(const ServerAdapter* server, std::string path)
     : m_server(server)
     , m_path(std::move(path)) {}
 
 std::shared_ptr<std::vector<uint8_t>> DownloadProvider::fetch() {
-    return m_server.download(m_path);
+    assert(m_server != nullptr);
+    return m_server->download(m_path);
 }
 
 std::string DownloadProvider::path() const {
