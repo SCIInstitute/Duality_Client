@@ -39,7 +39,7 @@ void Scene::dispatch(AbstractDispatcher& dispatcher) const {
     }
 }
 
-GLMatrix Scene::modelViewMatrix() const {
+const GLMatrix& Scene::modelViewMatrix() const {
     return m_modelView;
 }
 

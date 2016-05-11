@@ -59,7 +59,8 @@ TEST_F(SceneParserTest, Transforms) {
     SceneParser parser(root, nullptr);
     auto scene = parser.parseScene();
     const auto& node = *scene->nodes()[0];
-    const auto& translation = *std::get<0>(node.transforms());
+    ASSERT_EQ(1, node.transforms().size());
+    const auto& translation = node.transforms().front();
     
     ASSERT_EQ(0.0f, translation.m11);
     ASSERT_EQ(1.0f, translation.m12);
@@ -80,7 +81,4 @@ TEST_F(SceneParserTest, Transforms) {
     ASSERT_EQ(13.0f, translation.m42);
     ASSERT_EQ(14.0f, translation.m43);
     ASSERT_EQ(15.0f, translation.m44);
-
-    ASSERT_TRUE(std::get<1>(node.transforms()) == nullptr);
-    ASSERT_TRUE(std::get<2>(node.transforms()) == nullptr);
 }

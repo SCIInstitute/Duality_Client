@@ -8,7 +8,7 @@ class AbstractDispatcher;
 
 class GeometryNode : public SceneNode {
 public:
-    GeometryNode(std::unique_ptr<DataProvider> provider, SceneNode::MatrixTriple transforms = SceneNode::MatrixTriple{});
+    GeometryNode(std::unique_ptr<DataProvider> provider, std::vector<IVDA::Mat4f> transforms = {});
 
     // SceneNode interface
     void applyTransform(const IVDA::Mat4f& matrix) override;

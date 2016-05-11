@@ -41,7 +41,7 @@ std::unique_ptr<SceneNode> SceneParser::parseNode(const JsonCpp::Value& node) {
 
 std::unique_ptr<SceneNode> SceneParser::parseGeometry(const JsonCpp::Value& node) {
     auto provider = parseDataSource(node["source"]);
-    SceneNode::MatrixTriple transforms{nullptr, nullptr, nullptr};
+    std::vector<Mat4f> transforms;
     if (node.isMember("transforms")) {
         transforms = parseMatrices(node["transforms"]);
     }
@@ -52,28 +52,19 @@ std::unique_ptr<DataProvider> SceneParser::parseDataSource(const JsonCpp::Value&
     return std::make_unique<DownloadProvider>(m_serverAdapter, node["path"].asString());
 }
 
-std::unique_ptr<Mat4f> SceneParser::parseMatrix(const JsonCpp::Value& node) {
+Mat4f SceneParser::parseMatrix(const JsonCpp::Value& node) {
     if (node.size() != 16) {
         THROW_ERROR("Invalid matrix definition in JSON");
     }
-    return std::make_unique<Mat4f>(node[0].asFloat(), node[1].asFloat(), node[2].asFloat(), node[3].asFloat(), node[4].asFloat(),
-                                   node[5].asFloat(), node[6].asFloat(), node[7].asFloat(), node[8].asFloat(), node[9].asFloat(),
-                                   node[10].asFloat(), node[11].asFloat(), node[12].asFloat(), node[13].asFloat(), node[14].asFloat(),
-                                   node[15].asFloat());
+    return Mat4f(node[0].asFloat(), node[1].asFloat(), node[2].asFloat(), node[3].asFloat(), node[4].asFloat(), node[5].asFloat(),
+                 node[6].asFloat(), node[7].asFloat(), node[8].asFloat(), node[9].asFloat(), node[10].asFloat(), node[11].asFloat(),
+                 node[12].asFloat(), node[13].asFloat(), node[14].asFloat(), node[15].asFloat());
 }
 
-SceneNode::MatrixTriple SceneParser::parseMatrices(const JsonCpp::Value& node) {
-    std::unique_ptr<Mat4f> translation = nullptr;
-    std::unique_ptr<Mat4f> rotation = nullptr;
-    std::unique_ptr<Mat4f> scale = nullptr;
-    if (node.isMember("translation")) {
-        translation = parseMatrix(node["translation"]);
+std::vector<IVDA::Mat4f> SceneParser::parseMatrices(const JsonCpp::Value& node) {
+    std::vector<Mat4f> result;
+    for (auto it = node.begin(); it != node.end(); ++it) {
+        result.push_back(parseMatrix(*it));
     }
-    if (node.isMember("rotation")) {
-        rotation = parseMatrix(node["rotation"]);
-    }
-    if (node.isMember("scale")) {
-        scale = parseMatrix(node["scale"]);
-    }
-    return std::make_tuple(std::move(translation), std::move(rotation), std::move(scale));
+    return result;
 }

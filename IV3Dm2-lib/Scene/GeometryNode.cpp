@@ -7,7 +7,7 @@
 
 using namespace IVDA;
 
-GeometryNode::GeometryNode(std::unique_ptr<DataProvider> provider, SceneNode::MatrixTriple transforms)
+GeometryNode::GeometryNode(std::unique_ptr<DataProvider> provider, std::vector<IVDA::Mat4f> transforms)
     : SceneNode(std::move(provider), std::move(transforms))
     , m_geometry(nullptr)
     , m_positions(nullptr)

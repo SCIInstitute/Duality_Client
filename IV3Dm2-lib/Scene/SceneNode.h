@@ -15,10 +15,7 @@ class AbstractDispatcher;
 
 class SceneNode {
 public:
-    // 0: translation, 1: rotation, 2: scaling
-    using MatrixTriple = std::tuple<std::unique_ptr<IVDA::Mat4f>, std::unique_ptr<IVDA::Mat4f>, std::unique_ptr<IVDA::Mat4f>>;
-
-    SceneNode(std::unique_ptr<DataProvider> provider, MatrixTriple transforms = MatrixTriple{});
+    SceneNode(std::unique_ptr<DataProvider> provider, std::vector<IVDA::Mat4f> transforms = {});
     virtual ~SceneNode() {}
 
     virtual void applyTransform(const IVDA::Mat4f& matrix) = 0;
@@ -27,9 +24,9 @@ public:
     virtual void updateDataset();
 
     const DataProvider& dataProvider() const noexcept;
-    const MatrixTriple& transforms() const noexcept;
+    const std::vector<IVDA::Mat4f>& transforms() const noexcept;
 
 private:
     std::unique_ptr<DataProvider> m_provider;
-    MatrixTriple m_transforms;
+    std::vector<IVDA::Mat4f> m_transforms;
 };

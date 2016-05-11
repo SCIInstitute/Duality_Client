@@ -1,8 +1,9 @@
 #pragma once
 
-#include "Scene/ScreenInfo.h"
+#include "Scene/AbstractRenderer.h"
 #include "Scene/G3D.h"
 #include "Scene/GeometryNode.h"
+#include "Scene/ScreenInfo.h"
 
 #include <memory>
 
@@ -18,11 +19,11 @@ class GeometryRendererImpl {
 #include "RendererImpl/GeometryRendererImpl.h"
 #endif
 
-class GeometryRenderer {
+class GeometryRenderer : public AbsstractRenderer {
 public:
     GeometryRenderer(ScreenInfo screenInfo);
-    void render(const GeometryNode& dataset);
-    
+    void render(const GeometryNode& dataset, const GLMatrix& modelView);
+
 private:
     std::unique_ptr<GeometryRendererImpl> m_impl;
 };

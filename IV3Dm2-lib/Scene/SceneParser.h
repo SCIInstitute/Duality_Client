@@ -29,8 +29,8 @@ private:
     std::unique_ptr<SceneNode> parseNode(const JsonCpp::Value& node);
     std::unique_ptr<SceneNode> parseGeometry(const JsonCpp::Value& node);
     std::unique_ptr<DataProvider> parseDataSource(const JsonCpp::Value& node);
-    std::unique_ptr<IVDA::Mat4f> parseMatrix(const JsonCpp::Value& node);
-    SceneNode::MatrixTriple parseMatrices(const JsonCpp::Value& node);
+    IVDA::Mat4f parseMatrix(const JsonCpp::Value& node);
+    std::vector<IVDA::Mat4f> parseMatrices(const JsonCpp::Value& node);
     
 private:
     const JsonCpp::Value& m_root;

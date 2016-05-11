@@ -12,6 +12,7 @@
 #include <string>
 
 class AbstractDispatcher;
+class RenderDispatcher;
 
 class Scene {
 public:
@@ -25,7 +26,7 @@ public:
     void updateDatasets();
     void dispatch(AbstractDispatcher& dispatcher) const;
 
-    GLMatrix modelViewMatrix() const;
+    const GLMatrix& modelViewMatrix() const;
 
 private:
     GLMatrix defaultModelView() const;
