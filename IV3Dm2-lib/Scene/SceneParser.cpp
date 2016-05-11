@@ -6,10 +6,10 @@
 
 #include "Common/Error.h"
 #include "Scene/DownloadProvider.h"
-#include "Scene/ServerAdapter.h"
 #include "Scene/GeometryNode.h"
-#include "Scene/GroupNode.h"
-#include "Scene/Scene.h"
+#include "Scene/ServerAdapter.h"
+
+using namespace IVDA;
 
 SceneParser::SceneParser(const JsonCpp::Value& root, const ServerAdapter* serverAdapter)
     : m_root(root)
@@ -23,67 +23,49 @@ SceneMetadata SceneParser::parseMetadata() {
 
 std::unique_ptr<Scene> SceneParser::parseScene() {
     auto metadata = parseMetadata();
-    auto sceneRoot = parseNode(m_root["scene"]);
-    return std::make_unique<Scene>(std::move(metadata), std::move(sceneRoot));
+    auto node = std::make_unique<Scene>(std::move(metadata));
+    auto sceneJson = m_root["scene"];
+    for (auto it = sceneJson.begin(); it != sceneJson.end(); ++it) {
+        node->addNode(parseNode(*it));
+    }
+    return node;
 }
 
 std::unique_ptr<SceneNode> SceneParser::parseNode(const JsonCpp::Value& node) {
     std::string type = node["type"].asString();
     if (type == "geo") {
         return parseGeometry(node);
-    } else if (type == "group") {
-        return parseGroupNode(node);
     }
     throw Error("Invalid node type: " + type, __FILE__, __LINE__);
 }
 
 std::unique_ptr<SceneNode> SceneParser::parseGeometry(const JsonCpp::Value& node) {
     auto provider = parseDataSource(node["source"]);
-    SceneNode::MatrixTriple transforms {nullptr, nullptr, nullptr};
+    SceneNode::MatrixTriple transforms{nullptr, nullptr, nullptr};
     if (node.isMember("transforms")) {
         transforms = parseMatrices(node["transforms"]);
     }
     return std::make_unique<GeometryNode>(std::move(provider), std::move(transforms));
 }
 
-std::unique_ptr<SceneNode> SceneParser::parseGroupNode(const JsonCpp::Value& node) {
-    SceneNode::MatrixTriple transforms {nullptr, nullptr, nullptr};
-    if (node.isMember("transforms")) {
-        transforms = parseMatrices(node["transforms"]);
-    }
-    auto result = std::make_unique<GroupNode>(std::move(transforms));
-    const auto& children = node["children"];
-    for (auto it = children.begin(); it != children.end(); ++it) {
-        result->addChild(parseNode(*it));
-    }
-    return std::move(result);
-}
-
 std::unique_ptr<DataProvider> SceneParser::parseDataSource(const JsonCpp::Value& node) {
     return std::make_unique<DownloadProvider>(m_serverAdapter, node["path"].asString());
 }
 
-std::unique_ptr<GLMatrix> SceneParser::parseMatrix(const JsonCpp::Value& node) {
-    if (node.size() != 9) {
+std::unique_ptr<Mat4f> SceneParser::parseMatrix(const JsonCpp::Value& node) {
+    if (node.size() != 16) {
         THROW_ERROR("Invalid matrix definition in JSON");
     }
-    auto matrix = std::make_unique<GLMatrix>();
-    (*matrix)[0][0] = node[0].asFloat();
-    (*matrix)[0][1] = node[1].asFloat();
-    (*matrix)[0][2] = node[2].asFloat();
-    (*matrix)[1][0] = node[3].asFloat();
-    (*matrix)[1][1] = node[4].asFloat();
-    (*matrix)[1][2] = node[5].asFloat();
-    (*matrix)[2][0] = node[6].asFloat();
-    (*matrix)[2][1] = node[7].asFloat();
-    (*matrix)[2][2] = node[8].asFloat();
-    return matrix;
+    return std::make_unique<Mat4f>(node[0].asFloat(), node[1].asFloat(), node[2].asFloat(), node[3].asFloat(), node[4].asFloat(),
+                                   node[5].asFloat(), node[6].asFloat(), node[7].asFloat(), node[8].asFloat(), node[9].asFloat(),
+                                   node[10].asFloat(), node[11].asFloat(), node[12].asFloat(), node[13].asFloat(), node[14].asFloat(),
+                                   node[15].asFloat());
 }
 
 SceneNode::MatrixTriple SceneParser::parseMatrices(const JsonCpp::Value& node) {
-    std::unique_ptr<GLMatrix> translation = nullptr;
-    std::unique_ptr<GLMatrix> rotation = nullptr;
-    std::unique_ptr<GLMatrix> scale = nullptr;
+    std::unique_ptr<Mat4f> translation = nullptr;
+    std::unique_ptr<Mat4f> rotation = nullptr;
+    std::unique_ptr<Mat4f> scale = nullptr;
     if (node.isMember("translation")) {
         translation = parseMatrix(node["translation"]);
     }

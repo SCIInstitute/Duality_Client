@@ -1,7 +1,6 @@
 #include "gtest/gtest.h"
 
 #include "Scene/SceneParser.h"
-#include "Scene/GroupNode.h"
 #include "Scene/GeometryNode.h"
 #include "Scene/DownloadProvider.h"
 
@@ -22,66 +21,66 @@ TEST_F(SceneParserTest, Metadata) {
     ASSERT_EQ("test scene", result.description());
 }
 
-TEST_F(SceneParserTest, SingleGeoNode) {
+TEST_F(SceneParserTest, TwoGeoNodes) {
   JsonCpp::Value root;
-  root["scene"]["type"] = "geo";
-  root["scene"]["source"]["type"] = "download";
-  root["scene"]["source"]["path"] = "/some/file";
+  root["scene"][0]["type"] = "geo";
+  root["scene"][0]["source"]["type"] = "download";
+  root["scene"][0]["source"]["path"] = "/some/file1";
+  root["scene"][1]["type"] = "geo";
+  root["scene"][1]["source"]["type"] = "download";
+  root["scene"][1]["source"]["path"] = "/some/file2";
 
   SceneParser parser(root, nullptr);
   auto scene = parser.parseScene();
-  const auto& node = scene->rootNode();
-  ASSERT_TRUE(dynamic_cast<const GeometryNode*>(&node) != nullptr);
-  const auto& dataProvider = node.dataProvider();
-  ASSERT_TRUE(dynamic_cast<const DownloadProvider*>(&dataProvider) != nullptr);
-  ASSERT_EQ("/some/file", dynamic_cast<const DownloadProvider*>(&dataProvider)->path());
-}
+  const auto& nodes = scene->nodes();
+  ASSERT_EQ(2, nodes.size());
 
-TEST_F(SceneParserTest, GroupNode) {
-    JsonCpp::Value root;
-    root["scene"]["type"] = "group";
-    root["scene"]["children"][0]["type"] = "geo";
-    root["scene"]["children"][0]["source"]["type"] = "download";
-    root["scene"]["children"][0]["source"]["path"] = "/some/file1";
-    root["scene"]["children"][1]["type"] = "geo";
-    root["scene"]["children"][1]["source"]["type"] = "download";
-    root["scene"]["children"][1]["source"]["path"] = "/some/file2";
+  const auto& node1 = *scene->nodes()[0];
+  ASSERT_TRUE(dynamic_cast<const GeometryNode*>(&node1) != nullptr);
+  const auto& dataProvider1 = node1.dataProvider();
+  ASSERT_TRUE(dynamic_cast<const DownloadProvider*>(&dataProvider1) != nullptr);
+  ASSERT_EQ("/some/file1", dynamic_cast<const DownloadProvider*>(&dataProvider1)->path());
 
-    SceneParser parser(root, nullptr);
-    auto scene = parser.parseScene();
-    const auto& rootNode = scene->rootNode();
-    ASSERT_TRUE(dynamic_cast<const GroupNode*>(&rootNode) != nullptr);
-    const auto& children = dynamic_cast<const GroupNode&>(rootNode).children();
-    ASSERT_EQ(2, children.size());
-    ASSERT_TRUE(dynamic_cast<const GeometryNode*>(children[0].get()) != nullptr);
-    ASSERT_TRUE(dynamic_cast<const GeometryNode*>(children[1].get()) != nullptr);
+  const auto& node2 = *scene->nodes()[1];
+  ASSERT_TRUE(dynamic_cast<const GeometryNode*>(&node2) != nullptr);
+  const auto& dataProvider2 = node2.dataProvider();
+  ASSERT_TRUE(dynamic_cast<const DownloadProvider*>(&dataProvider2) != nullptr);
+  ASSERT_EQ("/some/file2", dynamic_cast<const DownloadProvider*>(&dataProvider2)->path());
 }
 
 TEST_F(SceneParserTest, Transforms) {
     JsonCpp::Value root;
-    root["scene"]["type"] = "geo";
-    root["scene"]["source"]["type"] = "download";
-    root["scene"]["source"]["path"] = "/some/file";
-    for (int i = 0; i < 9; ++i) {
-        root["scene"]["transforms"]["translation"][i] = i;
+    root["scene"][0]["type"] = "geo";
+    root["scene"][0]["source"]["type"] = "download";
+    root["scene"][0]["source"]["path"] = "/some/file";
+    for (int i = 0; i < 16; ++i) {
+        root["scene"][0]["transforms"]["translation"][i] = i;
     }
     SceneParser parser(root, nullptr);
     auto scene = parser.parseScene();
-    const auto& node = scene->rootNode();
+    const auto& node = *scene->nodes()[0];
     const auto& translation = *std::get<0>(node.transforms());
     
-    ASSERT_EQ(0.0f, translation[0][0]);
-    ASSERT_EQ(1.0f, translation[0][1]);
-    ASSERT_EQ(2.0f, translation[0][2]);
+    ASSERT_EQ(0.0f, translation.m11);
+    ASSERT_EQ(1.0f, translation.m12);
+    ASSERT_EQ(2.0f, translation.m13);
+    ASSERT_EQ(3.0f, translation.m14);
 
-    ASSERT_EQ(3.0f, translation[1][0]);
-    ASSERT_EQ(4.0f, translation[1][1]);
-    ASSERT_EQ(5.0f, translation[1][2]);
+    ASSERT_EQ(4.0f, translation.m21);
+    ASSERT_EQ(5.0f, translation.m22);
+    ASSERT_EQ(6.0f, translation.m23);
+    ASSERT_EQ(7.0f, translation.m24);
 
-    ASSERT_EQ(6.0f, translation[2][0]);
-    ASSERT_EQ(7.0f, translation[2][1]);
-    ASSERT_EQ(8.0f, translation[2][2]);
-    
+    ASSERT_EQ(8.0f, translation.m31);
+    ASSERT_EQ(9.0f, translation.m32);
+    ASSERT_EQ(10.0f, translation.m33);
+    ASSERT_EQ(11.0f, translation.m34);
+
+    ASSERT_EQ(12.0f, translation.m41);
+    ASSERT_EQ(13.0f, translation.m42);
+    ASSERT_EQ(14.0f, translation.m43);
+    ASSERT_EQ(15.0f, translation.m44);
+
     ASSERT_TRUE(std::get<1>(node.transforms()) == nullptr);
     ASSERT_TRUE(std::get<2>(node.transforms()) == nullptr);
 }

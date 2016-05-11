@@ -3,6 +3,9 @@
 #include "AbstractDispatcher.h"
 #include "AbstractIO.h"
 #include "Common/Error.h"
+#include "IVDA/Vectors.h"
+
+using namespace IVDA;
 
 GeometryNode::GeometryNode(std::unique_ptr<DataProvider> provider, SceneNode::MatrixTriple transforms)
     : SceneNode(std::move(provider), std::move(transforms))
@@ -13,6 +16,47 @@ GeometryNode::GeometryNode(std::unique_ptr<DataProvider> provider, SceneNode::Ma
     , m_colors(nullptr)
     , m_texcoords(nullptr)
     , m_alphas(nullptr) {}
+
+void GeometryNode::applyTransform(const Mat4f& matrix) {
+    uint32_t numVertices = m_geometry->info.numberVertices;
+    {
+        float* positions = const_cast<float*>(this->getPositions());
+        if (positions != nullptr) {
+            for (uint32_t i = 0; i < numVertices; ++i, positions += 3) {
+                IVDA::Vec4f position(IVDA::Vec3f(m_positions), 1);
+                position = matrix * position;
+                positions[0] = position.x;
+                positions[1] = position.y;
+                positions[2] = position.z;
+            }
+        }
+    }
+    {
+        float* normals = const_cast<float*>(this->getNormals());
+        if (normals != nullptr) {
+            Mat4f normalMatrix = matrix.inverse().Transpose();
+            for (uint32_t i = 0; i < numVertices; ++i, normals += 3) {
+                Vec4f normal(Vec3f(normals), 0);
+                normal = normalMatrix * normal;
+                normals[0] = normal.x;
+                normals[1] = normal.y;
+                normals[2] = normal.z;
+            }
+        }
+    }
+    {
+        float* tangents = const_cast<float*>(this->getTangents());
+        if (tangents != nullptr) {
+            for (uint32_t i = 0; i < numVertices; ++i, tangents += 3) {
+                Vec4f tangent(Vec3f(tangents), 0);
+                tangent = matrix * tangent;
+                tangents[0] = tangent.x;
+                tangents[1] = tangent.y;
+                tangents[2] = tangent.z;
+            }
+        }
+    }
+}
 
 void GeometryNode::accept(AbstractDispatcher& dispatcher) {
     dispatcher.dispatch(*this);

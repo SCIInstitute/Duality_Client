@@ -4,10 +4,8 @@
 
 #pragma once
 
-#include "SceneMetadata.h"
-#include "SceneNode.h"
-
-#include "jsoncpp/json.h"
+#include "Scene/SceneMetadata.h"
+#include "Scene/SceneNode.h"
 
 #include <string>
 #include <memory>
@@ -16,15 +14,17 @@ class RenderDispatcher;
 
 class Scene {
 public:
-    Scene(SceneMetadata metadata, std::unique_ptr<SceneNode> sceneRoot);
+    Scene(SceneMetadata metadata);
 
     SceneMetadata metadata() const noexcept;
-    const SceneNode& rootNode() const noexcept;
+
+    void addNode(std::unique_ptr<SceneNode> node);
+    const std::vector<std::unique_ptr<SceneNode>>& nodes() const noexcept;
 
     void updateDatasets();
     void render(RenderDispatcher& dispatcher) const;
 
 private:
     SceneMetadata m_metadata;
-    std::unique_ptr<SceneNode> m_sceneRoot;
+    std::vector<std::unique_ptr<SceneNode>> m_nodes;
 };

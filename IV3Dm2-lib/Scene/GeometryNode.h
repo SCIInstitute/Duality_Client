@@ -11,6 +11,7 @@ public:
     GeometryNode(std::unique_ptr<DataProvider> provider, SceneNode::MatrixTriple transforms = SceneNode::MatrixTriple{});
 
     // SceneNode interface
+    void applyTransform(const IVDA::Mat4f& matrix) override;
     void accept(AbstractDispatcher& renderer) override;
     void readDataset(std::shared_ptr<std::vector<uint8_t>> data) override;
 

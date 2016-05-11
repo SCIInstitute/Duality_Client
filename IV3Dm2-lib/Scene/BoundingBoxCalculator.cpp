@@ -2,8 +2,8 @@
 //  Copyright © 2016 Scientific Computing and Imaging Institute. All rights reserved.
 //
 
-#include "BoundingBoxCalculator.h"
-#include "GeometryNode.h"
+#include "Scene/BoundingBoxCalculator.h"
+#include "Scene/GeometryNode.h"
 
 #include <limits>
 
@@ -14,9 +14,13 @@ BoundingBoxCalculator::BoundingBoxCalculator() {
 
 void BoundingBoxCalculator::dispatch(GeometryNode& node) {
     for (size_t i = 0; i < node.geometryInfo().numberIndices; ++i) {
-        IVDA::Vec3f pos(node.getPositions()[3 * node.getIndices()[i] + 0], node.getPositions()[3 * node.getIndices()[i] + 1],
-                        node.getPositions()[3 * node.getIndices()[i] + 2]);
+        auto offset = 3 * node.getIndices()[i];
+        IVDA::Vec3f pos(node.getPositions()[offset + 0], node.getPositions()[offset + 1], node.getPositions()[offset + 2]);
         m_min.StoreMin(pos);
         m_max.StoreMax(pos);
     }
+}
+
+std::pair<IVDA::Vec3f, IVDA::Vec3f> BoundingBoxCalculator::getMinMax() const {
+    return std::make_pair(m_min, m_max);
 }

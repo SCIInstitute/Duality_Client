@@ -8,6 +8,8 @@
 #include "Scene/Scene.h"
 #include "Scene/SceneMetadata.h"
 
+#include "IVDA/Vectors.h"
+
 #include "jsoncpp/json.h"
 
 #include <tuple>
@@ -26,9 +28,8 @@ public:
 private:
     std::unique_ptr<SceneNode> parseNode(const JsonCpp::Value& node);
     std::unique_ptr<SceneNode> parseGeometry(const JsonCpp::Value& node);
-    std::unique_ptr<SceneNode> parseGroupNode(const JsonCpp::Value& node);
     std::unique_ptr<DataProvider> parseDataSource(const JsonCpp::Value& node);
-    std::unique_ptr<GLMatrix> parseMatrix(const JsonCpp::Value& node);
+    std::unique_ptr<IVDA::Mat4f> parseMatrix(const JsonCpp::Value& node);
     SceneNode::MatrixTriple parseMatrices(const JsonCpp::Value& node);
     
 private:

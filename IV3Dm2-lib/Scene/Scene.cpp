@@ -4,25 +4,32 @@
 
 #include "Scene.h"
 
-#include "Scene/SceneParser.h"
 #include "Scene/RenderDispatcher.h"
+#include "Scene/SceneParser.h"
 
-Scene::Scene(SceneMetadata metadata, std::unique_ptr<SceneNode> sceneRoot)
-    : m_metadata(std::move(metadata))
-    , m_sceneRoot(std::move(sceneRoot)) {}
+Scene::Scene(SceneMetadata metadata)
+    : m_metadata(std::move(metadata)) {}
 
 SceneMetadata Scene::metadata() const noexcept {
     return m_metadata;
 }
 
-const SceneNode& Scene::rootNode() const noexcept {
-    return *m_sceneRoot;
+void Scene::addNode(std::unique_ptr<SceneNode> node) {
+    m_nodes.push_back(std::move(node));
+}
+
+const std::vector<std::unique_ptr<SceneNode>>& Scene::nodes() const noexcept {
+    return m_nodes;
 }
 
 void Scene::updateDatasets() {
-    m_sceneRoot->updateDataset();
+    for (auto& node : m_nodes) {
+        node->updateDataset();
+    }
 }
 
 void Scene::render(RenderDispatcher& dispatcher) const {
-    m_sceneRoot->accept(dispatcher);
+    for (auto& node : m_nodes) {
+        node->accept(dispatcher);
+    }
 }

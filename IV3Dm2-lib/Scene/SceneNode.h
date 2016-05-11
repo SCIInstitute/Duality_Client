@@ -5,7 +5,7 @@
 #pragma once
 
 #include "Scene/DataProvider.h"
-#include "Scene/GLMatrix.h"
+#include "IVDA/Vectors.h"
 
 #include <memory>
 #include <tuple>
@@ -15,33 +15,19 @@ class AbstractDispatcher;
 
 class SceneNode {
 public:
-    // translation, rotation, scaling
-    using MatrixTriple = std::tuple<std::unique_ptr<GLMatrix>, std::unique_ptr<GLMatrix>, std::unique_ptr<GLMatrix>>;
+    // 0: translation, 1: rotation, 2: scaling
+    using MatrixTriple = std::tuple<std::unique_ptr<IVDA::Mat4f>, std::unique_ptr<IVDA::Mat4f>, std::unique_ptr<IVDA::Mat4f>>;
 
-    SceneNode(std::unique_ptr<DataProvider> provider, MatrixTriple transforms = MatrixTriple{})
-        : m_provider(std::move(provider))
-        , m_transforms(std::move(transforms)) {}
+    SceneNode(std::unique_ptr<DataProvider> provider, MatrixTriple transforms = MatrixTriple{});
     virtual ~SceneNode() {}
 
+    virtual void applyTransform(const IVDA::Mat4f& matrix) = 0;
     virtual void accept(AbstractDispatcher& dispatcher) = 0;
     virtual void readDataset(std::shared_ptr<std::vector<uint8_t>> data) = 0;
+    virtual void updateDataset();
 
-    virtual void updateDataset() {
-        if (m_provider != nullptr) {
-            auto data = m_provider->fetch();
-            if (data != nullptr) {
-                readDataset(data);
-            }
-        }
-    }
-
-    const DataProvider& dataProvider() const {
-        return *m_provider;
-    }
-
-    const MatrixTriple& transforms() const {
-        return m_transforms;
-    }
+    const DataProvider& dataProvider() const noexcept;
+    const MatrixTriple& transforms() const noexcept;
 
 private:
     std::unique_ptr<DataProvider> m_provider;
