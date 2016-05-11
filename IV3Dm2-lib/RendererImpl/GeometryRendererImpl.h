@@ -12,7 +12,7 @@ class GeometryNode;
 
 class GeometryRendererImpl {
 public:
-    GeometryRendererImpl(ScreenInfo screenInfo);
+    GeometryRendererImpl();
     void render(const GeometryNode& dataset, const GLMatrix& mvp);
 
 private:
@@ -21,8 +21,6 @@ private:
     GLShader& determineActiveShader(const GeometryNode& dataset) const;
 
 private:
-    ScreenInfo m_screenInfo;
-    std::unique_ptr<GLFrameBufferObject> m_fbo;
     std::unique_ptr<GLShader> m_normShader;
     std::unique_ptr<GLShader> m_normAlphaShader;
     std::unique_ptr<GLShader> m_normTexAlphaShader;

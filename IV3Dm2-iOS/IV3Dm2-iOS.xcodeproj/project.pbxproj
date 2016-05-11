@@ -124,6 +124,7 @@
 		8EB837CA1CE3D6AD0086D761 /* SceneNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EB837A91CE3D6AD0086D761 /* SceneNode.cpp */; };
 		8EB837CB1CE3D6AD0086D761 /* SceneParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EB837AB1CE3D6AD0086D761 /* SceneParser.cpp */; };
 		8EB837CC1CE3D6AD0086D761 /* ServerAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EB837AE1CE3D6AD0086D761 /* ServerAdapter.cpp */; };
+		8EB837CF1CE3F7270086D761 /* AbstractRendererImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EB837CD1CE3F7270086D761 /* AbstractRendererImpl.cpp */; };
 		8EC1922D1CE12C42003EBC45 /* Render3DViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8EC1922C1CE12C42003EBC45 /* Render3DViewController.mm */; };
 		8EC1922F1CE12FB6003EBC45 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EC1922E1CE12FB6003EBC45 /* GLKit.framework */; };
 		8EC5A3961CE143650042E2C8 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EC5A3951CE143650042E2C8 /* OpenGLES.framework */; };
@@ -360,6 +361,8 @@
 		8EB837AD1CE3D6AD0086D761 /* ScreenInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScreenInfo.h; sourceTree = "<group>"; };
 		8EB837AE1CE3D6AD0086D761 /* ServerAdapter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ServerAdapter.cpp; sourceTree = "<group>"; };
 		8EB837AF1CE3D6AD0086D761 /* ServerAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerAdapter.h; sourceTree = "<group>"; };
+		8EB837CD1CE3F7270086D761 /* AbstractRendererImpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AbstractRendererImpl.cpp; sourceTree = "<group>"; };
+		8EB837CE1CE3F7270086D761 /* AbstractRendererImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractRendererImpl.h; sourceTree = "<group>"; };
 		8EC1922B1CE12C31003EBC45 /* Render3DViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Render3DViewController.h; sourceTree = "<group>"; };
 		8EC1922C1CE12C42003EBC45 /* Render3DViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Render3DViewController.mm; sourceTree = "<group>"; };
 		8EC1922E1CE12FB6003EBC45 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
@@ -874,6 +877,8 @@
 		8EB837831CE3D6AD0086D761 /* RendererImpl */ = {
 			isa = PBXGroup;
 			children = (
+				8EB837CD1CE3F7270086D761 /* AbstractRendererImpl.cpp */,
+				8EB837CE1CE3F7270086D761 /* AbstractRendererImpl.h */,
 				8EB837841CE3D6AD0086D761 /* GeometryRendererImpl.cpp */,
 				8EB837851CE3D6AD0086D761 /* GeometryRendererImpl.h */,
 				8EB837861CE3D6AD0086D761 /* GLFrameBufferObject.cpp */,
@@ -1069,6 +1074,7 @@
 				8EB837CC1CE3D6AD0086D761 /* ServerAdapter.cpp in Sources */,
 				8EB837B81CE3D6AD0086D761 /* Threads.cpp in Sources */,
 				8E6DCEC91CDB971B0091D5AB /* SettingsViewController.mm in Sources */,
+				8EB837CF1CE3F7270086D761 /* AbstractRendererImpl.cpp in Sources */,
 				8EB837BA1CE3D6AD0086D761 /* GeometryRendererImpl.cpp in Sources */,
 				8E2BFB631CDBF1690040DC47 /* FramingConnectionFactory.cpp in Sources */,
 				8EB837C51CE3D6AD0086D761 /* GLMatrix.cpp in Sources */,

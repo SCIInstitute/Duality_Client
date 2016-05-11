@@ -2,8 +2,9 @@
 
 #include <cmath>
 
-AbsstractRenderer::AbsstractRenderer(ScreenInfo screenInfo)
-    : m_screenInfo(screenInfo) {
+AbsstractRenderer::AbsstractRenderer(const ScreenInfo& screenInfo)
+    : m_impl(std::make_unique<AbstractRendererImpl>(screenInfo))
+    , m_screenInfo(screenInfo) {
     updateProjectionMatrix();
 }
 

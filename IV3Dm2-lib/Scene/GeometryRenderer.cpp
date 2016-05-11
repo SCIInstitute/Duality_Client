@@ -1,12 +1,12 @@
 #include "Scene/GeometryRenderer.h"
 
 #if __APPLE__ && TARGET_OS_IPHONE
-GeometryRenderer::GeometryRenderer(ScreenInfo screenInfo)
-    : AbsstractRenderer(std::move(screenInfo))
-    , m_impl(std::make_unique<GeometryRendererImpl>(screenInfo)) {}
+GeometryRenderer::GeometryRenderer(const ScreenInfo& screenInfo)
+    : AbsstractRenderer(screenInfo)
+    , m_impl(std::make_unique<GeometryRendererImpl>()) {}
 #else
-GeometryRenderer::GeometryRenderer(ScreenInfo screenInfo)
-    : AbsstractRenderer(std::move(screenInfo))
+GeometryRenderer::GeometryRenderer(const ScreenInfo& screenInfo)
+    : AbsstractRenderer(screenInfo)
     , m_impl(nullptr) {}
 #endif
 

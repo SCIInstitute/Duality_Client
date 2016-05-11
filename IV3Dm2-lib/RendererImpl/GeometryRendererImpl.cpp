@@ -5,11 +5,7 @@
 
 #include <OpenGLES/ES3/gl.h>
 
-GeometryRendererImpl::GeometryRendererImpl(ScreenInfo screenInfo)
-    : m_screenInfo(screenInfo)
-    , m_fbo(std::make_unique<GLFrameBufferObject>(static_cast<unsigned int>(screenInfo.width / screenInfo.standardDownSampleFactor),
-                                                  static_cast<unsigned int>(screenInfo.height / screenInfo.standardDownSampleFactor),
-                                                  true)) {
+GeometryRendererImpl::GeometryRendererImpl() {
     {
         GlShaderAttributes attributes;
         attributes.push_back("position");
@@ -66,9 +62,6 @@ GeometryRendererImpl::GeometryRendererImpl(ScreenInfo screenInfo)
 }
 
 void GeometryRendererImpl::render(const GeometryNode& dataset, const GLMatrix& mvp) {
-    GL(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
-    GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-    
     auto& shader = determineActiveShader(dataset);
     shader.Enable();
     
@@ -85,8 +78,6 @@ void GeometryRendererImpl::render(const GeometryNode& dataset, const GLMatrix& m
     for (int i = 0; i < attributeCount; ++i) {
         GL(glDisableVertexAttribArray(i));
     }
-    
-    m_fbo->Read(0);
 }
 
 int GeometryRendererImpl::primitiveTypeGL(const GeometryNode& dataset) {

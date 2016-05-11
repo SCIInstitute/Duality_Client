@@ -14,12 +14,12 @@ class AbsstractRendererImpl {
     ~AbsstractRendererImpl() = default;
 };
 #else
-#include "RendererImpl/AbsstractRendererImpl.h"
+#include "RendererImpl/AbstractRendererImpl.h"
 #endif
 
 class AbsstractRenderer {
 public:
-    AbsstractRenderer(ScreenInfo screenInfo);
+    AbsstractRenderer(const ScreenInfo& screenInfo);
 
     void startDraw();
     void finishDraw();
@@ -30,7 +30,7 @@ private:
     void updateProjectionMatrix();
 
 private:
-    std::unique_ptr<AbsstractRendererImpl> m_impl;
+    std::unique_ptr<AbstractRendererImpl> m_impl;
     ScreenInfo m_screenInfo;
     GLMatrix m_projection;
 };

@@ -21,7 +21,7 @@ class GeometryRendererImpl {
 
 class GeometryRenderer : public AbsstractRenderer {
 public:
-    GeometryRenderer(ScreenInfo screenInfo);
+    GeometryRenderer(const ScreenInfo& screenInfo);
     void render(const GeometryNode& dataset, const GLMatrix& modelView);
 
 private:

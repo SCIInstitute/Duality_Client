@@ -34,9 +34,11 @@ void Scene::updateDatasets() {
 }
 
 void Scene::dispatch(AbstractDispatcher& dispatcher) const {
+    dispatcher.setup();
     for (auto& node : m_nodes) {
         node->accept(dispatcher);
     }
+    dispatcher.finish();
 }
 
 const GLMatrix& Scene::modelViewMatrix() const {
@@ -61,5 +63,8 @@ GLMatrix Scene::defaultModelView() const {
     float maxExtend = size.maxVal();
     result.scale(1.f / maxExtend, 1.f / maxExtend, 1.f / maxExtend);
 
+    // FIXME: just a temporary solution
+    result.translate(0, 0, -3.f);
+    
     return result;
 }
