@@ -10,6 +10,8 @@
 
 #include "jsoncpp/json.h"
 
+#include <tuple>
+
 class SceneNode;
 class DataProvider;
 class ServerAdapter;
@@ -26,7 +28,9 @@ private:
     std::unique_ptr<SceneNode> parseGeometry(const JsonCpp::Value& node);
     std::unique_ptr<SceneNode> parseGroupNode(const JsonCpp::Value& node);
     std::unique_ptr<DataProvider> parseDataSource(const JsonCpp::Value& node);
-
+    std::unique_ptr<GLMatrix> parseMatrix(const JsonCpp::Value& node);
+    SceneNode::MatrixTriple parseMatrices(const JsonCpp::Value& node);
+    
 private:
     const JsonCpp::Value& m_root;
     const ServerAdapter& m_serverAdapter;

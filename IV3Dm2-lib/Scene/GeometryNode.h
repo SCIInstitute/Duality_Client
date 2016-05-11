@@ -1,14 +1,14 @@
 #pragma once
 
-#include "SceneNode.h"
 #include "G3D.h"
+#include "SceneNode.h"
 
 class DataProvider;
 class AbstractDispatcher;
 
 class GeometryNode : public SceneNode {
 public:
-    GeometryNode(std::unique_ptr<DataProvider> provider);
+    GeometryNode(std::unique_ptr<DataProvider> provider, SceneNode::MatrixTriple transforms);
 
     // SceneNode interface
     void accept(AbstractDispatcher& renderer) override;
@@ -25,7 +25,7 @@ public:
 
 private:
     void assignShortcutPointers();
-    
+
 private:
     std::unique_ptr<G3D::GeometrySoA> m_geometry;
 

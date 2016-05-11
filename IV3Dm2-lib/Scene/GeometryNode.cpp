@@ -4,8 +4,8 @@
 #include "AbstractIO.h"
 #include "Common/Error.h"
 
-GeometryNode::GeometryNode(std::unique_ptr<DataProvider> provider)
-    : SceneNode(std::move(provider))
+GeometryNode::GeometryNode(std::unique_ptr<DataProvider> provider, SceneNode::MatrixTriple transforms)
+    : SceneNode(std::move(provider), std::move(transforms))
     , m_geometry(nullptr)
     , m_positions(nullptr)
     , m_normals(nullptr)

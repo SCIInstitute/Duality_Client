@@ -6,8 +6,8 @@
 
 #include "AbstractDispatcher.h"
 
-GroupNode::GroupNode(std::unique_ptr<DataProvider> provider)
-    : SceneNode(std::move(provider)) {}
+GroupNode::GroupNode(std::unique_ptr<DataProvider> provider, SceneNode::MatrixTriple transforms)
+    : SceneNode(std::move(provider), std::move(transforms)) {}
 
 void GroupNode::accept(AbstractDispatcher& dispatcher) {
     dispatcher.dispatch(*this);

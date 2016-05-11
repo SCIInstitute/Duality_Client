@@ -13,7 +13,7 @@ class GroupNode : public SceneNode {
 public:
     using NodeVec = std::vector<std::unique_ptr<SceneNode>>;
 
-    GroupNode(std::unique_ptr<DataProvider> provider);
+    GroupNode(std::unique_ptr<DataProvider> provider, SceneNode::MatrixTriple transforms);
     
     void updateDataset() override;    
     void accept(AbstractDispatcher& dispatcher) override;

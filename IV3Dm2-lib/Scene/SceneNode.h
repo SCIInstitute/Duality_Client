@@ -5,15 +5,22 @@
 #pragma once
 
 #include "Communication/DataProvider.h"
+#include "Render/GLMatrix.h"
 
 #include <memory>
+#include <tuple>
+#include <vector>
 
 class AbstractDispatcher;
 
 class SceneNode {
 public:
-    SceneNode(std::unique_ptr<DataProvider> provider)
-        : m_provider(std::move(provider)) {}
+    // translation, rotation, scaling
+    using MatrixTriple = std::tuple<std::unique_ptr<GLMatrix>, std::unique_ptr<GLMatrix>, std::unique_ptr<GLMatrix>>;
+
+    SceneNode(std::unique_ptr<DataProvider> provider, MatrixTriple transforms)
+        : m_provider(std::move(provider))
+        , m_transforms(std::move(transforms)) {}
     virtual ~SceneNode() {}
 
     virtual void accept(AbstractDispatcher& dispatcher) = 0;
@@ -28,4 +35,5 @@ public:
 
 private:
     std::unique_ptr<DataProvider> m_provider;
+    MatrixTriple m_transforms;
 };

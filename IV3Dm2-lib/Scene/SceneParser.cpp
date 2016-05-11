@@ -39,11 +39,19 @@ std::unique_ptr<SceneNode> SceneParser::parseNode(const JsonCpp::Value& node) {
 
 std::unique_ptr<SceneNode> SceneParser::parseGeometry(const JsonCpp::Value& node) {
     auto provider = parseDataSource(node["source"]);
-    return std::make_unique<GeometryNode>(std::move(provider));
+    SceneNode::MatrixTriple transforms = {nullptr, nullptr, nullptr};
+    if (node.isMember("transforms")) {
+        transforms = parseMatrices(node["transforms"]);
+    }
+    return std::make_unique<GeometryNode>(std::move(provider), std::move(transforms));
 }
 
 std::unique_ptr<SceneNode> SceneParser::parseGroupNode(const JsonCpp::Value& node) {
-    auto result = std::make_unique<GroupNode>(nullptr);
+    SceneNode::MatrixTriple transforms = {nullptr, nullptr, nullptr};
+    if (node.isMember("transforms")) {
+        transforms = parseMatrices(node["transforms"]);
+    }
+    auto result = std::make_unique<GroupNode>(nullptr, std::move(transforms));
     const auto& children = node["children"];
     for (auto it = children.begin(); it != children.end(); ++it) {
         result->addChild(parseNode(*it));
@@ -53,4 +61,37 @@ std::unique_ptr<SceneNode> SceneParser::parseGroupNode(const JsonCpp::Value& nod
 
 std::unique_ptr<DataProvider> SceneParser::parseDataSource(const JsonCpp::Value& node) {
     return std::make_unique<DownloadProvider>(m_serverAdapter, node["path"].asString());
+}
+
+std::unique_ptr<GLMatrix> SceneParser::parseMatrix(const JsonCpp::Value& node) {
+    if (node.size() != 9) {
+        THROW_ERROR("Invalid matrix definition in JSON");
+    }
+    auto matrix = std::make_unique<GLMatrix>();
+    (*matrix)[0][0] = node[0].asFloat();
+    (*matrix)[0][1] = node[1].asFloat();
+    (*matrix)[0][2] = node[2].asFloat();
+    (*matrix)[1][0] = node[3].asFloat();
+    (*matrix)[1][1] = node[4].asFloat();
+    (*matrix)[1][2] = node[5].asFloat();
+    (*matrix)[2][0] = node[6].asFloat();
+    (*matrix)[2][1] = node[7].asFloat();
+    (*matrix)[2][2] = node[8].asFloat();
+    return matrix;
+}
+
+SceneNode::MatrixTriple SceneParser::parseMatrices(const JsonCpp::Value& node) {
+    std::unique_ptr<GLMatrix> translation = nullptr;
+    std::unique_ptr<GLMatrix> rotation = nullptr;
+    std::unique_ptr<GLMatrix> scale = nullptr;
+    if (node.isMember("translation")) {
+        translation = parseMatrix(node["translation"]);
+    }
+    if (node.isMember("rotation")) {
+        rotation = parseMatrix(node["rotation"]);
+    }
+    if (node.isMember("scale")) {
+        scale = parseMatrix(node["scale"]);
+    }
+    return std::make_tuple(std::move(translation), std::move(rotation), std::move(scale));
 }
