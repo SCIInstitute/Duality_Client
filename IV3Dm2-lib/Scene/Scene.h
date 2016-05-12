@@ -7,6 +7,7 @@
 #include "Scene/GLMatrix.h"
 #include "Scene/SceneMetadata.h"
 #include "Scene/SceneNode.h"
+#include "IVDA/Vectors.h"
 
 #include <memory>
 #include <string>
@@ -26,7 +27,8 @@ public:
     void updateDatasets();
     void dispatch(AbstractDispatcher& dispatcher) const;
 
-    const GLMatrix& modelViewMatrix() const;
+    void addTranslation(const IVDA::Vec2f& translation);
+    GLMatrix modelViewMatrix() const;
 
 private:
     GLMatrix defaultModelView() const;
@@ -34,5 +36,6 @@ private:
 private:
     SceneMetadata m_metadata;
     std::vector<std::unique_ptr<SceneNode>> m_nodes;
-    GLMatrix m_modelView;
+    GLMatrix m_defaultModelView;
+    IVDA::Vec3f m_translation;
 };

@@ -69,12 +69,70 @@
     m_rendererDispatcher = std::make_unique<RenderDispatcher>([self screenInfo]);
 }
 
+// Drawing
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
     if (m_scene) {
-        m_rendererDispatcher->setModelView(&m_scene->modelViewMatrix());
+        GLMatrix modelView = m_scene->modelViewMatrix();
+        m_rendererDispatcher->setModelView(&modelView);
         m_scene->dispatch(*m_rendererDispatcher);
     }
     [view bindDrawable];
+}
+
+// Interaction
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesBegan:touches withEvent:event];
+    
+    NSUInteger numTouches = [[event allTouches] count];
+    NSArray* allTouches = [[event allTouches] allObjects];
+    if (numTouches == 2) {
+        CGPoint touchPoint1 = [[allTouches objectAtIndex:0] locationInView:self.view];
+        CGPoint touchPoint2 = [[allTouches objectAtIndex:1] locationInView:self.view];
+        m_touchPos1 = IVDA::Vec2f(touchPoint1.x/self.view.frame.size.width,
+                                  touchPoint1.y/self.view.frame.size.height);
+        m_touchPos2 = IVDA::Vec2f(touchPoint2.x/self.view.frame.size.width,
+                                  touchPoint2.y/self.view.frame.size.height);
+    }
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesMoved:touches withEvent:event];
+    
+    UITouch* touch = [[event touchesForView:self.view] anyObject];
+    CGPoint pos = [touch locationInView:self.view];
+    CGPoint prev = [touch previousLocationInView:self.view];
+    NSUInteger numTouches = [[event allTouches] count];
+    
+    if (pos.x == prev.x && pos.y == prev.y && numTouches == 1) {
+        return;
+    }
+    
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    
+    NSArray* allTouches = [[event allTouches] allObjects];
+    if (numTouches == 2) {
+        CGPoint touchPoint1 = [[allTouches objectAtIndex:0] locationInView:self.view];
+        CGPoint touchPoint2 = [[allTouches objectAtIndex:1] locationInView:self.view];
+        
+        IVDA::Vec2f touchPos1(touchPoint1.x/self.view.frame.size.width,
+                              touchPoint1.y/self.view.frame.size.height);
+        IVDA::Vec2f touchPos2(touchPoint2.x/self.view.frame.size.width,
+                              touchPoint2.y/self.view.frame.size.height);
+        
+        [self translateSceneWith:touchPos1 andWith:touchPos2];
+        
+        m_touchPos1 = touchPos1;
+        m_touchPos2 = touchPos2;
+    }
+}
+
+- (void) translateSceneWith:(const IVDA::Vec2f&)touchPos1 andWith:(const IVDA::Vec2f&)touchPos2 {
+    IVDA::Vec2f c1((m_touchPos1.x + m_touchPos2.x) / 2, (m_touchPos1.y + m_touchPos2.y) / 2);
+    IVDA::Vec2f c2((touchPos1.x + touchPos2.x) / 2, (touchPos1.y + touchPos2.y) / 2);
+    IVDA::Vec2f translation(c2.x - c1.x, -(c2.y - c1.y));
+    m_scene->addTranslation(translation);
 }
 
 @end

@@ -30,7 +30,7 @@ void Scene::updateDatasets() {
     for (auto& node : m_nodes) {
         node->updateDataset();
     }
-    m_modelView = defaultModelView();
+    m_defaultModelView = defaultModelView();
 }
 
 void Scene::dispatch(AbstractDispatcher& dispatcher) const {
@@ -41,8 +41,15 @@ void Scene::dispatch(AbstractDispatcher& dispatcher) const {
     dispatcher.finish();
 }
 
-const GLMatrix& Scene::modelViewMatrix() const {
-    return m_modelView;
+void Scene::addTranslation(const IVDA::Vec2f &translation) {
+    m_translation.x += translation.x;
+    m_translation.y += translation.y;
+}
+
+GLMatrix Scene::modelViewMatrix() const {
+    GLMatrix modelView = m_defaultModelView;
+    modelView.translate(m_translation.x, m_translation.y, m_translation.y);
+    return modelView;
 }
 
 GLMatrix Scene::defaultModelView() const {
