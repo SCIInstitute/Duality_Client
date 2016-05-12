@@ -24,8 +24,8 @@ class RenderDispatcher;
     IVDA::Vec2f m_touchPos2;
 }
 
--(id) initWithScene:(Scene*)scene;
--(void) changeScene:(Scene*)scene;
+-(id) init;
+-(void)reloadScene:(NSNotification*)notification;
 
 @property (nonatomic, retain) EAGLContext *context;
 

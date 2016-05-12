@@ -4,22 +4,18 @@
 
 #import "TabBarViewController.h"
 
-class ServerAdapter;
-class Scene;
-class AbstractRenderer;
+class SceneLoader;
 
 @interface AppDelegate : NSObject <UIApplicationDelegate>
 {
     UIWindow * window;
     TabBarViewController* m_tabBarViewController;
-    ServerAdapter* m_serverAdapter;
-    Scene* m_scene;
+    std::unique_ptr<SceneLoader> m_sceneLoader;
 }
 
 @property (strong, nonatomic) IBOutlet UIWindow *window;
 
-- (void) changeScene:(Scene*)scene;
-- (Scene*) currentScene;
+-(void)loadScene:(NSNotification*)notification;
 
 @end
 

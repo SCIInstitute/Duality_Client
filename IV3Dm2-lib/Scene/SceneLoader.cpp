@@ -6,33 +6,40 @@
 
 #include "Common/Error.h"
 #include "Scene/SceneParser.h"
-#include "ServerAdapter.h"
+#include "Scene/ServerAdapter.h"
 
 #include <algorithm>
 #include <cassert>
 
-SceneLoader::SceneLoader(const ServerAdapter* server)
-    : m_server(server) {
+SceneLoader::SceneLoader(std::unique_ptr<ServerAdapter> server)
+    : m_server(std::move(server)) {
     assert(m_server != nullptr);
-    m_root = server->scenes();
-    for (auto it = m_root.begin(); it != m_root.end(); ++it) {
-        SceneParser parser(*it, m_server);
-        m_metadata.push_back(parser.parseMetadata());
-    }
 }
 
-const std::vector<SceneMetadata>& SceneLoader::listMetadata() const {
-    return m_metadata;
+std::vector<SceneMetadata> SceneLoader::listMetadata() const {
+    auto root = m_server->scenes();
+    std::vector<SceneMetadata> result;
+    for (auto it = root.begin(); it != root.end(); ++it) {
+        SceneParser parser(*it, m_server.get());
+        result.push_back(parser.parseMetadata());
+    }
+    return result;
 }
 
-std::unique_ptr<Scene> SceneLoader::getScene(const std::string& name) const {
-    auto it = std::find_if(begin(m_metadata), end(m_metadata), [&name](const SceneMetadata& md) {
-        return md.name() == name;
-    });
-    if (it != end(m_metadata)) {
-        auto index = std::distance(begin(m_metadata), it);
-        SceneParser parser(m_root[static_cast<int>(index)], m_server);
-        return parser.parseScene();
+bool SceneLoader::loadScene(const std::string& name) {
+    if (m_scene != nullptr && m_scene->metadata().name() == name) return false;
+    auto root = m_server->scenes();
+    for (auto it = root.begin(); it != root.end(); ++it) {
+        SceneParser parser(*it, m_server.get());
+        auto metadata = parser.parseMetadata();
+        if (metadata.name() == name) {
+            m_scene = parser.parseScene();
+            return true;
+        }
     }
-    THROW_ERROR("No scene named " << name);
+    throw Error("Scene named '" + name + "' does not exist", __FILE__, __LINE__);
+}
+
+Scene* SceneLoader::activeScene() const {
+    return m_scene.get();
 }

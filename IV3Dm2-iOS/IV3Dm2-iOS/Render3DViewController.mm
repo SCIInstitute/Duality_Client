@@ -4,7 +4,9 @@
 
 #import <Foundation/Foundation.h>
 
+#import "AppDelegate.h"
 #import "Render3DViewController.h"
+#import "SceneWrapper.h"
 
 #include "IVDA/iOS.h"
 #include "Scene/RenderDispatcher.h"
@@ -15,17 +17,12 @@
 
 @synthesize context = _context;
 
-- (id)initWithScene:(Scene*)scene {
+- (id)init {
     self = [super init];
-    m_scene = scene;
+    m_scene = nullptr;
     m_rendererDispatcher = nullptr;
     m_uiBuilder = nullptr;
     return self;
-}
-
--(void) changeScene:(Scene*)scene {
-    m_scene = scene;
-    [m_uiBuilder generateUI];
 }
 
 - (ScreenInfo)screenInfo {
@@ -73,6 +70,7 @@
     floatParams.push_back(param2);
     
     m_uiBuilder = [[DynamicUIBuilder alloc] initWitView:self.view andFloatParams:floatParams];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadScene:) name:@"NewSceneLoaded" object:nil];
 }
 
 - (void)viewWillLayoutSubviews {
@@ -84,6 +82,14 @@
 {
     [super viewDidLayoutSubviews];
     [m_uiBuilder layoutUI];
+}
+
+-(void)reloadScene:(NSNotification*)notification
+{
+    SceneWrapper* sceneWrapper = notification.userInfo[@"scene"];
+    m_scene = [sceneWrapper scene];
+    m_scene->updateDatasets();
+    [m_uiBuilder generateUI];
 }
 
 // Drawing

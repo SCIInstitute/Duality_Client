@@ -13,7 +13,8 @@
 @protected
     UIView* m_view;
     std::vector<InputParameterFloat> m_floatParams;
-    NSMutableArray<UILabel*>* m_labels;
+    NSMutableArray<UILabel*>* m_nameLabels;
+    NSMutableArray<UILabel*>* m_valueLabels;
     NSMutableArray<UIStepper*>* m_steppers;
 }
 

@@ -6,19 +6,21 @@
 //  Copyright © 2016 Scientific Computing and Imaging Institute. All rights reserved.
 //
 
-#import "TabBarViewController.h"
-#import "AppDelegate.h"
-
 #import <Foundation/Foundation.h>
+
+#import "TabBarViewController.h"
+
+#include "Scene/SceneLoader.h"
 
 @implementation TabBarViewController
 
-- (id)initWithRenderView:(Render3DViewController*)renderView andSceneView:(SelectSceneViewController*)sceneView andSettingsView:(SettingsViewController*)settingsView {
+- (id)initWithRenderView:(Render3DViewController*)renderView andSceneView:(SelectSceneViewController*)sceneView andSettingsView:(SettingsViewController*)settingsView andSceneLoader:(SceneLoader*)sceneLoader{
     self = [super init];
     if (self) {
         m_render3DViewController = renderView;
         m_selectSceneViewController = sceneView;
         m_settingsViewController = settingsView;
+        m_sceneLoader = sceneLoader;
         [self createNavigationControllers];
     }
     return self;
@@ -54,10 +56,9 @@
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
 {
-    if ([item tag] == 0) {
-        AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-        Scene* scene = [app currentScene];
-        [m_render3DViewController changeScene:scene];
+    // "Select Scene" tab was selected
+    if ([item tag] == 1) {
+        [m_selectSceneViewController setMetadata:m_sceneLoader->listMetadata()];
     }
 }
 

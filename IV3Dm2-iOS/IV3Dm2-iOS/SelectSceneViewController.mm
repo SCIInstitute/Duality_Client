@@ -3,7 +3,6 @@
 //
 
 #import "SelectSceneViewController.h"
-#import "AppDelegate.h"
 
 @interface SelectSceneViewController ()
 
@@ -11,10 +10,10 @@
 
 @implementation SelectSceneViewController
 
-- (id)initWithSceneLoader:(std::shared_ptr<SceneLoader>)provider {
-    self = [super initWithStyle:UITableViewStyleGrouped];
-    m_provider = provider;
-    return self;
+-(void)setMetadata:(const std::vector<SceneMetadata>&)metadata
+{
+    m_metadata = metadata;
+    [self.tableView reloadData];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -24,7 +23,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return m_provider->listMetadata().size();
+    return m_metadata.size();
 }
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -36,23 +35,29 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     
-    const SceneMetadata& meta = m_provider->listMetadata()[indexPath.row];
+    const SceneMetadata& meta = m_metadata[indexPath.row];
     cell.textLabel.text = [NSString stringWithUTF8String:meta.name().c_str()];
     cell.detailTextLabel.text = [NSString stringWithUTF8String:meta.description().c_str()];
     
     return cell;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    auto name = m_provider->listMetadata()[indexPath.row].name();
-    Scene* scene = m_provider->getScene(name).release(); // FIXME: ugly
-    AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-    [app changeScene:scene];
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    m_selectedScene = [NSString stringWithUTF8String:m_metadata[indexPath.row].name().c_str()];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"Select Scene";
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    if (m_selectedScene) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"SelectedSceneChanged" object:self userInfo:@{@"name":m_selectedScene}];
+    }
+    [super viewWillDisappear:animated];
 }
 
 - (void)didReceiveMemoryWarning {

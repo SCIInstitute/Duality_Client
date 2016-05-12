@@ -131,6 +131,7 @@
 		8ECB12E41CE502FC009297D6 /* SCIRunProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8ECB12CF1CE502FC009297D6 /* SCIRunProvider.cpp */; };
 		8ECB12E51CE502FC009297D6 /* ServerAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8ECB12D21CE502FC009297D6 /* ServerAdapter.cpp */; };
 		8ECB12E81CE50EAD009297D6 /* DynamicUIBuilder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8ECB12E71CE50EAD009297D6 /* DynamicUIBuilder.mm */; };
+		8ECB12EB1CE54490009297D6 /* SceneWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8ECB12EA1CE54490009297D6 /* SceneWrapper.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -376,6 +377,8 @@
 		8ECB12D31CE502FC009297D6 /* ServerAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerAdapter.h; sourceTree = "<group>"; };
 		8ECB12E61CE50E29009297D6 /* DynamicUIBuilder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DynamicUIBuilder.h; sourceTree = "<group>"; };
 		8ECB12E71CE50EAD009297D6 /* DynamicUIBuilder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DynamicUIBuilder.mm; sourceTree = "<group>"; };
+		8ECB12E91CE542F8009297D6 /* SceneWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneWrapper.h; sourceTree = "<group>"; };
+		8ECB12EA1CE54490009297D6 /* SceneWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SceneWrapper.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -429,6 +432,8 @@
 				8E2AF9EC1CDAA7B500AC6CEC /* TabBarViewController.mm */,
 				8E2AF9E21CDA762900AC6CEC /* LaunchScreen.storyboard */,
 				8E2AF9D11CDA762900AC6CEC /* Supporting Files */,
+				8ECB12E91CE542F8009297D6 /* SceneWrapper.h */,
+				8ECB12EA1CE54490009297D6 /* SceneWrapper.mm */,
 			);
 			path = "IV3Dm2-iOS";
 			sourceTree = "<group>";
@@ -1077,6 +1082,7 @@
 				8E2BFB591CDBF1690040DC47 /* StreamLog.cpp in Sources */,
 				8E2BFB6C1CDBF1690040DC47 /* MethodDescription.cpp in Sources */,
 				8E2BFB6F1CDBF1690040DC47 /* QueueConnection.cpp in Sources */,
+				8ECB12EB1CE54490009297D6 /* SceneWrapper.mm in Sources */,
 				8ECB12E81CE50EAD009297D6 /* DynamicUIBuilder.mm in Sources */,
 				8ECB12D61CE502FC009297D6 /* BoundingBoxCalculator.cpp in Sources */,
 				8E2BFB651CDBF1690040DC47 /* LoopbackConnectionAcceptor.cpp in Sources */,

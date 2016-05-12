@@ -15,8 +15,9 @@ class SceneLoader;
     Render3DViewController* m_render3DViewController;
     SelectSceneViewController* m_selectSceneViewController;
     SettingsViewController* m_settingsViewController;
+    SceneLoader* m_sceneLoader;
 }
 
-- (id)initWithRenderView:(Render3DViewController*)renderView andSceneView:(SelectSceneViewController*)sceneView andSettingsView:(SettingsViewController*)settingsView;
+- (id)initWithRenderView:(Render3DViewController*)renderView andSceneView:(SelectSceneViewController*)sceneView andSettingsView:(SettingsViewController*)settingsView andSceneLoader:(SceneLoader*)sceneLoader;
 
 @end

@@ -4,17 +4,17 @@
 
 #import <UIKit/UIKit.h>
 
-#include "Scene/Scene.h"
-#include "Scene/SceneLoader.h"
+#include "Scene/SceneMetadata.h"
 
 #include <vector>
 
 @interface SelectSceneViewController : UITableViewController
 {
-    std::shared_ptr<SceneLoader> m_provider;
+    std::vector<SceneMetadata> m_metadata;
+    NSString* m_selectedScene;
 }
 
-- (id)initWithSceneLoader:(std::shared_ptr<SceneLoader>)provider;
+- (void)setMetadata:(const std::vector<SceneMetadata>&)metadata;
 
 @end
 

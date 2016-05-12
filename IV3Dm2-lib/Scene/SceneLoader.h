@@ -8,18 +8,19 @@
 #include "Scene/SceneMetadata.h"
 
 #include <vector>
+#include <memory>
 
 class ServerAdapter;
 
 class SceneLoader {
 public:
-    SceneLoader(const ServerAdapter* server);
+    SceneLoader(std::unique_ptr<ServerAdapter> server);
     
-    const std::vector<SceneMetadata>& listMetadata() const;
-    std::unique_ptr<Scene> getScene(const std::string& name) const;
+    std::vector<SceneMetadata> listMetadata() const;
+    bool loadScene(const std::string& name);
+    Scene* activeScene() const;
     
 private:
-    const ServerAdapter* m_server;
-    JsonCpp::Value m_root;
-    std::vector<SceneMetadata> m_metadata;
+    std::unique_ptr<ServerAdapter> m_server;
+    std::unique_ptr<Scene> m_scene;
 };

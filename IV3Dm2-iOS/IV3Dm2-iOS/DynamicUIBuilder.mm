@@ -12,7 +12,8 @@
 {
     m_view = view;
     m_floatParams = floatParams;
-    m_labels = [[NSMutableArray<UILabel*> alloc] init];
+    m_nameLabels = [[NSMutableArray<UILabel*> alloc] init];
+    m_valueLabels = [[NSMutableArray<UILabel*> alloc] init];
     m_steppers = [[NSMutableArray<UIStepper*> alloc] init];
     return self;
 }
@@ -21,9 +22,9 @@
 {
     [self clearUI];
     for (const auto& floatParam : m_floatParams) {
-        UILabel* label = [self createLabel:floatParam];
-        [m_labels addObject:label];
-        [m_view addSubview:label];
+        UILabel* nameLabel = [self createNameLabel:floatParam];
+        [m_nameLabels addObject:nameLabel];
+        [m_view addSubview:nameLabel];
         
         UIStepper* stepper = [self createStepper:floatParam];
         [m_steppers addObject:stepper];
@@ -41,9 +42,9 @@
     CGFloat const buttonWidth = 120;
     CGFloat const labelWidth = 120;
 
-    for (int i = 0; i < [m_labels count]; ++i) {
+    for (int i = 0; i < [m_nameLabels count]; ++i) {
         CGFloat top = topMargin + i * (height + spacing);
-        m_labels[i].frame = CGRectMake(leftMargin, top, labelWidth, height);
+        m_nameLabels[i].frame = CGRectMake(leftMargin, top, labelWidth, height);
     }
     
     for (int i = 0; i < [m_steppers count]; ++i) {
@@ -54,10 +55,10 @@
 
 - (void) clearUI
 {
-    for (UILabel* label in m_labels) {
+    for (UILabel* label in m_nameLabels) {
         [label removeFromSuperview];
     }
-    [m_labels removeAllObjects];
+    [m_nameLabels removeAllObjects];
     
     for (UIStepper* stepper in m_steppers) {
         [stepper removeFromSuperview];
@@ -65,13 +66,13 @@
     [m_steppers removeAllObjects];
 }
 
--(UILabel*) createLabel:(const InputParameterFloat&)floatParam
+-(UILabel*) createNameLabel:(const InputParameterFloat&)floatParam
 {
     UILabel* label = [[UILabel alloc] init];
     label.text = [NSString stringWithUTF8String:floatParam.name.c_str()];
-    [label setTextColor:[UIColor whiteColor]];
-    [label setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.8]];
-    [label setTextAlignment:NSTextAlignmentCenter];
+    label.textColor = [UIColor whiteColor];
+    label.backgroundColor = [UIColor colorWithWhite:0 alpha:0.8];
+    label.textAlignment = NSTextAlignmentCenter;
     return label;
 }
 
