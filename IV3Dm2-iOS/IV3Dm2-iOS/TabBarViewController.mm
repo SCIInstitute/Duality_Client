@@ -30,12 +30,16 @@
     UINavigationController* navController;
 
     navController = [self createNavigationController:m_render3DViewController withTitle:@"3D View"];
+    navController.navigationBar.hidden = YES;
+    navController.tabBarItem.tag = 0;
     [viewControllersArray addObject:navController];
     
     navController = [self createNavigationController:m_selectSceneViewController withTitle:@"Select Scene"];
+    navController.tabBarItem.tag = 1;
     [viewControllersArray addObject:navController];
 
     navController = [self createNavigationController:m_settingsViewController withTitle:@"Settings"];
+    navController.tabBarItem.tag = 2;
     [viewControllersArray addObject:navController];
     
     self.viewControllers = viewControllersArray;
@@ -50,9 +54,11 @@
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
 {
-    AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-    Scene* scene = [app currentScene];
-    [m_render3DViewController changeScene:scene];
+    if ([item tag] == 0) {
+        AppDelegate* app = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+        Scene* scene = [app currentScene];
+        [m_render3DViewController changeScene:scene];
+    }
 }
 
 @end

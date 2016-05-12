@@ -48,7 +48,7 @@ void Scene::addTranslation(const IVDA::Vec2f &translation) {
 
 GLMatrix Scene::modelViewMatrix() const {
     GLMatrix modelView = m_defaultModelView;
-    modelView.translate(m_translation.x, m_translation.y, m_translation.y);
+    modelView.translate(m_translation.x, m_translation.y, m_translation.z);
     return modelView;
 }
 

@@ -19,11 +19,13 @@
     self = [super init];
     m_scene = scene;
     m_rendererDispatcher = nullptr;
+    m_uiBuilder = nullptr;
     return self;
 }
 
 -(void) changeScene:(Scene*)scene {
     m_scene = scene;
+    [m_uiBuilder generateUI];
 }
 
 - (ScreenInfo)screenInfo {
@@ -62,6 +64,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initGL];
+    
+    // FIXME: dummy for testing purposes
+    std::vector<InputParameterFloat> floatParams;
+    InputParameterFloat param1 { "test1", 5, 10, 1, 7 };
+    InputParameterFloat param2 { "test2", 1, 10, 2, 5 };
+    floatParams.push_back(param1);
+    floatParams.push_back(param2);
+    
+    m_uiBuilder = [[DynamicUIBuilder alloc] initWitView:self.view andFloatParams:floatParams];
 }
 
 - (void)viewWillLayoutSubviews {
@@ -69,8 +80,15 @@
     m_rendererDispatcher = std::make_unique<RenderDispatcher>([self screenInfo]);
 }
 
+- (void) viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    [m_uiBuilder layoutUI];
+}
+
 // Drawing
-- (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
+- (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
+{
     if (m_scene) {
         GLMatrix modelView = m_scene->modelViewMatrix();
         m_rendererDispatcher->setModelView(&modelView);
