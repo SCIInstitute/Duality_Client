@@ -19,10 +19,10 @@ class Scene {
 public:
     Scene(SceneMetadata metadata);
 
-    SceneMetadata metadata() const noexcept;
+    SceneMetadata metadata() const;
 
     void addNode(std::unique_ptr<SceneNode> node);
-    const std::vector<std::unique_ptr<SceneNode>>& nodes() const noexcept;
+    const std::vector<std::unique_ptr<SceneNode>>& nodes() const;
 
     void updateDatasets();
     void dispatch(AbstractDispatcher& dispatcher) const;

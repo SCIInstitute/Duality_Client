@@ -4,15 +4,14 @@
 
 #pragma once
 
-#include "Scene/ServerAdapter.h"
+#include "Scene/InputParameter.h"
 #include "Scene/Scene.h"
 #include "Scene/SceneMetadata.h"
+#include "Scene/ServerAdapter.h"
 
 #include "IVDA/Vectors.h"
 
 #include "jsoncpp/json.h"
-
-#include <tuple>
 
 class SceneNode;
 class DataProvider;
@@ -28,11 +27,16 @@ public:
 private:
     std::unique_ptr<SceneNode> parseNode(const JsonCpp::Value& node);
     std::unique_ptr<SceneNode> parseGeometry(const JsonCpp::Value& node);
-    std::unique_ptr<DataProvider> parseDataSource(const JsonCpp::Value& node);
+    
     IVDA::Mat4f parseMatrix(const JsonCpp::Value& node);
     std::vector<IVDA::Mat4f> parseMatrices(const JsonCpp::Value& node);
     
+    std::unique_ptr<DataProvider> parseDataSource(const JsonCpp::Value& node);
+    std::unique_ptr<DataProvider> parseSCIRun(const JsonCpp::Value& node);
+    std::vector<InputParameterFloat> parseFloatParams(const JsonCpp::Value& node);
+    std::vector<InputParameterEnum> parseEnumParams(const JsonCpp::Value& node);
+
 private:
-    const JsonCpp::Value& m_root;
+    JsonCpp::Value m_root;
     const ServerAdapter* m_serverAdapter;
 };

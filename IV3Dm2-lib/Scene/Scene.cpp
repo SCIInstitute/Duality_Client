@@ -14,7 +14,7 @@ using namespace IVDA;
 Scene::Scene(SceneMetadata metadata)
     : m_metadata(std::move(metadata)) {}
 
-SceneMetadata Scene::metadata() const noexcept {
+SceneMetadata Scene::metadata() const {
     return m_metadata;
 }
 
@@ -22,7 +22,7 @@ void Scene::addNode(std::unique_ptr<SceneNode> node) {
     m_nodes.push_back(std::move(node));
 }
 
-const std::vector<std::unique_ptr<SceneNode>>& Scene::nodes() const noexcept {
+const std::vector<std::unique_ptr<SceneNode>>& Scene::nodes() const {
     return m_nodes;
 }
 

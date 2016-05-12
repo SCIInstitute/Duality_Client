@@ -3,6 +3,7 @@
 #include "Scene/SceneParser.h"
 #include "Scene/GeometryNode.h"
 #include "Scene/DownloadProvider.h"
+#include "Scene/SCIRunProvider.h"
 
 class SceneParserTest : public ::testing::Test {
 protected:
@@ -23,10 +24,10 @@ TEST_F(SceneParserTest, Metadata) {
 
 TEST_F(SceneParserTest, TwoGeoNodes) {
   JsonCpp::Value root;
-  root["scene"][0]["type"] = "geo";
+  root["scene"][0]["type"] = "geometry";
   root["scene"][0]["source"]["type"] = "download";
   root["scene"][0]["source"]["path"] = "/some/file1";
-  root["scene"][1]["type"] = "geo";
+  root["scene"][1]["type"] = "geometry";
   root["scene"][1]["source"]["type"] = "download";
   root["scene"][1]["source"]["path"] = "/some/file2";
 
@@ -50,7 +51,7 @@ TEST_F(SceneParserTest, TwoGeoNodes) {
 
 TEST_F(SceneParserTest, Transforms) {
     JsonCpp::Value root;
-    root["scene"][0]["type"] = "geo";
+    root["scene"][0]["type"] = "geometry";
     root["scene"][0]["source"]["type"] = "download";
     root["scene"][0]["source"]["path"] = "/some/file";
     for (int i = 0; i < 16; ++i) {
@@ -81,4 +82,63 @@ TEST_F(SceneParserTest, Transforms) {
     ASSERT_EQ(13.0f, translation.m42);
     ASSERT_EQ(14.0f, translation.m43);
     ASSERT_EQ(15.0f, translation.m44);
+}
+
+TEST_F(SceneParserTest, SCIRunProvider_FloatParams) {
+    JsonCpp::Value root;
+    root["scene"][0]["type"] = "geometry";
+    root["scene"][0]["source"]["type"] = "SCIRun";
+    root["scene"][0]["source"]["network"] = "myNetwork";
+    root["scene"][0]["source"]["floatParams"][0]["name"] = "myFloat";
+    root["scene"][0]["source"]["floatParams"][0]["lowerBound"] = 5.f;
+    root["scene"][0]["source"]["floatParams"][0]["upperBound"] = 10.f;
+    root["scene"][0]["source"]["floatParams"][0]["stepSize"] = .5f;
+    root["scene"][0]["source"]["floatParams"][0]["defaultValue"] = 7.f;
+
+    SceneParser parser(root, nullptr);
+    auto scene = parser.parseScene();
+    const auto& nodes = scene->nodes();
+
+    const auto& node = *scene->nodes()[0];
+    ASSERT_TRUE(dynamic_cast<const GeometryNode*>(&node) != nullptr);
+    auto provider = dynamic_cast<const SCIRunProvider*>(&node.dataProvider());
+    ASSERT_TRUE(provider != nullptr);
+    ASSERT_EQ("myNetwork", provider->network());
+    auto floatParams = provider->floatParameters();
+    ASSERT_EQ(1, floatParams.size());
+    auto floatParam = floatParams[0];
+    ASSERT_EQ("myFloat", floatParam.name);
+    ASSERT_EQ(5.f, floatParam.lowerBound);
+    ASSERT_EQ(10.f, floatParam.upperBound);
+    ASSERT_EQ(.5f, floatParam.stepSize);
+    ASSERT_EQ(7.f, floatParam.defaultValue);
+}
+
+TEST_F(SceneParserTest, SCIRunProvider_EnumParams) {
+    JsonCpp::Value root;
+    root["scene"][0]["type"] = "geometry";
+    root["scene"][0]["source"]["type"] = "SCIRun";
+    root["scene"][0]["source"]["network"] = "myNetwork";
+    root["scene"][0]["source"]["enumParams"][0]["name"] = "myEnum";
+    root["scene"][0]["source"]["enumParams"][0]["values"][0] = "val1";
+    root["scene"][0]["source"]["enumParams"][0]["values"][1] = "val2";
+    root["scene"][0]["source"]["enumParams"][0]["defaultValue"] = "val2";
+
+    SceneParser parser(root, nullptr);
+    auto scene = parser.parseScene();
+    const auto& nodes = scene->nodes();
+
+    const auto& node = *scene->nodes()[0];
+    ASSERT_TRUE(dynamic_cast<const GeometryNode*>(&node) != nullptr);
+    auto provider = dynamic_cast<const SCIRunProvider*>(&node.dataProvider());
+    ASSERT_TRUE(provider != nullptr);
+    ASSERT_EQ("myNetwork", provider->network());
+    auto enumParams = provider->enumParameters();
+    ASSERT_EQ(1, enumParams.size());
+    auto enumParam = enumParams[0];
+    ASSERT_EQ("myEnum", enumParam.name);
+    ASSERT_EQ(2, enumParam.values.size());
+    ASSERT_EQ("val1", enumParam.values[0]);
+    ASSERT_EQ("val2", enumParam.values[1]);
+    ASSERT_EQ("val2", enumParam.defaultValue);
 }

@@ -23,8 +23,8 @@ public:
     virtual void readDataset(std::shared_ptr<std::vector<uint8_t>> data) = 0;
     virtual void updateDataset();
 
-    const DataProvider& dataProvider() const noexcept;
-    const std::vector<IVDA::Mat4f>& transforms() const noexcept;
+    const DataProvider& dataProvider() const;
+    const std::vector<IVDA::Mat4f>& transforms() const;
 
 private:
     std::unique_ptr<DataProvider> m_provider;

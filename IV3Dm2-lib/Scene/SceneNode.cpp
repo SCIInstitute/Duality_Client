@@ -16,10 +16,10 @@ void SceneNode::updateDataset() {
     }
 }
 
-const DataProvider& SceneNode::dataProvider() const noexcept {
+const DataProvider& SceneNode::dataProvider() const {
     return *m_provider;
 }
 
-const std::vector<IVDA::Mat4f>& SceneNode::transforms() const noexcept {
+const std::vector<IVDA::Mat4f>& SceneNode::transforms() const {
     return m_transforms;
 }
