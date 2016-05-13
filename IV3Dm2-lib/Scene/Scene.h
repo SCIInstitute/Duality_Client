@@ -7,12 +7,13 @@
 #include "Scene/GLMatrix.h"
 #include "Scene/SceneMetadata.h"
 #include "Scene/SceneNode.h"
+#include "Scene/ScreenInfo.h"
 #include "IVDA/Vectors.h"
 
 #include <memory>
 #include <string>
 
-class AbstractDispatcher;
+class DatasetDispatcher;
 class RenderDispatcher;
 
 class Scene {
@@ -25,7 +26,7 @@ public:
     const std::vector<std::unique_ptr<SceneNode>>& nodes() const;
 
     void updateDatasets();
-    void dispatch(AbstractDispatcher& dispatcher) const;
+    void render(const ScreenInfo& screenInfo) const;
 
     void addTranslation(const IVDA::Vec2f& translation);
     GLMatrix modelViewMatrix() const;

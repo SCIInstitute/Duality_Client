@@ -1,10 +1,9 @@
 #pragma once
 
-#include <memory>
-#include <vector>
+#include "Scene/DataProviderDispatcher.h"
 
 class DataProvider {
 public:
     virtual ~DataProvider() {}
-    virtual std::shared_ptr<std::vector<uint8_t>> fetch() = 0;
+    virtual void accept(DataProviderDispatcher& dispatcher) = 0;
 };

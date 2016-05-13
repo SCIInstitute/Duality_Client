@@ -1,6 +1,6 @@
 #include "gmock/gmock.h"
 
-#include "Scene/GeometryNode.h"
+#include "Mocks/DatasetMock.h"
 #include "Mocks/DataProviderMock.h"
 #include "Scene/SceneMetadata.h"
 #include "Scene/Scene.h"
@@ -18,13 +18,19 @@ TEST_F(SceneTest, UpdateDatasets) {
     SceneMetadata meta("test", "test");
     Scene scene(meta);
 
-    auto mock1 = std::make_unique<DataProviderMock>();
-    EXPECT_CALL(*mock1, fetch()).Times(1).WillOnce(Return(nullptr));
-    scene.addNode(std::make_unique<GeometryNode>(std::move(mock1)));
+    auto providerMock1 = std::make_unique<DataProviderMock>();
+    EXPECT_CALL(*providerMock1, accept(_)).Times(1);
+    auto datasetMock1 = std::make_unique<DatasetMock>();
+    EXPECT_CALL(*datasetMock1, accept(_)).Times(1);
+    EXPECT_CALL(*datasetMock1, read(_)).Times(1);
+    scene.addNode(std::make_unique<SceneNode>(std::move(providerMock1), std::move(datasetMock1)));
 
-    auto mock2 = std::make_unique<DataProviderMock>();
-    EXPECT_CALL(*mock2, fetch()).Times(1).WillOnce(Return(nullptr));
-    scene.addNode(std::make_unique<GeometryNode>(std::move(mock2)));
+    auto providerMock2 = std::make_unique<DataProviderMock>();
+    EXPECT_CALL(*providerMock2, accept(_)).Times(1);
+    auto datasetMock2 = std::make_unique<DatasetMock>();
+    EXPECT_CALL(*datasetMock2, accept(_)).Times(1);
+    EXPECT_CALL(*datasetMock2, read(_)).Times(1);
+    scene.addNode(std::make_unique<SceneNode>(std::move(providerMock2), std::move(datasetMock2)));
 
     scene.updateDatasets();
 }

@@ -1,19 +1,19 @@
 #pragma once
 
-#include "G3D.h"
-#include "SceneNode.h"
+#include "Scene/Dataset.h"
+#include "Scene/G3D.h"
 
 class DataProvider;
-class AbstractDispatcher;
+class DatasetDispatcher;
 
-class GeometryNode : public SceneNode {
+class GeometryDataset : public Dataset {
 public:
-    GeometryNode(std::unique_ptr<DataProvider> provider, std::vector<IVDA::Mat4f> transforms = {});
+    GeometryDataset(std::vector<IVDA::Mat4f> transforms = {});
 
     // SceneNode interface
     void applyTransform(const IVDA::Mat4f& matrix) override;
-    void accept(AbstractDispatcher& renderer) override;
-    void readDataset(std::shared_ptr<std::vector<uint8_t>> data) override;
+    void accept(DatasetDispatcher& renderer) override;
+    void read(std::shared_ptr<std::vector<uint8_t>> data) override;
 
     const G3D::GeometryInfo* geometryInfo() const noexcept;
     const uint32_t* getIndices() const noexcept;
@@ -23,8 +23,6 @@ public:
     const float* getColors() const noexcept;
     const float* getTexCoords() const noexcept;
     const float* getAlphas() const noexcept;
-
-
 
 private:
     void assignShortcutPointers();

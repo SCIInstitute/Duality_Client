@@ -3,7 +3,7 @@
 //
 
 #include "Scene/BoundingBoxCalculator.h"
-#include "Scene/GeometryNode.h"
+#include "Scene/GeometryDataset.h"
 
 #include <limits>
 
@@ -12,7 +12,7 @@ BoundingBoxCalculator::BoundingBoxCalculator() {
     m_max = IVDA::Vec3f(-std::numeric_limits<float>::max(), -std::numeric_limits<float>::max(), -std::numeric_limits<float>::max());
 }
 
-void BoundingBoxCalculator::dispatch(GeometryNode& node) {
+void BoundingBoxCalculator::dispatch(GeometryDataset& node) {
     if (node.geometryInfo() == nullptr) return;
     for (size_t i = 0; i < node.geometryInfo()->numberIndices; ++i) {
         auto offset = 3 * node.getIndices()[i];

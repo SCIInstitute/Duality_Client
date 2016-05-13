@@ -4,10 +4,10 @@
 
 #pragma once
 
-#include "Scene/AbstractDispatcher.h"
+#include "Scene/DatasetDispatcher.h"
 #include "Scene/GeometryRenderer.h"
 
-class RenderDispatcher : public AbstractDispatcher {
+class RenderDispatcher : public DatasetDispatcher {
 public:
     RenderDispatcher(const ScreenInfo& screenInfo);
     
@@ -15,7 +15,7 @@ public:
     
     void setup() override;
     void finish() override;
-    void dispatch(GeometryNode& node) override;
+    void dispatch(GeometryDataset& node) override;
     
 private:
     std::unique_ptr<GeometryRenderer> m_geoRenderer;

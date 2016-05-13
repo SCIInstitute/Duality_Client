@@ -4,7 +4,7 @@
 
 #include "Scene/RenderDispatcher.h"
 
-#include "Scene/GeometryNode.h"
+#include "Scene/GeometryDataset.h"
 
 RenderDispatcher::RenderDispatcher(const ScreenInfo& screenInfo)
     : m_geoRenderer(std::make_unique<GeometryRenderer>(screenInfo))
@@ -22,6 +22,6 @@ void RenderDispatcher::finish() {
     m_geoRenderer->finishDraw();
 }
 
-void RenderDispatcher::dispatch(GeometryNode& node) {
+void RenderDispatcher::dispatch(GeometryDataset& node) {
     m_geoRenderer->render(node, *m_modelView);
 }

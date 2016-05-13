@@ -10,7 +10,7 @@ GeometryRenderer::GeometryRenderer(const ScreenInfo& screenInfo)
     , m_impl(nullptr) {}
 #endif
 
-void GeometryRenderer::render(const GeometryNode& dataset, const GLMatrix& modelView) {
+void GeometryRenderer::render(const GeometryDataset& dataset, const GLMatrix& modelView) {
     GLMatrix mvp = modelView;
     mvp.multiply(projectionMatrix());
 #if __APPLE__ && TARGET_OS_IPHONE
