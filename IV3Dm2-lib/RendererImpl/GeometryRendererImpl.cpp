@@ -1,7 +1,7 @@
 #include "GeometryRendererImpl.h"
 
 #include "Common/Error.h"
-#include "Scene/GeometryNode.h"
+#include "Scene/GeometryDataset.h"
 
 #include <OpenGLES/ES3/gl.h>
 
@@ -61,7 +61,7 @@ GeometryRendererImpl::GeometryRendererImpl() {
     }
 }
 
-void GeometryRendererImpl::render(const GeometryNode& dataset, const GLMatrix& mvp) {
+void GeometryRendererImpl::render(const GeometryDataset& dataset, const GLMatrix& mvp) {
     auto& shader = determineActiveShader(dataset);
     shader.Enable();
     
@@ -80,7 +80,7 @@ void GeometryRendererImpl::render(const GeometryNode& dataset, const GLMatrix& m
     }
 }
 
-int GeometryRendererImpl::primitiveTypeGL(const GeometryNode& dataset) {
+int GeometryRendererImpl::primitiveTypeGL(const GeometryDataset& dataset) {
     switch (dataset.geometryInfo()->primitiveType) {
     case G3D::Point:
         return GL_POINTS;
@@ -96,7 +96,7 @@ int GeometryRendererImpl::primitiveTypeGL(const GeometryNode& dataset) {
     }
 }
 
-GLShader& GeometryRendererImpl::determineActiveShader(const GeometryNode& dataset) const {
+GLShader& GeometryRendererImpl::determineActiveShader(const GeometryDataset& dataset) const {
     if (dataset.getNormals() && !dataset.getColors() && !dataset.getTexCoords() && !dataset.getAlphas())
         return *m_normShader;
     else if (dataset.getNormals() && !dataset.getColors() && !dataset.getTexCoords() && dataset.getAlphas())
@@ -114,7 +114,7 @@ GLShader& GeometryRendererImpl::determineActiveShader(const GeometryNode& datase
     THROW_ERROR("Cannot determine shader for geometry dataset");
 }
 
-int GeometryRendererImpl::enableAttributeArrays(const GeometryNode& dataset) {
+int GeometryRendererImpl::enableAttributeArrays(const GeometryDataset& dataset) {
     int attributeIndex = 0;
     if (dataset.getPositions()) {
         GL(glVertexAttribPointer(attributeIndex, 3, GL_FLOAT, 0, 0, dataset.getPositions()));

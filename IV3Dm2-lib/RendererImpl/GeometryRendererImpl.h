@@ -8,17 +8,17 @@
 
 #include <memory>
 
-class GeometryNode;
+class GeometryDataset;
 
 class GeometryRendererImpl {
 public:
     GeometryRendererImpl();
-    void render(const GeometryNode& dataset, const GLMatrix& mvp);
+    void render(const GeometryDataset& dataset, const GLMatrix& mvp);
 
 private:
-    static int primitiveTypeGL(const GeometryNode& dataset);
-    static int enableAttributeArrays(const GeometryNode& geometry);
-    GLShader& determineActiveShader(const GeometryNode& dataset) const;
+    static int primitiveTypeGL(const GeometryDataset& dataset);
+    static int enableAttributeArrays(const GeometryDataset& dataset);
+    GLShader& determineActiveShader(const GeometryDataset& dataset) const;
 
 private:
     std::unique_ptr<GLShader> m_normShader;

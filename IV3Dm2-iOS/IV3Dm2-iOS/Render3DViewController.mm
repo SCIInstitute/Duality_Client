@@ -98,7 +98,7 @@
     if (m_scene) {
         GLMatrix modelView = m_scene->modelViewMatrix();
         m_rendererDispatcher->setModelView(&modelView);
-        m_scene->dispatch(*m_rendererDispatcher);
+        m_scene->render(*m_rendererDispatcher); //FIXME
     }
     [view bindDrawable];
 }

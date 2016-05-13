@@ -6,7 +6,6 @@
 
 #include "IVDA/Vectors.h"
 #include "Scene/UpdateDataDispatcher.h"
-#include "Scene/DatasetDispatcher.h"
 #include "Scene/BoundingBoxCalculator.h"
 #include "Scene/RenderDispatcher.h"
 #include "Scene/SceneParser.h"
@@ -31,17 +30,15 @@ const std::vector<std::unique_ptr<SceneNode>>& Scene::nodes() const {
 void Scene::updateDatasets() {
     UpdateDataDispatcher dispatcher;
     for (auto& node : m_nodes) {
-        node->dispatch(dispatcher);
-        node->loadDataset(dispatcher.data());
+        node->updateDatasets(dispatcher);
     }
     m_defaultModelView = defaultModelView();
 }
 
-void Scene::render(const ScreenInfo& screenInfo) const {
-    RenderDispatcher dispatcher(screenInfo);
+void Scene::render(RenderDispatcher& dispatcher) const {
     dispatcher.setup();
     for (auto& node : m_nodes) {
-        node->dispatch(dispatcher);
+        node->render(dispatcher);
     }
     dispatcher.finish();
 }
@@ -60,7 +57,7 @@ GLMatrix Scene::modelViewMatrix() const {
 GLMatrix Scene::defaultModelView() const {
     BoundingBoxCalculator bbCalc;
     for (auto& node : m_nodes) {
-        node->dispatch(bbCalc);
+        node->calculateBoundingBox(bbCalc);
     }
 
     auto minMax = bbCalc.getMinMax();

@@ -13,7 +13,6 @@
 #include <memory>
 #include <string>
 
-class DatasetDispatcher;
 class RenderDispatcher;
 
 class Scene {
@@ -26,7 +25,7 @@ public:
     const std::vector<std::unique_ptr<SceneNode>>& nodes() const;
 
     void updateDatasets();
-    void render(const ScreenInfo& screenInfo) const;
+    void render(RenderDispatcher& dispatcher) const;
 
     void addTranslation(const IVDA::Vec2f& translation);
     GLMatrix modelViewMatrix() const;

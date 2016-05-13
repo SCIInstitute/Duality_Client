@@ -6,24 +6,27 @@
 
 #include "Scene/DataProvider.h"
 #include "Scene/Dataset.h"
+#include "Scene/UpdateDataDispatcher.h"
+#include "Scene/RenderDispatcher.h"
+#include "Scene/BoundingBoxCalculator.h"
 
 #include <memory>
 #include <vector>
-
-class DatasetDispatcher;
 
 class SceneNode {
 public:
     SceneNode(std::unique_ptr<DataProvider> provider, std::unique_ptr<Dataset> dataset);
 
-    void dispatch(DatasetDispatcher& dispatcher);
-    void dispatch(DataProviderDispatcher& dispatcher);
+    void updateDatasets(UpdateDataDispatcher& dispatcher);
+    void render(RenderDispatcher& dispatcher) const;
+    void calculateBoundingBox(BoundingBoxCalculator& dispatcher) const;
     
-    void loadDataset(std::shared_ptr<std::vector<uint8_t>> data);
-
     const DataProvider* dataProvider() const;
     const Dataset* dataset() const;
 
+private:
+    void loadDataset(std::shared_ptr<std::vector<uint8_t>> data);
+    
 private:
     std::unique_ptr<DataProvider> m_provider;
     std::unique_ptr<Dataset> m_dataset;

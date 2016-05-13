@@ -4,16 +4,17 @@ SceneNode::SceneNode(std::unique_ptr<DataProvider> provider, std::unique_ptr<Dat
     : m_provider(std::move(provider))
     , m_dataset(std::move(dataset)) {}
 
-void SceneNode::dispatch(DatasetDispatcher& dispatcher) {
+void SceneNode::updateDatasets(UpdateDataDispatcher& dispatcher) {
+    m_provider->accept(dispatcher);
+    loadDataset(dispatcher.data());
+}
+
+void SceneNode::render(RenderDispatcher& dispatcher) const {
     m_dataset->accept(dispatcher);
 }
 
-void SceneNode::dispatch(DataProviderDispatcher& dispatcher) {
-    m_provider->accept(dispatcher);
-}
-
-void SceneNode::loadDataset(std::shared_ptr<std::vector<uint8_t>> data) {
-    m_dataset->load(data);
+void SceneNode::calculateBoundingBox(BoundingBoxCalculator& dispatcher) const {
+    m_dataset->accept(dispatcher);
 }
 
 const DataProvider* SceneNode::dataProvider() const {
@@ -23,3 +24,9 @@ const DataProvider* SceneNode::dataProvider() const {
 const Dataset* SceneNode::dataset() const {
     return m_dataset.get();
 }
+
+void SceneNode::loadDataset(std::shared_ptr<std::vector<uint8_t>> data) {
+    m_dataset->load(data);
+}
+
+
