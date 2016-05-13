@@ -5,10 +5,9 @@
 #include "Scene/Scene.h"
 
 #include "IVDA/Vectors.h"
-#include "Scene/UpdateDataDispatcher.h"
 #include "Scene/BoundingBoxCalculator.h"
-#include "Scene/RenderDispatcher.h"
 #include "Scene/SceneParser.h"
+#include "Scene/UpdateDataDispatcher.h"
 
 using namespace IVDA;
 
@@ -43,7 +42,15 @@ void Scene::render(RenderDispatcher& dispatcher) const {
     dispatcher.finish();
 }
 
-void Scene::addTranslation(const IVDA::Vec2f &translation) {
+std::vector<ParameterManipulator*> Scene::parameterManipulators() const {
+    ParameterManipulatorCollector dispatcher;
+    for (auto& node : m_nodes) {
+        node->makeManipultor(dispatcher);
+    }
+    return dispatcher.manipulators();
+}
+
+void Scene::addTranslation(const IVDA::Vec2f& translation) {
     m_translation.x += translation.x;
     m_translation.y += translation.y;
 }
@@ -76,6 +83,6 @@ GLMatrix Scene::defaultModelView() const {
 
     // FIXME: just a temporary solution
     result.translate(0, 0, -3.f);
-    
+
     return result;
 }

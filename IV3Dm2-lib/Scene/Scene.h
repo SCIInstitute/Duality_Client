@@ -4,16 +4,15 @@
 
 #pragma once
 
+#include "IVDA/Vectors.h"
 #include "Scene/GLMatrix.h"
+#include "Scene/RenderDispatcher.h"
 #include "Scene/SceneMetadata.h"
 #include "Scene/SceneNode.h"
-#include "Scene/ScreenInfo.h"
-#include "IVDA/Vectors.h"
+#include "Scene/ParameterManipulator.h"
 
 #include <memory>
 #include <string>
-
-class RenderDispatcher;
 
 class Scene {
 public:
@@ -26,6 +25,7 @@ public:
 
     void updateDatasets();
     void render(RenderDispatcher& dispatcher) const;
+    std::vector<ParameterManipulator*> parameterManipulators() const;
 
     void addTranslation(const IVDA::Vec2f& translation);
     GLMatrix modelViewMatrix() const;

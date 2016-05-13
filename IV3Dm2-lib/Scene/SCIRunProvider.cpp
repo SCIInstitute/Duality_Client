@@ -7,10 +7,10 @@ SCIRunProvider::SCIRunProvider(std::string network, std::vector<InputParameterFl
     , m_enumParameters(std::move(enumParameters)) {}
 
 void SCIRunProvider::accept(DataProviderDispatcher& dispatcher) {
-    // FIXME
+    dispatcher.dispatch(*this);
 }
 
-std::string SCIRunProvider::network() const {
+std::string SCIRunProvider::name() const {
     return m_network;
 }
 

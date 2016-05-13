@@ -17,6 +17,10 @@ void SceneNode::calculateBoundingBox(BoundingBoxCalculator& dispatcher) const {
     m_dataset->accept(dispatcher);
 }
 
+void SceneNode::makeManipultor(ParameterManipulatorCollector& dispatcher) const {
+    m_provider->accept(dispatcher);
+}
+
 const DataProvider* SceneNode::dataProvider() const {
     return m_provider.get();
 }
@@ -28,5 +32,3 @@ const Dataset* SceneNode::dataset() const {
 void SceneNode::loadDataset(std::shared_ptr<std::vector<uint8_t>> data) {
     m_dataset->load(data);
 }
-
-

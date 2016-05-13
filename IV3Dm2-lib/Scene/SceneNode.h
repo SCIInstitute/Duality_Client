@@ -9,6 +9,7 @@
 #include "Scene/UpdateDataDispatcher.h"
 #include "Scene/RenderDispatcher.h"
 #include "Scene/BoundingBoxCalculator.h"
+#include "Scene/ParameterManipulator.h"
 
 #include <memory>
 #include <vector>
@@ -20,7 +21,8 @@ public:
     void updateDatasets(UpdateDataDispatcher& dispatcher);
     void render(RenderDispatcher& dispatcher) const;
     void calculateBoundingBox(BoundingBoxCalculator& dispatcher) const;
-    
+    void makeManipultor(ParameterManipulatorCollector& dispatcher) const;
+
     const DataProvider* dataProvider() const;
     const Dataset* dataset() const;
 

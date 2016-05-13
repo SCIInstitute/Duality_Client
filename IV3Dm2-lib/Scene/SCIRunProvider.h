@@ -1,18 +1,19 @@
 #pragma once
 
 #include "Scene/DataProvider.h"
-#include "Scene/InputParameter.h"
+#include "Scene/ParameterManipulator.h"
 
-class SCIRunProvider : public DataProvider {
+class SCIRunProvider : public DataProvider, public ParameterManipulator {
 public:
     SCIRunProvider(std::string network, std::vector<InputParameterFloat> floatParameters, std::vector<InputParameterEnum> enumParameters);
 
     // DataProvider interface
     void accept(DataProviderDispatcher& dispatcher) override;
 
-    std::string network() const;
-    std::vector<InputParameterFloat> floatParameters() const;
-    std::vector<InputParameterEnum> enumParameters() const;
+    // ParameterManipulator interface
+    std::string name() const override;
+    std::vector<InputParameterFloat> floatParameters() const override;
+    std::vector<InputParameterEnum> enumParameters() const override;
 
 private:
     std::string m_network;

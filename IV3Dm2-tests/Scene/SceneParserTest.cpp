@@ -1,15 +1,15 @@
 #include "gtest/gtest.h"
 
-#include "Scene/SceneParser.h"
-#include "Scene/GeometryDataset.h"
 #include "Scene/DownloadProvider.h"
+#include "Scene/GeometryDataset.h"
 #include "Scene/SCIRunProvider.h"
+#include "Scene/SceneParser.h"
 
 class SceneParserTest : public ::testing::Test {
 protected:
-  SceneParserTest() {}
+    SceneParserTest() {}
 
-  virtual ~SceneParserTest() {}
+    virtual ~SceneParserTest() {}
 };
 
 TEST_F(SceneParserTest, Metadata) {
@@ -23,32 +23,32 @@ TEST_F(SceneParserTest, Metadata) {
 }
 
 TEST_F(SceneParserTest, TwoNodes) {
-  JsonCpp::Value root;
-  root["scene"][0]["dataset"]["type"] = "geometry";
-  root["scene"][0]["source"]["type"] = "download";
-  root["scene"][0]["source"]["path"] = "/some/file1";
-  root["scene"][1]["dataset"]["type"] = "geometry";
-  root["scene"][1]["source"]["type"] = "download";
-  root["scene"][1]["source"]["path"] = "/some/file2";
+    JsonCpp::Value root;
+    root["scene"][0]["dataset"]["type"] = "geometry";
+    root["scene"][0]["source"]["type"] = "download";
+    root["scene"][0]["source"]["path"] = "/some/file1";
+    root["scene"][1]["dataset"]["type"] = "geometry";
+    root["scene"][1]["source"]["type"] = "download";
+    root["scene"][1]["source"]["path"] = "/some/file2";
 
-  SceneParser parser(root, nullptr);
-  auto scene = parser.parseScene();
-  const auto& nodes = scene->nodes();
-  ASSERT_EQ(2, nodes.size());
+    SceneParser parser(root, nullptr);
+    auto scene = parser.parseScene();
+    const auto& nodes = scene->nodes();
+    ASSERT_EQ(2, nodes.size());
 
-  const auto& node1 = *scene->nodes()[0];
-  const auto dataset1 = node1.dataset();
-  ASSERT_TRUE(dynamic_cast<const GeometryDataset*>(dataset1) != nullptr);
-  const auto dataProvider1 = node1.dataProvider();
-  ASSERT_TRUE(dynamic_cast<const DownloadProvider*>(dataProvider1) != nullptr);
-  ASSERT_EQ("/some/file1", dynamic_cast<const DownloadProvider*>(dataProvider1)->path());
+    const auto& node1 = *scene->nodes()[0];
+    const auto dataset1 = node1.dataset();
+    ASSERT_TRUE(dynamic_cast<const GeometryDataset*>(dataset1) != nullptr);
+    const auto dataProvider1 = node1.dataProvider();
+    ASSERT_TRUE(dynamic_cast<const DownloadProvider*>(dataProvider1) != nullptr);
+    ASSERT_EQ("/some/file1", dynamic_cast<const DownloadProvider*>(dataProvider1)->path());
 
-  const auto& node2 = *scene->nodes()[1];
-  const auto dataset2 = node1.dataset();
-  ASSERT_TRUE(dynamic_cast<const GeometryDataset*>(dataset2) != nullptr);
-  const auto dataProvider2 = node2.dataProvider();
-  ASSERT_TRUE(dynamic_cast<const DownloadProvider*>(dataProvider2) != nullptr);
-  ASSERT_EQ("/some/file2", dynamic_cast<const DownloadProvider*>(dataProvider2)->path());
+    const auto& node2 = *scene->nodes()[1];
+    const auto dataset2 = node1.dataset();
+    ASSERT_TRUE(dynamic_cast<const GeometryDataset*>(dataset2) != nullptr);
+    const auto dataProvider2 = node2.dataProvider();
+    ASSERT_TRUE(dynamic_cast<const DownloadProvider*>(dataProvider2) != nullptr);
+    ASSERT_EQ("/some/file2", dynamic_cast<const DownloadProvider*>(dataProvider2)->path());
 }
 
 TEST_F(SceneParserTest, Transforms) {
@@ -66,7 +66,7 @@ TEST_F(SceneParserTest, Transforms) {
     const auto& dataset = *node.dataset();
     ASSERT_EQ(1, dataset.transforms().size());
     const auto& translation = dataset.transforms().front();
-    
+
     ASSERT_EQ(0.0f, translation.m11);
     ASSERT_EQ(1.0f, translation.m12);
     ASSERT_EQ(2.0f, translation.m13);
@@ -108,7 +108,7 @@ TEST_F(SceneParserTest, SCIRunProvider_FloatParams) {
     ASSERT_TRUE(dynamic_cast<const GeometryDataset*>(&dataset) != nullptr);
     const auto provider = dynamic_cast<const SCIRunProvider*>(node.dataProvider());
     ASSERT_TRUE(provider != nullptr);
-    ASSERT_EQ("myNetwork", provider->network());
+    ASSERT_EQ("myNetwork", provider->name());
     auto floatParams = provider->floatParameters();
     ASSERT_EQ(1, floatParams.size());
     auto floatParam = floatParams[0];
@@ -138,7 +138,7 @@ TEST_F(SceneParserTest, SCIRunProvider_EnumParams) {
     ASSERT_TRUE(dynamic_cast<const GeometryDataset*>(&dataset) != nullptr);
     const auto provider = dynamic_cast<const SCIRunProvider*>(node.dataProvider());
     ASSERT_TRUE(provider != nullptr);
-    ASSERT_EQ("myNetwork", provider->network());
+    ASSERT_EQ("myNetwork", provider->name());
     auto enumParams = provider->enumParameters();
     ASSERT_EQ(1, enumParams.size());
     auto enumParam = enumParams[0];
