@@ -2,7 +2,9 @@
 //  Copyright © 2016 Scientific Computing and Imaging Institute. All rights reserved.
 //
 
-#include "DownloadProvider.h"
+#include "Scene/DownloadProvider.h"
+
+#include "Scene/DataProviderDispatcher.h"
 
 #include <cassert>
 
@@ -10,7 +12,11 @@ DownloadProvider::DownloadProvider(const ServerAdapter* server, std::string path
     : m_server(server)
     , m_path(std::move(path)) {}
 
-std::shared_ptr<std::vector<uint8_t>> DownloadProvider::fetch() {
+void DownloadProvider::accept(DataProviderDispatcher& dispatcher) {
+    dispatcher.dispatch(*this);
+}
+
+std::shared_ptr<std::vector<uint8_t>> DownloadProvider::download() const {
     assert(m_server != nullptr);
     return m_server->download(m_path);
 }

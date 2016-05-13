@@ -6,7 +6,7 @@
 
 #include "Common/Error.h"
 #include "Scene/DownloadProvider.h"
-#include "Scene/GeometryNode.h"
+#include "Scene/GeometryDataset.h"
 #include "Scene/SCIRunProvider.h"
 #include "Scene/ServerAdapter.h"
 
@@ -33,6 +33,12 @@ std::unique_ptr<Scene> SceneParser::parseScene() {
 }
 
 std::unique_ptr<SceneNode> SceneParser::parseNode(const JsonCpp::Value& node) {
+    auto provider = parseDataSource(node["source"]);
+    auto dataset = parseDataset(node["dataset"]);
+    return std::make_unique<SceneNode>(std::move(provider), std::move(dataset));
+}
+
+std::unique_ptr<Dataset> SceneParser::parseDataset(const JsonCpp::Value& node) {
     std::string type = node["type"].asString();
     if (type == "geometry") {
         return parseGeometry(node);
@@ -40,23 +46,26 @@ std::unique_ptr<SceneNode> SceneParser::parseNode(const JsonCpp::Value& node) {
     throw Error("Invalid node type: " + type, __FILE__, __LINE__);
 }
 
-std::unique_ptr<SceneNode> SceneParser::parseGeometry(const JsonCpp::Value& node) {
-    auto provider = parseDataSource(node["source"]);
+std::unique_ptr<Dataset> SceneParser::parseGeometry(const JsonCpp::Value& node) {
     std::vector<Mat4f> transforms;
     if (node.isMember("transforms")) {
         transforms = parseMatrices(node["transforms"]);
     }
-    return std::make_unique<GeometryNode>(std::move(provider), std::move(transforms));
+    return std::make_unique<GeometryDataset>(std::move(transforms));
 }
 
 std::unique_ptr<DataProvider> SceneParser::parseDataSource(const JsonCpp::Value& node) {
     std::string type = node["type"].asString();
     if (type == "download") {
-        return std::make_unique<DownloadProvider>(m_serverAdapter, node["path"].asString());
+        return parseDownload(node);
     } else if (type == "SCIRun") {
         return parseSCIRun(node);
     }
     throw Error("Invalid data source type: " + type, __FILE__, __LINE__);
+}
+
+std::unique_ptr<DataProvider> SceneParser::parseDownload(const JsonCpp::Value& node) {
+    return std::make_unique<DownloadProvider>(m_serverAdapter, node["path"].asString());
 }
 
 Mat4f SceneParser::parseMatrix(const JsonCpp::Value& node) {

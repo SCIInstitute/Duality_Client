@@ -1,25 +1,25 @@
 #include "Scene/SceneNode.h"
 
-SceneNode::SceneNode(std::unique_ptr<DataProvider> provider, std::vector<IVDA::Mat4f> transforms)
+SceneNode::SceneNode(std::unique_ptr<DataProvider> provider, std::unique_ptr<Dataset> dataset)
     : m_provider(std::move(provider))
-    , m_transforms(std::move(transforms)) {}
+    , m_dataset(std::move(dataset)) {}
 
-void SceneNode::updateDataset() {
-    if (m_provider != nullptr) {
-        auto data = m_provider->fetch();
-        if (data != nullptr) {
-            readDataset(data);
-            for (const auto& transform : m_transforms) {
-                applyTransform(transform);
-            }
-        }
-    }
+void SceneNode::dispatch(DatasetDispatcher& dispatcher) {
+    m_dataset->accept(dispatcher);
 }
 
-const DataProvider& SceneNode::dataProvider() const {
-    return *m_provider;
+void SceneNode::dispatch(DataProviderDispatcher& dispatcher) {
+    m_provider->accept(dispatcher);
 }
 
-const std::vector<IVDA::Mat4f>& SceneNode::transforms() const {
-    return m_transforms;
+void SceneNode::loadDataset(std::shared_ptr<std::vector<uint8_t>> data) {
+    m_dataset->load(data);
+}
+
+const DataProvider* SceneNode::dataProvider() const {
+    return m_provider.get();
+}
+
+const Dataset* SceneNode::dataset() const {
+    return m_dataset.get();
 }

@@ -13,6 +13,7 @@
 
 #include "jsoncpp/json.h"
 
+class Dataset;
 class SceneNode;
 class DataProvider;
 class ServerAdapter;
@@ -26,12 +27,15 @@ public:
 
 private:
     std::unique_ptr<SceneNode> parseNode(const JsonCpp::Value& node);
-    std::unique_ptr<SceneNode> parseGeometry(const JsonCpp::Value& node);
+    
+    std::unique_ptr<Dataset> parseDataset(const JsonCpp::Value& node);
+    std::unique_ptr<Dataset> parseGeometry(const JsonCpp::Value& node);
     
     IVDA::Mat4f parseMatrix(const JsonCpp::Value& node);
     std::vector<IVDA::Mat4f> parseMatrices(const JsonCpp::Value& node);
     
     std::unique_ptr<DataProvider> parseDataSource(const JsonCpp::Value& node);
+    std::unique_ptr<DataProvider> parseDownload(const JsonCpp::Value& node);
     std::unique_ptr<DataProvider> parseSCIRun(const JsonCpp::Value& node);
     std::vector<InputParameterFloat> parseFloatParams(const JsonCpp::Value& node);
     std::vector<InputParameterEnum> parseEnumParams(const JsonCpp::Value& node);

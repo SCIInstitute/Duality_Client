@@ -9,14 +9,16 @@
 
 #include <string>
 #include <memory>
+#include <vector>
 
 class DownloadProvider : public DataProvider {
 public:
     DownloadProvider(const ServerAdapter* server, std::string path);
 
     // DataProvider interface
-    std::shared_ptr<std::vector<uint8_t>> fetch() override;
+    void accept(DataProviderDispatcher& dispatcher) override;
 
+    std::shared_ptr<std::vector<uint8_t>> download() const;
     std::string path() const;
 
 private:

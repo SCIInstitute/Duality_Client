@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 
 #include "Scene/SceneParser.h"
-#include "Scene/GeometryNode.h"
+#include "Scene/GeometryDataset.h"
 #include "Scene/DownloadProvider.h"
 #include "Scene/SCIRunProvider.h"
 
@@ -22,12 +22,12 @@ TEST_F(SceneParserTest, Metadata) {
     ASSERT_EQ("test scene", result.description());
 }
 
-TEST_F(SceneParserTest, TwoGeoNodes) {
+TEST_F(SceneParserTest, TwoNodes) {
   JsonCpp::Value root;
-  root["scene"][0]["type"] = "geometry";
+  root["scene"][0]["dataset"]["type"] = "geometry";
   root["scene"][0]["source"]["type"] = "download";
   root["scene"][0]["source"]["path"] = "/some/file1";
-  root["scene"][1]["type"] = "geometry";
+  root["scene"][1]["dataset"]["type"] = "geometry";
   root["scene"][1]["source"]["type"] = "download";
   root["scene"][1]["source"]["path"] = "/some/file2";
 
@@ -37,31 +37,35 @@ TEST_F(SceneParserTest, TwoGeoNodes) {
   ASSERT_EQ(2, nodes.size());
 
   const auto& node1 = *scene->nodes()[0];
-  ASSERT_TRUE(dynamic_cast<const GeometryNode*>(&node1) != nullptr);
-  const auto& dataProvider1 = node1.dataProvider();
-  ASSERT_TRUE(dynamic_cast<const DownloadProvider*>(&dataProvider1) != nullptr);
-  ASSERT_EQ("/some/file1", dynamic_cast<const DownloadProvider*>(&dataProvider1)->path());
+  const auto dataset1 = node1.dataset();
+  ASSERT_TRUE(dynamic_cast<const GeometryDataset*>(dataset1) != nullptr);
+  const auto dataProvider1 = node1.dataProvider();
+  ASSERT_TRUE(dynamic_cast<const DownloadProvider*>(dataProvider1) != nullptr);
+  ASSERT_EQ("/some/file1", dynamic_cast<const DownloadProvider*>(dataProvider1)->path());
 
   const auto& node2 = *scene->nodes()[1];
-  ASSERT_TRUE(dynamic_cast<const GeometryNode*>(&node2) != nullptr);
-  const auto& dataProvider2 = node2.dataProvider();
-  ASSERT_TRUE(dynamic_cast<const DownloadProvider*>(&dataProvider2) != nullptr);
-  ASSERT_EQ("/some/file2", dynamic_cast<const DownloadProvider*>(&dataProvider2)->path());
+  const auto dataset2 = node1.dataset();
+  ASSERT_TRUE(dynamic_cast<const GeometryDataset*>(dataset2) != nullptr);
+  const auto dataProvider2 = node2.dataProvider();
+  ASSERT_TRUE(dynamic_cast<const DownloadProvider*>(dataProvider2) != nullptr);
+  ASSERT_EQ("/some/file2", dynamic_cast<const DownloadProvider*>(dataProvider2)->path());
 }
 
 TEST_F(SceneParserTest, Transforms) {
     JsonCpp::Value root;
-    root["scene"][0]["type"] = "geometry";
+    root["scene"][0]["dataset"]["type"] = "geometry";
+    for (int i = 0; i < 16; ++i) {
+        root["scene"][0]["dataset"]["transforms"][0][i] = i;
+    }
     root["scene"][0]["source"]["type"] = "download";
     root["scene"][0]["source"]["path"] = "/some/file";
-    for (int i = 0; i < 16; ++i) {
-        root["scene"][0]["transforms"]["translation"][i] = i;
-    }
+
     SceneParser parser(root, nullptr);
     auto scene = parser.parseScene();
     const auto& node = *scene->nodes()[0];
-    ASSERT_EQ(1, node.transforms().size());
-    const auto& translation = node.transforms().front();
+    const auto& dataset = *node.dataset();
+    ASSERT_EQ(1, dataset.transforms().size());
+    const auto& translation = dataset.transforms().front();
     
     ASSERT_EQ(0.0f, translation.m11);
     ASSERT_EQ(1.0f, translation.m12);
@@ -86,7 +90,7 @@ TEST_F(SceneParserTest, Transforms) {
 
 TEST_F(SceneParserTest, SCIRunProvider_FloatParams) {
     JsonCpp::Value root;
-    root["scene"][0]["type"] = "geometry";
+    root["scene"][0]["dataset"]["type"] = "geometry";
     root["scene"][0]["source"]["type"] = "SCIRun";
     root["scene"][0]["source"]["network"] = "myNetwork";
     root["scene"][0]["source"]["floatParams"][0]["name"] = "myFloat";
@@ -100,8 +104,9 @@ TEST_F(SceneParserTest, SCIRunProvider_FloatParams) {
     const auto& nodes = scene->nodes();
 
     const auto& node = *scene->nodes()[0];
-    ASSERT_TRUE(dynamic_cast<const GeometryNode*>(&node) != nullptr);
-    auto provider = dynamic_cast<const SCIRunProvider*>(&node.dataProvider());
+    const auto& dataset = *node.dataset();
+    ASSERT_TRUE(dynamic_cast<const GeometryDataset*>(&dataset) != nullptr);
+    const auto provider = dynamic_cast<const SCIRunProvider*>(node.dataProvider());
     ASSERT_TRUE(provider != nullptr);
     ASSERT_EQ("myNetwork", provider->network());
     auto floatParams = provider->floatParameters();
@@ -116,7 +121,7 @@ TEST_F(SceneParserTest, SCIRunProvider_FloatParams) {
 
 TEST_F(SceneParserTest, SCIRunProvider_EnumParams) {
     JsonCpp::Value root;
-    root["scene"][0]["type"] = "geometry";
+    root["scene"][0]["dataset"]["type"] = "geometry";
     root["scene"][0]["source"]["type"] = "SCIRun";
     root["scene"][0]["source"]["network"] = "myNetwork";
     root["scene"][0]["source"]["enumParams"][0]["name"] = "myEnum";
@@ -129,8 +134,9 @@ TEST_F(SceneParserTest, SCIRunProvider_EnumParams) {
     const auto& nodes = scene->nodes();
 
     const auto& node = *scene->nodes()[0];
-    ASSERT_TRUE(dynamic_cast<const GeometryNode*>(&node) != nullptr);
-    auto provider = dynamic_cast<const SCIRunProvider*>(&node.dataProvider());
+    const auto& dataset = *node.dataset();
+    ASSERT_TRUE(dynamic_cast<const GeometryDataset*>(&dataset) != nullptr);
+    const auto provider = dynamic_cast<const SCIRunProvider*>(node.dataProvider());
     ASSERT_TRUE(provider != nullptr);
     ASSERT_EQ("myNetwork", provider->network());
     auto enumParams = provider->enumParameters();

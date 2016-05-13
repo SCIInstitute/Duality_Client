@@ -6,9 +6,8 @@ SCIRunProvider::SCIRunProvider(std::string network, std::vector<InputParameterFl
     , m_floatParameters(std::move(floatParameters))
     , m_enumParameters(std::move(enumParameters)) {}
 
-std::shared_ptr<std::vector<uint8_t>> SCIRunProvider::fetch() {
+void SCIRunProvider::accept(DataProviderDispatcher& dispatcher) {
     // FIXME
-    return nullptr;
 }
 
 std::string SCIRunProvider::network() const {

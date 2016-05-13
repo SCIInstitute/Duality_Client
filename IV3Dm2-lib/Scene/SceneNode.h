@@ -5,28 +5,26 @@
 #pragma once
 
 #include "Scene/DataProvider.h"
-#include "IVDA/Vectors.h"
+#include "Scene/Dataset.h"
 
 #include <memory>
-#include <tuple>
 #include <vector>
 
-class AbstractDispatcher;
+class DatasetDispatcher;
 
 class SceneNode {
 public:
-    SceneNode(std::unique_ptr<DataProvider> provider, std::vector<IVDA::Mat4f> transforms = {});
-    virtual ~SceneNode() {}
+    SceneNode(std::unique_ptr<DataProvider> provider, std::unique_ptr<Dataset> dataset);
 
-    virtual void applyTransform(const IVDA::Mat4f& matrix) = 0;
-    virtual void accept(AbstractDispatcher& dispatcher) = 0;
-    virtual void readDataset(std::shared_ptr<std::vector<uint8_t>> data) = 0;
-    virtual void updateDataset();
+    void dispatch(DatasetDispatcher& dispatcher);
+    void dispatch(DataProviderDispatcher& dispatcher);
+    
+    void loadDataset(std::shared_ptr<std::vector<uint8_t>> data);
 
-    const DataProvider& dataProvider() const;
-    const std::vector<IVDA::Mat4f>& transforms() const;
+    const DataProvider* dataProvider() const;
+    const Dataset* dataset() const;
 
 private:
     std::unique_ptr<DataProvider> m_provider;
-    std::vector<IVDA::Mat4f> m_transforms;
+    std::unique_ptr<Dataset> m_dataset;
 };

@@ -8,7 +8,7 @@ public:
     SCIRunProvider(std::string network, std::vector<InputParameterFloat> floatParameters, std::vector<InputParameterEnum> enumParameters);
 
     // DataProvider interface
-    std::shared_ptr<std::vector<uint8_t>> fetch() override;
+    void accept(DataProviderDispatcher& dispatcher) override;
 
     std::string network() const;
     std::vector<InputParameterFloat> floatParameters() const;

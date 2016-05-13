@@ -2,7 +2,7 @@
 
 #include "Scene/AbstractRenderer.h"
 #include "Scene/G3D.h"
-#include "Scene/GeometryNode.h"
+#include "Scene/GeometryDataset.h"
 #include "Scene/ScreenInfo.h"
 
 #include <memory>
@@ -22,7 +22,7 @@ class GeometryRendererImpl {
 class GeometryRenderer : public AbsstractRenderer {
 public:
     GeometryRenderer(const ScreenInfo& screenInfo);
-    void render(const GeometryNode& dataset, const GLMatrix& modelView);
+    void render(const GeometryDataset& dataset, const GLMatrix& modelView);
 
 private:
     std::unique_ptr<GeometryRendererImpl> m_impl;

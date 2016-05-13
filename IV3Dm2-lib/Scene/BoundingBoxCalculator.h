@@ -4,15 +4,15 @@
 
 #pragma once
 
-#include "Scene/AbstractDispatcher.h"
+#include "Scene/DatasetDispatcher.h"
 #include "IVDA/Vectors.h"
 
 
-class BoundingBoxCalculator : public AbstractDispatcher {
+class BoundingBoxCalculator : public DatasetDispatcher {
 public:
     BoundingBoxCalculator();
     
-    void dispatch(GeometryNode& node) override;
+    void dispatch(GeometryDataset& node) override;
     // void dispatch(VolumeNode& node) override;
 
     std::pair<IVDA::Vec3f, IVDA::Vec3f> getMinMax() const;
