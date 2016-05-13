@@ -428,12 +428,12 @@
 				8E2AF9D81CDA762900AC6CEC /* SelectSceneViewController.mm */,
 				8E6DCEC71CDB97080091D5AB /* SettingsViewController.h */,
 				8E6DCEC81CDB971B0091D5AB /* SettingsViewController.mm */,
+				8ECB12E91CE542F8009297D6 /* SceneWrapper.h */,
+				8ECB12EA1CE54490009297D6 /* SceneWrapper.mm */,
 				8E2AF9EB1CDAA68100AC6CEC /* TabBarViewController.h */,
 				8E2AF9EC1CDAA7B500AC6CEC /* TabBarViewController.mm */,
 				8E2AF9E21CDA762900AC6CEC /* LaunchScreen.storyboard */,
 				8E2AF9D11CDA762900AC6CEC /* Supporting Files */,
-				8ECB12E91CE542F8009297D6 /* SceneWrapper.h */,
-				8ECB12EA1CE54490009297D6 /* SceneWrapper.mm */,
 			);
 			path = "IV3Dm2-iOS";
 			sourceTree = "<group>";
