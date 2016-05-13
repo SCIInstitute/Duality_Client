@@ -4,6 +4,7 @@
 #include "Scene/DataProviderDispatcher.h"
 
 #include <string>
+#include <map>
 
 class ParameterManipulator {
 public:
@@ -12,7 +13,8 @@ public:
     virtual std::string name() const = 0;
     virtual std::vector<InputParameterFloat> floatParameters() const = 0;
     virtual std::vector<InputParameterEnum> enumParameters() const = 0;
-    //virtual void setFloatParameter(const std::string& name, float value);
+    virtual void setFloatValue(const std::string& name, float value) = 0;
+    virtual std::map<std::string, float> floatValues() const = 0;
     //virtual void setEnumParameter(const std::string& name, const std::string& value);
 };
 

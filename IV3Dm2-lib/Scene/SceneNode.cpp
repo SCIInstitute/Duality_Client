@@ -6,7 +6,9 @@ SceneNode::SceneNode(std::unique_ptr<DataProvider> provider, std::unique_ptr<Dat
 
 void SceneNode::updateDatasets(UpdateDataDispatcher& dispatcher) {
     m_provider->accept(dispatcher);
-    loadDataset(dispatcher.data());
+    if (dispatcher.data() != nullptr) {
+        loadDataset(dispatcher.data());
+    }
 }
 
 void SceneNode::render(RenderDispatcher& dispatcher) const {

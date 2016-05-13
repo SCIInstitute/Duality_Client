@@ -16,9 +16,10 @@
 class ServerAdapter {
 public:
     ServerAdapter();
-    
+
     JsonCpp::Value scenes() const;
     std::shared_ptr<std::vector<uint8_t>> download(const std::string& path) const;
+    std::shared_ptr<std::vector<uint8_t>> sciRunGenerate(const std::string& network, const JsonCpp::Value& sciRunParams) const;
 
 private:
     std::unique_ptr<mocca::net::RpcClient> m_rpcClient;

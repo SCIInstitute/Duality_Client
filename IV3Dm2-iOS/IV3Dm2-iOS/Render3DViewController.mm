@@ -61,16 +61,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initGL];
-    
-    // FIXME: dummy for testing purposes
-    std::vector<InputParameterFloat> floatParams;
-    InputParameterFloat param1 { "test1", 5, 10, 1, 7 };
-    InputParameterFloat param2 { "test2", 1, 10, 2, 5 };
-    floatParams.push_back(param1);
-    floatParams.push_back(param2);
-    
-    m_uiBuilder = [[DynamicUIBuilder alloc] initWitView:self.view andFloatParams:floatParams];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadScene:) name:@"NewSceneLoaded" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateDatasets:) name:@"DatasetChanged" object:nil];
 }
 
 - (void)viewWillLayoutSubviews {
@@ -89,8 +81,18 @@
     SceneWrapper* sceneWrapper = notification.userInfo[@"scene"];
     m_scene = [sceneWrapper scene];
     m_scene->updateDatasets();
-    [m_uiBuilder generateUI];
+    std::vector<ParameterManipulator*> manipulators = m_scene->parameterManipulators();
+    if (!manipulators.empty()) {
+        m_uiBuilder = [[DynamicUIBuilder alloc] initWitView:self.view andParameterManipulators:manipulators];
+        [m_uiBuilder generateUI];
+    }
 }
+
+-(void)updateDatasets:(NSNotification*)notification
+{
+    m_scene->updateDatasets();
+}
+
 
 // Drawing
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
@@ -98,7 +100,7 @@
     if (m_scene) {
         GLMatrix modelView = m_scene->modelViewMatrix();
         m_rendererDispatcher->setModelView(&modelView);
-        m_scene->render(*m_rendererDispatcher); //FIXME
+        m_scene->render(*m_rendererDispatcher);
     }
     [view bindDrawable];
 }

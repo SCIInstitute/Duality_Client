@@ -8,10 +8,10 @@
 
 @implementation DynamicUIBuilder
 
--(id) initWitView:(UIView*)view andFloatParams:(const std::vector<InputParameterFloat>&)floatParams
+-(id) initWitView:(UIView*)view andParameterManipulators:(std::vector<ParameterManipulator*>)manipulators
 {
     m_view = view;
-    m_floatParams = floatParams;
+    m_manipulators = manipulators;
     m_nameLabels = [[NSMutableArray<UILabel*> alloc] init];
     m_valueLabels = [[NSMutableArray<UILabel*> alloc] init];
     m_steppers = [[NSMutableArray<UIStepper*> alloc] init];
@@ -20,19 +20,22 @@
 
 -(void) generateUI
 {
-    [self clearUI];
-    for (size_t i = 0; i < m_floatParams.size(); ++i) {
-        UILabel* nameLabel = [self createNameLabel:m_floatParams[i]];
-        [m_nameLabels addObject:nameLabel];
-        [m_view addSubview:nameLabel];
-        
-        UIStepper* stepper = [self createStepper:m_floatParams[i] withTag:i];
-        [m_steppers addObject:stepper];
-        [m_view addSubview:stepper];
-
-        UILabel* valueLabel = [self createValueLabel];
-        [m_valueLabels addObject:valueLabel];
-        [m_view addSubview:valueLabel];
+    for (size_t i = 0; i < m_manipulators.size(); ++i) {
+        const auto& manipulator = *m_manipulators[i];
+        auto floatParams = manipulator.floatParameters();
+        for (const auto param : floatParams) {
+            UILabel* nameLabel = [self createNameLabel:param];
+            [m_nameLabels addObject:nameLabel];
+            [m_view addSubview:nameLabel];
+            
+            UIStepper* stepper = [self createStepper:param withTag:[m_steppers count]];
+            [m_steppers addObject:stepper];
+            [m_view addSubview:stepper];
+            
+            UILabel* valueLabel = [self createValueLabel];
+            [m_valueLabels addObject:valueLabel];
+            [m_view addSubview:valueLabel];
+        }
     }
     
     for (UIStepper* stepper in m_steppers) {
@@ -48,25 +51,26 @@
     CGFloat const spacing = 2;
     
     CGFloat const stepperWidth = 120;
-    CGFloat const labelWidth = 80;
+    CGFloat const nameLabelWidth = 120;
+    CGFloat const valueLabelWidth = 80;
 
     for (int i = 0; i < [m_nameLabels count]; ++i) {
         CGFloat top = topMargin + i * (height + spacing);
-        m_nameLabels[i].frame = CGRectMake(leftMargin, top, labelWidth, height);
+        m_nameLabels[i].frame = CGRectMake(leftMargin, top, nameLabelWidth, height);
     }
     
     for (int i = 0; i < [m_steppers count]; ++i) {
         CGFloat top = topMargin + i * (height + spacing);
-        m_steppers[i].frame = CGRectMake(leftMargin + labelWidth, top, stepperWidth, height);
+        m_steppers[i].frame = CGRectMake(leftMargin + nameLabelWidth, top, stepperWidth, height);
     }
 
     for (int i = 0; i < [m_valueLabels count]; ++i) {
         CGFloat top = topMargin + i * (height + spacing);
-        m_valueLabels[i].frame = CGRectMake(leftMargin + labelWidth + stepperWidth, top, labelWidth, height);
+        m_valueLabels[i].frame = CGRectMake(leftMargin + nameLabelWidth + stepperWidth, top, valueLabelWidth, height);
     }
 }
 
-- (void) clearUI
+- (void) dealloc
 {
     for (UILabel* label in m_nameLabels) {
         [label removeFromSuperview];
@@ -119,6 +123,8 @@
 {
     int index = stepper.tag;
     m_valueLabels[index].text = [NSString stringWithFormat:@"%.02f", stepper.value];
+    m_manipulators[0]->setFloatValue("val", stepper.value);
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"DatasetChanged" object:self];
 }
 
 @end

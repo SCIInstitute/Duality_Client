@@ -25,7 +25,6 @@ class RenderDispatcher;
 }
 
 -(id) init;
--(void)reloadScene:(NSNotification*)notification;
 
 @property (nonatomic, retain) EAGLContext *context;
 

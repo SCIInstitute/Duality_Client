@@ -5,6 +5,7 @@
 #import <UIKit/UIKit.h>
 
 #include "Scene/InputParameter.h"
+#include "Scene/ParameterManipulator.h"
 
 #include <vector>
 
@@ -12,13 +13,13 @@
 {
 @protected
     UIView* m_view;
-    std::vector<InputParameterFloat> m_floatParams;
+    std::vector<ParameterManipulator*> m_manipulators;
     NSMutableArray<UILabel*>* m_nameLabels;
     NSMutableArray<UILabel*>* m_valueLabels;
     NSMutableArray<UIStepper*>* m_steppers;
 }
 
--(id) initWitView:(UIView*)view andFloatParams:(const std::vector<InputParameterFloat>&)floatParams;
+-(id) initWitView:(UIView*)view andParameterManipulators:(std::vector<ParameterManipulator*>)manipulators;
 -(void) generateUI;
 -(void) layoutUI;
 

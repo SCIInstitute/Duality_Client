@@ -134,6 +134,7 @@
 		8ED74CA61CE652F300CE7588 /* SCIRunProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8ED74C8E1CE652F300CE7588 /* SCIRunProvider.cpp */; };
 		8ED74CA71CE652F300CE7588 /* ServerAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8ED74C911CE652F300CE7588 /* ServerAdapter.cpp */; };
 		8ED74CA81CE652F300CE7588 /* UpdateDataDispatcher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8ED74C931CE652F300CE7588 /* UpdateDataDispatcher.cpp */; };
+		8ED74CAB1CE66E9700CE7588 /* ParameterManipulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8ED74CA91CE66E9700CE7588 /* ParameterManipulator.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -386,6 +387,8 @@
 		8ED74C921CE652F300CE7588 /* ServerAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerAdapter.h; sourceTree = "<group>"; };
 		8ED74C931CE652F300CE7588 /* UpdateDataDispatcher.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UpdateDataDispatcher.cpp; sourceTree = "<group>"; };
 		8ED74C941CE652F300CE7588 /* UpdateDataDispatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpdateDataDispatcher.h; sourceTree = "<group>"; };
+		8ED74CA91CE66E9700CE7588 /* ParameterManipulator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParameterManipulator.cpp; sourceTree = "<group>"; };
+		8ED74CAA1CE66E9700CE7588 /* ParameterManipulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParameterManipulator.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -942,6 +945,8 @@
 				8ED74C7F1CE652F300CE7588 /* GLMatrix.h */,
 				8ED74C801CE652F300CE7588 /* InputParameter.cpp */,
 				8ED74C811CE652F300CE7588 /* InputParameter.h */,
+				8ED74CA91CE66E9700CE7588 /* ParameterManipulator.cpp */,
+				8ED74CAA1CE66E9700CE7588 /* ParameterManipulator.h */,
 				8ED74C821CE652F300CE7588 /* RenderDispatcher.cpp */,
 				8ED74C831CE652F300CE7588 /* RenderDispatcher.h */,
 				8ED74C841CE652F300CE7588 /* Scene.cpp */,
@@ -1074,6 +1079,7 @@
 				8E2BFB6B1CDBF1690040DC47 /* Method.cpp in Sources */,
 				8E2BFB771CDBF1690040DC47 /* TCPNetworkAddress.cpp in Sources */,
 				8E2BFB5F1CDBF1690040DC47 /* SizePrefixedProtocol.cpp in Sources */,
+				8ED74CAB1CE66E9700CE7588 /* ParameterManipulator.cpp in Sources */,
 				8E2AF9ED1CDAA7B500AC6CEC /* TabBarViewController.mm in Sources */,
 				8E2BFB6A1CDBF1690040DC47 /* JsonKeys.cpp in Sources */,
 				8ED74CA71CE652F300CE7588 /* ServerAdapter.cpp in Sources */,

@@ -89,7 +89,7 @@ std::unique_ptr<DataProvider> SceneParser::parseSCIRun(const JsonCpp::Value& nod
     std::vector<InputParameterFloat> floatParams = parseFloatParams(node["floatParams"]);
     std::vector<InputParameterEnum> enumParams = parseEnumParams(node["enumParams"]);
     std::string network = node["network"].asString();
-    return std::make_unique<SCIRunProvider>(std::move(network), std::move(floatParams), std::move(enumParams));
+    return std::make_unique<SCIRunProvider>(m_serverAdapter, std::move(network), std::move(floatParams), std::move(enumParams));
 }
 
 std::vector<InputParameterFloat> SceneParser::parseFloatParams(const JsonCpp::Value& node) {

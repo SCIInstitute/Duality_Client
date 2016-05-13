@@ -21,3 +21,11 @@ std::shared_ptr<std::vector<uint8_t>> ServerAdapter::download(const std::string&
     auto reply = m_rpcClient->receive();
     return reply.second[0];
 }
+
+std::shared_ptr<std::vector<uint8_t>> ServerAdapter::sciRunGenerate(const std::string& network, const JsonCpp::Value& sciRunParams) const {
+    JsonCpp::Value params;
+    params["params"] = sciRunParams;
+    m_rpcClient->send("scirun", params);
+    auto reply = m_rpcClient->receive();
+    return reply.second[0];
+}
