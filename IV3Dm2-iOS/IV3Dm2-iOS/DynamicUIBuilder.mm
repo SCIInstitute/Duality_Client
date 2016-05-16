@@ -6,44 +6,18 @@
 
 #import "DynamicUIBuilder.h"
 
-@implementation DynamicUIBuilder
+@implementation WidgetGroup
 
--(id) initWitView:(UIView*)view andParameterManipulators:(std::vector<ParameterManipulator*>)manipulators
++(UILabel*) createLabelWithText:(NSString*)text
 {
-    m_view = view;
-    m_manipulators = manipulators;
-    m_nameLabels = [[NSMutableArray<UILabel*> alloc] init];
-    m_valueLabels = [[NSMutableArray<UILabel*> alloc] init];
-    m_steppers = [[NSMutableArray<UIStepper*> alloc] init];
-    return self;
+    UILabel* label = [[UILabel alloc] init];
+    label.text = text;
+    label.textColor = [UIColor whiteColor];
+    label.backgroundColor = [UIColor colorWithWhite:0 alpha:0];
+    return label;
 }
 
--(void) generateUI
-{
-    for (size_t i = 0; i < m_manipulators.size(); ++i) {
-        const auto& manipulator = *m_manipulators[i];
-        auto floatParams = manipulator.floatParameters();
-        for (const auto param : floatParams) {
-            UILabel* nameLabel = [self createNameLabel:param];
-            [m_nameLabels addObject:nameLabel];
-            [m_view addSubview:nameLabel];
-            
-            UIStepper* stepper = [self createStepper:param withTag:[m_steppers count]];
-            [m_steppers addObject:stepper];
-            [m_view addSubview:stepper];
-            
-            UILabel* valueLabel = [self createValueLabel];
-            [m_valueLabels addObject:valueLabel];
-            [m_view addSubview:valueLabel];
-        }
-    }
-    
-    for (UIStepper* stepper in m_steppers) {
-        [self stepToValue:stepper];
-    }
-}
-
--(void) layoutUI
++(void) layoutNameLabel:(UILabel*)nameLabel andStepper:(UIStepper*)stepper andValueLabel:(UILabel*)valueLabel atIndex:(int)index
 {
     CGFloat const topMargin = 50;
     CGFloat const leftMargin = 60;
@@ -53,78 +27,159 @@
     CGFloat const stepperWidth = 120;
     CGFloat const nameLabelWidth = 120;
     CGFloat const valueLabelWidth = 80;
+    
+    CGFloat top = topMargin + index * (height + spacing);
+    nameLabel.frame = CGRectMake(leftMargin, top, nameLabelWidth, height);
+    stepper.frame = CGRectMake(leftMargin + nameLabelWidth, top, stepperWidth, height);
+    valueLabel.frame = CGRectMake(leftMargin + nameLabelWidth + stepperWidth, top, valueLabelWidth, height);
+}
 
-    for (int i = 0; i < [m_nameLabels count]; ++i) {
-        CGFloat top = topMargin + i * (height + spacing);
-        m_nameLabels[i].frame = CGRectMake(leftMargin, top, nameLabelWidth, height);
+@end
+
+@implementation FloatWidgetGroup
+
+-(id) initWithManipulator:(ParameterManipulatorFloat)manipulator andView:(UIView*)view
+{
+    self = [super init];
+    
+    m_manipulator = std::make_unique<ParameterManipulatorFloat>(manipulator);
+ 
+    auto param = m_manipulator->parameter();
+    
+    m_nameLabel = [WidgetGroup createLabelWithText:[NSString stringWithUTF8String:param.name.c_str()]];
+    m_nameLabel.textAlignment = NSTextAlignmentLeft;
+    [view addSubview:m_nameLabel];
+    
+    m_stepper = [[UIStepper alloc] init];
+    m_stepper.minimumValue = param.lowerBound;
+    m_stepper.maximumValue = param.upperBound;
+    m_stepper.stepValue = param.stepSize;
+    m_stepper.value = param.defaultValue;
+    [view addSubview:m_stepper];
+    [m_stepper addTarget:self action:@selector(stepToValue:) forControlEvents:UIControlEventValueChanged];
+    
+    m_valueLabel = [WidgetGroup createLabelWithText:@""];
+    m_valueLabel.textAlignment = NSTextAlignmentRight;
+    [view addSubview:m_valueLabel];
+    
+    [self stepToValue:m_stepper];
+    
+    return self;
+}
+
+-(void) layout
+{
+    int index = m_manipulator->parameter().index;
+    [WidgetGroup layoutNameLabel:m_nameLabel andStepper:m_stepper andValueLabel:m_valueLabel atIndex:index];
+}
+
+- (void)stepToValue:(UIStepper*)stepper
+{
+    m_valueLabel.text = [NSString stringWithFormat:@"%.02f", stepper.value];
+    m_manipulator->setValue(stepper.value);
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"DatasetChanged" object:self];
+}
+
+- (void) dealloc
+{
+    [m_nameLabel removeFromSuperview];
+    [m_stepper removeFromSuperview];
+    [m_nameLabel removeFromSuperview];
+}
+
+@end
+
+
+@implementation EnumWidgetGroup
+
+-(id) initWithManipulator:(ParameterManipulatorEnum)manipulator andView:(UIView*)view
+{
+    self = [super init];
+    
+    m_manipulator = std::make_unique<ParameterManipulatorEnum>(manipulator);
+    
+    auto param = m_manipulator->parameter();
+    
+    m_nameLabel = [WidgetGroup createLabelWithText:[NSString stringWithUTF8String:param.name.c_str()]];
+    m_nameLabel.textAlignment = NSTextAlignmentLeft;
+    [view addSubview:m_nameLabel];
+    
+    m_stepper = [[UIStepper alloc] init];
+    m_stepper.minimumValue = 0;
+    m_stepper.maximumValue = param.values.size() - 1;
+    m_stepper.stepValue = 1;
+    auto findIt = std::find(begin(param.values), end(param.values), param.defaultValue);
+    m_stepper.value = std::distance(begin(param.values), findIt);
+    [view addSubview:m_stepper];
+    [m_stepper addTarget:self action:@selector(stepToValue:) forControlEvents:UIControlEventValueChanged];
+    
+    m_valueLabel = [WidgetGroup createLabelWithText:@""];
+    m_valueLabel.textAlignment = NSTextAlignmentRight;
+    [view addSubview:m_valueLabel];
+    
+    [self stepToValue:m_stepper];
+    
+    return self;
+}
+
+-(void) layout
+{
+    int index = m_manipulator->parameter().index;
+    [WidgetGroup layoutNameLabel:m_nameLabel andStepper:m_stepper andValueLabel:m_valueLabel atIndex:index];
+}
+
+- (void)stepToValue:(UIStepper*)stepper
+{
+    auto param = m_manipulator->parameter();
+    std::string value = param.values[(int)stepper.value];
+    m_valueLabel.text = [NSString stringWithUTF8String:value.c_str()];
+    m_manipulator->setValue(value);
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"DatasetChanged" object:self];
+}
+
+- (void) dealloc
+{
+    [m_nameLabel removeFromSuperview];
+    [m_stepper removeFromSuperview];
+    [m_nameLabel removeFromSuperview];
+}
+
+@end
+
+
+@implementation DynamicUIBuilder
+
+-(id) initWitView:(UIView*)view andFloatManipulators:(const std::vector<ParameterManipulatorFloat>&)floatManipulators andEnumManipulators:(const std::vector<ParameterManipulatorEnum>&)enumManipulators
+{
+    m_floatWidgetGroups = [[NSMutableArray<FloatWidgetGroup*> alloc] init];
+    for (const auto& manipulator : floatManipulators) {
+        FloatWidgetGroup* widgetGroup = [[FloatWidgetGroup alloc] initWithManipulator:manipulator andView:view];
+        [m_floatWidgetGroups addObject:widgetGroup];
+    }
+
+    m_enumWidgetGroups = [[NSMutableArray<EnumWidgetGroup*> alloc] init];
+    for (const auto& manipulator : enumManipulators) {
+        EnumWidgetGroup* widgetGroup = [[EnumWidgetGroup alloc] initWithManipulator:manipulator andView:view];
+        [m_enumWidgetGroups addObject:widgetGroup];
     }
     
-    for (int i = 0; i < [m_steppers count]; ++i) {
-        CGFloat top = topMargin + i * (height + spacing);
-        m_steppers[i].frame = CGRectMake(leftMargin + nameLabelWidth, top, stepperWidth, height);
+    return self;
+}
+
+-(void) layoutUI
+{
+    for (FloatWidgetGroup* widgetGroup in m_floatWidgetGroups) {
+        [widgetGroup layout];
     }
 
-    for (int i = 0; i < [m_valueLabels count]; ++i) {
-        CGFloat top = topMargin + i * (height + spacing);
-        m_valueLabels[i].frame = CGRectMake(leftMargin + nameLabelWidth + stepperWidth, top, valueLabelWidth, height);
+    for (EnumWidgetGroup* widgetGroup in m_enumWidgetGroups) {
+        [widgetGroup layout];
     }
 }
 
 - (void) dealloc
 {
-    for (UILabel* label in m_nameLabels) {
-        [label removeFromSuperview];
-    }
-    [m_nameLabels removeAllObjects];
-    
-    for (UIStepper* stepper in m_steppers) {
-        [stepper removeFromSuperview];
-    }
-    [m_steppers removeAllObjects];
-
-    for (UILabel* label in m_valueLabels) {
-        [label removeFromSuperview];
-    }
-    [m_valueLabels removeAllObjects];
-}
-
--(UILabel*) createNameLabel:(const InputParameterFloat&)floatParam
-{
-    UILabel* label = [[UILabel alloc] init];
-    label.text = [NSString stringWithUTF8String:floatParam.name.c_str()];
-    label.textColor = [UIColor whiteColor];
-    label.backgroundColor = [UIColor colorWithWhite:0 alpha:0];
-    label.textAlignment = NSTextAlignmentLeft;
-    return label;
-}
-
--(UIStepper*) createStepper:(const InputParameterFloat&)floatParam withTag:(int)tag
-{
-    UIStepper* stepper = [[UIStepper alloc] init];
-    stepper.minimumValue = floatParam.lowerBound;
-    stepper.maximumValue = floatParam.upperBound;
-    stepper.stepValue = floatParam.stepSize;
-    stepper.value = floatParam.defaultValue;
-    stepper.tag = tag;
-    [stepper addTarget:self action:@selector(stepToValue:) forControlEvents:UIControlEventValueChanged];
-    return stepper;
-}
-
--(UILabel*) createValueLabel
-{
-    UILabel* label = [[UILabel alloc] init];
-    label.textColor = [UIColor whiteColor];
-    label.backgroundColor = [UIColor colorWithWhite:0 alpha:0];
-    label.textAlignment = NSTextAlignmentRight;
-    return label;
-}
-
-- (void)stepToValue:(UIStepper*)stepper
-{
-    int index = stepper.tag;
-    m_valueLabels[index].text = [NSString stringWithFormat:@"%.02f", stepper.value];
-    m_manipulators[0]->setFloatValue("val", stepper.value);
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"DatasetChanged" object:self];
+    [m_floatWidgetGroups removeAllObjects];
 }
 
 @end

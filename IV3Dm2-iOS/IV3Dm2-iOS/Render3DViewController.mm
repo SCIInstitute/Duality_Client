@@ -81,10 +81,9 @@
     SceneWrapper* sceneWrapper = notification.userInfo[@"scene"];
     m_scene = [sceneWrapper scene];
     m_scene->updateDatasets();
-    std::vector<ParameterManipulator*> manipulators = m_scene->parameterManipulators();
-    if (!manipulators.empty()) {
-        m_uiBuilder = [[DynamicUIBuilder alloc] initWitView:self.view andParameterManipulators:manipulators];
-        [m_uiBuilder generateUI];
+    auto manipulators = m_scene->manipulators();
+    if (!manipulators.first.empty() || !manipulators.second.empty()) {
+        m_uiBuilder = [[DynamicUIBuilder alloc] initWitView:self.view andFloatManipulators:manipulators.first andEnumManipulators:manipulators.second];
     }
 }
 

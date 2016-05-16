@@ -46,8 +46,8 @@ float SCIRunProvider::getFloatValue(const std::string& name) const {
 }
 
 void SCIRunProvider::setEnumValue(const std::string& name, const std::string& value) {
-    assert(std::find(begin(m_parameter.values), end(m_parameter.values), value) != end(m_parameter.values));
     m_enumValues[name] = value;
+    m_dirty = true;
 }
 
 std::string SCIRunProvider::getEnumValue(const std::string& name) const {
