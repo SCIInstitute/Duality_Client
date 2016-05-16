@@ -6,16 +6,26 @@
 #include <string>
 #include <map>
 
-class ParameterManipulator {
+class ParameterManipulatorFloat {
 public:
-    virtual ~ParameterManipulator() {}
+    ParameterManipulatorFloat(InputParameterFloat parameter, SCIRunProvider* provider);
+    InputParameterFloat parameter() const;
+    void setValue(float value);
+    float getValue() const;
+private:
+    InputParameterFloat m_parameter;
+    SCIRunProvider* m_provider;
+};
 
-    virtual std::string name() const = 0;
-    virtual std::vector<InputParameterFloat> floatParameters() const = 0;
-    virtual std::vector<InputParameterEnum> enumParameters() const = 0;
-    virtual void setFloatValue(const std::string& name, float value) = 0;
-    virtual std::map<std::string, float> floatValues() const = 0;
-    //virtual void setEnumParameter(const std::string& name, const std::string& value);
+class ParameterManipulatorEnum {
+public:
+    ParameterManipulatorEnum(InputParameterEnum parameter, SCIRunProvider* provider);
+    InputParameterEnum parameter() const;
+    void setValue(std::string value);
+    std::string getValue() const;
+private:
+    InputParameterEnum m_parameter;
+    SCIRunProvider* m_provider;
 };
 
 class ParameterManipulatorCollector : public DataProviderDispatcher {
@@ -23,8 +33,10 @@ public:
     void dispatch(DownloadProvider& provider) override;
     void dispatch(SCIRunProvider& provider) override;
 
-    std::vector<ParameterManipulator*> manipulators() const;
+    std::vector<ParameterManipulatorFloat> floatManipulators() const;
+    std::vector<ParameterManipulatorEnum> enumManipulators() const;
 
 private:
-    std::vector<ParameterManipulator*> m_manipulators;
+    std::vector<ParameterManipulatorFloat> m_floatManipulators;
+    std::vector<ParameterManipulatorEnum> m_enumManipulators;
 };

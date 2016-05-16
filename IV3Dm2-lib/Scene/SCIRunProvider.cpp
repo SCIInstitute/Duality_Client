@@ -20,7 +20,7 @@ void SCIRunProvider::accept(DataProviderDispatcher& dispatcher) {
     dispatcher.dispatch(*this);
 }
 
-std::string SCIRunProvider::name() const {
+std::string SCIRunProvider::network() const {
     return m_network;
 }
 
@@ -33,32 +33,39 @@ std::vector<InputParameterEnum> SCIRunProvider::enumParameters() const {
 }
 
 void SCIRunProvider::setFloatValue(const std::string& name, float value) {
-    auto it = std::find_if(begin(m_floatParameters), end(m_floatParameters), [&](const InputParameterFloat& p) { return p.name == name; });
-    if (it == end(m_floatParameters)) {
-        throw Error("Invalid float parameter '" + name + "'", __FILE__, __LINE__);
-    }
-    if (m_floatValues[name] != value) {
-        m_floatValues[name] = value;
-        m_dirty = true;
-    }
+    m_floatValues[name] = value;
+    m_dirty = true;
 }
 
-std::map<std::string, float> SCIRunProvider::floatValues() const {
-    return m_floatValues;
+float SCIRunProvider::getFloatValue(const std::string& name) const {
+    auto it = m_floatValues.find(name);
+    if (it == end(m_floatValues)) {
+        throw Error("Unknown float parameter '" + name + "'", __FILE__, __LINE__);
+    }
+    return it->second;
+}
+
+void SCIRunProvider::setEnumValue(const std::string& name, const std::string& value) {
+    assert(std::find(begin(m_parameter.values), end(m_parameter.values), value) != end(m_parameter.values));
+    m_enumValues[name] = value;
+}
+
+std::string SCIRunProvider::getEnumValue(const std::string& name) const {
+    auto it = m_enumValues.find(name);
+    if (it == end(m_enumValues)) {
+        throw Error("Unknown enum parameter '" + name + "'", __FILE__, __LINE__);
+    }
+    return it->second;
 }
 
 std::shared_ptr<std::vector<uint8_t>> SCIRunProvider::generate() const {
+    if (!m_dirty) {
+        return nullptr;
+    }
+
     JsonCpp::Value params;
     for (const auto& val : m_floatValues) {
         params[val.first] = val.second;
     }
     return m_server->sciRunGenerate(m_network, params);
-}
-
-bool SCIRunProvider::isDirty() const {
-    return m_dirty;
-}
-
-void SCIRunProvider::setDirty(bool dirty) {
-    m_dirty = dirty;
 }

@@ -88,16 +88,23 @@ TEST_F(SceneParserTest, Transforms) {
     ASSERT_EQ(15.0f, translation.m44);
 }
 
-TEST_F(SceneParserTest, SCIRunProvider_FloatParams) {
+TEST_F(SceneParserTest, SCIRunParams) {
     JsonCpp::Value root;
     root["scene"][0]["dataset"]["type"] = "geometry";
     root["scene"][0]["source"]["type"] = "SCIRun";
     root["scene"][0]["source"]["network"] = "myNetwork";
-    root["scene"][0]["source"]["floatParams"][0]["name"] = "myFloat";
-    root["scene"][0]["source"]["floatParams"][0]["lowerBound"] = 5.f;
-    root["scene"][0]["source"]["floatParams"][0]["upperBound"] = 10.f;
-    root["scene"][0]["source"]["floatParams"][0]["stepSize"] = .5f;
-    root["scene"][0]["source"]["floatParams"][0]["defaultValue"] = 7.f;
+    root["scene"][0]["source"]["parameters"][0]["name"] = "myEnum";
+    root["scene"][0]["source"]["parameters"][0]["type"] = "enum";
+    root["scene"][0]["source"]["parameters"][0]["values"][0] = "val1";
+    root["scene"][0]["source"]["parameters"][0]["values"][1] = "val2";
+    root["scene"][0]["source"]["parameters"][0]["defaultValue"] = "val2";
+
+    root["scene"][0]["source"]["parameters"][1]["name"] = "myFloat";
+    root["scene"][0]["source"]["parameters"][1]["type"] = "float";
+    root["scene"][0]["source"]["parameters"][1]["lowerBound"] = 5.f;
+    root["scene"][0]["source"]["parameters"][1]["upperBound"] = 10.f;
+    root["scene"][0]["source"]["parameters"][1]["stepSize"] = .5f;
+    root["scene"][0]["source"]["parameters"][1]["defaultValue"] = 7.f;
 
     SceneParser parser(root, nullptr);
     auto scene = parser.parseScene();
@@ -108,43 +115,25 @@ TEST_F(SceneParserTest, SCIRunProvider_FloatParams) {
     ASSERT_TRUE(dynamic_cast<const GeometryDataset*>(&dataset) != nullptr);
     const auto provider = dynamic_cast<const SCIRunProvider*>(node.dataProvider());
     ASSERT_TRUE(provider != nullptr);
-    ASSERT_EQ("myNetwork", provider->name());
-    auto floatParams = provider->floatParameters();
-    ASSERT_EQ(1, floatParams.size());
-    auto floatParam = floatParams[0];
-    ASSERT_EQ("myFloat", floatParam.name);
-    ASSERT_EQ(5.f, floatParam.lowerBound);
-    ASSERT_EQ(10.f, floatParam.upperBound);
-    ASSERT_EQ(.5f, floatParam.stepSize);
-    ASSERT_EQ(7.f, floatParam.defaultValue);
-}
+    ASSERT_EQ("myNetwork", provider->network());
 
-TEST_F(SceneParserTest, SCIRunProvider_EnumParams) {
-    JsonCpp::Value root;
-    root["scene"][0]["dataset"]["type"] = "geometry";
-    root["scene"][0]["source"]["type"] = "SCIRun";
-    root["scene"][0]["source"]["network"] = "myNetwork";
-    root["scene"][0]["source"]["enumParams"][0]["name"] = "myEnum";
-    root["scene"][0]["source"]["enumParams"][0]["values"][0] = "val1";
-    root["scene"][0]["source"]["enumParams"][0]["values"][1] = "val2";
-    root["scene"][0]["source"]["enumParams"][0]["defaultValue"] = "val2";
-
-    SceneParser parser(root, nullptr);
-    auto scene = parser.parseScene();
-    const auto& nodes = scene->nodes();
-
-    const auto& node = *scene->nodes()[0];
-    const auto& dataset = *node.dataset();
-    ASSERT_TRUE(dynamic_cast<const GeometryDataset*>(&dataset) != nullptr);
-    const auto provider = dynamic_cast<const SCIRunProvider*>(node.dataProvider());
-    ASSERT_TRUE(provider != nullptr);
-    ASSERT_EQ("myNetwork", provider->name());
     auto enumParams = provider->enumParameters();
     ASSERT_EQ(1, enumParams.size());
     auto enumParam = enumParams[0];
     ASSERT_EQ("myEnum", enumParam.name);
+    ASSERT_EQ(0, enumParam.index);
     ASSERT_EQ(2, enumParam.values.size());
     ASSERT_EQ("val1", enumParam.values[0]);
     ASSERT_EQ("val2", enumParam.values[1]);
     ASSERT_EQ("val2", enumParam.defaultValue);
+
+    auto floatParams = provider->floatParameters();
+    ASSERT_EQ(1, floatParams.size());
+    auto floatParam = floatParams[0];
+    ASSERT_EQ("myFloat", floatParam.name);
+    ASSERT_EQ(1, floatParam.index);
+    ASSERT_EQ(5.f, floatParam.lowerBound);
+    ASSERT_EQ(10.f, floatParam.upperBound);
+    ASSERT_EQ(.5f, floatParam.stepSize);
+    ASSERT_EQ(7.f, floatParam.defaultValue);
 }

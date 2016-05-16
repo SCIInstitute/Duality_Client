@@ -7,7 +7,7 @@
 #include <memory>
 #include <vector>
 
-class SCIRunProvider : public DataProvider, public ParameterManipulator {
+class SCIRunProvider : public DataProvider {
 public:
     SCIRunProvider(const ServerAdapter* server, std::string network, std::vector<InputParameterFloat> floatParameters,
                    std::vector<InputParameterEnum> enumParameters);
@@ -15,16 +15,15 @@ public:
     // DataProvider interface
     void accept(DataProviderDispatcher& dispatcher) override;
 
-    // ParameterManipulator interface
-    std::string name() const override;
-    std::vector<InputParameterFloat> floatParameters() const override;
-    std::vector<InputParameterEnum> enumParameters() const override;
-    void setFloatValue(const std::string& name, float value) override;
-    std::map<std::string, float> floatValues() const override;
-    
+    std::string network() const;
+    std::vector<InputParameterFloat> floatParameters() const;
+    std::vector<InputParameterEnum> enumParameters() const;
+    void setFloatValue(const std::string& name, float value);
+    float getFloatValue(const std::string& name) const;
+    void setEnumValue(const std::string& name, const std::string& value);
+    std::string getEnumValue(const std::string& name) const;
+
     std::shared_ptr<std::vector<uint8_t>> generate() const;
-    bool isDirty() const;
-    void setDirty(bool dirty);
     
 private:
     const ServerAdapter* m_server;
@@ -32,5 +31,6 @@ private:
     std::vector<InputParameterFloat> m_floatParameters;
     std::vector<InputParameterEnum> m_enumParameters;
     std::map<std::string, float> m_floatValues;
+    std::map<std::string, std::string> m_enumValues;
     bool m_dirty;
 };

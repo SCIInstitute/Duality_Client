@@ -8,9 +8,9 @@ void UpdateDataDispatcher::dispatch(DownloadProvider& provider) {
 }
 
 void UpdateDataDispatcher::dispatch(SCIRunProvider& provider) {
-    if (provider.isDirty()) {
-        m_data = provider.generate();
-        provider.setDirty(false);
+    auto data = provider.generate();
+    if (data != nullptr) {
+        m_data = data;
     }
 }
 

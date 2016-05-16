@@ -25,7 +25,7 @@ public:
 
     void updateDatasets();
     void render(RenderDispatcher& dispatcher) const;
-    std::vector<ParameterManipulator*> parameterManipulators() const;
+    std::pair<std::vector<ParameterManipulatorFloat>, std::vector<ParameterManipulatorEnum>> manipulators() const;
 
     void addTranslation(const IVDA::Vec2f& translation);
     GLMatrix modelViewMatrix() const;

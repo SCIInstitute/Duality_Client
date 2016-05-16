@@ -42,12 +42,12 @@ void Scene::render(RenderDispatcher& dispatcher) const {
     dispatcher.finish();
 }
 
-std::vector<ParameterManipulator*> Scene::parameterManipulators() const {
+std::pair<std::vector<ParameterManipulatorFloat>, std::vector<ParameterManipulatorEnum>> Scene::manipulators() const {
     ParameterManipulatorCollector dispatcher;
     for (auto& node : m_nodes) {
         node->makeManipultor(dispatcher);
     }
-    return dispatcher.manipulators();
+    return std::make_pair(dispatcher.floatManipulators(), dispatcher.enumManipulators());
 }
 
 void Scene::addTranslation(const IVDA::Vec2f& translation) {
