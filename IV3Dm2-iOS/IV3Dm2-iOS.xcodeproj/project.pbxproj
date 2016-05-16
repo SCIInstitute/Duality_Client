@@ -135,6 +135,7 @@
 		8ED74CA71CE652F300CE7588 /* ServerAdapter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8ED74C911CE652F300CE7588 /* ServerAdapter.cpp */; };
 		8ED74CA81CE652F300CE7588 /* UpdateDataDispatcher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8ED74C931CE652F300CE7588 /* UpdateDataDispatcher.cpp */; };
 		8ED74CAB1CE66E9700CE7588 /* ParameterManipulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8ED74CA91CE66E9700CE7588 /* ParameterManipulator.cpp */; };
+		8EE1D6FA1CEA8522009AF00B /* ArcBall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EE1D6F81CEA8522009AF00B /* ArcBall.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -389,6 +390,8 @@
 		8ED74C941CE652F300CE7588 /* UpdateDataDispatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpdateDataDispatcher.h; sourceTree = "<group>"; };
 		8ED74CA91CE66E9700CE7588 /* ParameterManipulator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParameterManipulator.cpp; sourceTree = "<group>"; };
 		8ED74CAA1CE66E9700CE7588 /* ParameterManipulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParameterManipulator.h; sourceTree = "<group>"; };
+		8EE1D6F81CEA8522009AF00B /* ArcBall.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ArcBall.cpp; sourceTree = "<group>"; };
+		8EE1D6F91CEA8522009AF00B /* ArcBall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArcBall.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -873,6 +876,8 @@
 		8EB8376B1CE3D6AD0086D761 /* IVDA */ = {
 			isa = PBXGroup;
 			children = (
+				8EE1D6F81CEA8522009AF00B /* ArcBall.cpp */,
+				8EE1D6F91CEA8522009AF00B /* ArcBall.h */,
 				8EB8376C1CE3D6AD0086D761 /* AbstrDebugOut.cpp */,
 				8EB8376D1CE3D6AD0086D761 /* AbstrDebugOut.h */,
 				8EB8376E1CE3D6AD0086D761 /* CMakeLists.txt */,
@@ -1146,6 +1151,7 @@
 				8E2AF9D61CDA762900AC6CEC /* AppDelegate.mm in Sources */,
 				8ED74CA51CE652F300CE7588 /* SceneParser.cpp in Sources */,
 				8EB837B51CE3D6AD0086D761 /* Macros.cpp in Sources */,
+				8EE1D6FA1CEA8522009AF00B /* ArcBall.cpp in Sources */,
 				8E2BFB571CDBF1690040DC47 /* Log.cpp in Sources */,
 				8E2BFB751CDBF1690040DC47 /* TCPConnectionAcceptor.cpp in Sources */,
 				8E2AF9D91CDA762900AC6CEC /* SelectSceneViewController.mm in Sources */,

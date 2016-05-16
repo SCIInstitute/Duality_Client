@@ -12,7 +12,8 @@
 using namespace IVDA;
 
 Scene::Scene(SceneMetadata metadata)
-    : m_metadata(std::move(metadata)) {}
+    : m_metadata(std::move(metadata))
+    , m_translation(Vec3f(0.f, 0.f, -3.f)) {}
 
 SceneMetadata Scene::metadata() const {
     return m_metadata;
@@ -55,8 +56,13 @@ void Scene::addTranslation(const IVDA::Vec2f& translation) {
     m_translation.y += translation.y;
 }
 
+void Scene::addRotation(const IVDA::Mat4f& rotation) {
+    m_rotation = m_rotation * rotation;
+}
+
 GLMatrix Scene::modelViewMatrix() const {
     GLMatrix modelView = m_defaultModelView;
+    modelView.multiply((GLMatrix)m_rotation);
     modelView.translate(m_translation.x, m_translation.y, m_translation.z);
     return modelView;
 }
@@ -80,9 +86,6 @@ GLMatrix Scene::defaultModelView() const {
 
     float maxExtend = size.maxVal();
     result.scale(1.f / maxExtend, 1.f / maxExtend, 1.f / maxExtend);
-
-    // FIXME: just a temporary solution
-    result.translate(0, 0, -3.f);
 
     return result;
 }

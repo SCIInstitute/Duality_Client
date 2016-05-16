@@ -180,6 +180,7 @@
 - (void) dealloc
 {
     [m_floatWidgetGroups removeAllObjects];
+    [m_enumWidgetGroups removeAllObjects];
 }
 
 @end

@@ -28,6 +28,7 @@ public:
     std::pair<std::vector<ParameterManipulatorFloat>, std::vector<ParameterManipulatorEnum>> manipulators() const;
 
     void addTranslation(const IVDA::Vec2f& translation);
+    void addRotation(const IVDA::Mat4f& rotation);
     GLMatrix modelViewMatrix() const;
 
 private:
@@ -38,4 +39,5 @@ private:
     std::vector<std::unique_ptr<SceneNode>> m_nodes;
     GLMatrix m_defaultModelView;
     IVDA::Vec3f m_translation;
+    IVDA::Mat4f m_rotation;
 };

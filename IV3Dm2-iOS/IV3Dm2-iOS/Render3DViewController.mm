@@ -68,6 +68,7 @@
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
     m_rendererDispatcher = std::make_unique<RenderDispatcher>([self screenInfo]);
+    m_arcBall.SetWindowSize(uint32_t(self.view.bounds.size.width), uint32_t(self.view.bounds.size.height));
 }
 
 - (void) viewDidLayoutSubviews
@@ -112,8 +113,12 @@
     [super touchesBegan:touches withEvent:event];
     
     NSUInteger numTouches = [[event allTouches] count];
-    NSArray* allTouches = [[event allTouches] allObjects];
-    if (numTouches == 2) {
+    if (numTouches == 1) {
+        CGPoint touchPoint = [[touches anyObject] locationInView:self.view];
+        m_arcBall.Click(IVDA::Vec2ui(touchPoint.x, touchPoint.y));
+    }
+    else if (numTouches == 2) {
+        NSArray* allTouches = [[event allTouches] allObjects];
         CGPoint touchPoint1 = [[allTouches objectAtIndex:0] locationInView:self.view];
         CGPoint touchPoint2 = [[allTouches objectAtIndex:1] locationInView:self.view];
         m_touchPos1 = IVDA::Vec2f(touchPoint1.x/self.view.frame.size.width,
@@ -138,8 +143,14 @@
     
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     
-    NSArray* allTouches = [[event allTouches] allObjects];
-    if (numTouches == 2) {
+    if (numTouches == 1) {
+        CGPoint touchPoint = [[touches anyObject] locationInView:self.view];
+        IVDA::Mat4f rotation = m_arcBall.Drag(IVDA::Vec2ui(touchPoint.x, touchPoint.y)).ComputeRotation();
+        m_scene->addRotation(rotation);
+        m_arcBall.Click(IVDA::Vec2ui(touchPoint.x, touchPoint.y));
+    }
+    else if (numTouches == 2) {
+        NSArray* allTouches = [[event allTouches] allObjects];
         CGPoint touchPoint1 = [[allTouches objectAtIndex:0] locationInView:self.view];
         CGPoint touchPoint2 = [[allTouches objectAtIndex:1] locationInView:self.view];
         
