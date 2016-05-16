@@ -37,8 +37,9 @@ private:
     std::unique_ptr<DataProvider> parseDataSource(const JsonCpp::Value& node);
     std::unique_ptr<DataProvider> parseDownload(const JsonCpp::Value& node);
     std::unique_ptr<DataProvider> parseSCIRun(const JsonCpp::Value& node);
-    std::vector<InputParameterFloat> parseFloatParams(const JsonCpp::Value& node);
-    std::vector<InputParameterEnum> parseEnumParams(const JsonCpp::Value& node);
+    void parseParams(const JsonCpp::Value& node, std::vector<InputParameterFloat>& floatParams, std::vector<InputParameterEnum>& enumParams);
+    InputParameterFloat parseFloatParam(const JsonCpp::Value& node, int index);
+    InputParameterEnum parseEnumParam(const JsonCpp::Value& node, int index);
 
 private:
     JsonCpp::Value m_root;
