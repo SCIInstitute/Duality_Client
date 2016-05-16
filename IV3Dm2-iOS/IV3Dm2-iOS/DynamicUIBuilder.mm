@@ -62,7 +62,7 @@
     m_valueLabel.textAlignment = NSTextAlignmentRight;
     [view addSubview:m_valueLabel];
     
-    [self stepToValue:m_stepper];
+    m_valueLabel.text = [NSString stringWithFormat:@"%.02f", param.defaultValue];
     
     return self;
 }
@@ -84,7 +84,7 @@
 {
     [m_nameLabel removeFromSuperview];
     [m_stepper removeFromSuperview];
-    [m_nameLabel removeFromSuperview];
+    [m_valueLabel removeFromSuperview];
 }
 
 @end
@@ -117,7 +117,7 @@
     m_valueLabel.textAlignment = NSTextAlignmentRight;
     [view addSubview:m_valueLabel];
     
-    [self stepToValue:m_stepper];
+    m_valueLabel.text = [NSString stringWithUTF8String:param.defaultValue.c_str()];
     
     return self;
 }
@@ -141,7 +141,7 @@
 {
     [m_nameLabel removeFromSuperview];
     [m_stepper removeFromSuperview];
-    [m_nameLabel removeFromSuperview];
+    [m_valueLabel removeFromSuperview];
 }
 
 @end

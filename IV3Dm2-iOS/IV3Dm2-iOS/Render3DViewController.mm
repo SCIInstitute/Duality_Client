@@ -84,6 +84,8 @@
     auto manipulators = m_scene->manipulators();
     if (!manipulators.first.empty() || !manipulators.second.empty()) {
         m_uiBuilder = [[DynamicUIBuilder alloc] initWitView:self.view andFloatManipulators:manipulators.first andEnumManipulators:manipulators.second];
+    } else {
+        m_uiBuilder = nil;
     }
 }
 
