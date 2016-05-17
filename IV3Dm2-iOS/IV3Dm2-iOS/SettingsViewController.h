@@ -4,7 +4,14 @@
 
 #import <UIKit/UIKit.h>
 
+@class TextSettingCell;
+
+class SceneLoader;
+
 @interface SettingsViewController : UITableViewController
+{
+    NSMutableArray<TextSettingCell*>* m_textSettingCells;
+}
 
 - (id) init;
 

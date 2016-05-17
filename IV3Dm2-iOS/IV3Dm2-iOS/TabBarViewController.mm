@@ -10,19 +10,29 @@
 
 #import "TabBarViewController.h"
 
+#include "Scene/ServerAdapter.h"
 #include "Scene/SceneLoader.h"
 
 @implementation TabBarViewController
 
-- (id)initWithRenderView:(Render3DViewController*)renderView andSceneView:(SelectSceneViewController*)sceneView andSettingsView:(SettingsViewController*)settingsView andSceneLoader:(SceneLoader*)sceneLoader{
+- (id)init
+{
     self = [super init];
-    if (self) {
-        m_render3DViewController = renderView;
-        m_selectSceneViewController = sceneView;
-        m_settingsViewController = settingsView;
-        m_sceneLoader = sceneLoader;
-        [self createNavigationControllers];
-    }
+    
+    std::string serverIP = [[[NSUserDefaults standardUserDefaults] stringForKey:@"ServerIP"] UTF8String];
+    uint16_t serverPort = [[NSUserDefaults standardUserDefaults] integerForKey:@"ServerPort"];
+    auto serverAdapter = std::make_unique<ServerAdapter>(serverIP, serverPort);
+    m_sceneLoader = std::make_unique<SceneLoader>(std::move(serverAdapter));
+
+    m_render3DViewController = [[Render3DViewController alloc] init];
+    m_selectSceneViewController = [[SelectSceneViewController alloc] init];
+    m_settingsViewController = [[SettingsViewController alloc] init];
+
+    [self createNavigationControllers];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reinitSceneLoader:) name:@"ServerAddressChanged" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectNewScene:) name:@"SelectedSceneChanged" object:nil];
+    
     return self;
 }
 
@@ -47,11 +57,31 @@
     self.viewControllers = viewControllersArray;
 }
 
-- (UINavigationController*) createNavigationController:(UIViewController*)viewController withTitle:(NSString*)title {
+- (UINavigationController*) createNavigationController:(UIViewController*)viewController withTitle:(NSString*)title
+{
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:viewController];
     UITabBarItem* tabBarItem  = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(title, @"Title of the tab") image:[UIImage imageNamed:@"data.png"] tag:0];
     navController.tabBarItem = tabBarItem;
     return navController;
+}
+
+-(void) selectNewScene:(NSNotification*)notification
+{
+    NSString* name = notification.userInfo[@"name"];
+    if (m_sceneLoader->loadScene(std::string([name UTF8String]))) {
+        Scene* scene = m_sceneLoader->activeScene();
+        scene->updateDatasets();
+        [m_render3DViewController setScene:m_sceneLoader->activeScene()];
+    }
+}
+
+-(void) reinitSceneLoader:(NSNotification*)notification
+{
+    std::string serverIP = [[[NSUserDefaults standardUserDefaults] stringForKey:@"ServerIP"] UTF8String];
+    uint16_t serverPort = [[NSUserDefaults standardUserDefaults] integerForKey:@"ServerPort"];
+    auto serverAdapter = std::make_unique<ServerAdapter>(serverIP, serverPort);
+    m_sceneLoader = std::make_unique<SceneLoader>(std::move(serverAdapter));
+    [m_render3DViewController reset];
 }
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item

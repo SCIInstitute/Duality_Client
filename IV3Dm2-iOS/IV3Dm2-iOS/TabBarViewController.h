@@ -12,12 +12,12 @@ class SceneLoader;
 
 @interface TabBarViewController : UITabBarController {
 @private
+    std::unique_ptr<SceneLoader> m_sceneLoader;
     Render3DViewController* m_render3DViewController;
     SelectSceneViewController* m_selectSceneViewController;
     SettingsViewController* m_settingsViewController;
-    SceneLoader* m_sceneLoader;
 }
 
-- (id)initWithRenderView:(Render3DViewController*)renderView andSceneView:(SelectSceneViewController*)sceneView andSettingsView:(SettingsViewController*)settingsView andSceneLoader:(SceneLoader*)sceneLoader;
+- (id)init;
 
 @end

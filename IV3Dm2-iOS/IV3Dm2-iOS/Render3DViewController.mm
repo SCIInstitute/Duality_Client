@@ -17,15 +17,19 @@
 
 @synthesize context = _context;
 
-- (id)init {
-    self = [super init];
-    m_scene = nullptr;
-    m_rendererDispatcher = nullptr;
-    m_uiBuilder = nullptr;
-    return self;
+-(void) setScene:(Scene*)scene
+{
+    m_scene = scene;
+    auto manipulators = m_scene->manipulators();
+    if (!manipulators.first.empty() || !manipulators.second.empty()) {
+        m_uiBuilder = [[DynamicUIBuilder alloc] initWitView:self.view andFloatManipulators:manipulators.first andEnumManipulators:manipulators.second];
+    } else {
+        m_uiBuilder = nil;
+    }
 }
 
-- (ScreenInfo)screenInfo {
+- (ScreenInfo)screenInfo
+{
     float scale = iOS::DetectScreenScale();
     float iPad = iOS::DetectIPad() ? 2 : 1;
     float xOffset = 0.0f;
@@ -39,7 +43,8 @@
     return screenInfo;
 }
 
-- (void)initGL {
+- (void)initGL
+{
     self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
     // FIXME: Only OpenGL ES 3???
     
@@ -58,35 +63,20 @@
     GL(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     [self initGL];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadScene:) name:@"NewSceneLoaded" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateDatasets:) name:@"DatasetChanged" object:nil];
 }
 
-- (void)viewWillLayoutSubviews {
+- (void)viewWillLayoutSubviews
+{
     [super viewWillLayoutSubviews];
     m_rendererDispatcher = std::make_unique<RenderDispatcher>([self screenInfo]);
     m_arcBall.SetWindowSize(uint32_t(self.view.bounds.size.width), uint32_t(self.view.bounds.size.height));
-}
-
-- (void) viewDidLayoutSubviews
-{
-    [super viewDidLayoutSubviews];
-    [m_uiBuilder layoutUI];
-}
-
--(void)reloadScene:(NSNotification*)notification
-{
-    SceneWrapper* sceneWrapper = notification.userInfo[@"scene"];
-    m_scene = [sceneWrapper scene];
-    m_scene->updateDatasets();
-    auto manipulators = m_scene->manipulators();
-    if (!manipulators.first.empty() || !manipulators.second.empty()) {
-        m_uiBuilder = [[DynamicUIBuilder alloc] initWitView:self.view andFloatManipulators:manipulators.first andEnumManipulators:manipulators.second];
-    } else {
-        m_uiBuilder = nil;
+    if (m_uiBuilder) {
+        [m_uiBuilder layoutUI];
     }
 }
 
@@ -95,6 +85,12 @@
     m_scene->updateDatasets();
 }
 
+-(void) reset
+{
+    m_scene = nullptr;
+    m_uiBuilder = nullptr;
+    glClear(GL_COLOR_BUFFER_BIT);
+}
 
 // Drawing
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
@@ -111,6 +107,9 @@
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [super touchesBegan:touches withEvent:event];
+    if (m_scene == nullptr) {
+        return;
+    }
     
     NSUInteger numTouches = [[event allTouches] count];
     if (numTouches == 1) {
@@ -131,6 +130,9 @@
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [super touchesMoved:touches withEvent:event];
+    if (m_scene == nullptr) {
+        return;
+    }
     
     UITouch* touch = [[event touchesForView:self.view] anyObject];
     CGPoint pos = [touch locationInView:self.view];

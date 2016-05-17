@@ -26,7 +26,8 @@ class RenderDispatcher;
     IVDA::ArcBall m_arcBall;
 }
 
--(id) init;
+-(void) setScene:(Scene*)scene;
+-(void) reset;
 
 @property (nonatomic, retain) EAGLContext *context;
 

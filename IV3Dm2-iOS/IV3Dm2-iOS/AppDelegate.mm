@@ -3,21 +3,8 @@
 //
 
 #import "AppDelegate.h"
-#import "Render3DViewController.h"
-#import "SelectSceneViewController.h"
-#import "SettingsViewController.h"
-#import "SceneWrapper.h"
-
-#include "Scene/ServerAdapter.h"
-#include "Scene/Scene.h"
-#include "Scene/GeometryRenderer.h"
 
 #include "mocca/net/ConnectionFactorySelector.h"
-
-@interface AppDelegate ()
-
-@end
-
 
 @implementation AppDelegate
 
@@ -25,15 +12,15 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    NSDictionary* appDefaults = [NSDictionary dictionaryWithObjectsAndKeys:
+                                 @"127.0.0.1", @"ServerIP",
+                                 @"10123", @"ServerPort",
+                                 nil];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
+    
     mocca::net::ConnectionFactorySelector::addDefaultFactories();
     
-    auto serverAdapter = std::make_unique<ServerAdapter>();
-    m_sceneLoader = std::make_unique<SceneLoader>(std::move(serverAdapter));
-    
-    Render3DViewController* renderView = [[Render3DViewController alloc] init];
-    SelectSceneViewController* sceneView = [[SelectSceneViewController alloc] init];
-    SettingsViewController* settingsView = [[SettingsViewController alloc] init];    
-    m_tabBarViewController = [[TabBarViewController alloc] initWithRenderView:renderView andSceneView:sceneView andSettingsView:settingsView andSceneLoader:m_sceneLoader.get()];
+    m_tabBarViewController = [[TabBarViewController alloc] init];
     
     // Create window and content view (to hold other views)
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -46,8 +33,6 @@
     } else {
         [window addSubview:m_tabBarViewController.view];
     }
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadScene:) name:@"SelectedSceneChanged" object:nil];
     
     // Add subview to window to reference the tabbarcontroller
     [window makeKeyAndVisible];
@@ -75,16 +60,6 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-}
-
--(void)loadScene:(NSNotification*)notification
-{
-    NSString* name = notification.userInfo[@"name"];
-    if (m_sceneLoader->loadScene(std::string([name UTF8String]))) {
-        Scene* scene = m_sceneLoader->activeScene();
-        SceneWrapper* sceneWrapper = [[SceneWrapper alloc] initWithScene:scene];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"NewSceneLoaded" object:self userInfo:@{@"scene":sceneWrapper}];
-    }
 }
 
 @end

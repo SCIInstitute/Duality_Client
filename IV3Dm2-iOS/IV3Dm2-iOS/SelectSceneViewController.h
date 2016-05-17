@@ -14,7 +14,7 @@
     NSString* m_selectedScene;
 }
 
-- (void)setMetadata:(const std::vector<SceneMetadata>&)metadata;
+-(void) setMetadata:(std::vector<SceneMetadata>)metadata;
 
 @end
 

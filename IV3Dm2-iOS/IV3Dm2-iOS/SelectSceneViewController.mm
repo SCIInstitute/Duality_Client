@@ -4,17 +4,7 @@
 
 #import "SelectSceneViewController.h"
 
-@interface SelectSceneViewController ()
-
-@end
-
 @implementation SelectSceneViewController
-
--(void)setMetadata:(const std::vector<SceneMetadata>&)metadata
-{
-    m_metadata = metadata;
-    [self.tableView reloadData];
-}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -47,9 +37,15 @@
     m_selectedScene = [NSString stringWithUTF8String:m_metadata[indexPath.row].name().c_str()];
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.title = @"Select Scene";
+}
+
+-(void) viewWillAppear:(BOOL)animated
+{
+    [self.tableView reloadData];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -58,6 +54,11 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:@"SelectedSceneChanged" object:self userInfo:@{@"name":m_selectedScene}];
     }
     [super viewWillDisappear:animated];
+}
+
+-(void) setMetadata:(std::vector<SceneMetadata>)metadata
+{
+    m_metadata = std::move(metadata);
 }
 
 - (void)didReceiveMemoryWarning {
