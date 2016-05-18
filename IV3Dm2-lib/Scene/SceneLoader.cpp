@@ -6,32 +6,30 @@
 
 #include "Common/Error.h"
 #include "Scene/SceneParser.h"
-#include "Scene/ServerAdapter.h"
 
 #include <algorithm>
 #include <cassert>
 
-SceneLoader::SceneLoader(std::unique_ptr<ServerAdapter> server)
-    : m_server(std::move(server)) {
-    assert(m_server != nullptr);
-}
+
+SceneLoader::SceneLoader(const mocca::net::Endpoint& endpoint)
+    : m_rpc(std::make_shared<LazyRpcClient>(endpoint)) {}
 
 std::vector<SceneMetadata> SceneLoader::listMetadata() const {
-    auto root = m_server->scenes();
+    auto root = fetchScenes();
     std::vector<SceneMetadata> result;
     for (auto it = root.begin(); it != root.end(); ++it) {
-        SceneParser parser(*it, m_server.get());
-        result.push_back(parser.parseMetadata());
+        result.push_back(SceneParser::parseMetadata(*it));
     }
     return result;
 }
 
 bool SceneLoader::loadScene(const std::string& name) {
-    if (m_scene != nullptr && m_scene->metadata().name() == name) return false;
-    auto root = m_server->scenes();
+    if (m_scene != nullptr && m_scene->metadata().name() == name)
+        return false;
+    auto root = fetchScenes();
     for (auto it = root.begin(); it != root.end(); ++it) {
-        SceneParser parser(*it, m_server.get());
-        auto metadata = parser.parseMetadata();
+        SceneParser parser(*it, m_rpc);
+        auto metadata = SceneParser::parseMetadata(*it);
         if (metadata.name() == name) {
             m_scene = parser.parseScene();
             return true;
@@ -42,4 +40,9 @@ bool SceneLoader::loadScene(const std::string& name) {
 
 Scene* SceneLoader::activeScene() const {
     return m_scene.get();
+}
+
+JsonCpp::Value SceneLoader::fetchScenes() const {
+    m_rpc->send("listScenes", JsonCpp::Value());
+    return m_rpc->receive().first;
 }

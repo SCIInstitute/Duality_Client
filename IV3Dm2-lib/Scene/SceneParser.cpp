@@ -8,28 +8,26 @@
 #include "Scene/DownloadProvider.h"
 #include "Scene/GeometryDataset.h"
 #include "Scene/SCIRunProvider.h"
-#include "Scene/ServerAdapter.h"
 
 using namespace IVDA;
 
-SceneParser::SceneParser(const JsonCpp::Value& root, const ServerAdapter* serverAdapter)
+SceneParser::SceneParser(const JsonCpp::Value& root, std::shared_ptr<LazyRpcClient> rpc)
     : m_root(root)
-    , m_serverAdapter(serverAdapter) {}
+    , m_rpc(rpc) {}
 
-SceneMetadata SceneParser::parseMetadata() {
-    std::string name = m_root["metadata"]["name"].asString();
-    std::string description = m_root["metadata"]["description"].asString();
+SceneMetadata SceneParser::parseMetadata(const JsonCpp::Value& root) {
+    std::string name = root["metadata"]["name"].asString();
+    std::string description = root["metadata"]["description"].asString();
     return SceneMetadata(std::move(name), std::move(description));
 }
 
 std::unique_ptr<Scene> SceneParser::parseScene() {
-    auto metadata = parseMetadata();
-    auto scene = std::make_unique<Scene>(std::move(metadata));
+    m_scene = std::make_unique<Scene>(parseMetadata(m_root));
     auto sceneJson = m_root["scene"];
     for (auto it = sceneJson.begin(); it != sceneJson.end(); ++it) {
-        scene->addNode(parseNode(*it));
+        m_scene->addNode(parseNode(*it));
     }
-    return scene;
+    return std::move(m_scene);
 }
 
 SceneNode SceneParser::parseNode(const JsonCpp::Value& node) {
@@ -66,7 +64,7 @@ std::unique_ptr<DataProvider> SceneParser::parseDataSource(const JsonCpp::Value&
 }
 
 std::unique_ptr<DataProvider> SceneParser::parseDownload(const JsonCpp::Value& node) {
-    return std::make_unique<DownloadProvider>(m_serverAdapter, node["path"].asString());
+    return std::make_unique<DownloadProvider>(m_scene->metadata().name(), node["filename"].asString(), m_rpc);
 }
 
 Mat4f SceneParser::parseMatrix(const JsonCpp::Value& node) {
@@ -89,9 +87,10 @@ std::vector<IVDA::Mat4f> SceneParser::parseMatrices(const JsonCpp::Value& node) 
 std::unique_ptr<DataProvider> SceneParser::parseSCIRun(const JsonCpp::Value& node) {
     std::vector<InputVariableFloat> floatVariables;
     std::vector<InputVariableEnum> enumVariables;
-    std::string network = node["network"].asString();
+    std::string fileName = node["filename"].asString();
     parseParams(node["variables"], floatVariables, enumVariables);
-    return std::make_unique<SCIRunProvider>(m_serverAdapter, std::move(network), std::move(floatVariables), std::move(enumVariables));
+    return std::make_unique<SCIRunProvider>(m_scene->metadata().name(), fileName, std::move(floatVariables), std::move(enumVariables),
+                                            m_rpc);
 }
 
 void SceneParser::parseParams(const JsonCpp::Value& node, std::vector<InputVariableFloat>& floatParams,
@@ -113,7 +112,7 @@ InputVariableFloat SceneParser::parseFloatVariable(const JsonCpp::Value& node, i
     float upperBound = node["upperBound"].asFloat();
     float stepSize = node["stepSize"].asFloat();
     float defaultValue = node["defaultValue"].asFloat();
-    InputVariableFloat::Info info{ std::move(name), index, lowerBound, upperBound, stepSize, defaultValue };
+    InputVariableFloat::Info info{std::move(name), index, lowerBound, upperBound, stepSize, defaultValue};
     return InputVariableFloat(info);
 }
 

@@ -21,58 +21,60 @@ TEST_F(SceneTest, UpdateDatasets) {
     Scene scene(meta);
 
     auto providerMock1 = std::make_unique<DataProviderMock>();
-    EXPECT_CALL(*providerMock1, accept(_)).Times(1);
+    EXPECT_CALL(*providerMock1, fetch()).Times(1);
     auto datasetMock1 = std::make_unique<DatasetMock>();
     EXPECT_CALL(*datasetMock1, accept(_)).Times(1);
-    scene.addNode(std::make_unique<SceneNode>(std::move(providerMock1), std::move(datasetMock1)));
+    scene.addNode(SceneNode("node", std::move(providerMock1), std::move(datasetMock1)));
 
     auto providerMock2 = std::make_unique<DataProviderMock>();
-    EXPECT_CALL(*providerMock2, accept(_)).Times(1);
+    EXPECT_CALL(*providerMock2, fetch()).Times(1);
     auto datasetMock2 = std::make_unique<DatasetMock>();
     EXPECT_CALL(*datasetMock2, accept(_)).Times(1);
-    scene.addNode(std::make_unique<SceneNode>(std::move(providerMock2), std::move(datasetMock2)));
+    scene.addNode(SceneNode("node", std::move(providerMock2), std::move(datasetMock2)));
 
     scene.updateDatasets();
 }
 
-TEST_F(SceneTest, DefaultModelView) {
-    // TODO: write test
-}
+TEST_F(SceneTest, FloatManipulators) {
+    InputVariableFloat::Info floatInfo1{"float1", 0, 0.f, 10.f, 1.f, 5.f};
+    InputVariableFloat floatVar1(floatInfo1);
 
-TEST_F(SceneTest, CreateFloatManipulators) {
+    InputVariableFloat::Info floatInfo2{"float2", 0, 0.f, 10.f, 1.f, 5.f};
+    InputVariableFloat floatVar2(floatInfo2);
+
+    auto sciRunProvider = std::make_unique<SCIRunProvider>("SceneName", "FileName", std::vector<InputVariableFloat>{floatVar1, floatVar2},
+                                                           std::vector<InputVariableEnum>(), nullptr);
+
     SceneMetadata meta("test", "test");
     Scene scene(meta);
+    scene.addNode(SceneNode("node", std::move(sciRunProvider), nullptr));
 
-    InputParameterFloat floatParam1("floatParam1", 0, 0.f, 10.f, 1.f, 5.f);
-    InputParameterFloat floatParam2("floatParam2", 0, 0.f, 10.f, 1.f, 5.f);
-
-    auto sciRunProvider = std::make_unique<SCIRunProvider>(nullptr, "Test", std::vector<InputParameterFloat>{floatParam1, floatParam2},
-                                                           std::vector<InputParameterEnum>());
-    scene.addNode(std::make_unique<SceneNode>(std::move(sciRunProvider), nullptr));
-    auto downloadProvider = std::make_unique<DownloadProvider>(nullptr, "some/path");
-    scene.addNode(std::make_unique<SceneNode>(std::move(downloadProvider), nullptr));
-
-    auto manipulators = scene.manipulators().first;
-    ASSERT_EQ(2, manipulators.size());
-    ASSERT_EQ("floatParam1", manipulators[0].parameter().name);
-    ASSERT_EQ("floatParam2", manipulators[1].parameter().name);
+    auto variableMap = scene.variableMap();
+    ASSERT_EQ(1, variableMap.size());
+    ASSERT_EQ(2, variableMap["node"].floatVariables.size());
+    ASSERT_EQ(0, variableMap["node"].enumVariables.size());
+    ASSERT_EQ("float1", variableMap["node"].floatVariables[0]->info().name);
+    ASSERT_EQ("float2", variableMap["node"].floatVariables[1]->info().name);
 }
 
 TEST_F(SceneTest, CreateEnumManipulators) {
+    InputVariableEnum::Info enumInfo1{"enum1", 0, {"val1", "val2"}, "val2"};
+    InputVariableEnum enumVar1(enumInfo1);
+
+    InputVariableEnum::Info enumInfo2{"enum2", 0, {"val1", "val2"}, "val2"};
+    InputVariableEnum enumVar2(enumInfo2);
+
+    auto sciRunProvider = std::make_unique<SCIRunProvider>("SceneName", "FileName", std::vector<InputVariableFloat>(),
+                                                           std::vector<InputVariableEnum>{enumVar1, enumVar2}, nullptr);
+
     SceneMetadata meta("test", "test");
     Scene scene(meta);
+    scene.addNode(SceneNode("node", std::move(sciRunProvider), nullptr));
 
-    InputParameterEnum enumParam1("enumParam1", 0, {"val1", "val2"}, "val2");
-    InputParameterEnum enumParam2("enumParam2", 1, {"val1", "val2"}, "val2");
-
-    auto sciRunProvider = std::make_unique<SCIRunProvider>(nullptr, "Test", std::vector<InputParameterFloat>(),
-                                                           std::vector<InputParameterEnum>{enumParam1, enumParam2});
-    scene.addNode(std::make_unique<SceneNode>(std::move(sciRunProvider), nullptr));
-    auto downloadProvider = std::make_unique<DownloadProvider>(nullptr, "some/path");
-    scene.addNode(std::make_unique<SceneNode>(std::move(downloadProvider), nullptr));
-
-    auto manipulators = scene.manipulators().second;
-    ASSERT_EQ(2, manipulators.size());
-    ASSERT_EQ("enumParam1", manipulators[0].parameter().name);
-    ASSERT_EQ("enumParam2", manipulators[1].parameter().name);
+    auto variableMap = scene.variableMap();
+    ASSERT_EQ(1, variableMap.size());
+    ASSERT_EQ(0, variableMap["node"].floatVariables.size());
+    ASSERT_EQ(2, variableMap["node"].enumVariables.size());
+    ASSERT_EQ("enum1", variableMap["node"].enumVariables[0]->info().name);
+    ASSERT_EQ("enum2", variableMap["node"].enumVariables[1]->info().name);
 }

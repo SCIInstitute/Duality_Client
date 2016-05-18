@@ -4,5 +4,5 @@
 
 class DataProviderMock : public DataProvider {
 public:
-    MOCK_METHOD1(accept, void(DataProviderDispatcher&));
+    MOCK_METHOD0(fetch, std::shared_ptr<std::vector<uint8_t>>());
 };

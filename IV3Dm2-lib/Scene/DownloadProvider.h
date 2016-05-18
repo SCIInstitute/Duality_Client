@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "Scene/ServerAdapter.h"
+#include "Scene/Communication.h"
 #include "Scene/DataProvider.h"
 
 #include <string>
@@ -13,14 +13,15 @@
 
 class DownloadProvider : public DataProvider {
 public:
-    DownloadProvider(const ServerAdapter* server, std::string path);
+    DownloadProvider(std::string sceneName, std::string fileName, std::shared_ptr<LazyRpcClient> rpc);
 
     // DataProvider interface
     std::shared_ptr<std::vector<uint8_t>> fetch() override;
 
-    std::string path() const;
+    std::string fileName() const;
 
 private:
-    const ServerAdapter* m_server;
-    std::string m_path;
+    std::string m_sceneName;
+    std::string m_fileName;
+    std::shared_ptr<LazyRpcClient> m_rpc;
 };
