@@ -26,17 +26,17 @@ const std::vector<SceneNode>& Scene::nodes() const {
     return m_nodes;
 }
 
+void Scene::dispatch(DatasetDispatcher& dispatcher) const {
+    for (auto& node : m_nodes) {
+        node.dispatch(dispatcher);
+    }
+}
+
 void Scene::updateDatasets() {
     for (auto& node : m_nodes) {
         node.updateDataset();
     }
     m_defaultModelView = defaultModelView();
-}
-
-void Scene::render(RenderDispatcher& dispatcher) const {
-    for (auto& node : m_nodes) {
-        node.render(dispatcher);
-    }
 }
 
 std::pair<std::vector<ParameterManipulatorFloat>, std::vector<ParameterManipulatorEnum>> Scene::manipulators() const {
@@ -65,9 +65,7 @@ GLMatrix Scene::modelViewMatrix() const {
 
 GLMatrix Scene::defaultModelView() const {
     BoundingBoxCalculator bbCalc;
-    for (auto& node : m_nodes) {
-        node.calculateBoundingBox(bbCalc);
-    }
+    dispatch(bbCalc);
 
     auto minMax = bbCalc.getMinMax();
     Vec3f vMin = minMax.first;

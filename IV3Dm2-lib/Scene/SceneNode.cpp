@@ -11,11 +11,7 @@ void SceneNode::updateDataset() {
     }
 }
 
-void SceneNode::render(RenderDispatcher& dispatcher) const {
-    m_dataset->accept(dispatcher);
-}
-
-void SceneNode::calculateBoundingBox(BoundingBoxCalculator& dispatcher) const {
+void SceneNode::dispatch(DatasetDispatcher& dispatcher) const {
     m_dataset->accept(dispatcher);
 }
 

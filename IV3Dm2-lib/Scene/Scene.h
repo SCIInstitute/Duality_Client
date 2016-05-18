@@ -22,8 +22,9 @@ public:
     void addNode(SceneNode node);
     const std::vector<SceneNode>& nodes() const;
 
+    void dispatch(DatasetDispatcher& dispatcher) const;
+
     void updateDatasets();
-    void render(RenderDispatcher& dispatcher) const;
     std::pair<std::vector<ParameterManipulatorFloat>, std::vector<ParameterManipulatorEnum>> manipulators() const;
 
     void addTranslation(const IVDA::Vec2f& translation);

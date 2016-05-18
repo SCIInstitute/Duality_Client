@@ -18,10 +18,8 @@ public:
     SceneNode(std::unique_ptr<DataProvider> provider, std::unique_ptr<Dataset> dataset);
 
     void updateDataset();
-    std::pair<std::vector<ParameterManipulatorFloat>, std::vector<ParameterManipulatorEnum>> createManipultors() const;
 
-    void render(RenderDispatcher& dispatcher) const;
-    void calculateBoundingBox(BoundingBoxCalculator& dispatcher) const;
+    void dispatch(DatasetDispatcher& dispatcher) const;
     void makeManipultor(ParameterManipulatorCollector& dispatcher) const;
 
     const DataProvider* dataProvider() const;
