@@ -33,9 +33,10 @@ std::unique_ptr<Scene> SceneParser::parseScene() {
 }
 
 SceneNode SceneParser::parseNode(const JsonCpp::Value& node) {
+    std::string name = node["name"].asString();
     auto provider = parseDataSource(node["source"]);
     auto dataset = parseDataset(node["dataset"]);
-    return SceneNode(std::move(provider), std::move(dataset));
+    return SceneNode(name, std::move(provider), std::move(dataset));
 }
 
 std::unique_ptr<Dataset> SceneParser::parseDataset(const JsonCpp::Value& node) {
@@ -86,36 +87,37 @@ std::vector<IVDA::Mat4f> SceneParser::parseMatrices(const JsonCpp::Value& node) 
 }
 
 std::unique_ptr<DataProvider> SceneParser::parseSCIRun(const JsonCpp::Value& node) {
-    std::vector<InputParameterFloat> floatParams;
-    std::vector<InputParameterEnum> enumParams;
+    std::vector<InputVariableFloat> floatVariables;
+    std::vector<InputVariableEnum> enumVariables;
     std::string network = node["network"].asString();
-    parseParams(node["parameters"], floatParams, enumParams);
-    return std::make_unique<SCIRunProvider>(m_serverAdapter, std::move(network), std::move(floatParams), std::move(enumParams));
+    parseParams(node["variables"], floatVariables, enumVariables);
+    return std::make_unique<SCIRunProvider>(m_serverAdapter, std::move(network), std::move(floatVariables), std::move(enumVariables));
 }
 
-void SceneParser::parseParams(const JsonCpp::Value& node, std::vector<InputParameterFloat>& floatParams,
-                              std::vector<InputParameterEnum>& enumParams) {
+void SceneParser::parseParams(const JsonCpp::Value& node, std::vector<InputVariableFloat>& floatParams,
+                              std::vector<InputVariableEnum>& enumParams) {
     int index = 0;
     for (auto it = node.begin(); it != node.end(); ++it, ++index) {
         auto paramNode = *it;
         if (paramNode["type"] == "float") {
-            floatParams.push_back(parseFloatParam(paramNode, index));
+            floatParams.push_back(parseFloatVariable(paramNode, index));
         } else if (paramNode["type"] == "enum") {
-            enumParams.push_back(parseEnumParam(paramNode, index));
+            enumParams.push_back(parseEnumVariable(paramNode, index));
         }
     }
 }
 
-InputParameterFloat SceneParser::parseFloatParam(const JsonCpp::Value& node, int index) {
+InputVariableFloat SceneParser::parseFloatVariable(const JsonCpp::Value& node, int index) {
     std::string name = node["name"].asString();
     float lowerBound = node["lowerBound"].asFloat();
     float upperBound = node["upperBound"].asFloat();
     float stepSize = node["stepSize"].asFloat();
     float defaultValue = node["defaultValue"].asFloat();
-    return InputParameterFloat{std::move(name), index, lowerBound, upperBound, stepSize, defaultValue};
+    InputVariableFloat::Info info{ std::move(name), index, lowerBound, upperBound, stepSize, defaultValue };
+    return InputVariableFloat(info);
 }
 
-InputParameterEnum SceneParser::parseEnumParam(const JsonCpp::Value& node, int index) {
+InputVariableEnum SceneParser::parseEnumVariable(const JsonCpp::Value& node, int index) {
     std::string name = node["name"].asString();
     auto valuesNode = node["values"];
     std::vector<std::string> values;
@@ -123,5 +125,6 @@ InputParameterEnum SceneParser::parseEnumParam(const JsonCpp::Value& node, int i
         values.push_back(valIt->asString());
     }
     std::string defaultValue = node["defaultValue"].asString();
-    return InputParameterEnum{std::move(name), index, std::move(values), defaultValue};
+    InputVariableEnum::Info info{std::move(name), index, std::move(values), defaultValue};
+    return InputVariableEnum(info);
 }

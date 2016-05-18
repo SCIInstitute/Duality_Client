@@ -9,7 +9,6 @@
 #include "Scene/RenderDispatcher.h"
 #include "Scene/SceneMetadata.h"
 #include "Scene/SceneNode.h"
-#include "Scene/ParameterManipulator.h"
 
 #include <memory>
 #include <string>
@@ -17,15 +16,23 @@
 class Scene {
 public:
     Scene(SceneMetadata metadata);
+
     SceneMetadata metadata() const;
 
     void addNode(SceneNode node);
     const std::vector<SceneNode>& nodes() const;
+    std::vector<SceneNode>& nodes();
 
     void dispatch(DatasetDispatcher& dispatcher) const;
 
     void updateDatasets();
-    std::pair<std::vector<ParameterManipulatorFloat>, std::vector<ParameterManipulatorEnum>> manipulators() const;
+
+    struct VariableCollection {
+        std::vector<InputVariableFloat*> floatVariables;
+        std::vector<InputVariableEnum*> enumVariables;
+    };
+    using VariableMap = std::map<std::string, VariableCollection>;
+    VariableMap variableMap();
 
     void addTranslation(const IVDA::Vec2f& translation);
     void addRotation(const IVDA::Mat4f& rotation);

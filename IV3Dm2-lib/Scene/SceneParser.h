@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "Scene/InputParameter.h"
+#include "Scene/InputVariable.h"
 #include "Scene/Scene.h"
 #include "Scene/SceneMetadata.h"
 #include "Scene/ServerAdapter.h"
@@ -37,9 +37,9 @@ private:
     std::unique_ptr<DataProvider> parseDataSource(const JsonCpp::Value& node);
     std::unique_ptr<DataProvider> parseDownload(const JsonCpp::Value& node);
     std::unique_ptr<DataProvider> parseSCIRun(const JsonCpp::Value& node);
-    void parseParams(const JsonCpp::Value& node, std::vector<InputParameterFloat>& floatParams, std::vector<InputParameterEnum>& enumParams);
-    InputParameterFloat parseFloatParam(const JsonCpp::Value& node, int index);
-    InputParameterEnum parseEnumParam(const JsonCpp::Value& node, int index);
+    void parseParams(const JsonCpp::Value& node, std::vector<InputVariableFloat>& floatParams, std::vector<InputVariableEnum>& enumParams);
+    InputVariableFloat parseFloatVariable(const JsonCpp::Value& node, int index);
+    InputVariableEnum parseEnumVariable(const JsonCpp::Value& node, int index);
 
 private:
     JsonCpp::Value m_root;

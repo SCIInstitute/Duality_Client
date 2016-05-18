@@ -26,6 +26,10 @@ const std::vector<SceneNode>& Scene::nodes() const {
     return m_nodes;
 }
 
+std::vector<SceneNode>& Scene::nodes() {
+    return m_nodes;
+}
+
 void Scene::dispatch(DatasetDispatcher& dispatcher) const {
     for (auto& node : m_nodes) {
         node.dispatch(dispatcher);
@@ -39,12 +43,13 @@ void Scene::updateDatasets() {
     m_defaultModelView = defaultModelView();
 }
 
-std::pair<std::vector<ParameterManipulatorFloat>, std::vector<ParameterManipulatorEnum>> Scene::manipulators() const {
-    ParameterManipulatorCollector dispatcher;
+Scene::VariableMap Scene::variableMap() {
+    VariableMap result;
     for (auto& node : m_nodes) {
-        node.makeManipultor(dispatcher);
+        result[node.name()].floatVariables = node.dataProvider()->inputVariablesFloat();
+        result[node.name()].enumVariables = node.dataProvider()->inputVariablesEnum();
     }
-    return std::make_pair(dispatcher.floatManipulators(), dispatcher.enumManipulators());
+    return result;
 }
 
 void Scene::addTranslation(const IVDA::Vec2f& translation) {

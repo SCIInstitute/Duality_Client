@@ -4,17 +4,13 @@
 
 #include <algorithm>
 
-SCIRunProvider::SCIRunProvider(const ServerAdapter* server, std::string network, std::vector<InputParameterFloat> floatParameters,
-                               std::vector<InputParameterEnum> enumParameters)
+SCIRunProvider::SCIRunProvider(const ServerAdapter* server, std::string network, std::vector<InputVariableFloat> floatVariables,
+                               std::vector<InputVariableEnum> enumVariables)
     : m_server(server)
     , m_network(std::move(network))
-    , m_floatParameters(std::move(floatParameters))
-    , m_enumParameters(std::move(enumParameters))
-    , m_dirty(true) {
-    for (const auto& param : m_floatParameters) {
-        m_floatValues[param.name] = param.defaultValue;
-    }
-}
+    , m_floatVariables(std::move(floatVariables))
+    , m_enumVariables(std::move(enumVariables))
+    , m_dirty(true) {}
 
 void SCIRunProvider::accept(DataProviderDispatcher& dispatcher) {
     dispatcher.dispatch(*this);
@@ -24,48 +20,33 @@ std::string SCIRunProvider::network() const {
     return m_network;
 }
 
-std::vector<InputParameterFloat> SCIRunProvider::floatParameters() const {
-    return m_floatParameters;
-}
-
-std::vector<InputParameterEnum> SCIRunProvider::enumParameters() const {
-    return m_enumParameters;
-}
-
-void SCIRunProvider::setFloatValue(const std::string& name, float value) {
-    m_floatValues[name] = value;
-    m_dirty = true;
-}
-
-float SCIRunProvider::getFloatValue(const std::string& name) const {
-    auto it = m_floatValues.find(name);
-    if (it == end(m_floatValues)) {
-        throw Error("Unknown float parameter '" + name + "'", __FILE__, __LINE__);
-    }
-    return it->second;
-}
-
-void SCIRunProvider::setEnumValue(const std::string& name, const std::string& value) {
-    m_enumValues[name] = value;
-    m_dirty = true;
-}
-
-std::string SCIRunProvider::getEnumValue(const std::string& name) const {
-    auto it = m_enumValues.find(name);
-    if (it == end(m_enumValues)) {
-        throw Error("Unknown enum parameter '" + name + "'", __FILE__, __LINE__);
-    }
-    return it->second;
-}
-
 std::shared_ptr<std::vector<uint8_t>> SCIRunProvider::fetch() {
     if (!m_dirty) {
         return nullptr;
     }
 
     JsonCpp::Value params;
-    for (const auto& val : m_floatValues) {
-        params[val.first] = val.second;
+    for (const auto& var : m_floatVariables) {
+        params[var.info().name] = var.value();
+    }
+    for (const auto& var : m_enumVariables) {
+        params[var.info().name] = var.value();
     }
     return m_server->sciRunGenerate(m_network, params);
+}
+
+std::vector<InputVariableFloat*> SCIRunProvider::inputVariablesFloat() {
+    std::vector<InputVariableFloat*> vars;
+    for (auto& var : m_floatVariables) {
+        vars.push_back(&var);
+    }
+    return vars;
+}
+
+std::vector<InputVariableEnum*> SCIRunProvider::inputVariablesEnum() {
+    std::vector<InputVariableEnum*> vars;
+    for (auto& var : m_enumVariables) {
+        vars.push_back(&var);
+    }
+    return vars;
 }
