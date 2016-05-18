@@ -17,3 +17,11 @@ void RenderDispatcher::setModelView(const GLMatrix* modelView) {
 void RenderDispatcher::dispatch(GeometryDataset& node) {
     m_geoRenderer->render(node, *m_modelView);
 }
+
+void RenderDispatcher::startDraw() {
+    m_geoRenderer->startDraw();
+}
+
+void RenderDispatcher::finishDraw() {
+    m_geoRenderer->finishDraw();
+}

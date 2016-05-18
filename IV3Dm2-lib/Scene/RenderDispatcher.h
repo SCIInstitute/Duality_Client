@@ -12,6 +12,8 @@ public:
     RenderDispatcher(const ScreenInfo& screenInfo);
     void setModelView(const GLMatrix* modelView);
     void dispatch(GeometryDataset& node) override;
+    void startDraw();
+    void finishDraw();
 private:
     std::unique_ptr<GeometryRenderer> m_geoRenderer;
     const GLMatrix* m_modelView;
