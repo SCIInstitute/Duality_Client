@@ -16,7 +16,6 @@ public:
     DownloadProvider(const ServerAdapter* server, std::string path);
 
     // DataProvider interface
-    void accept(DataProviderDispatcher& dispatcher) override;
     std::shared_ptr<std::vector<uint8_t>> fetch() override;
 
     std::string path() const;

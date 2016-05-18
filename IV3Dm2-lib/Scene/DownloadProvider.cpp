@@ -4,17 +4,11 @@
 
 #include "Scene/DownloadProvider.h"
 
-#include "Scene/DataProviderDispatcher.h"
-
 #include <cassert>
 
 DownloadProvider::DownloadProvider(const ServerAdapter* server, std::string path)
     : m_server(server)
     , m_path(std::move(path)) {}
-
-void DownloadProvider::accept(DataProviderDispatcher& dispatcher) {
-    dispatcher.dispatch(*this);
-}
 
 std::shared_ptr<std::vector<uint8_t>> DownloadProvider::fetch() {
     assert(m_server != nullptr);

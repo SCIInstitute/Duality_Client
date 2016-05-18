@@ -12,10 +12,6 @@ SCIRunProvider::SCIRunProvider(const ServerAdapter* server, std::string network,
     , m_enumVariables(std::move(enumVariables))
     , m_dirty(true) {}
 
-void SCIRunProvider::accept(DataProviderDispatcher& dispatcher) {
-    dispatcher.dispatch(*this);
-}
-
 std::string SCIRunProvider::network() const {
     return m_network;
 }

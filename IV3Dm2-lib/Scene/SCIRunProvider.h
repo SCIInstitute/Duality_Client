@@ -13,7 +13,6 @@ public:
         std::vector<InputVariableEnum> enumVariables);
 
     // DataProvider interface
-    void accept(DataProviderDispatcher& dispatcher) override;
     std::shared_ptr<std::vector<uint8_t>> fetch() override;
     std::vector<InputVariableFloat*> inputVariablesFloat() override;
     std::vector<InputVariableEnum*> inputVariablesEnum() override;
