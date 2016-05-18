@@ -6,6 +6,7 @@
 
 #include "Scene/Scene.h"
 #include "Scene/SceneMetadata.h"
+#include "Scene/Communication.h"
 
 #include <vector>
 #include <memory>
@@ -14,13 +15,16 @@ class ServerAdapter;
 
 class SceneLoader {
 public:
-    SceneLoader(std::unique_ptr<ServerAdapter> server);
+    SceneLoader(const mocca::net::Endpoint& endpoint);
     
     std::vector<SceneMetadata> listMetadata() const;
     bool loadScene(const std::string& name);
     Scene* activeScene() const;
     
 private:
-    std::unique_ptr<ServerAdapter> m_server;
+    JsonCpp::Value fetchScenes() const;
+
+private:
+    std::shared_ptr<LazyRpcClient> m_rpc;
     std::unique_ptr<Scene> m_scene;
 };

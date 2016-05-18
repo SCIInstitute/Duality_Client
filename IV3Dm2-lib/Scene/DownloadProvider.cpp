@@ -6,15 +6,20 @@
 
 #include <cassert>
 
-DownloadProvider::DownloadProvider(const ServerAdapter* server, std::string path)
-    : m_server(server)
-    , m_path(std::move(path)) {}
+DownloadProvider::DownloadProvider(std::string sceneName, std::string fileName, std::shared_ptr<LazyRpcClient> rpc)
+    : m_sceneName(sceneName)
+    , m_fileName(fileName)
+    , m_rpc(rpc) {}
 
 std::shared_ptr<std::vector<uint8_t>> DownloadProvider::fetch() {
-    assert(m_server != nullptr);
-    return m_server->download(m_path);
+    JsonCpp::Value params;
+    params["scene"] = m_sceneName;
+    params["filename"] = m_fileName;
+    m_rpc->send("download", params);
+    auto reply = m_rpc->receive();
+    return reply.second[0];
 }
 
-std::string DownloadProvider::path() const {
-    return m_path;
+std::string DownloadProvider::fileName() const {
+    return m_fileName;
 }

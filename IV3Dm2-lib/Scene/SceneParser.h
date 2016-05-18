@@ -7,7 +7,7 @@
 #include "Scene/InputVariable.h"
 #include "Scene/Scene.h"
 #include "Scene/SceneMetadata.h"
-#include "Scene/ServerAdapter.h"
+#include "Scene/Communication.h"
 
 #include "IVDA/Vectors.h"
 
@@ -16,14 +16,13 @@
 class Dataset;
 class SceneNode;
 class DataProvider;
-class ServerAdapter;
 
 class SceneParser {
 public:
-    SceneParser(const JsonCpp::Value& root, const ServerAdapter* serverAdapter);
+    SceneParser(const JsonCpp::Value& root, std::shared_ptr<LazyRpcClient> rpc);
 
-    SceneMetadata parseMetadata();
     std::unique_ptr<Scene> parseScene();
+    static SceneMetadata parseMetadata(const JsonCpp::Value& root);
 
 private:
     SceneNode parseNode(const JsonCpp::Value& node);
@@ -43,5 +42,6 @@ private:
 
 private:
     JsonCpp::Value m_root;
-    const ServerAdapter* m_serverAdapter;
+    std::shared_ptr<LazyRpcClient> m_rpc;
+    std::unique_ptr<Scene> m_scene;
 };

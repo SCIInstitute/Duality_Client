@@ -24,9 +24,7 @@ public:
     std::vector<SceneNode>& nodes();
 
     void dispatch(DatasetDispatcher& dispatcher) const;
-
     void updateDatasets();
-
     struct VariableCollection {
         std::vector<InputVariableFloat*> floatVariables;
         std::vector<InputVariableEnum*> enumVariables;
