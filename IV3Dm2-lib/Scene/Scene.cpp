@@ -7,7 +7,6 @@
 #include "IVDA/Vectors.h"
 #include "Scene/BoundingBoxCalculator.h"
 #include "Scene/SceneParser.h"
-#include "Scene/UpdateDataDispatcher.h"
 
 using namespace IVDA;
 
@@ -19,34 +18,31 @@ SceneMetadata Scene::metadata() const {
     return m_metadata;
 }
 
-void Scene::addNode(std::unique_ptr<SceneNode> node) {
+void Scene::addNode(SceneNode node) {
     m_nodes.push_back(std::move(node));
 }
 
-const std::vector<std::unique_ptr<SceneNode>>& Scene::nodes() const {
+const std::vector<SceneNode>& Scene::nodes() const {
     return m_nodes;
 }
 
 void Scene::updateDatasets() {
-    UpdateDataDispatcher dispatcher;
     for (auto& node : m_nodes) {
-        node->updateDatasets(dispatcher);
+        node.updateDataset();
     }
     m_defaultModelView = defaultModelView();
 }
 
 void Scene::render(RenderDispatcher& dispatcher) const {
-    dispatcher.setup();
     for (auto& node : m_nodes) {
-        node->render(dispatcher);
+        node.render(dispatcher);
     }
-    dispatcher.finish();
 }
 
 std::pair<std::vector<ParameterManipulatorFloat>, std::vector<ParameterManipulatorEnum>> Scene::manipulators() const {
     ParameterManipulatorCollector dispatcher;
     for (auto& node : m_nodes) {
-        node->makeManipultor(dispatcher);
+        node.makeManipultor(dispatcher);
     }
     return std::make_pair(dispatcher.floatManipulators(), dispatcher.enumManipulators());
 }
@@ -70,7 +66,7 @@ GLMatrix Scene::modelViewMatrix() const {
 GLMatrix Scene::defaultModelView() const {
     BoundingBoxCalculator bbCalc;
     for (auto& node : m_nodes) {
-        node->calculateBoundingBox(bbCalc);
+        node.calculateBoundingBox(bbCalc);
     }
 
     auto minMax = bbCalc.getMinMax();

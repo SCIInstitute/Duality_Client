@@ -6,7 +6,6 @@
 
 #include "Scene/DataProvider.h"
 #include "Scene/Dataset.h"
-#include "Scene/UpdateDataDispatcher.h"
 #include "Scene/RenderDispatcher.h"
 #include "Scene/BoundingBoxCalculator.h"
 #include "Scene/ParameterManipulator.h"
@@ -18,7 +17,9 @@ class SceneNode {
 public:
     SceneNode(std::unique_ptr<DataProvider> provider, std::unique_ptr<Dataset> dataset);
 
-    void updateDatasets(UpdateDataDispatcher& dispatcher);
+    void updateDataset();
+    std::pair<std::vector<ParameterManipulatorFloat>, std::vector<ParameterManipulatorEnum>> createManipultors() const;
+
     void render(RenderDispatcher& dispatcher) const;
     void calculateBoundingBox(BoundingBoxCalculator& dispatcher) const;
     void makeManipultor(ParameterManipulatorCollector& dispatcher) const;

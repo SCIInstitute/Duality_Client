@@ -58,7 +58,7 @@ std::string SCIRunProvider::getEnumValue(const std::string& name) const {
     return it->second;
 }
 
-std::shared_ptr<std::vector<uint8_t>> SCIRunProvider::generate() const {
+std::shared_ptr<std::vector<uint8_t>> SCIRunProvider::fetch() {
     if (!m_dirty) {
         return nullptr;
     }

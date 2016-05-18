@@ -11,9 +11,9 @@ public:
     Dataset(std::vector<IVDA::Mat4f> transforms = {});
     virtual ~Dataset();
 
-    void load(std::shared_ptr<std::vector<uint8_t>> data);
     virtual void accept(DatasetDispatcher& dispatcher) = 0;
 
+    void load(std::shared_ptr<std::vector<uint8_t>> data);
     std::vector<IVDA::Mat4f> transforms() const;
 
 private:

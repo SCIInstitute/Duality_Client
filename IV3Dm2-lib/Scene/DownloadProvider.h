@@ -17,8 +17,8 @@ public:
 
     // DataProvider interface
     void accept(DataProviderDispatcher& dispatcher) override;
+    std::shared_ptr<std::vector<uint8_t>> fetch() override;
 
-    std::shared_ptr<std::vector<uint8_t>> download() const;
     std::string path() const;
 
 private:

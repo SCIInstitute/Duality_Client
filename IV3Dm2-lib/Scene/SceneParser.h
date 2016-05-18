@@ -26,7 +26,7 @@ public:
     std::unique_ptr<Scene> parseScene();
 
 private:
-    std::unique_ptr<SceneNode> parseNode(const JsonCpp::Value& node);
+    SceneNode parseNode(const JsonCpp::Value& node);
     
     std::unique_ptr<Dataset> parseDataset(const JsonCpp::Value& node);
     std::unique_ptr<Dataset> parseGeometry(const JsonCpp::Value& node);

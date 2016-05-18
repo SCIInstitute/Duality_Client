@@ -17,11 +17,10 @@
 class Scene {
 public:
     Scene(SceneMetadata metadata);
-
     SceneMetadata metadata() const;
 
-    void addNode(std::unique_ptr<SceneNode> node);
-    const std::vector<std::unique_ptr<SceneNode>>& nodes() const;
+    void addNode(SceneNode node);
+    const std::vector<SceneNode>& nodes() const;
 
     void updateDatasets();
     void render(RenderDispatcher& dispatcher) const;
@@ -36,7 +35,7 @@ private:
 
 private:
     SceneMetadata m_metadata;
-    std::vector<std::unique_ptr<SceneNode>> m_nodes;
+    std::vector<SceneNode> m_nodes;
     GLMatrix m_defaultModelView;
     IVDA::Vec3f m_translation;
     IVDA::Mat4f m_rotation;

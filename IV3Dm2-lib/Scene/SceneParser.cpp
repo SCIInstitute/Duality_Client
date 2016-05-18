@@ -24,18 +24,18 @@ SceneMetadata SceneParser::parseMetadata() {
 
 std::unique_ptr<Scene> SceneParser::parseScene() {
     auto metadata = parseMetadata();
-    auto node = std::make_unique<Scene>(std::move(metadata));
+    auto scene = std::make_unique<Scene>(std::move(metadata));
     auto sceneJson = m_root["scene"];
     for (auto it = sceneJson.begin(); it != sceneJson.end(); ++it) {
-        node->addNode(parseNode(*it));
+        scene->addNode(parseNode(*it));
     }
-    return node;
+    return scene;
 }
 
-std::unique_ptr<SceneNode> SceneParser::parseNode(const JsonCpp::Value& node) {
+SceneNode SceneParser::parseNode(const JsonCpp::Value& node) {
     auto provider = parseDataSource(node["source"]);
     auto dataset = parseDataset(node["dataset"]);
-    return std::make_unique<SceneNode>(std::move(provider), std::move(dataset));
+    return SceneNode(std::move(provider), std::move(dataset));
 }
 
 std::unique_ptr<Dataset> SceneParser::parseDataset(const JsonCpp::Value& node) {
@@ -58,7 +58,7 @@ std::unique_ptr<DataProvider> SceneParser::parseDataSource(const JsonCpp::Value&
     std::string type = node["type"].asString();
     if (type == "download") {
         return parseDownload(node);
-    } else if (type == "SCIRun") {
+    } else if (type == "scirun") {
         return parseSCIRun(node);
     }
     throw Error("Invalid data source type: " + type, __FILE__, __LINE__);

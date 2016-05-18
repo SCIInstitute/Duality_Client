@@ -4,10 +4,10 @@ SceneNode::SceneNode(std::unique_ptr<DataProvider> provider, std::unique_ptr<Dat
     : m_provider(std::move(provider))
     , m_dataset(std::move(dataset)) {}
 
-void SceneNode::updateDatasets(UpdateDataDispatcher& dispatcher) {
-    m_provider->accept(dispatcher);
-    if (dispatcher.data() != nullptr) {
-        loadDataset(dispatcher.data());
+void SceneNode::updateDataset() {
+    auto data = m_provider->fetch();
+    if (data != nullptr) {
+        loadDataset(data);
     }
 }
 

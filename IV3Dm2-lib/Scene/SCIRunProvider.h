@@ -14,6 +14,7 @@ public:
 
     // DataProvider interface
     void accept(DataProviderDispatcher& dispatcher) override;
+    std::shared_ptr<std::vector<uint8_t>> fetch() override;
 
     std::string network() const;
     std::vector<InputParameterFloat> floatParameters() const;
@@ -23,8 +24,6 @@ public:
     void setEnumValue(const std::string& name, const std::string& value);
     std::string getEnumValue(const std::string& name) const;
 
-    std::shared_ptr<std::vector<uint8_t>> generate() const;
-    
 private:
     const ServerAdapter* m_server;
     std::string m_network;

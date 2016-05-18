@@ -16,7 +16,7 @@ void DownloadProvider::accept(DataProviderDispatcher& dispatcher) {
     dispatcher.dispatch(*this);
 }
 
-std::shared_ptr<std::vector<uint8_t>> DownloadProvider::download() const {
+std::shared_ptr<std::vector<uint8_t>> DownloadProvider::fetch() {
     assert(m_server != nullptr);
     return m_server->download(m_path);
 }
