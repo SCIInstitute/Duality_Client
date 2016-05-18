@@ -4,8 +4,8 @@
 
 #import <UIKit/UIKit.h>
 
-#include "Scene/InputParameter.h"
-#include "Scene/ParameterManipulator.h"
+#include "Scene/InputVariable.h"
+#include "Scene/Scene.h"
 
 #include <vector>
 
@@ -19,13 +19,13 @@
 @interface FloatWidgetGroup : NSObject
 {
 @private
-    std::unique_ptr<ParameterManipulatorFloat> m_manipulator;
+    InputVariableFloat* m_variable;
     UILabel* m_nameLabel;
     UIStepper* m_stepper;
     UILabel* m_valueLabel;
 }
 
--(id) initWithManipulator:(ParameterManipulatorFloat)manipulator andView:(UIView*)view;
+-(id) initWithVariable:(InputVariableFloat*)variable andView:(UIView*)view;
 -(void) layout;
 
 @end
@@ -33,13 +33,13 @@
 @interface EnumWidgetGroup : NSObject
 {
 @private
-    std::unique_ptr<ParameterManipulatorEnum> m_manipulator;
+    InputVariableEnum* m_variable;
     UILabel* m_nameLabel;
     UIStepper* m_stepper;
     UILabel* m_valueLabel;
 }
 
--(id) initWithManipulator:(ParameterManipulatorEnum)manipulator andView:(UIView*)view;
+-(id) initWithVariable:(InputVariableEnum*)variable andView:(UIView*)view;
 -(void) layout;
 
 @end
@@ -52,9 +52,7 @@
     NSMutableArray<EnumWidgetGroup*>* m_enumWidgetGroups;
 }
 
--(id) initWitView:(UIView*)view
-    andFloatManipulators:(const std::vector<ParameterManipulatorFloat>&)manipulators
-    andEnumManipulators:(const std::vector<ParameterManipulatorEnum>&)manipulators;
+-(id) initWitView:(UIView*)view andVariableMap:(Scene::VariableMap)variableMap;
 -(void) layoutUI;
 
 @end

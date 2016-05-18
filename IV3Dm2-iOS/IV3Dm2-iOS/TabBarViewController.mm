@@ -10,7 +10,6 @@
 
 #import "TabBarViewController.h"
 
-#include "Scene/ServerAdapter.h"
 #include "Scene/SceneLoader.h"
 
 @implementation TabBarViewController
@@ -21,8 +20,8 @@
     
     std::string serverIP = [[[NSUserDefaults standardUserDefaults] stringForKey:@"ServerIP"] UTF8String];
     uint16_t serverPort = [[NSUserDefaults standardUserDefaults] integerForKey:@"ServerPort"];
-    auto serverAdapter = std::make_unique<ServerAdapter>(serverIP, serverPort);
-    m_sceneLoader = std::make_unique<SceneLoader>(std::move(serverAdapter));
+    mocca::net::Endpoint endpoint("tcp.prefixed", serverIP, std::to_string(serverPort));
+    m_sceneLoader = std::make_unique<SceneLoader>(endpoint);
 
     m_render3DViewController = [[Render3DViewController alloc] init];
     m_selectSceneViewController = [[SelectSceneViewController alloc] init];
@@ -79,8 +78,8 @@
 {
     std::string serverIP = [[[NSUserDefaults standardUserDefaults] stringForKey:@"ServerIP"] UTF8String];
     uint16_t serverPort = [[NSUserDefaults standardUserDefaults] integerForKey:@"ServerPort"];
-    auto serverAdapter = std::make_unique<ServerAdapter>(serverIP, serverPort);
-    m_sceneLoader = std::make_unique<SceneLoader>(std::move(serverAdapter));
+    mocca::net::Endpoint endpoint("tcp.prefixed", serverIP, std::to_string(serverPort));
+    m_sceneLoader = std::make_unique<SceneLoader>(endpoint);
     [m_render3DViewController reset];
 }
 

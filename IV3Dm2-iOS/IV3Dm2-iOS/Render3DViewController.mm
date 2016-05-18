@@ -20,9 +20,9 @@
 -(void) setScene:(Scene*)scene
 {
     m_scene = scene;
-    auto manipulators = m_scene->manipulators();
-    if (!manipulators.first.empty() || !manipulators.second.empty()) {
-        m_uiBuilder = [[DynamicUIBuilder alloc] initWitView:self.view andFloatManipulators:manipulators.first andEnumManipulators:manipulators.second];
+    auto variableMap = m_scene->variableMap();
+    if (!variableMap.empty()) {
+        m_uiBuilder = [[DynamicUIBuilder alloc] initWitView:self.view andVariableMap:variableMap];
     } else {
         m_uiBuilder = nil;
     }
@@ -98,7 +98,9 @@
     if (m_scene) {
         GLMatrix modelView = m_scene->modelViewMatrix();
         m_rendererDispatcher->setModelView(&modelView);
-        m_scene->render(*m_rendererDispatcher);
+        m_rendererDispatcher->startDraw();
+        m_scene->dispatch(*m_rendererDispatcher);
+        m_rendererDispatcher->finishDraw();
     }
     [view bindDrawable];
 }
