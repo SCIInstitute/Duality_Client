@@ -25,12 +25,12 @@ public:
 
     void dispatch(DatasetDispatcher& dispatcher) const;
     void updateDatasets();
-    struct VariableCollection {
-        std::vector<InputVariableFloat*> floatVariables;
-        std::vector<InputVariableEnum*> enumVariables;
+    struct InputSetters {
+        std::vector<DataProvider::InputSetter<float>> floatSetters;
+        std::vector<DataProvider::InputSetter<std::string>> enumSetters;
     };
-    using VariableMap = std::map<std::string, VariableCollection>;
-    VariableMap variableMap();
+    using VariableSetterMap = std::map<std::string, InputSetters>;
+    VariableSetterMap variableSetterMap();
 
     void addTranslation(const IVDA::Vec2f& translation);
     void addRotation(const IVDA::Mat4f& rotation);

@@ -43,11 +43,11 @@ void Scene::updateDatasets() {
     m_defaultModelView = defaultModelView();
 }
 
-Scene::VariableMap Scene::variableMap() {
-    VariableMap result;
+Scene::VariableSetterMap Scene::variableSetterMap() {
+    VariableSetterMap result;
     for (auto& node : m_nodes) {
-        result[node.name()].floatVariables = node.dataProvider()->inputVariablesFloat();
-        result[node.name()].enumVariables = node.dataProvider()->inputVariablesEnum();
+        result[node.name()].floatSetters = node.dataProvider()->floatSetters();
+        result[node.name()].enumSetters = node.dataProvider()->enumSetters();
     }
     return result;
 }

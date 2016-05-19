@@ -14,8 +14,12 @@ public:
 
     // DataProvider interface
     std::shared_ptr<std::vector<uint8_t>> fetch() override;
-    std::vector<InputVariableFloat*> inputVariablesFloat() override;
-    std::vector<InputVariableEnum*> inputVariablesEnum() override;
+    std::vector<InputVariableFloat::Info> floatVariableInfos() const override;
+    std::vector<InputVariableEnum::Info> enumVariableInfos() const override;
+    void setInputValue(const std::string& variable, float value) override;
+    void setInputValue(const std::string& variable, const std::string& value) override;
+    std::vector<InputSetter<float>> floatSetters() override;
+    std::vector<InputSetter<std::string>> enumSetters() override;
 
     std::string fileName() const;
 

@@ -116,23 +116,23 @@ TEST_F(SceneParserTest, PythonParams) {
     ASSERT_TRUE(provider != nullptr);
     ASSERT_EQ("myScript.py", provider->fileName());
 
-    auto enumVars = provider->inputVariablesEnum();
+    auto enumVars = provider->enumVariableInfos();
     ASSERT_EQ(1, enumVars.size());
-    auto enumParam = enumVars[0];
-    ASSERT_EQ("myEnum", enumParam->info().name);
-    ASSERT_EQ(0, enumParam->info().index);
-    ASSERT_EQ(2, enumParam->info().values.size());
-    ASSERT_EQ("val1", enumParam->info().values[0]);
-    ASSERT_EQ("val2", enumParam->info().values[1]);
-    ASSERT_EQ("val2", enumParam->info().defaultValue);
+    auto enumInfo = enumVars[0];
+    ASSERT_EQ("myEnum", enumInfo.name);
+    ASSERT_EQ(0, enumInfo.index);
+    ASSERT_EQ(2, enumInfo.values.size());
+    ASSERT_EQ("val1", enumInfo.values[0]);
+    ASSERT_EQ("val2", enumInfo.values[1]);
+    ASSERT_EQ("val2", enumInfo.defaultValue);
 
-    auto floatVars = provider->inputVariablesFloat();
+    auto floatVars = provider->floatVariableInfos();
     ASSERT_EQ(1, floatVars.size());
-    auto floatParam = floatVars[0];
-    ASSERT_EQ("myFloat", floatParam->info().name);
-    ASSERT_EQ(1, floatParam->info().index);
-    ASSERT_EQ(5.f, floatParam->info().lowerBound);
-    ASSERT_EQ(10.f, floatParam->info().upperBound);
-    ASSERT_EQ(.5f, floatParam->info().stepSize);
-    ASSERT_EQ(7.f, floatParam->info().defaultValue);
+    auto floatInfo = floatVars[0];
+    ASSERT_EQ("myFloat", floatInfo.name);
+    ASSERT_EQ(1, floatInfo.index);
+    ASSERT_EQ(5.f, floatInfo.lowerBound);
+    ASSERT_EQ(10.f, floatInfo.upperBound);
+    ASSERT_EQ(.5f, floatInfo.stepSize);
+    ASSERT_EQ(7.f, floatInfo.defaultValue);
 }

@@ -49,12 +49,10 @@ TEST_F(SceneTest, FloatManipulators) {
     Scene scene(meta);
     scene.addNode(SceneNode("node", std::move(pythonProvider), nullptr));
 
-    auto variableMap = scene.variableMap();
-    ASSERT_EQ(1, variableMap.size());
-    ASSERT_EQ(2, variableMap["node"].floatVariables.size());
-    ASSERT_EQ(0, variableMap["node"].enumVariables.size());
-    ASSERT_EQ("float1", variableMap["node"].floatVariables[0]->info().name);
-    ASSERT_EQ("float2", variableMap["node"].floatVariables[1]->info().name);
+    auto setterMap = scene.variableSetterMap();
+    ASSERT_EQ(1, setterMap.size());
+    ASSERT_EQ(2, setterMap["node"].floatSetters.size());
+    ASSERT_EQ(0, setterMap["node"].enumSetters.size());
 }
 
 TEST_F(SceneTest, CreateEnumManipulators) {
@@ -71,10 +69,8 @@ TEST_F(SceneTest, CreateEnumManipulators) {
     Scene scene(meta);
     scene.addNode(SceneNode("node", std::move(pythonProvider), nullptr));
 
-    auto variableMap = scene.variableMap();
-    ASSERT_EQ(1, variableMap.size());
-    ASSERT_EQ(0, variableMap["node"].floatVariables.size());
-    ASSERT_EQ(2, variableMap["node"].enumVariables.size());
-    ASSERT_EQ("enum1", variableMap["node"].enumVariables[0]->info().name);
-    ASSERT_EQ("enum2", variableMap["node"].enumVariables[1]->info().name);
+    auto setterMap = scene.variableSetterMap();
+    ASSERT_EQ(1, setterMap.size());
+    ASSERT_EQ(0, setterMap["node"].floatSetters.size());
+    ASSERT_EQ(2, setterMap["node"].enumSetters.size());
 }
