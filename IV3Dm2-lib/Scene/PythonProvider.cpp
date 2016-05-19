@@ -1,10 +1,10 @@
-#include "Scene/SCIRunProvider.h"
+#include "Scene/PythonProvider.h"
 
 #include "Common/Error.h"
 
 #include <algorithm>
 
-SCIRunProvider::SCIRunProvider(const std::string& sceneName, const std::string& fileName, std::vector<InputVariableFloat> floatVariables,
+PythonProvider::PythonProvider(const std::string& sceneName, const std::string& fileName, std::vector<InputVariableFloat> floatVariables,
                                std::vector<InputVariableEnum> enumVariables, std::shared_ptr<LazyRpcClient> rpc)
     : m_sceneName(sceneName)
     , m_fileName(fileName)
@@ -13,7 +13,7 @@ SCIRunProvider::SCIRunProvider(const std::string& sceneName, const std::string& 
     , m_rpc(rpc)
     , m_dirty(true) {}
 
-std::shared_ptr<std::vector<uint8_t>> SCIRunProvider::fetch() {
+std::shared_ptr<std::vector<uint8_t>> PythonProvider::fetch() {
     if (!m_dirty) {
         return nullptr;
     }
@@ -29,13 +29,13 @@ std::shared_ptr<std::vector<uint8_t>> SCIRunProvider::fetch() {
     JsonCpp::Value params;
     params["scene"] = m_sceneName;
     params["filename"] = m_fileName;
-    params["values"] = values;
-    m_rpc->send("scirun", params);
+    params["variables"] = values;
+    m_rpc->send("python", params);
     auto reply = m_rpc->receive();
     return reply.second[0];
 }
 
-std::vector<InputVariableFloat*> SCIRunProvider::inputVariablesFloat() {
+std::vector<InputVariableFloat*> PythonProvider::inputVariablesFloat() {
     std::vector<InputVariableFloat*> vars;
     for (auto& var : m_floatVariables) {
         vars.push_back(&var);
@@ -43,7 +43,7 @@ std::vector<InputVariableFloat*> SCIRunProvider::inputVariablesFloat() {
     return vars;
 }
 
-std::vector<InputVariableEnum*> SCIRunProvider::inputVariablesEnum() {
+std::vector<InputVariableEnum*> PythonProvider::inputVariablesEnum() {
     std::vector<InputVariableEnum*> vars;
     for (auto& var : m_enumVariables) {
         vars.push_back(&var);
@@ -51,6 +51,6 @@ std::vector<InputVariableEnum*> SCIRunProvider::inputVariablesEnum() {
     return vars;
 }
 
-std::string SCIRunProvider::fileName() const {
+std::string PythonProvider::fileName() const {
     return m_fileName;
 }

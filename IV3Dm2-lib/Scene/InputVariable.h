@@ -16,7 +16,7 @@ public:
         float defaultValue;
     };
 
-    InputVariableFloat(Info info);
+    InputVariableFloat(const Info& info);
     Info info() const;
     void setValue(float value);
     float value() const;
@@ -35,7 +35,7 @@ public:
         std::string defaultValue;
     };
 
-    InputVariableEnum(Info info);
+    InputVariableEnum(const Info& info);
     Info info() const;
     void setValue(std::string value);
     std::string value() const;

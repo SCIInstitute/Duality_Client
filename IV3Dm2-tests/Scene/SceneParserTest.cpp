@@ -2,7 +2,7 @@
 
 #include "Scene/DownloadProvider.h"
 #include "Scene/GeometryDataset.h"
-#include "Scene/SCIRunProvider.h"
+#include "Scene/PythonProvider.h"
 #include "Scene/SceneParser.h"
 
 class SceneParserTest : public ::testing::Test {
@@ -87,11 +87,11 @@ TEST_F(SceneParserTest, Transforms) {
     ASSERT_EQ(15.0f, translation.m44);
 }
 
-TEST_F(SceneParserTest, SCIRunParams) {
+TEST_F(SceneParserTest, PythonParams) {
     JsonCpp::Value root;
     root["scene"][0]["dataset"]["type"] = "geometry";
-    root["scene"][0]["source"]["type"] = "scirun";
-    root["scene"][0]["source"]["filename"] = "myNetwork";
+    root["scene"][0]["source"]["type"] = "python";
+    root["scene"][0]["source"]["filename"] = "myScript.py";
     root["scene"][0]["source"]["variables"][0]["name"] = "myEnum";
     root["scene"][0]["source"]["variables"][0]["type"] = "enum";
     root["scene"][0]["source"]["variables"][0]["values"][0] = "val1";
@@ -112,9 +112,9 @@ TEST_F(SceneParserTest, SCIRunParams) {
     auto& node = scene->nodes()[0];
     const auto& dataset = *node.dataset();
     ASSERT_TRUE(dynamic_cast<const GeometryDataset*>(&dataset) != nullptr);
-    auto provider = dynamic_cast<SCIRunProvider*>(node.dataProvider());
+    auto provider = dynamic_cast<PythonProvider*>(node.dataProvider());
     ASSERT_TRUE(provider != nullptr);
-    ASSERT_EQ("myNetwork", provider->fileName());
+    ASSERT_EQ("myScript.py", provider->fileName());
 
     auto enumVars = provider->inputVariablesEnum();
     ASSERT_EQ(1, enumVars.size());

@@ -7,7 +7,7 @@
 #include "Common/Error.h"
 #include "Scene/DownloadProvider.h"
 #include "Scene/GeometryDataset.h"
-#include "Scene/SCIRunProvider.h"
+#include "Scene/PythonProvider.h"
 
 using namespace IVDA;
 
@@ -57,8 +57,8 @@ std::unique_ptr<DataProvider> SceneParser::parseDataSource(const JsonCpp::Value&
     std::string type = node["type"].asString();
     if (type == "download") {
         return parseDownload(node);
-    } else if (type == "scirun") {
-        return parseSCIRun(node);
+    } else if (type == "python") {
+        return parsePython(node);
     }
     throw Error("Invalid data source type: " + type, __FILE__, __LINE__);
 }
@@ -84,12 +84,12 @@ std::vector<IVDA::Mat4f> SceneParser::parseMatrices(const JsonCpp::Value& node) 
     return result;
 }
 
-std::unique_ptr<DataProvider> SceneParser::parseSCIRun(const JsonCpp::Value& node) {
+std::unique_ptr<DataProvider> SceneParser::parsePython(const JsonCpp::Value& node) {
     std::vector<InputVariableFloat> floatVariables;
     std::vector<InputVariableEnum> enumVariables;
     std::string fileName = node["filename"].asString();
     parseParams(node["variables"], floatVariables, enumVariables);
-    return std::make_unique<SCIRunProvider>(m_scene->metadata().name(), fileName, std::move(floatVariables), std::move(enumVariables),
+    return std::make_unique<PythonProvider>(m_scene->metadata().name(), fileName, std::move(floatVariables), std::move(enumVariables),
                                             m_rpc);
 }
 
@@ -124,6 +124,6 @@ InputVariableEnum SceneParser::parseEnumVariable(const JsonCpp::Value& node, int
         values.push_back(valIt->asString());
     }
     std::string defaultValue = node["defaultValue"].asString();
-    InputVariableEnum::Info info{std::move(name), index, std::move(values), defaultValue};
+    InputVariableEnum::Info info{std::move(name), index, std::move(values), std::move(defaultValue)};
     return InputVariableEnum(info);
 }

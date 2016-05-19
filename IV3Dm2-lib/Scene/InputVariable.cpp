@@ -1,10 +1,10 @@
 #include "Scene/InputVariable.h"
 
 #include "Scene/DownloadProvider.h"
-#include "Scene/SCIRunProvider.h"
+#include "Scene/PythonProvider.h"
 
-InputVariableFloat::InputVariableFloat(Info info)
-    : m_info(std::move(info))
+InputVariableFloat::InputVariableFloat(const Info& info)
+    : m_info(info)
     , m_value(info.defaultValue) {}
 
 InputVariableFloat::Info InputVariableFloat::info() const {
@@ -20,8 +20,8 @@ float InputVariableFloat::value() const {
 }
 
 
-InputVariableEnum::InputVariableEnum(Info info)
-    : m_info(std::move(info))
+InputVariableEnum::InputVariableEnum(const Info& info)
+    : m_info(info)
     , m_value(info.defaultValue) {}
 
 InputVariableEnum::Info InputVariableEnum::info() const {

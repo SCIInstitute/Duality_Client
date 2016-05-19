@@ -3,7 +3,7 @@
 #include "Mocks/DataProviderMock.h"
 #include "Mocks/DatasetMock.h"
 #include "Scene/DownloadProvider.h"
-#include "Scene/SCIRunProvider.h"
+#include "Scene/PythonProvider.h"
 #include "Scene/Scene.h"
 #include "Scene/SceneMetadata.h"
 
@@ -42,12 +42,12 @@ TEST_F(SceneTest, FloatManipulators) {
     InputVariableFloat::Info floatInfo2{"float2", 0, 0.f, 10.f, 1.f, 5.f};
     InputVariableFloat floatVar2(floatInfo2);
 
-    auto sciRunProvider = std::make_unique<SCIRunProvider>("SceneName", "FileName", std::vector<InputVariableFloat>{floatVar1, floatVar2},
+    auto pythonProvider = std::make_unique<PythonProvider>("SceneName", "FileName", std::vector<InputVariableFloat>{floatVar1, floatVar2},
                                                            std::vector<InputVariableEnum>(), nullptr);
 
     SceneMetadata meta("test", "test");
     Scene scene(meta);
-    scene.addNode(SceneNode("node", std::move(sciRunProvider), nullptr));
+    scene.addNode(SceneNode("node", std::move(pythonProvider), nullptr));
 
     auto variableMap = scene.variableMap();
     ASSERT_EQ(1, variableMap.size());
@@ -64,12 +64,12 @@ TEST_F(SceneTest, CreateEnumManipulators) {
     InputVariableEnum::Info enumInfo2{"enum2", 0, {"val1", "val2"}, "val2"};
     InputVariableEnum enumVar2(enumInfo2);
 
-    auto sciRunProvider = std::make_unique<SCIRunProvider>("SceneName", "FileName", std::vector<InputVariableFloat>(),
+    auto pythonProvider = std::make_unique<PythonProvider>("SceneName", "FileName", std::vector<InputVariableFloat>(),
                                                            std::vector<InputVariableEnum>{enumVar1, enumVar2}, nullptr);
 
     SceneMetadata meta("test", "test");
     Scene scene(meta);
-    scene.addNode(SceneNode("node", std::move(sciRunProvider), nullptr));
+    scene.addNode(SceneNode("node", std::move(pythonProvider), nullptr));
 
     auto variableMap = scene.variableMap();
     ASSERT_EQ(1, variableMap.size());

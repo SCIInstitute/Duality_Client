@@ -7,9 +7,9 @@
 #include <memory>
 #include <vector>
 
-class SCIRunProvider : public DataProvider {
+class PythonProvider : public DataProvider {
 public:
-    SCIRunProvider(const std::string& sceneName, const std::string& fileName, std::vector<InputVariableFloat> floatVariables,
+    PythonProvider(const std::string& sceneName, const std::string& fileName, std::vector<InputVariableFloat> floatVariables,
                    std::vector<InputVariableEnum> enumVariables, std::shared_ptr<LazyRpcClient> rpc);
 
     // DataProvider interface
