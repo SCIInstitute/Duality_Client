@@ -4,23 +4,32 @@
 
 #include "Scene/Communication.h"
 
+#include "mocca/net/NetworkError.h"
+
 LazyRpcClient::LazyRpcClient(const mocca::net::Endpoint& endpoint)
-    : m_endpoint(endpoint), m_rpcClient(nullptr)
-{
+    : m_endpoint(endpoint)
+    , m_rpcClient(nullptr) {}
+
+void LazyRpcClient::send(const std::string& method, const JsonCpp::Value& params) const {
+    try {
+        if (m_rpcClient == nullptr) {
+            m_rpcClient = std::make_unique<mocca::net::RpcClient>(m_endpoint);
+        }
+        m_rpcClient->send(method, params);
+    } catch (const mocca::net::NetworkError& err) {
+        m_rpcClient = nullptr;
+        throw err;
+    }
 }
 
-void LazyRpcClient::send(const std::string& method, const JsonCpp::Value& params) const
-{
-    if (m_rpcClient == nullptr) {
-        m_rpcClient = std::make_unique<mocca::net::RpcClient>(m_endpoint);
+mocca::net::RpcClient::ReturnType LazyRpcClient::receive() const {
+    try {
+        if (m_rpcClient == nullptr) {
+            m_rpcClient = std::make_unique<mocca::net::RpcClient>(m_endpoint);
+        }
+        return m_rpcClient->receive();
+    } catch (const mocca::net::NetworkError& err) {
+        m_rpcClient = nullptr;
+        throw err;
     }
-    m_rpcClient->send(method, params);
-}
-
-mocca::net::RpcClient::ReturnType LazyRpcClient::receive() const
-{
-    if (m_rpcClient == nullptr) {
-        m_rpcClient = std::make_unique<mocca::net::RpcClient>(m_endpoint);
-    }
-    return m_rpcClient->receive();
 }
