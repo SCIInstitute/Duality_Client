@@ -132,7 +132,6 @@
 		8EC1922F1CE12FB6003EBC45 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EC1922E1CE12FB6003EBC45 /* GLKit.framework */; };
 		8EC5A3961CE143650042E2C8 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EC5A3951CE143650042E2C8 /* OpenGLES.framework */; };
 		8ECB12E81CE50EAD009297D6 /* DynamicUIBuilder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8ECB12E71CE50EAD009297D6 /* DynamicUIBuilder.mm */; };
-		8ECB12EB1CE54490009297D6 /* SceneWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8ECB12EA1CE54490009297D6 /* SceneWrapper.mm */; };
 		8EE1D6FA1CEA8522009AF00B /* ArcBall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EE1D6F81CEA8522009AF00B /* ArcBall.cpp */; };
 /* End PBXBuildFile section */
 
@@ -381,8 +380,6 @@
 		8EC5A3951CE143650042E2C8 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		8ECB12E61CE50E29009297D6 /* DynamicUIBuilder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DynamicUIBuilder.h; sourceTree = "<group>"; };
 		8ECB12E71CE50EAD009297D6 /* DynamicUIBuilder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DynamicUIBuilder.mm; sourceTree = "<group>"; };
-		8ECB12E91CE542F8009297D6 /* SceneWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneWrapper.h; sourceTree = "<group>"; };
-		8ECB12EA1CE54490009297D6 /* SceneWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SceneWrapper.mm; sourceTree = "<group>"; };
 		8EE1D6F81CEA8522009AF00B /* ArcBall.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ArcBall.cpp; sourceTree = "<group>"; };
 		8EE1D6F91CEA8522009AF00B /* ArcBall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArcBall.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -434,8 +431,6 @@
 				8E2AF9D81CDA762900AC6CEC /* SelectSceneViewController.mm */,
 				8E6DCEC71CDB97080091D5AB /* SettingsViewController.h */,
 				8E6DCEC81CDB971B0091D5AB /* SettingsViewController.mm */,
-				8ECB12E91CE542F8009297D6 /* SceneWrapper.h */,
-				8ECB12EA1CE54490009297D6 /* SceneWrapper.mm */,
 				8E2AF9EB1CDAA68100AC6CEC /* TabBarViewController.h */,
 				8E2AF9EC1CDAA7B500AC6CEC /* TabBarViewController.mm */,
 				8E2AF9E21CDA762900AC6CEC /* LaunchScreen.storyboard */,
@@ -1090,7 +1085,6 @@
 				8E2BFB6C1CDBF1690040DC47 /* MethodDescription.cpp in Sources */,
 				8EAE3C5F1CED2ECE00A9B7F2 /* SceneLoader.cpp in Sources */,
 				8E2BFB6F1CDBF1690040DC47 /* QueueConnection.cpp in Sources */,
-				8ECB12EB1CE54490009297D6 /* SceneWrapper.mm in Sources */,
 				8ECB12E81CE50EAD009297D6 /* DynamicUIBuilder.mm in Sources */,
 				8E2BFB651CDBF1690040DC47 /* LoopbackConnectionAcceptor.cpp in Sources */,
 				8E2BFB781CDBF1690040DC47 /* NetworkTesting.cpp in Sources */,

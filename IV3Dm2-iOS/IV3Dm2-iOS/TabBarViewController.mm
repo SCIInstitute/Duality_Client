@@ -18,19 +18,16 @@
 {
     self = [super init];
     
-    std::string serverIP = [[[NSUserDefaults standardUserDefaults] stringForKey:@"ServerIP"] UTF8String];
-    uint16_t serverPort = [[NSUserDefaults standardUserDefaults] integerForKey:@"ServerPort"];
-    mocca::net::Endpoint endpoint("tcp.prefixed", serverIP, std::to_string(serverPort));
-    m_sceneLoader = std::make_unique<SceneLoader>(endpoint);
-
     m_render3DViewController = [[Render3DViewController alloc] init];
     m_selectSceneViewController = [[SelectSceneViewController alloc] init];
     m_settingsViewController = [[SettingsViewController alloc] init];
 
     [self createNavigationControllers];
-    
+    [self reinitSceneLoader:nil];
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reinitSceneLoader:) name:@"ServerAddressChanged" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(selectNewScene:) name:@"SelectedSceneChanged" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateDatasets:) name:@"DatasetChanged" object:nil];
     
     return self;
 }
@@ -81,6 +78,11 @@
     mocca::net::Endpoint endpoint("tcp.prefixed", serverIP, std::to_string(serverPort));
     m_sceneLoader = std::make_unique<SceneLoader>(endpoint);
     [m_render3DViewController reset];
+}
+
+-(void) updateDatasets:(NSNotification*)notification
+{
+    m_sceneLoader->activeScene()->updateDatasets();
 }
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item

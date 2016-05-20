@@ -65,7 +65,6 @@
 {
     [super viewDidLoad];
     [self initGL];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateDatasets:) name:@"DatasetChanged" object:nil];
 }
 
 - (void)viewWillLayoutSubviews
@@ -76,11 +75,6 @@
     if (m_uiBuilder) {
         [m_uiBuilder layoutUI];
     }
-}
-
--(void)updateDatasets:(NSNotification*)notification
-{
-    m_scene->updateDatasets();
 }
 
 -(void) reset
