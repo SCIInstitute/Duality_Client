@@ -21,6 +21,9 @@ public:
 
     std::string name() const;
 
+    void setVariable(const std::string& variableName, float value);
+    void setVariable(const std::string& variableName, const std::string& value);
+    
     const DataProvider* dataProvider() const;
     DataProvider* dataProvider();
     const Dataset* dataset() const;

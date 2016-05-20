@@ -53,32 +53,20 @@ std::vector<InputVariableEnum::Info> PythonProvider::enumVariableInfos() const {
     return result;
 }
 
-void PythonProvider::setVariable(const InputVariableFloat& variable) {
-    std::replace_if(begin(m_floatVariables), end(m_floatVariables),
-                    [&variable](const InputVariableFloat& var) { return var.info().name == variable.info().name; }, variable);
+void PythonProvider::setVariable(const std::string& variable, float value) {
+    auto it = std::find_if(begin(m_floatVariables), end(m_floatVariables),
+                           [&variable](const InputVariableFloat& var) { return var.info().name == variable; });
+    assert(it != end(m_floatVariables));
+    it->setValue(value);
     m_dirty = true;
 }
 
-void PythonProvider::setVariable(const InputVariableEnum &variable) {
-    std::replace_if(begin(m_enumVariables), end(m_enumVariables),
-                    [&variable](const InputVariableEnum& var) { return var.info().name == variable.info().name; }, variable);
+void PythonProvider::setVariable(const std::string& variable, const std::string& value) {
+    auto it = std::find_if(begin(m_enumVariables), end(m_enumVariables),
+                           [&variable](const InputVariableEnum& var) { return var.info().name == variable; });
+    assert(it != end(m_enumVariables));
+    it->setValue(value);
     m_dirty = true;
-}
-
-std::vector<DataProvider::InputSetter<InputVariableFloat>> PythonProvider::floatSetters() {
-    std::vector<DataProvider::InputSetter<InputVariableFloat>> result;
-    for (const auto& var : m_floatVariables) {
-        result.emplace_back(var, this);
-    }
-    return result;
-}
-
-std::vector<DataProvider::InputSetter<InputVariableEnum>> PythonProvider::enumSetters() {
-    std::vector<DataProvider::InputSetter<InputVariableEnum>> result;
-    for (const auto& var : m_enumVariables) {
-        result.emplace_back(var, this);
-    }
-    return result;
 }
 
 std::string PythonProvider::fileName() const {

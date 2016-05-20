@@ -6,7 +6,6 @@
 
 #import "AppDelegate.h"
 #import "Render3DViewController.h"
-#import "SceneWrapper.h"
 
 #include "IVDA/iOS.h"
 #include "Scene/RenderDispatcher.h"
@@ -20,9 +19,9 @@
 -(void) setScene:(Scene*)scene
 {
     m_scene = scene;
-    auto setterMap = m_scene->variableSetterMap();
-    if (!setterMap.empty()) {
-        m_uiBuilder = [[DynamicUIBuilder alloc] initWitView:self.view andSetterMap:setterMap];
+    auto variableMap = m_scene->variableMap();
+    if (!variableMap.empty()) {
+        m_uiBuilder = [[DynamicUIBuilder alloc] initWitView:self.view andVariableMap:variableMap];
     } else {
         m_uiBuilder = nil;
     }

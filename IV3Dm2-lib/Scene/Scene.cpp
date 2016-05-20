@@ -43,13 +43,25 @@ void Scene::updateDatasets() {
     m_defaultModelView = defaultModelView();
 }
 
-Scene::VariableSetterMap Scene::variableSetterMap() {
-    VariableSetterMap result;
+Scene::VariableMap Scene::variableMap() {
+    VariableMap result;
     for (auto& node : m_nodes) {
-        result[node.name()].floatSetters = node.dataProvider()->floatSetters();
-        result[node.name()].enumSetters = node.dataProvider()->enumSetters();
+        result[node.name()].floatInfos = node.dataProvider()->floatVariableInfos();
+        result[node.name()].enumInfos = node.dataProvider()->enumVariableInfos();
     }
     return result;
+}
+
+void Scene::setVariable(const std::string& objectName, const std::string& variableName, float value) {
+    auto it = std::find_if(begin(m_nodes), end(m_nodes), [&objectName](const SceneNode& node) { return node.name() == objectName; });
+    assert(it != end(m_nodes));
+    it->setVariable(variableName, value);
+}
+
+void Scene::setVariable(const std::string& objectName, const std::string& variableName, const std::string& value) {
+    auto it = std::find_if(begin(m_nodes), end(m_nodes), [&objectName](const SceneNode& node) { return node.name() == objectName; });
+    assert(it != end(m_nodes));
+    it->setVariable(variableName, value);
 }
 
 void Scene::addTranslation(const IVDA::Vec2f& translation) {

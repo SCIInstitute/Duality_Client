@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Scene/InputVariable.h"
-
 #include <vector>
 #include <string>
 

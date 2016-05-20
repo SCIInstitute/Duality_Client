@@ -20,6 +20,14 @@ std::string SceneNode::name() const {
     return m_name;
 }
 
+void SceneNode::setVariable(const std::string& variableName, float value) {
+    m_provider->setVariable(variableName, value);
+}
+
+void SceneNode::setVariable(const std::string& variableName, const std::string& value) {
+    m_provider->setVariable(variableName, value);
+}
+
 const DataProvider* SceneNode::dataProvider() const {
     return m_provider.get();
 }

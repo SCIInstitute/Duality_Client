@@ -16,10 +16,8 @@ public:
     std::shared_ptr<std::vector<uint8_t>> fetch() override;
     std::vector<InputVariableFloat::Info> floatVariableInfos() const override;
     std::vector<InputVariableEnum::Info> enumVariableInfos() const override;
-    void setVariable(const InputVariableFloat& variable) override;
-    void setVariable(const InputVariableEnum& variable) override;
-    std::vector<InputSetter<InputVariableFloat>> floatSetters() override;
-    std::vector<InputSetter<InputVariableEnum>> enumSetters() override;
+    void setVariable(const std::string& variable, float value) override;
+    void setVariable(const std::string& variable, const std::string& value) override;
 
     std::string fileName() const;
 

@@ -82,7 +82,17 @@
 
 -(void) updateDatasets:(NSNotification*)notification
 {
-    m_sceneLoader->activeScene()->updateDatasets();
+    Scene* scene = m_sceneLoader->activeScene();
+    NSDictionary* changeData = notification.userInfo;
+    std::string objectName([(NSString*)changeData[@"objectName"] UTF8String]);
+    std::string variableName([(NSString*)changeData[@"variableName"] UTF8String]);
+    id value = changeData[@"value"];
+    if ([value isKindOfClass:[NSNumber class]]) {
+        scene->setVariable(objectName, variableName, [(NSNumber*)value floatValue]);
+    } else if ([value isKindOfClass:[NSString class]]) {
+        scene->setVariable(objectName, variableName, std::string([(NSString*)value UTF8String]));
+    }
+    scene->updateDatasets();
 }
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
