@@ -66,6 +66,7 @@
 		8E2BFB7C1CDBF1690040DC47 /* license.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8E2BFB471CDBF1690040DC47 /* license.txt */; };
 		8E2BFB7D1CDBF1690040DC47 /* sha1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E2BFB481CDBF1690040DC47 /* sha1.cpp */; };
 		8E6DCEC91CDB971B0091D5AB /* SettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8E6DCEC81CDB971B0091D5AB /* SettingsViewController.mm */; };
+		8E886FFE1CEF7D94003CAED6 /* PythonProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E886FFC1CEF7D94003CAED6 /* PythonProvider.cpp */; };
 		8E95879F1CE1561400D8CAB9 /* bb.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 8E9587821CE1561400D8CAB9 /* bb.fsh */; };
 		8E9587A01CE1561400D8CAB9 /* bb.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 8E9587831CE1561400D8CAB9 /* bb.vsh */; };
 		8E9587A11CE1561400D8CAB9 /* geo_pc.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 8E9587841CE1561400D8CAB9 /* geo_pc.fsh */; };
@@ -113,7 +114,6 @@
 		8EAE3C601CED2ECE00A9B7F2 /* SceneMetadata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EAE3C481CED2ECE00A9B7F2 /* SceneMetadata.cpp */; };
 		8EAE3C611CED2ECE00A9B7F2 /* SceneNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EAE3C4A1CED2ECE00A9B7F2 /* SceneNode.cpp */; };
 		8EAE3C621CED2ECE00A9B7F2 /* SceneParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EAE3C4C1CED2ECE00A9B7F2 /* SceneParser.cpp */; };
-		8EAE3C631CED2ECE00A9B7F2 /* SCIRunProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EAE3C4E1CED2ECE00A9B7F2 /* SCIRunProvider.cpp */; };
 		8EB837B01CE3D6AD0086D761 /* AbstrDebugOut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EB8376C1CE3D6AD0086D761 /* AbstrDebugOut.cpp */; };
 		8EB837B11CE3D6AD0086D761 /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 8EB8376E1CE3D6AD0086D761 /* CMakeLists.txt */; };
 		8EB837B21CE3D6AD0086D761 /* ConsoleOut.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8EB837701CE3D6AD0086D761 /* ConsoleOut.cpp */; };
@@ -271,6 +271,8 @@
 		8E2BFB491CDBF1690040DC47 /* sha1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha1.h; sourceTree = "<group>"; };
 		8E6DCEC71CDB97080091D5AB /* SettingsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		8E6DCEC81CDB971B0091D5AB /* SettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SettingsViewController.mm; sourceTree = "<group>"; };
+		8E886FFC1CEF7D94003CAED6 /* PythonProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PythonProvider.cpp; sourceTree = "<group>"; };
+		8E886FFD1CEF7D94003CAED6 /* PythonProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PythonProvider.h; sourceTree = "<group>"; };
 		8E9587821CE1561400D8CAB9 /* bb.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = bb.fsh; sourceTree = "<group>"; };
 		8E9587831CE1561400D8CAB9 /* bb.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = bb.vsh; sourceTree = "<group>"; };
 		8E9587841CE1561400D8CAB9 /* geo_pc.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = geo_pc.fsh; sourceTree = "<group>"; };
@@ -337,8 +339,6 @@
 		8EAE3C4B1CED2ECE00A9B7F2 /* SceneNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneNode.h; sourceTree = "<group>"; };
 		8EAE3C4C1CED2ECE00A9B7F2 /* SceneParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneParser.cpp; sourceTree = "<group>"; };
 		8EAE3C4D1CED2ECE00A9B7F2 /* SceneParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneParser.h; sourceTree = "<group>"; };
-		8EAE3C4E1CED2ECE00A9B7F2 /* SCIRunProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SCIRunProvider.cpp; sourceTree = "<group>"; };
-		8EAE3C4F1CED2ECE00A9B7F2 /* SCIRunProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCIRunProvider.h; sourceTree = "<group>"; };
 		8EAE3C501CED2ECE00A9B7F2 /* ScreenInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScreenInfo.h; sourceTree = "<group>"; };
 		8EB8376A1CE3D6AD0086D761 /* Error.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Error.h; sourceTree = "<group>"; };
 		8EB8376C1CE3D6AD0086D761 /* AbstrDebugOut.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AbstrDebugOut.cpp; sourceTree = "<group>"; };
@@ -886,6 +886,8 @@
 				8EAE3C3F1CED2ECE00A9B7F2 /* GLMatrix.h */,
 				8EAE3C401CED2ECE00A9B7F2 /* InputVariable.cpp */,
 				8EAE3C411CED2ECE00A9B7F2 /* InputVariable.h */,
+				8E886FFC1CEF7D94003CAED6 /* PythonProvider.cpp */,
+				8E886FFD1CEF7D94003CAED6 /* PythonProvider.h */,
 				8EAE3C421CED2ECE00A9B7F2 /* RenderDispatcher.cpp */,
 				8EAE3C431CED2ECE00A9B7F2 /* RenderDispatcher.h */,
 				8EAE3C441CED2ECE00A9B7F2 /* Scene.cpp */,
@@ -898,8 +900,6 @@
 				8EAE3C4B1CED2ECE00A9B7F2 /* SceneNode.h */,
 				8EAE3C4C1CED2ECE00A9B7F2 /* SceneParser.cpp */,
 				8EAE3C4D1CED2ECE00A9B7F2 /* SceneParser.h */,
-				8EAE3C4E1CED2ECE00A9B7F2 /* SCIRunProvider.cpp */,
-				8EAE3C4F1CED2ECE00A9B7F2 /* SCIRunProvider.h */,
 				8EAE3C501CED2ECE00A9B7F2 /* ScreenInfo.h */,
 			);
 			path = Scene;
@@ -1106,6 +1106,7 @@
 				8EB837B31CE3D6AD0086D761 /* DebugOutHandler.cpp in Sources */,
 				8EAE3C511CED2ECE00A9B7F2 /* AbstractIO.cpp in Sources */,
 				8EAE3C521CED2ECE00A9B7F2 /* AbstractRenderer.cpp in Sources */,
+				8E886FFE1CEF7D94003CAED6 /* PythonProvider.cpp in Sources */,
 				8EAE3C591CED2ECE00A9B7F2 /* GeometryDataset.cpp in Sources */,
 				8EB837B81CE3D6AD0086D761 /* Threads.cpp in Sources */,
 				8E6DCEC91CDB971B0091D5AB /* SettingsViewController.mm in Sources */,
@@ -1132,7 +1133,6 @@
 				8E2BFB551CDBF1690040DC47 /* ConsoleLog.cpp in Sources */,
 				8E2BFB5A1CDBF1690040DC47 /* TextLog.cpp in Sources */,
 				8E2BFB671CDBF1690040DC47 /* LoopbackConnectionSpawner.cpp in Sources */,
-				8EAE3C631CED2ECE00A9B7F2 /* SCIRunProvider.cpp in Sources */,
 				8E2AF9D61CDA762900AC6CEC /* AppDelegate.mm in Sources */,
 				8EB837B51CE3D6AD0086D761 /* Macros.cpp in Sources */,
 				8EE1D6FA1CEA8522009AF00B /* ArcBall.cpp in Sources */,

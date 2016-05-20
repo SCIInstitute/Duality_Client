@@ -38,13 +38,13 @@
 
 @implementation FloatWidgetGroup
 
--(id) initWithVariable:(InputVariableFloat*)variable andView:(UIView *)view
+-(id) initWithSetter:(const DataProvider::InputSetter<InputVariableFloat>&)setter andView:(UIView *)view
 {
     self = [super init];
     
-    m_variable = variable;
+    m_setter = std::make_unique<DataProvider::InputSetter<InputVariableFloat>>(setter);
  
-    auto info = m_variable->info();
+    auto info = m_setter->info();
     
     m_nameLabel = [WidgetGroup createLabelWithText:[NSString stringWithUTF8String:info.name.c_str()]];
     m_nameLabel.textAlignment = NSTextAlignmentLeft;
@@ -69,14 +69,14 @@
 
 -(void) layout
 {
-    int index = m_variable->info().index;
+    int index = m_setter->info().index;
     [WidgetGroup layoutNameLabel:m_nameLabel andStepper:m_stepper andValueLabel:m_valueLabel atIndex:index];
 }
 
 - (void)stepToValue:(UIStepper*)stepper
 {
     m_valueLabel.text = [NSString stringWithFormat:@"%.02f", stepper.value];
-    m_variable->setValue(stepper.value);
+    m_setter->setValue(stepper.value);
     [[NSNotificationCenter defaultCenter] postNotificationName:@"DatasetChanged" object:self];
 }
 
@@ -92,13 +92,13 @@
 
 @implementation EnumWidgetGroup
 
--(id) initWithVariable:(InputVariableEnum *)variable andView:(UIView *)view
+-(id) initWithSetter:(const DataProvider::InputSetter<InputVariableEnum> &)setter andView:(UIView *)view
 {
     self = [super init];
     
-    m_variable = variable;
+    m_setter = std::make_unique<DataProvider::InputSetter<InputVariableEnum>>(setter);
     
-    auto info = m_variable->info();
+    auto info = m_setter->info();
     
     m_nameLabel = [WidgetGroup createLabelWithText:[NSString stringWithUTF8String:info.name.c_str()]];
     m_nameLabel.textAlignment = NSTextAlignmentLeft;
@@ -124,16 +124,16 @@
 
 -(void) layout
 {
-    int index = m_variable->info().index;
+    int index = m_setter->info().index;
     [WidgetGroup layoutNameLabel:m_nameLabel andStepper:m_stepper andValueLabel:m_valueLabel atIndex:index];
 }
 
 - (void)stepToValue:(UIStepper*)stepper
 {
-    auto info = m_variable->info();
+    auto info = m_setter->info();
     std::string value = info.values[(int)stepper.value];
     m_valueLabel.text = [NSString stringWithUTF8String:value.c_str()];
-    m_variable->setValue(value);
+    m_setter->setValue(value);
     [[NSNotificationCenter defaultCenter] postNotificationName:@"DatasetChanged" object:self];
 }
 
@@ -149,17 +149,17 @@
 
 @implementation DynamicUIBuilder
 
--(id) initWitView:(UIView*)view andVariableMap:(Scene::VariableMap)variableMap
+-(id) initWitView:(UIView *)view andSetterMap:(Scene::VariableSetterMap)setterMap
 {
     m_floatWidgetGroups = [[NSMutableArray<FloatWidgetGroup*> alloc] init];
-    for (const auto& variable : variableMap["dataset3"].floatVariables) { // FIXME
-        FloatWidgetGroup* widgetGroup = [[FloatWidgetGroup alloc] initWithVariable:variable andView:view];
+    for (const auto& setter : setterMap["dataset3"].floatSetters) { // FIXME
+        FloatWidgetGroup* widgetGroup = [[FloatWidgetGroup alloc] initWithSetter:setter andView:view];
         [m_floatWidgetGroups addObject:widgetGroup];
     }
 
     m_enumWidgetGroups = [[NSMutableArray<EnumWidgetGroup*> alloc] init];
-    for (const auto& variable : variableMap["dataset3"].enumVariables) { // FIXME
-        EnumWidgetGroup* widgetGroup = [[EnumWidgetGroup alloc] initWithVariable:variable andView:view];
+    for (const auto& setter : setterMap["dataset3"].enumSetters) { // FIXME
+        EnumWidgetGroup* widgetGroup = [[EnumWidgetGroup alloc] initWithSetter:setter andView:view];
         [m_enumWidgetGroups addObject:widgetGroup];
     }
     

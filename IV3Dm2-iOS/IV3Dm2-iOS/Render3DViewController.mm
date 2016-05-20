@@ -20,9 +20,9 @@
 -(void) setScene:(Scene*)scene
 {
     m_scene = scene;
-    auto variableMap = m_scene->variableMap();
-    if (!variableMap.empty()) {
-        m_uiBuilder = [[DynamicUIBuilder alloc] initWitView:self.view andVariableMap:variableMap];
+    auto setterMap = m_scene->variableSetterMap();
+    if (!setterMap.empty()) {
+        m_uiBuilder = [[DynamicUIBuilder alloc] initWitView:self.view andSetterMap:setterMap];
     } else {
         m_uiBuilder = nil;
     }
@@ -45,9 +45,7 @@
 
 - (void)initGL
 {
-    self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
-    // FIXME: Only OpenGL ES 3???
-    
+    self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES3];
     if (!self.context) {
         NSLog(@"Failed to create OpenGLES context");
     }

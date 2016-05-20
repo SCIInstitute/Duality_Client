@@ -15,6 +15,7 @@ public:
         float stepSize;
         float defaultValue;
     };
+    using ValueType = float;
 
     InputVariableFloat(const Info& info);
     Info info() const;
@@ -34,7 +35,8 @@ public:
         std::vector<std::string> values;
         std::string defaultValue;
     };
-
+    using ValueType = std::string;
+    
     InputVariableEnum(const Info& info);
     Info info() const;
     void setValue(std::string value);

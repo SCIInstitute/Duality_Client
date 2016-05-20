@@ -4,7 +4,7 @@
 
 #import <UIKit/UIKit.h>
 
-#include "Scene/InputVariable.h"
+#include "Scene/DataProvider.h"
 #include "Scene/Scene.h"
 
 #include <vector>
@@ -19,13 +19,13 @@
 @interface FloatWidgetGroup : NSObject
 {
 @private
-    InputVariableFloat* m_variable;
+    std::unique_ptr<DataProvider::InputSetter<InputVariableFloat>> m_setter; // unique_ptr because InputSetter does not have default ctor
     UILabel* m_nameLabel;
     UIStepper* m_stepper;
     UILabel* m_valueLabel;
 }
 
--(id) initWithVariable:(InputVariableFloat*)variable andView:(UIView*)view;
+-(id) initWithSetter:(const DataProvider::InputSetter<InputVariableFloat>&)setter andView:(UIView*)view;
 -(void) layout;
 
 @end
@@ -33,13 +33,13 @@
 @interface EnumWidgetGroup : NSObject
 {
 @private
-    InputVariableEnum* m_variable;
+    std::unique_ptr<DataProvider::InputSetter<InputVariableEnum>> m_setter; // unique_ptr because InputSetter does not have default ctor
     UILabel* m_nameLabel;
     UIStepper* m_stepper;
     UILabel* m_valueLabel;
 }
 
--(id) initWithVariable:(InputVariableEnum*)variable andView:(UIView*)view;
+-(id) initWithSetter:(const DataProvider::InputSetter<InputVariableEnum>&)setter andView:(UIView*)view;
 -(void) layout;
 
 @end
@@ -52,7 +52,7 @@
     NSMutableArray<EnumWidgetGroup*>* m_enumWidgetGroups;
 }
 
--(id) initWitView:(UIView*)view andVariableMap:(Scene::VariableMap)variableMap;
+-(id) initWitView:(UIView*)view andSetterMap:(Scene::VariableSetterMap)setterMap;
 -(void) layoutUI;
 
 @end

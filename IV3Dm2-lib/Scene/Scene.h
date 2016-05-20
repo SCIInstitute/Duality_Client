@@ -26,8 +26,8 @@ public:
     void dispatch(DatasetDispatcher& dispatcher) const;
     void updateDatasets();
     struct InputSetters {
-        std::vector<DataProvider::InputSetter<float>> floatSetters;
-        std::vector<DataProvider::InputSetter<std::string>> enumSetters;
+        std::vector<DataProvider::InputSetter<InputVariableFloat>> floatSetters;
+        std::vector<DataProvider::InputSetter<InputVariableEnum>> enumSetters;
     };
     using VariableSetterMap = std::map<std::string, InputSetters>;
     VariableSetterMap variableSetterMap();
