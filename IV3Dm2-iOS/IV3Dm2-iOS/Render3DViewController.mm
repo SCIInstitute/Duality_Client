@@ -6,6 +6,7 @@
 
 #import "AppDelegate.h"
 #import "Render3DViewController.h"
+#import "DynamicUIBuilder.h"
 
 #include "IVDA/iOS.h"
 #include "Scene/RenderDispatcher.h"
@@ -21,9 +22,11 @@
     m_scene = scene;
     auto variableMap = m_scene->variableMap();
     if (!variableMap.empty()) {
-        m_uiBuilder = [[DynamicUIBuilder alloc] initWitView:self.view andVariableMap:variableMap];
-    } else {
-        m_uiBuilder = nil;
+        UIStackView* stackView = buildStackViewFromVariableMap(variableMap);
+        stackView.translatesAutoresizingMaskIntoConstraints = false;
+        [self.view addSubview:stackView];
+        [stackView.topAnchor constraintEqualToAnchor:self.topLayoutGuide.bottomAnchor constant:20.0].active = true;
+        [stackView.leftAnchor constraintEqualToAnchor:self.view.leftAnchor constant:20.0].active = true;
     }
 }
 
@@ -71,15 +74,11 @@
     [super viewWillLayoutSubviews];
     m_rendererDispatcher = std::make_unique<RenderDispatcher>([self screenInfo]);
     m_arcBall.SetWindowSize(uint32_t(self.view.bounds.size.width), uint32_t(self.view.bounds.size.height));
-    if (m_uiBuilder) {
-        [m_uiBuilder layoutUI];
-    }
 }
 
 -(void) reset
 {
     m_scene = nullptr;
-    m_uiBuilder = nullptr;
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
