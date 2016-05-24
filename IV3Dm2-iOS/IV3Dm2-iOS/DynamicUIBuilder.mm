@@ -43,6 +43,43 @@
 
 @end
 
+@interface EnumStepper : UIStepper
+{
+@private
+    UILabel* m_label;
+    NSString* m_objectName;
+    InputVariableEnum::Info m_info;
+}
+-(id) initWithLabel:(UILabel*)label andObjectName:(NSString*)objectName andInfo:(const InputVariableEnum::Info&)info;
+-(void) stepToValue:(FloatStepper*)stepper;
+@end
+
+@implementation EnumStepper
+
+-(id) initWithLabel:(UILabel *)label andObjectName:(NSString *)objectName andInfo:(const InputVariableEnum::Info &)info
+{
+    self = [super init];
+    m_label = label;
+    m_objectName = objectName;
+    m_info = info;
+    [self addTarget:self action:@selector(stepToValue:) forControlEvents:UIControlEventValueChanged];
+    return self;
+}
+
+-(void)stepToValue:(FloatStepper *)stepper
+{
+    NSString* value = [NSString stringWithUTF8String:m_info.values[(int)stepper.value].c_str()];
+    m_label.text = value;
+    NSMutableDictionary* changeData = [[NSMutableDictionary alloc] init];
+    [changeData setValue:m_objectName forKey:@"objectName"];
+    [changeData setValue:[NSString stringWithUTF8String:m_info.name.c_str()] forKey:@"variableName"];
+    [changeData setValue:value forKey:@"value"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"DatasetChanged" object:self userInfo:changeData];
+}
+
+@end
+
+
 UIStackView* buildFloatVariableStackView(const std::string& objectName, const InputVariableFloat::Info& info)
 {
     UIStackView* stackView = [[UIStackView alloc] init];
@@ -63,7 +100,6 @@ UIStackView* buildFloatVariableStackView(const std::string& objectName, const In
     valueLabel.textColor = [UIColor whiteColor];
     valueLabel.backgroundColor = [UIColor colorWithWhite:0 alpha:0];
     [valueLabel.widthAnchor constraintEqualToConstant:100.0].active = true;
-    [stackView addArrangedSubview:valueLabel];
     
     FloatStepper* stepper = [[FloatStepper alloc] initWithLabel:valueLabel
                                                   andObjectName:[NSString stringWithUTF8String:objectName.c_str()]
@@ -73,7 +109,44 @@ UIStackView* buildFloatVariableStackView(const std::string& objectName, const In
     stepper.stepValue = info.stepSize;
     stepper.value = info.defaultValue;
     [stackView addArrangedSubview:stepper];
+    [stackView addArrangedSubview:valueLabel];
 
+    return stackView;
+}
+
+UIStackView* buildEnumVariableStackView(const std::string& objectName, const InputVariableEnum::Info& info)
+{
+    UIStackView* stackView = [[UIStackView alloc] init];
+    stackView.axis = UILayoutConstraintAxisHorizontal;
+    stackView.distribution = UIStackViewDistributionEqualSpacing;
+    stackView.alignment = UIStackViewAlignmentBottom;
+    stackView.spacing = 10;
+    
+    UILabel* nameLabel = [[UILabel alloc] init];
+    nameLabel.text = [NSString stringWithUTF8String:info.name.c_str()];
+    nameLabel.textColor = [UIColor whiteColor];
+    nameLabel.backgroundColor = [UIColor colorWithWhite:0 alpha:0];
+    [nameLabel.widthAnchor constraintEqualToConstant:200.0].active = true;
+    [stackView addArrangedSubview:nameLabel];
+    
+    UILabel* valueLabel = [[UILabel alloc] init];
+    auto valueIndex = std::distance(begin(info.values), std::find(begin(info.values), end(info.values), info.defaultValue));
+    NSString* value = [NSString stringWithUTF8String:info.values[valueIndex].c_str()];
+    valueLabel.text = value;
+    valueLabel.textColor = [UIColor whiteColor];
+    valueLabel.backgroundColor = [UIColor colorWithWhite:0 alpha:0];
+    [valueLabel.widthAnchor constraintEqualToConstant:100.0].active = true;
+    
+    EnumStepper* stepper = [[EnumStepper alloc] initWithLabel:valueLabel
+                                                andObjectName:[NSString stringWithUTF8String:objectName.c_str()]
+                                                andInfo:info];
+    stepper.minimumValue = 0;
+    stepper.maximumValue = info.values.size() - 1;
+    stepper.stepValue = 1;
+    stepper.value = valueIndex;
+    [stackView addArrangedSubview:stepper];
+    [stackView addArrangedSubview:valueLabel];
+    
     return stackView;
 }
 
@@ -91,10 +164,21 @@ UIStackView* buildObjectStackView(const std::string& name, const Scene::Variable
     objectLabel.backgroundColor = [UIColor colorWithWhite:0 alpha:0];
     [stackView addArrangedSubview:objectLabel];
     
-    for (const auto& info : infos.floatInfos) {
-        UIStackView* variableStackView = buildFloatVariableStackView(name, info);
-        variableStackView.translatesAutoresizingMaskIntoConstraints = false;
-        [stackView addArrangedSubview:variableStackView];
+    for (size_t i = 0; i < infos.floatInfos.size() + infos.enumInfos.size(); ++i) {
+        auto floatIt = std::find_if(begin(infos.floatInfos), end(infos.floatInfos),
+                               [i](const InputVariableFloat::Info& info) { return info.index == i; });
+        if (floatIt != end(infos.floatInfos)) {
+            UIStackView* variableStackView = buildFloatVariableStackView(name, *floatIt);
+            variableStackView.translatesAutoresizingMaskIntoConstraints = false;
+            [stackView addArrangedSubview:variableStackView];
+        } else {
+            auto enumIt = std::find_if(begin(infos.enumInfos), end(infos.enumInfos),
+                                   [i](const InputVariableEnum::Info& info) { return info.index == i; });
+            assert(enumIt != end(infos.enumInfos));
+            UIStackView* variableStackView = buildEnumVariableStackView(name, *enumIt);
+            variableStackView.translatesAutoresizingMaskIntoConstraints = false;
+            [stackView addArrangedSubview:variableStackView];
+        }
     }
     return stackView;
 }
