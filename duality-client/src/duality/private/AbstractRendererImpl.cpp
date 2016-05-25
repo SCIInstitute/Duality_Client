@@ -1,6 +1,6 @@
 #include "duality/private/AbstractRendererImpl.h"
 
-#include "duality/private/GLInclude.h"
+#include "IVDA/GLInclude.h"
 
 #include <OpenGLES/ES3/gl.h>
 
