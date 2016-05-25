@@ -3,7 +3,7 @@
 #ifndef GLOBJECT_H
 #define GLOBJECT_H
 
-#include "GLInclude.h"
+#include "IVDA/GLInclude.h"
 #include "GPUObject.h"
 
 /** Base for all OpenGL types which will utilize GPU memory */
