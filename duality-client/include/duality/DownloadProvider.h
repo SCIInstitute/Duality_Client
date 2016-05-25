@@ -24,4 +24,5 @@ private:
     std::string m_sceneName;
     std::string m_fileName;
     std::shared_ptr<LazyRpcClient> m_rpc;
+    bool m_dirty;
 };
