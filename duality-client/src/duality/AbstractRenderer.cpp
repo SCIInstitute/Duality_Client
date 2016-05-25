@@ -1,5 +1,18 @@
 #include "duality/AbstractRenderer.h"
 
+#if __APPLE__
+#include "TargetConditionals.h"
+#endif
+
+#if !__APPLE__ || !TARGET_OS_IPHONE
+class AbstractRendererImpl {
+public:
+    AbstractRendererImpl(const ScreenInfo&) {}
+};
+#else
+#include "duality/private/AbstractRendererImpl.h"
+#endif
+
 #include <cmath>
 
 AbsstractRenderer::AbsstractRenderer(const ScreenInfo& screenInfo)
@@ -7,6 +20,8 @@ AbsstractRenderer::AbsstractRenderer(const ScreenInfo& screenInfo)
     , m_screenInfo(screenInfo) {
     updateProjectionMatrix();
 }
+
+AbsstractRenderer::~AbsstractRenderer() = default;
 
 void AbsstractRenderer::startDraw() {
 #if __APPLE__ && TARGET_OS_IPHONE

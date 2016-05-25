@@ -5,23 +5,12 @@
 
 #include <memory>
 
-#if __APPLE__
-#include "TargetConditionals.h"
-#endif
-
-#if !__APPLE__ || !TARGET_OS_IPHONE
-class AbstractRendererImpl {
-public:
-    AbstractRendererImpl(const ScreenInfo&) {}
-    ~AbstractRendererImpl() = default;
-};
-#else
-#include "RendererImpl/AbstractRendererImpl.h"
-#endif
+class AbstractRendererImpl;
 
 class AbsstractRenderer {
 public:
     AbsstractRenderer(const ScreenInfo& screenInfo);
+    ~AbsstractRenderer();
 
     void startDraw();
     void finishDraw();
