@@ -1,9 +1,9 @@
 #include "duality/GeometryDataset.h"
 
-#include "duality/DatasetDispatcher.h"
-#include "duality/AbstractIO.h"
-#include "duality/Error.h"
 #include "IVDA/Vectors.h"
+#include "duality/AbstractIO.h"
+#include "duality/DatasetDispatcher.h"
+#include "duality/Error.h"
 
 using namespace IVDA;
 
@@ -16,6 +16,12 @@ GeometryDataset::GeometryDataset(std::vector<IVDA::Mat4f> transforms)
     , m_colors(nullptr)
     , m_texcoords(nullptr)
     , m_alphas(nullptr) {}
+
+GeometryDataset::GeometryDataset(std::unique_ptr<G3D::GeometrySoA> geometry, std::vector<IVDA::Mat4f> transforms)
+    : Dataset(transforms)
+    , m_geometry(std::move(geometry)) {
+    assignShortcutPointers();
+}
 
 void GeometryDataset::applyTransform(const Mat4f& matrix) {
     uint32_t numVertices = m_geometry->info.numberVertices;

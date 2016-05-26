@@ -5,6 +5,43 @@
 
 #include <string>
 
+static std::unique_ptr<G3D::GeometrySoA> createLineGeometry(const std::vector<uint16_t>& indices, const std::vector<float>& positions,
+                                                            const std::vector<float>& colors) {
+    auto geometry = std::make_unique<G3D::GeometrySoA>();
+
+    
+    uint32_t* ownIndices = new uint32_t[indices.size()]; //FIXME: memory leak
+    float* ownPositions = new float[positions.size()];
+    float* ownColors = new float[colors.size()];
+    
+    std::copy(indices.cbegin(), indices.cend(), ownIndices);
+    std::copy(positions.cbegin(), positions.cend(), ownPositions);
+    std::copy(colors.cbegin(), colors.cend(), ownColors);
+
+    const uint32_t numberIndices = static_cast<uint32_t>(indices.size());
+    const uint32_t numberPositions = static_cast<uint32_t>(positions.size());
+    const uint32_t indicesPerPrimitive = 2;
+    
+    geometry->info.primitiveType = G3D::Line;
+    geometry->info.indexSize = sizeof(uint32_t);
+    geometry->info.numberIndices = numberIndices;
+
+    geometry->info.numberPrimitives = numberIndices / indicesPerPrimitive;
+    geometry->info.numberVertices = numberPositions / G3D::floats(G3D::AttributeSemantic::Position);
+    geometry->info.vertexSize = sizeof(float) * G3D::floats(G3D::AttributeSemantic::Position) + sizeof(float) * G3D::floats(G3D::AttributeSemantic::Color); // vertex size in bytes for all attributes
+    geometry->info.vertexType = G3D::SoA;
+    geometry->info.attributeSemantics.push_back(G3D::AttributeSemantic::Position);
+    geometry->info.attributeSemantics.push_back(G3D::AttributeSemantic::Color);
+    
+    geometry->indices = ownIndices;
+    
+    geometry->vertexAttributes.push_back(ownPositions);
+    geometry->vertexAttributes.push_back(ownColors);
+    
+    return geometry;
+}
+
+
 void G3D::writeHeader(AbstractWriter& writer, const GeometryInfo& info, const uint32_t* const vertexType) {
     writer.write((char*)&info.isOpaque, sizeof(bool));
     writer.write((char*)&info.numberPrimitives, sizeof(uint32_t));

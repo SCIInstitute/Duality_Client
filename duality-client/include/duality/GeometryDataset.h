@@ -9,6 +9,7 @@ class DatasetDispatcher;
 class GeometryDataset : public Dataset {
 public:
     GeometryDataset(std::vector<IVDA::Mat4f> transforms = {});
+    GeometryDataset(std::unique_ptr<G3D::GeometrySoA> geometry, std::vector<IVDA::Mat4f> transforms = {});
 
     // SceneNode interface
     void applyTransform(const IVDA::Mat4f& matrix) override;

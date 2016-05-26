@@ -1,13 +1,24 @@
-//
-//  GeometrySliceRenderer.h
-//  Duality-iOS
-//
-//  Created by David McCann on 5/26/16.
-//  Copyright © 2016 Scientific Computing and Imaging Institute. All rights reserved.
-//
+#pragma once
 
-#ifndef GeometrySliceRenderer_h
-#define GeometrySliceRenderer_h
+#include "duality/GLMatrix.h"
+#include "duality/GeometryDataset.h"
+#include "duality/ScreenInfo.h"
 
+#include <memory>
 
-#endif /* GeometrySliceRenderer_h */
+class GLShader;
+
+class GeometrySliceRenderer {
+public:
+    GeometrySliceRenderer(const ScreenInfo& screenInfo);
+    ~GeometrySliceRenderer();
+    
+    void render(const GeometryDataset& dataset, const GLMatrix& modelView);
+    
+private:
+    static GLMatrix createProjectionMatrix(const ScreenInfo& screenInfo);
+    
+private:
+    GLMatrix m_projection;
+    std::unique_ptr<GLShader> m_shader;
+};

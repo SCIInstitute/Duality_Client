@@ -83,6 +83,9 @@ public:
         return 0;
     }
 
+    static std::unique_ptr<GeometrySoA> createLineGeometry(const std::vector<uint16_t>& indices, const std::vector<float>& positions,
+                                                           const std::vector<float>& colors);
+
     static void write(AbstractWriter& writer, const GeometryAoS* const geometry, uint32_t vertexType = AoS);
     static void write(AbstractWriter& writer, const GeometrySoA* const geometry, uint32_t vertexType = SoA);
     static void read(AbstractReader& reader, GeometryAoS* const geometry);
