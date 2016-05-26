@@ -6,7 +6,7 @@
 
 #include "IVDA/Vectors.h"
 #include "duality/GLMatrix.h"
-#include "duality/RenderDispatcher.h"
+#include "duality/RenderDispatcher3D.h"
 #include "duality/SceneMetadata.h"
 #include "duality/SceneNode.h"
 
@@ -35,17 +35,7 @@ public:
     void setVariable(const std::string& objectName, const std::string& variableName, float value);
     void setVariable(const std::string& objectName, const std::string& variableName, const std::string& value);
 
-    void addTranslation(const IVDA::Vec2f& translation);
-    void addRotation(const IVDA::Mat4f& rotation);
-    GLMatrix modelViewMatrix() const;
-
-private:
-    GLMatrix defaultModelView() const;
-
 private:
     SceneMetadata m_metadata;
     std::vector<SceneNode> m_nodes;
-    GLMatrix m_defaultModelView;
-    IVDA::Vec3f m_translation;
-    IVDA::Mat4f m_rotation;
 };

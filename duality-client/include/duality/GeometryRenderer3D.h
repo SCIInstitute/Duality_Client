@@ -1,25 +1,23 @@
 #pragma once
 
-#include "duality/private/GLFrameBufferObject.h"
-#include "duality/private/GLShader.h"
-#include "duality/G3D.h"
-#include "duality/GLMatrix.h"
 #include "duality/ScreenInfo.h"
+#include "duality/GLMatrix.h"
+#include "duality/GeometryDataset.h"
 
-#include <memory>
+class GLShader;
 
-class GeometryDataset;
-
-class GeometryRendererImpl {
+class GeometryRenderer3D {
 public:
-    GeometryRendererImpl();
-    void render(const GeometryDataset& dataset, const GLMatrix& mvp);
+    GeometryRenderer3D();
+    ~GeometryRenderer3D();
 
+    void render(const GeometryDataset& dataset, const GLMatrix& mvp);
+    
 private:
     static int primitiveTypeGL(const GeometryDataset& dataset);
     static int enableAttributeArrays(const GeometryDataset& dataset);
     GLShader& determineActiveShader(const GeometryDataset& dataset) const;
-
+    
 private:
     std::unique_ptr<GLShader> m_normShader;
     std::unique_ptr<GLShader> m_normAlphaShader;

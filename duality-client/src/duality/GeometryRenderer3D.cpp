@@ -1,11 +1,12 @@
-#include "duality/private/GeometryRendererImpl.h"
+#include "duality/GeometryRenderer3D.h"
 
+#include "IVDA/GLInclude.h"
 #include "duality/Error.h"
-#include "duality/GeometryDataset.h"
+#include "duality/private/GLShader.h"
 
 #include <OpenGLES/ES3/gl.h>
 
-GeometryRendererImpl::GeometryRendererImpl() {
+GeometryRenderer3D::GeometryRenderer3D() {
     {
         GlShaderAttributes attributes;
         attributes.push_back("position");
@@ -61,10 +62,12 @@ GeometryRendererImpl::GeometryRendererImpl() {
     }
 }
 
-void GeometryRendererImpl::render(const GeometryDataset& dataset, const GLMatrix& mvp) {
+GeometryRenderer3D::~GeometryRenderer3D() = default;
+
+void GeometryRenderer3D::render(const GeometryDataset& dataset, const GLMatrix& mvp) {
     auto& shader = determineActiveShader(dataset);
     shader.Enable();
-    
+
     shader.SetValue("mvpMatrix", (IVDA::Mat4f)(mvp)); // FIXME: very ugly cast!!!
 
     GL(glEnable(GL_DEPTH_TEST));
@@ -80,7 +83,8 @@ void GeometryRendererImpl::render(const GeometryDataset& dataset, const GLMatrix
     }
 }
 
-int GeometryRendererImpl::primitiveTypeGL(const GeometryDataset& dataset) {
+
+int GeometryRenderer3D::primitiveTypeGL(const GeometryDataset& dataset) {
     switch (dataset.geometryInfo()->primitiveType) {
     case G3D::Point:
         return GL_POINTS;
@@ -96,7 +100,7 @@ int GeometryRendererImpl::primitiveTypeGL(const GeometryDataset& dataset) {
     }
 }
 
-GLShader& GeometryRendererImpl::determineActiveShader(const GeometryDataset& dataset) const {
+GLShader& GeometryRenderer3D::determineActiveShader(const GeometryDataset& dataset) const {
     if (dataset.getNormals() && !dataset.getColors() && !dataset.getTexCoords() && !dataset.getAlphas())
         return *m_normShader;
     else if (dataset.getNormals() && !dataset.getColors() && !dataset.getTexCoords() && dataset.getAlphas())
@@ -111,10 +115,10 @@ GLShader& GeometryRendererImpl::determineActiveShader(const GeometryDataset& dat
         return *m_normTexShader;
     else if (!dataset.getNormals() && !dataset.getColors() && dataset.getTexCoords() && !dataset.getAlphas())
         return *m_texShader;
-    THROW_ERROR("Cannot determine shader for geometry dataset");
+    throw Error("Cannot determine shader for geometry dataset", __FILE__, __LINE__);
 }
 
-int GeometryRendererImpl::enableAttributeArrays(const GeometryDataset& dataset) {
+int GeometryRenderer3D::enableAttributeArrays(const GeometryDataset& dataset) {
     int attributeIndex = 0;
     if (dataset.getPositions()) {
         GL(glVertexAttribPointer(attributeIndex, 3, GL_FLOAT, 0, 0, dataset.getPositions()));

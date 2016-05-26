@@ -21,7 +21,7 @@ ADD_LIBRARY(duality-client
 	src/IVDA/DebugOutHandler.cpp
 
 	src/duality/GLMatrix.cpp
-	src/duality/GeometryRenderer.cpp
+	src/duality/GeometryRenderer3D.cpp
 	src/duality/GeometryDataset.cpp
 	src/duality/G3D.cpp
 	src/duality/DownloadProvider.cpp
@@ -35,7 +35,7 @@ ADD_LIBRARY(duality-client
 	src/duality/SceneMetadata.cpp
 	src/duality/SceneLoader.cpp
 	src/duality/Scene.cpp
-	src/duality/RenderDispatcher.cpp
+	src/duality/RenderDispatcher3D.cpp
 	src/duality/PythonProvider.cpp
 	src/duality/InputVariable.cpp
 	${RENDERER_SOURCE})

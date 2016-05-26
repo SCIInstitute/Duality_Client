@@ -6,19 +6,19 @@
 
 #include <memory>
 
-class GeometryRendererImpl;
+class GLShader;
 
-class GeometryRenderer {
+class GeometryRenderer2D {
 public:
-    GeometryRenderer(const ScreenInfo& screenInfo);
-    ~GeometryRenderer();
+    GeometryRenderer2D(const ScreenInfo& screenInfo);
+    ~GeometryRenderer2D();
 
     void render(const GeometryDataset& dataset, const GLMatrix& modelView);
 
 private:
     static GLMatrix createProjectionMatrix(const ScreenInfo& screenInfo);
-    
+
 private:
     GLMatrix m_projection;
-    std::unique_ptr<GeometryRendererImpl> m_impl;
+    std::unique_ptr<GLShader> m_shader;
 };
