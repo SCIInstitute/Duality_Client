@@ -7,8 +7,7 @@
 #include <OpenGLES/ES3/gl.h>
 
 
-GeometryRenderer2D::GeometryRenderer2D(const ScreenInfo& screenInfo)
-    : m_projection(createProjectionMatrix(screenInfo)) {
+GeometryRenderer2D::GeometryRenderer2D() {
     GlShaderAttributes attributes;
     attributes.push_back("position");
     attributes.push_back("color");
@@ -17,7 +16,7 @@ GeometryRenderer2D::GeometryRenderer2D(const ScreenInfo& screenInfo)
 
 GeometryRenderer2D::~GeometryRenderer2D() = default;
 
-void GeometryRenderer2D::render(const GeometryDataset& dataset, const GLMatrix& modelView) {
+void GeometryRenderer2D::render(const GeometryDataset& dataset, const GLMatrix& mvp) {
     auto lines = GeometryUtil::clipGeometry(dataset, GeometryUtil::Axis::AxisX, -16); // FIXME
 
     if (lines.getPositions()) {
@@ -30,8 +29,6 @@ void GeometryRenderer2D::render(const GeometryDataset& dataset, const GLMatrix& 
     }
     
     m_shader->Enable();
-    GLMatrix mvp;
-    mvp.loadIdentity();
     m_shader->SetValue("mvpMatrix", (IVDA::Mat4f)mvp);
     
     GL(glLineWidth(5.0));
@@ -44,16 +41,4 @@ void GeometryRenderer2D::render(const GeometryDataset& dataset, const GLMatrix& 
     GL(glDisableVertexAttribArray(0));
     GL(glDisableVertexAttribArray(1));
     GL(glEnable(GL_DEPTH_TEST));
-}
-
-GLMatrix GeometryRenderer2D::createProjectionMatrix(const ScreenInfo& screenInfo) {
-    float zNear = 0.01f;
-    float zFar = 1000.0f;
-    float frustSize = zNear * tanf(3.1415f / 8.0f);
-    float aspectRatio = float(screenInfo.height) / float(screenInfo.width);
-
-    GLMatrix projection;
-    projection.loadIdentity();
-    projection.frustum(-frustSize, frustSize, -frustSize * aspectRatio, frustSize * aspectRatio, zNear, zFar);
-    return projection;
 }

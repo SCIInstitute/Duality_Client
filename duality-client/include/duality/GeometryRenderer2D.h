@@ -10,15 +10,11 @@ class GLShader;
 
 class GeometryRenderer2D {
 public:
-    GeometryRenderer2D(const ScreenInfo& screenInfo);
+    GeometryRenderer2D();
     ~GeometryRenderer2D();
 
-    void render(const GeometryDataset& dataset, const GLMatrix& modelView);
-
+    void render(const GeometryDataset& dataset, const GLMatrix& mvp);
+    
 private:
-    static GLMatrix createProjectionMatrix(const ScreenInfo& screenInfo);
-
-private:
-    GLMatrix m_projection;
     std::unique_ptr<GLShader> m_shader;
 };
