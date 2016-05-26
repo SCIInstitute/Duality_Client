@@ -7,14 +7,19 @@
 #include "duality/DatasetDispatcher.h"
 #include "duality/GeometryRenderer.h"
 
+class GLFrameBufferObject;
+
 class RenderDispatcher : public DatasetDispatcher {
 public:
     RenderDispatcher(const ScreenInfo& screenInfo);
-    void setModelView(const GLMatrix* modelView);
+    ~RenderDispatcher();
+    
+    void setModelView(const GLMatrix& modelView);
     void dispatch(GeometryDataset& node) override;
     void startDraw();
     void finishDraw();
 private:
     std::unique_ptr<GeometryRenderer> m_geoRenderer;
-    const GLMatrix* m_modelView;
+    std::unique_ptr<GLFrameBufferObject> m_fbo;
+    GLMatrix m_modelView;
 };

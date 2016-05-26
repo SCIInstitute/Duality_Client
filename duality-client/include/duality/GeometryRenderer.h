@@ -1,7 +1,6 @@
 #pragma once
 
-#include "duality/AbstractRenderer.h"
-#include "duality/G3D.h"
+#include "duality/GLMatrix.h"
 #include "duality/GeometryDataset.h"
 #include "duality/ScreenInfo.h"
 
@@ -9,7 +8,7 @@
 
 class GeometryRendererImpl;
 
-class GeometryRenderer : public AbsstractRenderer {
+class GeometryRenderer {
 public:
     GeometryRenderer(const ScreenInfo& screenInfo);
     ~GeometryRenderer();
@@ -17,5 +16,9 @@ public:
     void render(const GeometryDataset& dataset, const GLMatrix& modelView);
 
 private:
+    static GLMatrix createProjectionMatrix(const ScreenInfo& screenInfo);
+    
+private:
+    GLMatrix m_projection;
     std::unique_ptr<GeometryRendererImpl> m_impl;
 };
