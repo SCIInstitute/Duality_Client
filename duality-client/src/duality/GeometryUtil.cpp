@@ -71,7 +71,7 @@ GeometryDataset GeometryUtil::clipGeometry(const GeometryDataset& geo, Axis axis
             }
         }
     }
-    return G3D::createLineGeometry(clipIndices, clipPositions, clipColors);
+    return G3D::createLineGeometry(std::move(clipIndices), std::move(clipPositions), std::move(clipColors));
 }
 
 bool GeometryUtil::planeIntersection(const float* triPositions, const float* triColors, Axis axis, float axisPosition, float* linePositions,

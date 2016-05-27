@@ -5,15 +5,9 @@
 
 #include <string>
 
-std::unique_ptr<G3D::GeometrySoA> G3D::createLineGeometry(const std::vector<uint32_t>& indices, const std::vector<float>& positions,
-                                                          const std::vector<float>& colors) {
+std::unique_ptr<G3D::GeometrySoA> G3D::createLineGeometry(std::vector<uint32_t> indices, std::vector<float> positions,
+                                                          std::vector<float> colors) {
     auto geometry = std::make_unique<G3D::GeometrySoA>();
-
-    float* ownPositions = new float[positions.size()];  // FIXME: memory leak
-    float* ownColors = new float[colors.size()];  // FIXME: memory leak
-
-    std::copy(positions.cbegin(), positions.cend(), ownPositions);
-    std::copy(colors.cbegin(), colors.cend(), ownColors);
 
     const uint32_t numberIndices = static_cast<uint32_t>(indices.size());
     const uint32_t numberPositions = static_cast<uint32_t>(positions.size());
@@ -33,8 +27,8 @@ std::unique_ptr<G3D::GeometrySoA> G3D::createLineGeometry(const std::vector<uint
 
     geometry->indices = indices;
 
-    geometry->vertexAttributes.push_back(ownPositions);
-    geometry->vertexAttributes.push_back(ownColors);
+    geometry->vertexAttributes.push_back(std::move(positions));
+    geometry->vertexAttributes.push_back(std::move(colors));
 
     return geometry;
 }
@@ -62,8 +56,8 @@ void G3D::writeIndices(AbstractWriter& writer, const std::vector<uint32_t>& indi
     writer.write((char*)indices.data(), info.numberIndices * info.indexSize);
 }
 
-void G3D::writeVertices(AbstractWriter& writer, const float* const vertices, const GeometryInfo& info) {
-    writer.write((char*)vertices, info.numberVertices * info.vertexSize);
+void G3D::writeVertices(AbstractWriter& writer, const std::vector<float>& vertices, const GeometryInfo& info) {
+    writer.write((char*)vertices.data(), info.numberVertices * info.vertexSize);
 }
 
 void G3D::writeContent(AbstractWriter& writer, const GeometryAoS& geometry) {
@@ -71,79 +65,75 @@ void G3D::writeContent(AbstractWriter& writer, const GeometryAoS& geometry) {
     writeVertices(writer, geometry.vertices, geometry.info);
 }
 
-void G3D::write(AbstractWriter& writer, const GeometryAoS* const geometry, uint32_t vertexType) {
+void G3D::write(AbstractWriter& writer, const GeometryAoS& geometry, uint32_t vertexType) {
     if (writer.isOpen()) {
         if (vertexType == AoS) {
-            writeHeader(writer, geometry->info);
-            writeContent(writer, *geometry);
+            writeHeader(writer, geometry.info);
+            writeContent(writer, geometry);
         } else if (vertexType == SoA) {
-            writeHeader(writer, geometry->info, &vertexType);
-            writeIndices(writer, geometry->indices, geometry->info);
-            std::vector<float*> vertexAttributes;
-            convertVertices(geometry->vertices, vertexAttributes, geometry->info);
-            writeVertices(writer, vertexAttributes, geometry->info);
-            cleanVertices(vertexAttributes);
+            writeHeader(writer, geometry.info, &vertexType);
+            writeIndices(writer, geometry.indices, geometry.info);
+            auto vertexAttributes = convertVertices(geometry.vertices, geometry.info);
+            writeVertexAttributes(writer, vertexAttributes, geometry.info);
         }
     }
 }
 
-void G3D::writeVertices(AbstractWriter& writer, const std::vector<float*>& vertexAttributes, const GeometryInfo& info) {
+void G3D::writeVertexAttributes(AbstractWriter& writer, const std::vector<std::vector<float>>& vertexAttributes, const GeometryInfo& info) {
     uint32_t i = 0;
-    for (std::vector<uint32_t>::const_iterator it = info.attributeSemantics.begin(); it != info.attributeSemantics.end(); ++it) {
-        writer.write((char*)vertexAttributes.at(i), info.numberVertices * floats(*it) * sizeof(float));
+    for (auto semantic : info.attributeSemantics) {
+        writer.write((char*)vertexAttributes.at(i).data(), info.numberVertices * floats(semantic) * sizeof(float));
         ++i;
     }
 }
 
 void G3D::writeContent(AbstractWriter& writer, const GeometrySoA& geometry) {
     writeIndices(writer, geometry.indices, geometry.info);
-    writeVertices(writer, geometry.vertexAttributes, geometry.info);
+    writeVertexAttributes(writer, geometry.vertexAttributes, geometry.info);
 }
 
-void G3D::write(AbstractWriter& writer, const GeometrySoA* const geometry, uint32_t vertexType) {
+void G3D::write(AbstractWriter& writer, const GeometrySoA& geometry, uint32_t vertexType) {
     if (writer.isOpen()) {
         if (vertexType == SoA) {
-            writeHeader(writer, geometry->info);
-            writeContent(writer, *geometry);
+            writeHeader(writer, geometry.info);
+            writeContent(writer, geometry);
         } else if (vertexType == AoS) {
-            writeHeader(writer, geometry->info, &vertexType);
-            writeIndices(writer, geometry->indices, geometry->info);
-            float* vertices = NULL;
-            convertVertices(geometry->vertexAttributes, vertices, geometry->info);
-            writeVertices(writer, vertices, geometry->info);
-            cleanVertices(vertices);
+            writeHeader(writer, geometry.info, &vertexType);
+            writeIndices(writer, geometry.indices, geometry.info);
+            auto vertices = convertVertices(geometry.vertexAttributes, geometry.info);
+            writeVertices(writer, vertices, geometry.info);
         }
     }
 }
 
-void G3D::readHeader(AbstractReader& reader, GeometryInfo& info) {
-    char* buffer = new char[8 * sizeof(uint32_t) + sizeof(bool)];
-    memset(buffer, 0, 8 * sizeof(uint32_t) + sizeof(bool));
-    reader.read(buffer, 8 * sizeof(uint32_t) + sizeof(bool));
-    info.isOpaque = ((buffer++)[0] == 1);
-    info.numberPrimitives = ((uint32_t*)buffer)[0];
-    info.primitiveType = ((uint32_t*)buffer)[1];
-    uint32_t numberSemantics = ((uint32_t*)buffer)[2];
-    info.numberIndices = ((uint32_t*)buffer)[3];
-    info.indexSize = ((uint32_t*)buffer)[4];
-    info.numberVertices = ((uint32_t*)buffer)[5];
-    info.vertexSize = ((uint32_t*)buffer)[6];
-    info.vertexType = ((uint32_t*)buffer)[7];
-    delete[]-- buffer;
+G3D::GeometryInfo G3D::readHeader(AbstractReader& reader) {
+    GeometryInfo info;
+    std::vector<char> buffer(8 * sizeof(uint32_t) + sizeof(bool), 0);
+    char* bufferPtr = buffer.data();
+    reader.read(buffer.data(), 8 * sizeof(uint32_t) + sizeof(bool));
+    info.isOpaque = ((bufferPtr++)[0] == 1);
+    info.numberPrimitives = ((uint32_t*)bufferPtr)[0];
+    info.primitiveType = ((uint32_t*)bufferPtr)[1];
+    uint32_t numberSemantics = ((uint32_t*)bufferPtr)[2];
+    info.numberIndices = ((uint32_t*)bufferPtr)[3];
+    info.indexSize = ((uint32_t*)bufferPtr)[4];
+    info.numberVertices = ((uint32_t*)bufferPtr)[5];
+    info.vertexSize = ((uint32_t*)bufferPtr)[6];
+    info.vertexType = ((uint32_t*)bufferPtr)[7];
 
     uint32_t divisor =
         (info.primitiveType == Point) ? 1 : (info.primitiveType == Line) ? 2 : (info.primitiveType == Triangle)
                                                                                    ? 3
                                                                                    : (info.primitiveType == TriangleAdj) ? 6 : 0;
     if (divisor > 0 && (info.numberIndices / divisor) == info.numberPrimitives) {
-        buffer = new char[numberSemantics * sizeof(uint32_t)];
-        reader.read(buffer, numberSemantics * sizeof(uint32_t));
+        std::vector<uint32_t> buffer(numberSemantics * sizeof(uint32_t));
+        reader.read((char*)buffer.data(), numberSemantics * sizeof(uint32_t));
         for (uint32_t i = 0; i < numberSemantics; ++i) {
-            info.attributeSemantics.push_back(((uint32_t*)buffer)[i]);
+            info.attributeSemantics.push_back(buffer[i]);
         }
-        delete[] buffer;
     } else
         info.numberVertices = 0;
+    return info;
 }
 
 std::vector<uint32_t> G3D::readIndices(AbstractReader& reader, const GeometryInfo& info) {
@@ -152,19 +142,19 @@ std::vector<uint32_t> G3D::readIndices(AbstractReader& reader, const GeometryInf
     return indices;
 }
 
-void G3D::readVertices(AbstractReader& reader, float*& vertices, const GeometryInfo& info) {
-    vertices = (float*)new char[info.numberVertices * info.vertexSize];
-    reader.read((char*)vertices, info.numberVertices * info.vertexSize);
+std::vector<float> G3D::readVertices(AbstractReader& reader, const GeometryInfo& info) {
+    std::vector<float> vertices;
+    reader.read((char*)vertices.data(), info.numberVertices * info.vertexSize);
+    return vertices;
 }
 
 void G3D::readContent(AbstractReader& reader, GeometryAoS& geometry) {
     geometry.indices = readIndices(reader, geometry.info);
-    readVertices(reader, geometry.vertices, geometry.info);
+    geometry.vertices = readVertices(reader, geometry.info);
 }
 
-void G3D::convertVertices(const std::vector<float*>& vertexAttributes, float*& vertices, const GeometryInfo& info) {
-    vertices = (float*)new char[info.numberVertices * info.vertexSize];
-
+std::vector<float> G3D::convertVertices(const std::vector<std::vector<float>>& vertexAttributes, const GeometryInfo& info) {
+    std::vector<float> vertices(info.numberVertices * info.vertexSize);
     uint32_t vertexFloats = info.vertexSize / sizeof(float);
     for (uint32_t i = 0; i < info.numberVertices; ++i) {
         uint32_t offset = 0;
@@ -177,47 +167,46 @@ void G3D::convertVertices(const std::vector<float*>& vertexAttributes, float*& v
             ++attributeIndex;
         }
     }
+    return vertices;
 }
 
-void G3D::read(AbstractReader& reader, GeometryAoS* const geometry) {
+void G3D::readAoS(AbstractReader& reader, G3D::GeometryAoS& geometry) {
     if (reader.isOpen()) {
-        readHeader(reader, geometry->info);
-        if (geometry->info.numberVertices == 0)
+        geometry.info = readHeader(reader);
+        if (geometry.info.numberVertices == 0)
             return;
-        if (geometry->info.vertexType == AoS)
-            readContent(reader, *geometry);
-        else if (geometry->info.vertexType == SoA) {
-            geometry->info.vertexType = AoS;
-            geometry->indices = readIndices(reader, geometry->info);
-            std::vector<float*> vertexAttributes;
-            readVertices(reader, vertexAttributes, geometry->info);
-            convertVertices(vertexAttributes, geometry->vertices, geometry->info);
-            cleanVertices(vertexAttributes);
+        if (geometry.info.vertexType == AoS)
+            readContent(reader, geometry);
+        else if (geometry.info.vertexType == SoA) {
+            geometry.info.vertexType = AoS;
+            geometry.indices = readIndices(reader, geometry.info);
+            auto vertexAttributes = readVertexAttributes(reader, geometry.info);
+            geometry.vertices = convertVertices(vertexAttributes, geometry.info);
         }
     }
 }
 
-void G3D::readVertices(AbstractReader& reader, std::vector<float*>& vertexAttributes, const GeometryInfo& info) {
+std::vector<std::vector<float>> G3D::readVertexAttributes(AbstractReader& reader, const GeometryInfo& info) {
+    std::vector<std::vector<float>> vertexAttributes;
     for (uint32_t i = 0; i < info.attributeSemantics.size(); ++i) {
-        vertexAttributes.push_back(NULL);
         uint32_t attributeFloats = floats(info.attributeSemantics.at(i));
-        vertexAttributes.at(i) = new float[info.numberVertices * attributeFloats];
-        reader.read((char*)vertexAttributes.at(i), info.numberVertices * attributeFloats * sizeof(float));
+        std::vector<float> attibutes(info.numberVertices * attributeFloats);
+        vertexAttributes.push_back(attibutes);
+        reader.read((char*)vertexAttributes.at(i).data(), info.numberVertices * attributeFloats * sizeof(float));
     }
+    return vertexAttributes;
 }
 
 void G3D::readContent(AbstractReader& reader, GeometrySoA& geometry) {
     geometry.indices = readIndices(reader, geometry.info);
-    readVertices(reader, geometry.vertexAttributes, geometry.info);
+    geometry.vertexAttributes = readVertexAttributes(reader, geometry.info);
 }
 
-void G3D::convertVertices(const float* const vertices, std::vector<float*>& vertexAttributes, const GeometryInfo& info) {
-    uint32_t i = 0;
-    for (std::vector<uint32_t>::const_iterator it = info.attributeSemantics.begin(); it != info.attributeSemantics.end(); ++it) {
-        vertexAttributes.push_back(NULL);
-        uint32_t attributeFloats = floats(*it);
-        vertexAttributes.at(i) = new float[info.numberVertices * attributeFloats];
-        ++i;
+std::vector<std::vector<float>> G3D::convertVertices(const std::vector<float>& vertices, const GeometryInfo& info) {
+    std::vector<std::vector<float>> vertexAttributes;
+    for (auto semantic : info.attributeSemantics) {
+        uint32_t attributeFloats = floats(semantic);
+        vertexAttributes.push_back(std::vector<float>(info.numberVertices * attributeFloats));
     }
 
     uint32_t vertexFloats = info.vertexSize / sizeof(float);
@@ -232,174 +221,45 @@ void G3D::convertVertices(const float* const vertices, std::vector<float*>& vert
             ++attributeIndex;
         }
     }
+    return vertexAttributes;
 }
 
-void G3D::read(AbstractReader& reader, GeometrySoA* const geometry) {
+void G3D::readSoA(AbstractReader& reader, G3D::GeometrySoA& geometry) {
     if (reader.isOpen()) {
-        readHeader(reader, geometry->info);
-        if (geometry->info.numberVertices == 0)
+        geometry.info = readHeader(reader);
+        if (geometry.info.numberVertices == 0)
             return;
-        if (geometry->info.vertexType == SoA)
-            readContent(reader, *geometry);
-        else if (geometry->info.vertexType == AoS) {
-            geometry->info.vertexType = SoA;
-            geometry->indices = readIndices(reader, geometry->info);
-            float* vertices = NULL;
-            readVertices(reader, vertices, geometry->info);
-            convertVertices(vertices, geometry->vertexAttributes, geometry->info);
-            cleanVertices(vertices);
+        if (geometry.info.vertexType == SoA)
+            readContent(reader, geometry);
+        else if (geometry.info.vertexType == AoS) {
+            geometry.info.vertexType = SoA;
+            geometry.indices = readIndices(reader, geometry.info);
+            std::vector<float> vertices = readVertices(reader, geometry.info);
+            geometry.vertexAttributes = convertVertices(vertices, geometry.info);
         }
     }
 }
 
-void G3D::cleanVertices(float* vertices) {
-    delete[] vertices;
-    vertices = NULL;
-}
-
-void G3D::cleanVertices(std::vector<float*>& vertexAttributes) {
-    for (std::vector<float*>::iterator it = vertexAttributes.begin(); it != vertexAttributes.end(); ++it)
-        delete[] * it;
-    vertexAttributes.clear();
-}
-
-void G3D::clean(GeometryAoS* geometry) {
-    if (geometry) {
-        cleanVertices(geometry->vertices);
-        geometry->info.attributeSemantics.clear();
-    }
-}
-
-void G3D::clean(GeometrySoA* geometry) {
-    if (geometry) {
-        cleanVertices(geometry->vertexAttributes);
-        geometry->info.attributeSemantics.clear();
-    }
-}
-/*
-namespace {
-template <typename T> bool merge(G3D::GeometrySoA* dst, const G3D::GeometrySoA* const other) {
-    if (dst->info.indexSize != other->info.indexSize || dst->info.vertexType != other->info.vertexType ||
-        dst->info.primitiveType != other->info.primitiveType || dst->info.attributeSemantics != other->info.attributeSemantics ||
-        // check if one of the indices of the appended other mesh would overflow
-        // we could check all indices individually (see commented code below) but we assume that all vertices are
-        // referenced by at least one index
-        (uint64_t)dst->info.numberVertices + (uint64_t)other->info.numberVertices > std::numeric_limits<T>::max()) {
-// TODO: All but the primitiveType mismatch can be fixed, do this!
-#if 0
-      G3D::print(dst);
-      G3D::print(other);
-#endif
-        if (dst->info.indexSize != other->info.indexSize) {
-            THROW_ERROR("Different index sizes (dst: " << dst->info.indexSize << " other: " << other->info.indexSize << ")");
-        }
-        if (dst->info.vertexType != other->info.vertexType) {
-            THROW_ERROR("Different vertex types (dst: " << G3D::printVertexType(dst) << " other: " << G3D::printVertexType(other) << ")");
-        }
-        if (dst->info.primitiveType != other->info.primitiveType) {
-            THROW_ERROR("Different primitive types (dst: " << G3D::printPrimitiveType(dst) << " other: " << G3D::printPrimitiveType(other)
-                                                           << ")");
-        }
-        if (dst->info.attributeSemantics != other->info.attributeSemantics) {
-            THROW_ERROR("Different attribute semantics (dst: " << G3D::printAttributeSemantics(dst)
-                                                               << " other: " << G3D::printAttributeSemantics(other) << ")");
-        }
-        if ((uint64_t)dst->info.numberVertices + (uint64_t)other->info.numberVertices > std::numeric_limits<T>::max()) {
-            THROW_ERROR("Number of vertices required:     " << (uint64_t)dst->info.numberVertices + (uint64_t)other->info.numberVertices
-                                                            << "; Max number of vertices possible: " << std::numeric_limits<T>::max());
-        }
-        return false;
-    }
-
-#if 0
-    // this is already checked conservatively above
-    // check if one of the indices of the appended other mesh would overflow
-    const T * checkIter = (T*)other->indices;
-    for (size_t i = 0; i < other->info.numberIndices; ++i)
-    {
-      uint64_t index = *checkIter + dst->info.numberVertices;
-      if (index > std::numeric_limits<T>::max())
-        return false;
-      checkIter++;
-    }
-#endif
-
-    // merge indices: copy my indices over to new array and then append other
-    //                but add number of vertices
-    uint32_t numberIndices = dst->info.numberIndices + other->info.numberIndices;
-    T* indices = new T[numberIndices];
-
-    std::copy((T*)dst->indices, (T*)dst->indices + dst->info.numberIndices, indices);
-
-    T* indicesIter = indices + dst->info.numberIndices;
-    T* otherIndicesIter = (T*)other->indices;
-
-    // TODO: Does numberVertices always equal numberIndices?
-    for (size_t i = 0; i < other->info.numberIndices; ++i) {
-        *indicesIter = *otherIndicesIter + dst->info.numberVertices;
-        indicesIter++;
-        otherIndicesIter++;
-    }
-    dst->info.numberIndices = numberIndices;
-    delete[] dst->indices;
-    dst->indices = (uint32_t*)indices;
-
-
-    // merge vertices: simply copy both my as well as the other vertex attribs
-    //                 into a new bigger pointer
-    uint32_t numberVertices = dst->info.numberVertices + other->info.numberVertices;
-
-    for (size_t a = 0; a < dst->info.attributeSemantics.size(); ++a) {
-        size_t bytes = G3D::floats(dst->info.attributeSemantics[a]);
-
-        float* values = new float[numberVertices * bytes];
-
-        std::copy(dst->vertexAttributes[a], dst->vertexAttributes[a] + dst->info.numberVertices * bytes, values);
-
-        std::copy(other->vertexAttributes[a], other->vertexAttributes[a] + other->info.numberVertices * bytes,
-                  values + dst->info.numberVertices * bytes);
-
-        delete[] dst->vertexAttributes[a];
-        dst->vertexAttributes[a] = values;
-    }
-
-    dst->info.numberVertices = numberVertices;
-    dst->info.numberPrimitives = dst->info.numberPrimitives + other->info.numberPrimitives;
-
-    return true;
-}
-}
-
-bool G3D::merge(GeometrySoA* dst, const GeometrySoA* const other) {
-    switch (dst->info.indexSize) {
-    case sizeof(uint16_t):
-        return ::merge<uint16_t>(dst, other);
-    case sizeof(uint32_t):
-        return ::merge<uint32_t>(dst, other);
-    }
-    return false;
-}
-*/
-std::string G3D::printPrimitiveType(const Geometry* const geometry) {
-    return ((geometry->info.primitiveType == Point) ? "Point" : (geometry->info.primitiveType == Line)
+std::string G3D::printPrimitiveType(const Geometry& geometry) {
+    return ((geometry.info.primitiveType == Point) ? "Point" : (geometry.info.primitiveType == Line)
                                                                     ? "Line"
-                                                                    : (geometry->info.primitiveType == Triangle)
+                                                                    : (geometry.info.primitiveType == Triangle)
                                                                           ? "Triangle"
-                                                                          : (geometry->info.primitiveType == TriangleAdj)
+                                                                          : (geometry.info.primitiveType == TriangleAdj)
                                                                                 ? "Triangle with adjacency"
                                                                                 : "Unknown");
 }
 
-std::string G3D::printVertexType(const Geometry* const geometry) {
-    return ((geometry->info.vertexType == AoS) ? "Array of Structs" : (geometry->info.vertexType == SoA) ? "Struct of Arrays" : "Unknown");
+std::string G3D::printVertexType(const Geometry& geometry) {
+    return ((geometry.info.vertexType == AoS) ? "Array of Structs" : (geometry.info.vertexType == SoA) ? "Struct of Arrays" : "Unknown");
 }
 
-std::string G3D::printAttributeSemantics(const Geometry* const geometry) {
+std::string G3D::printAttributeSemantics(const Geometry& geometry) {
     std::string as;
-    for (size_t i = 0; i < geometry->info.attributeSemantics.size(); ++i) {
+    for (size_t i = 0; i < geometry.info.attributeSemantics.size(); ++i) {
         if (i)
             as.append(", ");
-        auto const& it = geometry->info.attributeSemantics[i];
+        auto const& it = geometry.info.attributeSemantics[i];
         as.append(((it) == Position)
                       ? "Position"
                       : ((it) == Normal) ? "Normal"
@@ -411,18 +271,16 @@ std::string G3D::printAttributeSemantics(const Geometry* const geometry) {
     return as;
 }
 
-void G3D::print(const Geometry* const geometry, std::ostream& output) {
-    if (geometry) {
-        output << "Opaque: " << (geometry->info.isOpaque ? "yes" : "no") << std::endl;
-        output << "Number primitives: " << geometry->info.numberPrimitives << std::endl;
-        output << "Primitive type: " << printPrimitiveType(geometry) << std::endl;
-        output << "Number indices: " << geometry->info.numberIndices << std::endl;
-        output << "Index size: " << geometry->info.indexSize << std::endl;
-        output << "Number vertices: " << geometry->info.numberVertices << std::endl;
-        output << "Vertex size: " << geometry->info.vertexSize << std::endl;
-        output << "Vertex type: " << printVertexType(geometry) << std::endl;
-        output << "Vertex attribute semantics: " << printAttributeSemantics(geometry) << std::endl;
-    }
+void G3D::print(const Geometry& geometry, std::ostream& output) {
+    output << "Opaque: " << (geometry.info.isOpaque ? "yes" : "no") << std::endl;
+    output << "Number primitives: " << geometry.info.numberPrimitives << std::endl;
+    output << "Primitive type: " << printPrimitiveType(geometry) << std::endl;
+    output << "Number indices: " << geometry.info.numberIndices << std::endl;
+    output << "Index size: " << geometry.info.indexSize << std::endl;
+    output << "Number vertices: " << geometry.info.numberVertices << std::endl;
+    output << "Vertex size: " << geometry.info.vertexSize << std::endl;
+    output << "Vertex type: " << printVertexType(geometry) << std::endl;
+    output << "Vertex attribute semantics: " << printAttributeSemantics(geometry) << std::endl;
 }
 
 /*

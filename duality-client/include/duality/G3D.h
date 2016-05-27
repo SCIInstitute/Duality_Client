@@ -45,22 +45,15 @@ public:
     };
 
     struct GeometryAoS : Geometry {
-        GeometryAoS()
-            : Geometry()
-            , vertices(nullptr) {
-            info.vertexType = AoS;
-        }
+        GeometryAoS() { info.vertexType = AoS; }
 
-        float* vertices;
+        std::vector<float> vertices;
     };
 
     struct GeometrySoA : Geometry {
-        GeometrySoA()
-            : Geometry() {
-            info.vertexType = SoA;
-        }
+        GeometrySoA() { info.vertexType = SoA; }
 
-        std::vector<float*> vertexAttributes;
+        std::vector<std::vector<float>> vertexAttributes;
     };
 
     static uint32_t floats(uint32_t semantic) {
@@ -81,42 +74,35 @@ public:
         return 0;
     }
 
-    static std::unique_ptr<GeometrySoA> createLineGeometry(const std::vector<uint32_t>& indices, const std::vector<float>& positions,
-                                                           const std::vector<float>& colors);
+    static std::unique_ptr<GeometrySoA> createLineGeometry(std::vector<uint32_t> indices, std::vector<float> positions,
+                                                           std::vector<float> colors);
 
-    static void write(AbstractWriter& writer, const GeometryAoS* const geometry, uint32_t vertexType = AoS);
-    static void write(AbstractWriter& writer, const GeometrySoA* const geometry, uint32_t vertexType = SoA);
-    static void read(AbstractReader& reader, GeometryAoS* const geometry);
-    static void read(AbstractReader& reader, GeometrySoA* const geometry);
-    static std::string printPrimitiveType(const Geometry* const geometry);
-    static std::string printVertexType(const Geometry* const geometry);
-    static std::string printAttributeSemantics(const Geometry* const geometry);
-    static void print(const Geometry* const geometry, std::ostream& output = std::cout);
-    static void clean(GeometryAoS* geometry);
-    static void clean(GeometrySoA* geometry);
-    //static bool merge(GeometrySoA* a, const GeometrySoA* const b); // merge a and b into a
+    static void write(AbstractWriter& writer, const GeometryAoS& geometry, uint32_t vertexType = AoS);
+    static void write(AbstractWriter& writer, const GeometrySoA& geometry, uint32_t vertexType = SoA);
+    static void readAoS(AbstractReader& reader, GeometryAoS& geometry);
+    static void readSoA(AbstractReader& reader, GeometrySoA& geometry);
+    static std::string printPrimitiveType(const Geometry& geometry);
+    static std::string printVertexType(const Geometry& geometry);
+    static std::string printAttributeSemantics(const Geometry& geometry);
+    static void print(const Geometry& geometry, std::ostream& output = std::cout);
 
 private:
     static void writeHeader(AbstractWriter& writer, const GeometryInfo& info, const uint32_t* const vertexType = nullptr);
     static void writeIndices(AbstractWriter& writer, const std::vector<uint32_t>& indices, const GeometryInfo& info);
-    static void writeVertices(AbstractWriter& writer, const float* const vertices, const GeometryInfo& info);
-    static void writeVertices(AbstractWriter& writer, const std::vector<float*>& vertexAttributes, const GeometryInfo& info);
+    static void writeVertices(AbstractWriter& writer, const std::vector<float>& vertices, const GeometryInfo& info);
+    static void writeVertexAttributes(AbstractWriter& writer, const std::vector<std::vector<float>>& vertexAttributes, const GeometryInfo& info);
     static void writeContent(AbstractWriter& writer, const GeometryAoS& geometry);
     static void writeContent(AbstractWriter& writer, const GeometrySoA& geometry);
 
-    static void readHeader(AbstractReader& reader, GeometryInfo& info);
+    static GeometryInfo readHeader(AbstractReader& reader);
     static std::vector<uint32_t> readIndices(AbstractReader& reader, const GeometryInfo& info);
-    static void readVertices(AbstractReader& reader, float*& vertices, const GeometryInfo& info);
-    static void readVertices(AbstractReader& reader, std::vector<float*>& vertexAttributes, const GeometryInfo& info);
+    static std::vector<float> readVertices(AbstractReader& reader, const GeometryInfo& info);
+    static std::vector<std::vector<float>> readVertexAttributes(AbstractReader& reader, const GeometryInfo& info);
     static void readContent(AbstractReader& reader, GeometryAoS& geometry);
     static void readContent(AbstractReader& reader, GeometrySoA& geometry);
 
-    static void convertVertices(const std::vector<float*>& vertexAttributes, float*& vertices, const GeometryInfo& info);
-    static void convertVertices(const float* const vertices, std::vector<float*>& vertexAttributes, const GeometryInfo& info);
-
-    static void cleanIndices(uint32_t* indices);
-    static void cleanVertices(float* vertices);
-    static void cleanVertices(std::vector<float*>& vertexAttributes);
+    static std::vector<float> convertVertices(const std::vector<std::vector<float>>& vertexAttributes, const GeometryInfo& info);
+    static std::vector<std::vector<float>> convertVertices(const std::vector<float>& vertices, const GeometryInfo& info);
 };
 
 #endif // G3D_H

@@ -26,8 +26,8 @@ GeometryDataset::GeometryDataset(std::unique_ptr<G3D::GeometrySoA> geometry, std
 void GeometryDataset::applyTransform(const Mat4f& matrix) {
     uint32_t numVertices = m_geometry->info.numberVertices;
     {
-        float* positions = const_cast<float*>(this->getPositions());
-        if (positions != nullptr) {
+        if (m_positions != nullptr) {
+            float* positions = const_cast<float*>(m_positions);
             for (uint32_t i = 0; i < numVertices; ++i, positions += 3) {
                 IVDA::Vec4f position(IVDA::Vec3f(positions), 1);
                 position = matrix * position;
@@ -38,8 +38,8 @@ void GeometryDataset::applyTransform(const Mat4f& matrix) {
         }
     }
     {
-        float* normals = const_cast<float*>(this->getNormals());
-        if (normals != nullptr) {
+        if (m_normals != nullptr) {
+            float* normals = const_cast<float*>(m_normals);
             Mat4f normalMatrix = matrix.inverse().Transpose();
             for (uint32_t i = 0; i < numVertices; ++i, normals += 3) {
                 Vec4f normal(Vec3f(normals), 0);
@@ -51,8 +51,8 @@ void GeometryDataset::applyTransform(const Mat4f& matrix) {
         }
     }
     {
-        float* tangents = const_cast<float*>(this->getTangents());
-        if (tangents != nullptr) {
+        if (m_tangents != nullptr) {
+            float* tangents = const_cast<float*>(m_tangents);
             for (uint32_t i = 0; i < numVertices; ++i, tangents += 3) {
                 Vec4f tangent(Vec3f(tangents), 0);
                 tangent = matrix * tangent;
@@ -71,7 +71,7 @@ void GeometryDataset::accept(DatasetDispatcher& dispatcher) {
 void GeometryDataset::read(std::shared_ptr<std::vector<uint8_t>> data) {
     ReaderFromMemory reader(reinterpret_cast<const char*>(data->data()), data->size());
     m_geometry = std::make_unique<G3D::GeometrySoA>();
-    G3D::read(reader, m_geometry.get());
+    G3D::readSoA(reader, *m_geometry);
     assignShortcutPointers();
 }
 
@@ -111,27 +111,27 @@ void GeometryDataset::assignShortcutPointers() {
     for (size_t i = 0; i < m_geometry->info.attributeSemantics.size(); ++i) {
         switch (m_geometry->info.attributeSemantics[i]) {
         case G3D::Position: {
-            m_positions = m_geometry->vertexAttributes.at(i);
+            m_positions = m_geometry->vertexAttributes.at(i).data();
             break;
         }
         case G3D::Normal: {
-            m_normals = m_geometry->vertexAttributes.at(i);
+            m_normals = m_geometry->vertexAttributes.at(i).data();
             break;
         }
         case G3D::Tangent: {
-            m_tangents = m_geometry->vertexAttributes.at(i);
+            m_tangents = m_geometry->vertexAttributes.at(i).data();
             break;
         }
         case G3D::Color: {
-            m_colors = m_geometry->vertexAttributes.at(i);
+            m_colors = m_geometry->vertexAttributes.at(i).data();
             break;
         }
         case G3D::Tex: {
-            m_texcoords = m_geometry->vertexAttributes.at(i);
+            m_texcoords = m_geometry->vertexAttributes.at(i).data();
             break;
         }
         case G3D::Float: {
-            m_alphas = m_geometry->vertexAttributes.at(i);
+            m_alphas = m_geometry->vertexAttributes.at(i).data();
             break;
         }
         }
