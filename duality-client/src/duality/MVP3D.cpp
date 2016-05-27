@@ -2,14 +2,12 @@
 
 using namespace IVDA;
 
-MVP3D::MVP3D(const ScreenInfo& screenInfo, const std::pair<IVDA::Vec3f, IVDA::Vec3f>& boundingBox)
+MVP3D::MVP3D(const ScreenInfo& screenInfo, const BoundingBox& boundingBox)
     : m_translation(Vec3f(0.f, 0.f, -3.f)) {
     // create default model view matrix
-    Vec3f vMin = boundingBox.first;
-    Vec3f vMax = boundingBox.second;
 
-    Vec3f size = vMax - vMin;
-    Vec3f center = vMin + size / 2;
+    Vec3f size = boundingBox.max - boundingBox.min;
+    Vec3f center = boundingBox.min + size / 2;
 
     m_defaultModelView.loadIdentity();
     m_defaultModelView.translate(-center.x, -center.y, -center.z);

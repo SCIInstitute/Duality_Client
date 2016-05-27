@@ -5,7 +5,6 @@
 #include "duality/Scene.h"
 
 #include "IVDA/Vectors.h"
-#include "duality/BoundingBoxCalculator.h"
 #include "duality/SceneParser.h"
 
 using namespace IVDA;

@@ -242,12 +242,12 @@ void G3D::readSoA(AbstractReader& reader, G3D::GeometrySoA& geometry) {
 
 std::string G3D::printPrimitiveType(const Geometry& geometry) {
     return ((geometry.info.primitiveType == Point) ? "Point" : (geometry.info.primitiveType == Line)
-                                                                    ? "Line"
-                                                                    : (geometry.info.primitiveType == Triangle)
-                                                                          ? "Triangle"
-                                                                          : (geometry.info.primitiveType == TriangleAdj)
-                                                                                ? "Triangle with adjacency"
-                                                                                : "Unknown");
+                                                                   ? "Line"
+                                                                   : (geometry.info.primitiveType == Triangle)
+                                                                         ? "Triangle"
+                                                                         : (geometry.info.primitiveType == TriangleAdj)
+                                                                               ? "Triangle with adjacency"
+                                                                               : "Unknown");
 }
 
 std::string G3D::printVertexType(const Geometry& geometry) {

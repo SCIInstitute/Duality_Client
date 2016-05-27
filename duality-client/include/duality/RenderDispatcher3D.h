@@ -4,22 +4,23 @@
 
 #pragma once
 
-#include "duality/DatasetDispatcher.h"
-#include "duality/ScreenInfo.h"
-#include "duality/MVP3D.h"
 #include "IVDA/Vectors.h"
+#include "duality/BoundingBox.h"
+#include "duality/DatasetDispatcher.h"
+#include "duality/MVP3D.h"
+#include "duality/ScreenInfo.h"
 
 class GLFrameBufferObject;
 class GeometryRenderer3D;
 
 class RenderDispatcher3D : public DatasetDispatcher {
 public:
-    RenderDispatcher3D(const ScreenInfo& screenInfo, const std::pair<IVDA::Vec3f, IVDA::Vec3f>& boundingBox);
+    RenderDispatcher3D(const ScreenInfo& screenInfo, const BoundingBox& boundingBox);
     ~RenderDispatcher3D();
-    
+
     void addTranslation(const IVDA::Vec2f& translation);
     void addRotation(const IVDA::Mat4f& rotation);
-    
+
     void dispatch(GeometryDataset& node) override;
     void startDraw();
     void finishDraw();

@@ -3,10 +3,11 @@
 #include "IVDA/Vectors.h"
 #include "duality/GLMatrix.h"
 #include "duality/ScreenInfo.h"
+#include "duality/BoundingBox.h"
 
 class MVP3D {
 public:
-    MVP3D(const ScreenInfo& screenInfo, const std::pair<IVDA::Vec3f, IVDA::Vec3f>& boundingBox);
+    MVP3D(const ScreenInfo& screenInfo, const BoundingBox& boundingBox);
     
     void addTranslation(const IVDA::Vec2f& translation);
     void addRotation(const IVDA::Mat4f& rotation);

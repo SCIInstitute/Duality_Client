@@ -11,7 +11,7 @@
 
 #include <OpenGLES/ES3/gl.h>
 
-RenderDispatcher2D::RenderDispatcher2D(const ScreenInfo& screenInfo, const std::pair<IVDA::Vec3f, IVDA::Vec3f>& boundingBox)
+RenderDispatcher2D::RenderDispatcher2D(const ScreenInfo& screenInfo, const BoundingBox& boundingBox)
     : m_fbo(std::make_unique<GLFrameBufferObject>(static_cast<unsigned int>(screenInfo.width / screenInfo.standardDownSampleFactor),
                                                   static_cast<unsigned int>(screenInfo.width / screenInfo.standardDownSampleFactor), true))
     , m_geoRenderer(std::make_unique<GeometryRenderer2D>())

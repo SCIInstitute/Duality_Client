@@ -7,7 +7,6 @@
 #include "duality/DataProvider.h"
 #include "duality/Dataset.h"
 #include "duality/RenderDispatcher3D.h"
-#include "duality/BoundingBoxCalculator.h"
 
 #include <memory>
 #include <vector>

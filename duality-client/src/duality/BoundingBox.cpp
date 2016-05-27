@@ -2,7 +2,7 @@
 //  Copyright © 2016 Scientific Computing and Imaging Institute. All rights reserved.
 //
 
-#include "duality/BoundingBoxCalculator.h"
+#include "duality/BoundingBox.h"
 #include "duality/GeometryDataset.h"
 
 #include <limits>
@@ -25,6 +25,6 @@ void BoundingBoxCalculator::dispatch(GeometryDataset& node) {
     }
 }
 
-std::pair<IVDA::Vec3f, IVDA::Vec3f> BoundingBoxCalculator::getMinMax() const {
-    return std::make_pair(m_min, m_max);
+BoundingBox BoundingBoxCalculator::boundingBox() const {
+    return BoundingBox{m_min, m_max};
 }

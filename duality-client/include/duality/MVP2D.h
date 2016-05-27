@@ -4,10 +4,11 @@
 #include "duality/CoordinateSystem.h"
 #include "duality/GLMatrix.h"
 #include "duality/ScreenInfo.h"
+#include "duality/BoundingBox.h"
 
 class MVP2D {
 public:
-    MVP2D(const ScreenInfo& screenInfo, const std::pair<IVDA::Vec3f, IVDA::Vec3f>& boundingBox);
+    MVP2D(const ScreenInfo& screenInfo, const BoundingBox& boundingBox);
 
     void addTranslation(const IVDA::Vec2f& translation);
     void addRotation(float angle);
@@ -20,7 +21,7 @@ private:
 
 private:
     float m_screenAspect;
-    std::pair<IVDA::Vec3f, IVDA::Vec3f> m_boundingBox;
+    BoundingBox m_boundingBox;
     IVDA::Vec2f m_translation;
     float m_rotationAngle;
 };

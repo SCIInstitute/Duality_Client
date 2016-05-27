@@ -4,7 +4,7 @@
 
 using namespace IVDA;
 
-MVP2D::MVP2D(const ScreenInfo& screenInfo, const std::pair<Vec3f, Vec3f>& boundingBox)
+MVP2D::MVP2D(const ScreenInfo& screenInfo, const BoundingBox& boundingBox)
     : m_screenAspect(static_cast<float>(screenInfo.width) / static_cast<float>(screenInfo.height))
     , m_boundingBox(boundingBox)
     , m_translation(0.0f, 0.0f)
@@ -20,8 +20,8 @@ GLMatrix MVP2D::calculate() const {
     int axis = 2; // FIXME!!!
 
     // Vec3f const scale3  = m_vScale;
-    const Vec3f size3 = m_boundingBox.second - m_boundingBox.first;
-    const Vec3f center3 = m_boundingBox.first + size3 / 2;
+    const Vec3f size3 = m_boundingBox.max - m_boundingBox.min;
+    const Vec3f center3 = m_boundingBox.min + size3 / 2;
 
     const Mat3i svm = getSliceViewMatrix();
 
@@ -69,8 +69,8 @@ GLMatrix MVP2D::calculate() const {
     }
 
     // setup projection parameters
-    const auto min3 = m_boundingBox.first - center3;
-    const auto max3 = m_boundingBox.second - center3;
+    const auto min3 = m_boundingBox.min - center3;
+    const auto max3 = m_boundingBox.max - center3;
     const float d = 0.1; // some delta to make sure that our geometry does not get clipped away due to floating point precision errors
     switch (axis) {
     case 0: {

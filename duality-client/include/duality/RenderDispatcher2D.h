@@ -14,7 +14,7 @@ class GeometryRenderer2D;
 
 class RenderDispatcher2D : public DatasetDispatcher {
 public:
-    RenderDispatcher2D(const ScreenInfo& screenInfo, const std::pair<IVDA::Vec3f, IVDA::Vec3f>& boundingBox);
+    RenderDispatcher2D(const ScreenInfo& screenInfo, const BoundingBox& boundingBox);
     ~RenderDispatcher2D();
     
     //void addTranslation(const IVDA::Vec2f& translation);
