@@ -4,10 +4,10 @@
 
 #include "duality/RenderDispatcher2D.h"
 
+#include "IVDA/GLFrameBufferObject.h"
 #include "IVDA/GLInclude.h"
 #include "duality/GeometryDataset.h"
 #include "duality/GeometryRenderer2D.h"
-#include "duality/private/GLFrameBufferObject.h"
 
 #include <OpenGLES/ES3/gl.h>
 

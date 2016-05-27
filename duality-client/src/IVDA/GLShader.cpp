@@ -1,4 +1,4 @@
-#include "duality/private/GLShader.h"
+#include "IVDA/GLShader.h"
 
 #include "IVDA/iOS.h"
 #include "IVDA/SysTools.h"
