@@ -4,7 +4,7 @@
 
 class GeometryUtil {
 public:
-    enum Axis { AxisX, AxisY, AxisZ };
+    enum Axis { AxisX = 0, AxisY = 1, AxisZ = 2 };
     static GeometryDataset clipGeometry(const GeometryDataset& geo, Axis axis, float position);
 
 private:

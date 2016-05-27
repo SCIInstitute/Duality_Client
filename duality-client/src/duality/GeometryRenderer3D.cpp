@@ -68,7 +68,7 @@ void GeometryRenderer3D::render(const GeometryDataset& dataset, const GLMatrix& 
     auto& shader = determineActiveShader(dataset);
     shader.Enable();
 
-    shader.SetValue("mvpMatrix", (IVDA::Mat4f)(mvp)); // FIXME: very ugly cast!!!
+    shader.SetValue("mvpMatrix", static_cast<IVDA::Mat4f>(mvp));
 
     GL(glEnable(GL_DEPTH_TEST));
 

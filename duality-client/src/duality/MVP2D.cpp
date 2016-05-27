@@ -17,7 +17,7 @@ void MVP2D::addRotation(float angle) {}
 GLMatrix MVP2D::calculate() const {
     GLMatrix mvp;
 
-    int axis = 0; // FIXME!!!
+    int axis = 2; // FIXME!!!
 
     // Vec3f const scale3  = m_vScale;
     const Vec3f size3 = m_boundingBox.second - m_boundingBox.first;
@@ -109,7 +109,7 @@ Mat3i MVP2D::getSliceViewerBasis(const Axis viewerUp, const Axis viewerFace) {
 
 Mat3i MVP2D::getSliceViewMatrix() {
     CoordinateSystem cs;                                  // FIXME: default
-    const Axis viewerFace(CoordinateAxis::X_Axis, false); // FIXME: default
+    const Axis viewerFace(CoordinateAxis::Z_Axis, true); // FIXME: default
 
     const auto userUp = cs.mappedDirectionToAxis(cs.orientation.userUp);
     const auto userFace = cs.mappedDirectionToAxis(cs.orientation.userFace);

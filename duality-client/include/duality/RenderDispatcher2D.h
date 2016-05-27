@@ -19,6 +19,7 @@ public:
     
     //void addTranslation(const IVDA::Vec2f& translation);
     //void addRotation(const IVDA::Mat4f& rotation);
+    void setSlice(float slice);
     
     void dispatch(GeometryDataset& node) override;
     void startDraw();

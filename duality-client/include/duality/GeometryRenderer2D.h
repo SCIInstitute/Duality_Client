@@ -15,6 +15,9 @@ public:
 
     void render(const GeometryDataset& dataset, const GLMatrix& mvp);
     
+    void setSlice(float slice);
+    
 private:
     std::unique_ptr<GLShader> m_shader;
+    float m_slice;
 };

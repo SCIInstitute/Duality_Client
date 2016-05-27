@@ -23,7 +23,6 @@ void RenderDispatcher3D::dispatch(GeometryDataset& node) {
     m_geoRenderer->render(node, m_mvp.calculate());
 }
 
-
 void RenderDispatcher3D::addTranslation(const IVDA::Vec2f& translation) {
     m_mvp.addTranslation(translation);
 }
@@ -31,7 +30,6 @@ void RenderDispatcher3D::addTranslation(const IVDA::Vec2f& translation) {
 void RenderDispatcher3D::addRotation(const IVDA::Mat4f& rotation) {
     m_mvp.addRotation(rotation);
 }
-
 
 void RenderDispatcher3D::startDraw() {
     GL(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));

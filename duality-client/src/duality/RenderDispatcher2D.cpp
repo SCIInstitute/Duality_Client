@@ -31,6 +31,10 @@ void RenderDispatcher2D::dispatch(GeometryDataset& node) {
 //    m_mvp.addRotation(rotation);
 //}
 
+void RenderDispatcher2D::setSlice(float slice) {
+    m_geoRenderer->setSlice(slice);
+}
+
 void RenderDispatcher2D::startDraw() {
     GL(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
     GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));

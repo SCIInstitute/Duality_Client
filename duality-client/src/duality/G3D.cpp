@@ -9,7 +9,6 @@ std::unique_ptr<G3D::GeometrySoA> G3D::createLineGeometry(const std::vector<uint
                                                           const std::vector<float>& colors) {
     auto geometry = std::make_unique<G3D::GeometrySoA>();
 
-
     uint32_t* ownIndices = new uint32_t[indices.size()]; // FIXME: memory leak
     float* ownPositions = new float[positions.size()];
     float* ownColors = new float[colors.size()];
