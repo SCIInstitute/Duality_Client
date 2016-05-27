@@ -2,42 +2,40 @@
 //  Copyright © 2016 Scientific Computing and Imaging Institute. All rights reserved.
 //
 
-#include "duality/RenderDispatcher3D.h"
+#include "duality/RenderDispatcher2D.h"
 
 #include "IVDA/GLInclude.h"
 #include "duality/GeometryDataset.h"
-#include "duality/GeometryRenderer3D.h"
+#include "duality/GeometryRenderer2D.h"
 #include "duality/private/GLFrameBufferObject.h"
 
 #include <OpenGLES/ES3/gl.h>
 
-RenderDispatcher3D::RenderDispatcher3D(const ScreenInfo& screenInfo, const std::pair<IVDA::Vec3f, IVDA::Vec3f>& boundingBox)
+RenderDispatcher2D::RenderDispatcher2D(const ScreenInfo& screenInfo, const std::pair<IVDA::Vec3f, IVDA::Vec3f>& boundingBox)
     : m_fbo(std::make_unique<GLFrameBufferObject>(static_cast<unsigned int>(screenInfo.width / screenInfo.standardDownSampleFactor),
                                                   static_cast<unsigned int>(screenInfo.width / screenInfo.standardDownSampleFactor), true))
-    , m_geoRenderer(std::make_unique<GeometryRenderer3D>())
+    , m_geoRenderer(std::make_unique<GeometryRenderer2D>())
     , m_mvp(screenInfo, boundingBox) {}
 
-RenderDispatcher3D::~RenderDispatcher3D() = default;
+RenderDispatcher2D::~RenderDispatcher2D() = default;
 
-void RenderDispatcher3D::dispatch(GeometryDataset& node) {
+void RenderDispatcher2D::dispatch(GeometryDataset& node) {
     m_geoRenderer->render(node, m_mvp.calculate());
 }
 
+// void RenderDispatcher2D::addTranslation(const IVDA::Vec2f& translation) {
+//    m_mvp.addTranslation(translation);
+//}
 
-void RenderDispatcher3D::addTranslation(const IVDA::Vec2f& translation) {
-    m_mvp.addTranslation(translation);
-}
+// void RenderDispatcher2D::addRotation(const IVDA::Mat4f& rotation) {
+//    m_mvp.addRotation(rotation);
+//}
 
-void RenderDispatcher3D::addRotation(const IVDA::Mat4f& rotation) {
-    m_mvp.addRotation(rotation);
-}
-
-
-void RenderDispatcher3D::startDraw() {
+void RenderDispatcher2D::startDraw() {
     GL(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
     GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 }
 
-void RenderDispatcher3D::finishDraw() {
+void RenderDispatcher2D::finishDraw() {
     m_fbo->Read(0);
 }
