@@ -17,7 +17,7 @@ public:
     void read(std::shared_ptr<std::vector<uint8_t>> data) override;
 
     const G3D::GeometryInfo* geometryInfo() const noexcept;
-    const uint32_t* getIndices() const noexcept;
+    const std::vector<uint32_t>& getIndices() const noexcept;
     const float* getPositions() const noexcept;
     const float* getNormals() const noexcept;
     const float* getTangents() const noexcept;

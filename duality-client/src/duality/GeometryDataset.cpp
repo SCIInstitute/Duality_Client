@@ -79,8 +79,8 @@ const G3D::GeometryInfo* GeometryDataset::geometryInfo() const noexcept {
     return m_geometry != nullptr ? &m_geometry->info : nullptr;
 }
 
-const uint32_t* GeometryDataset::getIndices() const noexcept {
-    return m_geometry != nullptr ? m_geometry->indices : nullptr;
+const std::vector<uint32_t>& GeometryDataset::getIndices() const noexcept {
+    return m_geometry->indices;
 }
 
 const float* GeometryDataset::getPositions() const noexcept {

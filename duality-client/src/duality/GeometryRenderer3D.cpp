@@ -76,7 +76,7 @@ void GeometryRenderer3D::render(const GeometryDataset& dataset, const GLMatrix& 
 
     int primitiveType = primitiveTypeGL(dataset);
     uint32_t numIndices = dataset.geometryInfo()->numberIndices;
-    GL(glDrawElements(primitiveType, (GLsizei)numIndices, GL_UNSIGNED_INT, dataset.getIndices()));
+    GL(glDrawElements(primitiveType, (GLsizei)numIndices, GL_UNSIGNED_INT, dataset.getIndices().data()));
 
     for (int i = 0; i < attributeCount; ++i) {
         GL(glDisableVertexAttribArray(i));

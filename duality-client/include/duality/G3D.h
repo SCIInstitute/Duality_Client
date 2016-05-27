@@ -39,11 +39,9 @@ public:
     };
 
     struct Geometry {
-        Geometry()
-            : indices(nullptr) {}
+        Geometry() = default;
         GeometryInfo info;
-
-        uint32_t* indices;
+        std::vector<uint32_t> indices;
     };
 
     struct GeometryAoS : Geometry {
@@ -83,7 +81,7 @@ public:
         return 0;
     }
 
-    static std::unique_ptr<GeometrySoA> createLineGeometry(const std::vector<uint16_t>& indices, const std::vector<float>& positions,
+    static std::unique_ptr<GeometrySoA> createLineGeometry(const std::vector<uint32_t>& indices, const std::vector<float>& positions,
                                                            const std::vector<float>& colors);
 
     static void write(AbstractWriter& writer, const GeometryAoS* const geometry, uint32_t vertexType = AoS);
@@ -96,18 +94,18 @@ public:
     static void print(const Geometry* const geometry, std::ostream& output = std::cout);
     static void clean(GeometryAoS* geometry);
     static void clean(GeometrySoA* geometry);
-    static bool merge(GeometrySoA* a, const GeometrySoA* const b); // merge a and b into a
+    //static bool merge(GeometrySoA* a, const GeometrySoA* const b); // merge a and b into a
 
 private:
     static void writeHeader(AbstractWriter& writer, const GeometryInfo& info, const uint32_t* const vertexType = nullptr);
-    static void writeIndices(AbstractWriter& writer, const uint32_t* const indices, const GeometryInfo& info);
+    static void writeIndices(AbstractWriter& writer, const std::vector<uint32_t>& indices, const GeometryInfo& info);
     static void writeVertices(AbstractWriter& writer, const float* const vertices, const GeometryInfo& info);
     static void writeVertices(AbstractWriter& writer, const std::vector<float*>& vertexAttributes, const GeometryInfo& info);
     static void writeContent(AbstractWriter& writer, const GeometryAoS& geometry);
     static void writeContent(AbstractWriter& writer, const GeometrySoA& geometry);
 
     static void readHeader(AbstractReader& reader, GeometryInfo& info);
-    static void readIndices(AbstractReader& reader, uint32_t*& indices, const GeometryInfo& info);
+    static std::vector<uint32_t> readIndices(AbstractReader& reader, const GeometryInfo& info);
     static void readVertices(AbstractReader& reader, float*& vertices, const GeometryInfo& info);
     static void readVertices(AbstractReader& reader, std::vector<float*>& vertexAttributes, const GeometryInfo& info);
     static void readContent(AbstractReader& reader, GeometryAoS& geometry);

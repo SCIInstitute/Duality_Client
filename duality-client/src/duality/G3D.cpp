@@ -5,15 +5,13 @@
 
 #include <string>
 
-std::unique_ptr<G3D::GeometrySoA> G3D::createLineGeometry(const std::vector<uint16_t>& indices, const std::vector<float>& positions,
+std::unique_ptr<G3D::GeometrySoA> G3D::createLineGeometry(const std::vector<uint32_t>& indices, const std::vector<float>& positions,
                                                           const std::vector<float>& colors) {
     auto geometry = std::make_unique<G3D::GeometrySoA>();
 
-    uint32_t* ownIndices = new uint32_t[indices.size()]; // FIXME: memory leak
-    float* ownPositions = new float[positions.size()];
-    float* ownColors = new float[colors.size()];
+    float* ownPositions = new float[positions.size()];  // FIXME: memory leak
+    float* ownColors = new float[colors.size()];  // FIXME: memory leak
 
-    std::copy(indices.cbegin(), indices.cend(), ownIndices);
     std::copy(positions.cbegin(), positions.cend(), ownPositions);
     std::copy(colors.cbegin(), colors.cend(), ownColors);
 
@@ -33,7 +31,7 @@ std::unique_ptr<G3D::GeometrySoA> G3D::createLineGeometry(const std::vector<uint
     geometry->info.attributeSemantics.push_back(G3D::AttributeSemantic::Position);
     geometry->info.attributeSemantics.push_back(G3D::AttributeSemantic::Color);
 
-    geometry->indices = ownIndices;
+    geometry->indices = indices;
 
     geometry->vertexAttributes.push_back(ownPositions);
     geometry->vertexAttributes.push_back(ownColors);
@@ -60,8 +58,8 @@ void G3D::writeHeader(AbstractWriter& writer, const GeometryInfo& info, const ui
     writer.write((char*)&(info.attributeSemantics.at(0)), sizeof(uint32_t) * numberSemantics);
 }
 
-void G3D::writeIndices(AbstractWriter& writer, const uint32_t* const indices, const GeometryInfo& info) {
-    writer.write((char*)indices, info.numberIndices * info.indexSize);
+void G3D::writeIndices(AbstractWriter& writer, const std::vector<uint32_t>& indices, const GeometryInfo& info) {
+    writer.write((char*)indices.data(), info.numberIndices * info.indexSize);
 }
 
 void G3D::writeVertices(AbstractWriter& writer, const float* const vertices, const GeometryInfo& info) {
@@ -148,9 +146,10 @@ void G3D::readHeader(AbstractReader& reader, GeometryInfo& info) {
         info.numberVertices = 0;
 }
 
-void G3D::readIndices(AbstractReader& reader, uint32_t*& indices, const GeometryInfo& info) {
-    indices = (uint32_t*)new char[info.numberIndices * info.indexSize];
-    reader.read((char*)indices, info.numberIndices * info.indexSize);
+std::vector<uint32_t> G3D::readIndices(AbstractReader& reader, const GeometryInfo& info) {
+    std::vector<uint32_t> indices(info.numberIndices);
+    reader.read((char*)indices.data(), info.numberIndices * info.indexSize);
+    return indices;
 }
 
 void G3D::readVertices(AbstractReader& reader, float*& vertices, const GeometryInfo& info) {
@@ -159,7 +158,7 @@ void G3D::readVertices(AbstractReader& reader, float*& vertices, const GeometryI
 }
 
 void G3D::readContent(AbstractReader& reader, GeometryAoS& geometry) {
-    readIndices(reader, geometry.indices, geometry.info);
+    geometry.indices = readIndices(reader, geometry.info);
     readVertices(reader, geometry.vertices, geometry.info);
 }
 
@@ -189,7 +188,7 @@ void G3D::read(AbstractReader& reader, GeometryAoS* const geometry) {
             readContent(reader, *geometry);
         else if (geometry->info.vertexType == SoA) {
             geometry->info.vertexType = AoS;
-            readIndices(reader, geometry->indices, geometry->info);
+            geometry->indices = readIndices(reader, geometry->info);
             std::vector<float*> vertexAttributes;
             readVertices(reader, vertexAttributes, geometry->info);
             convertVertices(vertexAttributes, geometry->vertices, geometry->info);
@@ -208,7 +207,7 @@ void G3D::readVertices(AbstractReader& reader, std::vector<float*>& vertexAttrib
 }
 
 void G3D::readContent(AbstractReader& reader, GeometrySoA& geometry) {
-    readIndices(reader, geometry.indices, geometry.info);
+    geometry.indices = readIndices(reader, geometry.info);
     readVertices(reader, geometry.vertexAttributes, geometry.info);
 }
 
@@ -244,18 +243,13 @@ void G3D::read(AbstractReader& reader, GeometrySoA* const geometry) {
             readContent(reader, *geometry);
         else if (geometry->info.vertexType == AoS) {
             geometry->info.vertexType = SoA;
-            readIndices(reader, geometry->indices, geometry->info);
+            geometry->indices = readIndices(reader, geometry->info);
             float* vertices = NULL;
             readVertices(reader, vertices, geometry->info);
             convertVertices(vertices, geometry->vertexAttributes, geometry->info);
             cleanVertices(vertices);
         }
     }
-}
-
-void G3D::cleanIndices(uint32_t* indices) {
-    delete[] indices;
-    indices = NULL;
 }
 
 void G3D::cleanVertices(float* vertices) {
@@ -271,7 +265,6 @@ void G3D::cleanVertices(std::vector<float*>& vertexAttributes) {
 
 void G3D::clean(GeometryAoS* geometry) {
     if (geometry) {
-        cleanIndices(geometry->indices);
         cleanVertices(geometry->vertices);
         geometry->info.attributeSemantics.clear();
     }
@@ -279,12 +272,11 @@ void G3D::clean(GeometryAoS* geometry) {
 
 void G3D::clean(GeometrySoA* geometry) {
     if (geometry) {
-        cleanIndices(geometry->indices);
         cleanVertices(geometry->vertexAttributes);
         geometry->info.attributeSemantics.clear();
     }
 }
-
+/*
 namespace {
 template <typename T> bool merge(G3D::GeometrySoA* dst, const G3D::GeometrySoA* const other) {
     if (dst->info.indexSize != other->info.indexSize || dst->info.vertexType != other->info.vertexType ||
@@ -387,7 +379,7 @@ bool G3D::merge(GeometrySoA* dst, const GeometrySoA* const other) {
     }
     return false;
 }
-
+*/
 std::string G3D::printPrimitiveType(const Geometry* const geometry) {
     return ((geometry->info.primitiveType == Point) ? "Point" : (geometry->info.primitiveType == Line)
                                                                     ? "Line"

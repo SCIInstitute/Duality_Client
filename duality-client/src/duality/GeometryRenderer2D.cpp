@@ -35,7 +35,7 @@ void GeometryRenderer2D::render(const GeometryDataset& dataset, const GLMatrix& 
     GL(glLineWidth(5.0));
     GL(glDisable(GL_DEPTH_TEST));
     GL(glEnable(GL_BLEND));
-    GL(glDrawElements(GL_LINES, (GLsizei)lines.geometryInfo()->numberIndices, GL_UNSIGNED_INT, lines.getIndices()));
+    GL(glDrawElements(GL_LINES, (GLsizei)lines.geometryInfo()->numberIndices, GL_UNSIGNED_INT, lines.getIndices().data()));
 
     GL(glLineWidth(1.0));
     GL(glDisable(GL_BLEND));

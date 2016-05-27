@@ -13,12 +13,12 @@ GeometryDataset GeometryUtil::clipGeometry(const GeometryDataset& geo, Axis axis
     float outColors[12];   // max 3 lines
     size_t points;         // number of intersection points
 
-    const uint32_t* is = geo.getIndices();
+    const std::vector<uint32_t>& is = geo.getIndices();
     const float* ps = geo.getPositions();
     const float* cs = geo.getColors();
 
     // resulting lines
-    std::vector<uint16_t> clipIndices;
+    std::vector<uint32_t> clipIndices;
     std::vector<float> clipPositions;
     std::vector<float> clipColors;
 
@@ -51,8 +51,8 @@ GeometryDataset GeometryUtil::clipGeometry(const GeometryDataset& geo, Axis axis
                     clipColors.push_back(outColors[j]);
                 }
                 // add indices for last two points
-                clipIndices.push_back(clipPositions.size() / 3 - 2);
-                clipIndices.push_back(clipPositions.size() / 3 - 1);
+                clipIndices.push_back(static_cast<uint32_t>(clipPositions.size()) / 3 - 2);
+                clipIndices.push_back(static_cast<uint32_t>(clipPositions.size()) / 3 - 1);
 
                 // add third point if the given triangle happens to lie in the plane
                 if (points == 3) {
@@ -63,10 +63,10 @@ GeometryDataset GeometryUtil::clipGeometry(const GeometryDataset& geo, Axis axis
                         clipColors.push_back(outColors[j + 8]);
                     }
                     // add the other two lines because we have a triangle and not just a line
-                    clipIndices.push_back(clipPositions.size() / 3 - 2);
-                    clipIndices.push_back(clipPositions.size() / 3 - 1);
-                    clipIndices.push_back(clipPositions.size() / 3 - 3);
-                    clipIndices.push_back(clipPositions.size() / 3 - 1);
+                    clipIndices.push_back(static_cast<uint32_t>(clipPositions.size()) / 3 - 2);
+                    clipIndices.push_back(static_cast<uint32_t>(clipPositions.size()) / 3 - 1);
+                    clipIndices.push_back(static_cast<uint32_t>(clipPositions.size()) / 3 - 3);
+                    clipIndices.push_back(static_cast<uint32_t>(clipPositions.size()) / 3 - 1);
                 }
             }
         }
