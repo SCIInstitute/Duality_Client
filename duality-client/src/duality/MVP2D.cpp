@@ -2,6 +2,8 @@
 
 #include "duality/CoordinateSystem.h"
 
+#include <cmath>
+
 using namespace IVDA;
 
 MVP2D::MVP2D(const ScreenInfo& screenInfo, const BoundingBox& boundingBox)
@@ -49,7 +51,7 @@ GLMatrix MVP2D::calculate() const {
     // apply user interaction parameters
     mvp.translate(m_translation.x, m_translation.y, 0);
     // mvp.Scale(m_fZoom, m_fZoom, 1);
-    mvp.rotate(-m_rotationAngle * (180 / M_PI), 0, 0, 1);
+    mvp.rotate(-m_rotationAngle * (180 / static_cast<float>(M_PI)), 0, 0, 1);
 
     // match object and screen aspects to fit the screen
     const float objectAspect = size.x / size.y;
@@ -71,7 +73,7 @@ GLMatrix MVP2D::calculate() const {
     // setup projection parameters
     const auto min3 = m_boundingBox.min - center3;
     const auto max3 = m_boundingBox.max - center3;
-    const float d = 0.1; // some delta to make sure that our geometry does not get clipped away due to floating point precision errors
+    const float d = 0.1f; // some delta to make sure that our geometry does not get clipped away due to floating point precision errors
     switch (axis) {
     case 0: {
         const float off = size3.x * d;

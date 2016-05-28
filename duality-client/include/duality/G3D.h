@@ -2,6 +2,8 @@
 #define G3D_H
 
 #include "stdint.h"
+
+#include <memory>
 #include <iostream>
 #include <vector>
 

@@ -98,7 +98,7 @@ Axis CoordinateSystem::mappedDirectionToAxis(Direction const& direction) const {
 
     // create inverse mapping
     std::array<Axis, 3> inverseMapping;
-    for (int i = 0; i < mapping.axes.size(); i++) {
+    for (int i = 0; i < static_cast<int>(mapping.axes.size()); i++) {
         int d = mapping.axes[i];
         size_t a = std::abs(d) - 1;
         inverseMapping[a] = {i, 0 < d};
@@ -114,8 +114,9 @@ Axis CoordinateSystem::mappedDirectionToAxis(Direction const& direction) const {
 }
 
 Direction CoordinateSystem::mappedAxisToDirection(Axis const& a) const {
-    if (a.axis > 2)
+    if (a.axis > 2) {
         throw std::runtime_error("invalid axis");
+    }
 
     int mappedAxis = mapping.axes[a.axis];
 
