@@ -1,6 +1,6 @@
 #include "duality/SceneMetadata.h"
 
-#include "duality/SceneParser.h"
+#include "src/duality/SceneParser.h"
 
 SceneMetadata::SceneMetadata(std::string name, std::string description)
     : m_name(std::move(name))

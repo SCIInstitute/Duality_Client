@@ -35,8 +35,8 @@
 */
 
 #include <cstring>
-#include "IVDA/ConsoleOut.h"
-#include "IVDA/Console.h"
+#include "src/IVDA/ConsoleOut.h"
+#include "src/IVDA/Console.h"
 
 using namespace IVDA;
 

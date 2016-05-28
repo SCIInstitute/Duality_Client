@@ -4,11 +4,10 @@
 
 #pragma once
 
-#include "duality/InputVariable.h"
-#include "duality/Scene.h"
 #include "duality/SceneMetadata.h"
-#include "duality/Communication.h"
-
+#include "src/duality/Communication.h"
+#include "src/duality/InputVariable.h"
+#include "src/duality/Scene.h"
 #include "IVDA/Vectors.h"
 
 #include "jsoncpp/json.h"
@@ -26,13 +25,13 @@ public:
 
 private:
     SceneNode parseNode(const JsonCpp::Value& node);
-    
+
     std::unique_ptr<Dataset> parseDataset(const JsonCpp::Value& node);
     std::unique_ptr<Dataset> parseGeometry(const JsonCpp::Value& node);
-    
+
     IVDA::Mat4f parseMatrix(const JsonCpp::Value& node);
     std::vector<IVDA::Mat4f> parseMatrices(const JsonCpp::Value& node);
-    
+
     std::unique_ptr<DataProvider> parseDataSource(const JsonCpp::Value& node);
     std::unique_ptr<DataProvider> parseDownload(const JsonCpp::Value& node);
     std::unique_ptr<DataProvider> parsePython(const JsonCpp::Value& node);

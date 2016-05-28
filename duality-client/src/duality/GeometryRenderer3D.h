@@ -1,8 +1,8 @@
 #pragma once
 
+#include "src/duality/GeometryDataset.h"
+#include "IVDA/GLMatrix.h"
 #include "duality/ScreenInfo.h"
-#include "duality/GLMatrix.h"
-#include "duality/GeometryDataset.h"
 
 class GLShader;
 
@@ -12,12 +12,12 @@ public:
     ~GeometryRenderer3D();
 
     void render(const GeometryDataset& dataset, const GLMatrix& mvp);
-    
+
 private:
     static int primitiveTypeGL(const GeometryDataset& dataset);
     static int enableAttributeArrays(const GeometryDataset& dataset);
     GLShader& determineActiveShader(const GeometryDataset& dataset) const;
-    
+
 private:
     std::unique_ptr<GLShader> m_normShader;
     std::unique_ptr<GLShader> m_normAlphaShader;

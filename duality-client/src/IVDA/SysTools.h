@@ -37,7 +37,7 @@
 #ifndef IVDA_SYSTOOLS
 #define IVDA_SYSTOOLS
 
-#include "StdDefines.h"
+#include "IVDA/StdDefines.h"
 
 #include <sstream>
 #include <string>

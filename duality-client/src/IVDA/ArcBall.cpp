@@ -35,7 +35,7 @@
   \date    October 2008
 */
 
-#include "IVDA/ArcBall.h"
+#include "src/IVDA/ArcBall.h"
 
 namespace IVDA
 {

@@ -37,7 +37,7 @@
 #ifndef IVDA_VECTORS
 #define IVDA_VECTORS
 
-#include "StdDefines.h"
+#include "IVDA/StdDefines.h"
 
 #if defined DIRECT3D_VERSION
 #define USEDX

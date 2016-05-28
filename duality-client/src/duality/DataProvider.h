@@ -1,6 +1,6 @@
 #pragma once
 
-#include "duality/InputVariable.h"
+#include "src/duality/InputVariable.h"
 
 #include <memory>
 #include <vector>

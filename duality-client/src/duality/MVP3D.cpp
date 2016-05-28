@@ -1,4 +1,4 @@
-#include "duality/MVP3D.h"
+#include "src/duality/MVP3D.h"
 
 using namespace IVDA;
 

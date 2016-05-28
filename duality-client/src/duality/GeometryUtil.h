@@ -1,6 +1,6 @@
 #pragma once
 
-#include "duality/GeometryDataset.h"
+#include "src/duality/GeometryDataset.h"
 
 class GeometryUtil {
 public:

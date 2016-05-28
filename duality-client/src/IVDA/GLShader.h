@@ -3,7 +3,7 @@
 #ifndef GLSHADER_H
 #define GLSHADER_H
 
-#include "IVDA/GLObject.h"
+#include "src/IVDA/GLObject.h"
 #include "IVDA/Vectors.h"
 #include <map>
 #include <string>

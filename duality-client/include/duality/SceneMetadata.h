@@ -1,7 +1,5 @@
 #pragma once
 
-#include "jsoncpp/json.h"
-
 #include <string>
 
 class SceneMetadata {

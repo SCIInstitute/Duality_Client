@@ -1,51 +1,55 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.1.0)
 PROJECT(duality-client LANGUAGES CXX)
 
-SET(DUALITY_HEADER 
-	include/duality/DownloadProvider.h
+SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS on)
+
+SET(DUALITY_HEADER_PUBLIC
 	include/duality/Error.h
-	include/duality/G3D.h
-	include/duality/GeometryDataset.h
-	include/duality/GeometryRenderer2D.h
-	include/duality/GeometryRenderer3D.h
-	include/duality/GeometrySilceRenderer.h
-	include/duality/GeometryUtil.h
-	include/duality/GLMatrix.h
-	include/duality/InputVariable.h
-	include/duality/MVP2D.h
-	include/duality/MVP3D.h
-	include/duality/PythonProvider.h
-	include/duality/RenderDispatcher2D.h
-	include/duality/RenderDispatcher3D.h
-	include/duality/Scene.h
 	include/duality/SceneLoader.h
 	include/duality/SceneMetadata.h
-	include/duality/SceneNode.h
-	include/duality/SceneParser.h
 	include/duality/ScreenInfo.h
-	include/duality/AbstractIO.h
-	include/duality/BoundingBox.h
-	include/duality/Communication.h
-	include/duality/CoordinateSystem.h
-	include/duality/DataProvider.h
-	include/duality/Dataset.h
-	include/duality/DatasetDispatcher.h
 
-	include/IVDA/ArcBall.h
-	include/IVDA/Console.h
-	include/IVDA/ConsoleOut.h
-	include/IVDA/DebugOutHandler.h
-	include/IVDA/GLInclude.h
-	include/IVDA/iOS.h
-	include/IVDA/Macros.h
-	include/IVDA/MultiplexOut.h
-	include/IVDA/Singleton.h
+	include/IVDA/GLMatrix.h
 	include/IVDA/StdDefines.h
-	include/IVDA/SysTools.h
-	include/IVDA/Threads.h
-	include/IVDA/Vectors.h
-	include/IVDA/XQueryComponents.h
-	include/IVDA/AbstrDebugOut.h)
+	include/IVDA/Vectors.h)
+	
+SET(DUALITY_HEADER_PRIVATE
+	src/duality/DownloadProvider.h
+	src/duality/G3D.h
+	src/duality/GeometryDataset.h
+	src/duality/GeometryRenderer2D.h
+	src/duality/GeometryRenderer3D.h
+	src/duality/GeometryUtil.h
+	src/duality/InputVariable.h
+	src/duality/MVP2D.h
+	src/duality/MVP3D.h
+	src/duality/PythonProvider.h
+	src/duality/RenderDispatcher2D.h
+	src/duality/RenderDispatcher3D.h
+	src/duality/Scene.h
+	src/duality/SceneNode.h
+	src/duality/SceneParser.h
+	src/duality/AbstractIO.h
+	src/duality/BoundingBox.h
+	src/duality/Communication.h
+	src/duality/CoordinateSystem.h
+	src/duality/DataProvider.h
+	src/duality/Dataset.h
+	src/duality/DatasetDispatcher.h
+
+	src/IVDA/ArcBall.h
+	src/IVDA/Console.h
+	src/IVDA/ConsoleOut.h
+	src/IVDA/DebugOutHandler.h
+	src/IVDA/GLInclude.h
+	src/IVDA/iOS.h
+	src/IVDA/Macros.h
+	src/IVDA/MultiplexOut.h
+	src/IVDA/Singleton.h
+	src/IVDA/SysTools.h
+	src/IVDA/Threads.h
+	src/IVDA/XQueryComponents.h
+	src/IVDA/AbstrDebugOut.h)
 	
 SET (DUALITY_SOURCE
 	src/IVDA/Macros.cpp
@@ -56,11 +60,11 @@ SET (DUALITY_SOURCE
 	src/IVDA/ArcBall.cpp
 	src/IVDA/ConsoleOut.cpp
 	src/IVDA/DebugOutHandler.cpp
+	src/IVDA/GLMatrix.cpp
 	src/IVDA/GLShader.cpp
 	src/IVDA/GLFrameBufferObject.cpp
 
 	src/duality/CoordinateSystem.cpp
-	src/duality/GLMatrix.cpp
 	src/duality/GeometryRenderer2D.cpp
 	src/duality/GeometryRenderer3D.cpp
 	src/duality/GeometryDataset.cpp
@@ -81,12 +85,15 @@ SET (DUALITY_SOURCE
 	src/duality/InputVariable.cpp
 	src/duality/MVP2D.cpp
 	src/duality/MVP3D.cpp)
+	
+SOURCE_GROUP("Public Headers" FILES ${DUALITY_HEADER_PUBLIC})	
+SOURCE_GROUP("Private Headers" FILES ${DUALITY_HEADER_PRIVATE})
 
-ADD_LIBRARY(duality-client ${DUALITY_HEADER} ${DUALITY_SOURCE})
+ADD_LIBRARY(duality-client ${DUALITY_HEADER_PUBLIC} ${DUALITY_HEADER_PRIVATE} ${DUALITY_SOURCE})
 
 TARGET_INCLUDE_DIRECTORIES(
 	duality-client PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
-	duality-client PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+	duality-client PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 TARGET_COMPILE_FEATURES(duality-client
     PUBLIC cxx_auto_type

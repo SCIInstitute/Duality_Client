@@ -2,7 +2,7 @@
 //  Copyright © 2016 Scientific Computing and Imaging Institute. All rights reserved.
 //
 
-#include "duality/Communication.h"
+#include "src/duality/Communication.h"
 
 #include "mocca/net/NetworkError.h"
 

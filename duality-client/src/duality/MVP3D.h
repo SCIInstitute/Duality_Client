@@ -1,9 +1,9 @@
 #pragma once
 
 #include "IVDA/Vectors.h"
-#include "duality/GLMatrix.h"
+#include "IVDA/GLMatrix.h"
 #include "duality/ScreenInfo.h"
-#include "duality/BoundingBox.h"
+#include "src/duality/BoundingBox.h"
 
 class MVP3D {
 public:

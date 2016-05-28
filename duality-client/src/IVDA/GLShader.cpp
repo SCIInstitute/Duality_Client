@@ -1,8 +1,8 @@
-#include "IVDA/GLShader.h"
+#include "src/IVDA/GLShader.h"
 
-#include "IVDA/iOS.h"
-#include "IVDA/SysTools.h"
-#include "IVDA/Macros.h"
+#include "src/IVDA/iOS.h"
+#include "src/IVDA/SysTools.h"
+#include "src/IVDA/Macros.h"
 
 #include <OpenGLES/ES3/gl.h>
 #include <OpenGLES/ES3/glext.h>

@@ -2,8 +2,8 @@
 //  Copyright © 2016 Scientific Computing and Imaging Institute. All rights reserved.
 //
 
-#include "duality/BoundingBox.h"
-#include "duality/GeometryDataset.h"
+#include "src/duality/BoundingBox.h"
+#include "src/duality/GeometryDataset.h"
 
 #include <limits>
 #include <cassert>

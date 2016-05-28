@@ -1,6 +1,6 @@
-#include "IVDA/Threads.h"
-#include "IVDA/DebugOutHandler.h"
-#include "IVDA/SysTools.h"
+#include "src/IVDA/Threads.h"
+#include "src/IVDA/DebugOutHandler.h"
+#include "src/IVDA/SysTools.h"
 
 #ifndef DETECTED_OS_WINDOWS
 #include <sys/time.h>

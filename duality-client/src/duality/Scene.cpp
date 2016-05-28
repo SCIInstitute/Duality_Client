@@ -2,10 +2,10 @@
 //  Copyright © 2016 Scientific Computing and Imaging Institute. All rights reserved.
 //
 
-#include "duality/Scene.h"
+#include "src/duality/Scene.h"
 
 #include "IVDA/Vectors.h"
-#include "duality/SceneParser.h"
+#include "src/duality/SceneParser.h"
 
 using namespace IVDA;
 

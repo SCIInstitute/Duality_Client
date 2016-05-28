@@ -1,4 +1,4 @@
-#include "duality/SceneNode.h"
+#include "src/duality/SceneNode.h"
 
 SceneNode::SceneNode(const std::string& name, std::unique_ptr<DataProvider> provider, std::unique_ptr<Dataset> dataset)
     : m_name(name)

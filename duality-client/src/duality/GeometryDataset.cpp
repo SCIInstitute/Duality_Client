@@ -1,8 +1,8 @@
-#include "duality/GeometryDataset.h"
+#include "src/duality/GeometryDataset.h"
 
 #include "IVDA/Vectors.h"
-#include "duality/AbstractIO.h"
-#include "duality/DatasetDispatcher.h"
+#include "src/duality/AbstractIO.h"
+#include "src/duality/DatasetDispatcher.h"
 #include "duality/Error.h"
 
 using namespace IVDA;

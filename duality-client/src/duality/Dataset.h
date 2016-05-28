@@ -1,7 +1,7 @@
 #pragma once
 
 #include "IVDA/Vectors.h"
-#include "duality/DatasetDispatcher.h"
+#include "src/duality/DatasetDispatcher.h"
 
 #include <memory>
 #include <vector>

@@ -1,4 +1,4 @@
-#include "duality/PythonProvider.h"
+#include "src/duality/PythonProvider.h"
 
 #include "duality/Error.h"
 

@@ -1,7 +1,7 @@
-#include "duality/InputVariable.h"
+#include "src/duality/InputVariable.h"
 
-#include "duality/DownloadProvider.h"
-#include "duality/PythonProvider.h"
+#include "src/duality/DownloadProvider.h"
+#include "src/duality/PythonProvider.h"
 
 InputVariableFloat::InputVariableFloat(const Info& info)
     : m_info(info)

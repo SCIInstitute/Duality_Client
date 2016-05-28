@@ -1,8 +1,8 @@
 #pragma once
 
-#include "duality/DataProvider.h"
-#include "duality/InputVariable.h"
-#include "duality/Communication.h"
+#include "src/duality/DataProvider.h"
+#include "src/duality/InputVariable.h"
+#include "src/duality/Communication.h"
 
 #include <memory>
 #include <vector>

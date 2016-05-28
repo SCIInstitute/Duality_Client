@@ -1,7 +1,7 @@
-#include "duality/GeometryRenderer3D.h"
+#include "src/duality/GeometryRenderer3D.h"
 
-#include "IVDA/GLInclude.h"
-#include "IVDA/GLShader.h"
+#include "src/IVDA/GLInclude.h"
+#include "src/IVDA/GLShader.h"
 #include "duality/Error.h"
 
 #include <OpenGLES/ES3/gl.h>

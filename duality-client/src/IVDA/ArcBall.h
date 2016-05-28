@@ -41,8 +41,8 @@
 #ifndef IVDA_ARCBALL
 #define IVDA_ARCBALL
 
-#include "StdDefines.h"
-#include "Vectors.h"
+#include "IVDA/StdDefines.h"
+#include "IVDA/Vectors.h"
 
 namespace IVDA
 {

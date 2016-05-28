@@ -1,7 +1,7 @@
-#include "duality/G3D.h"
+#include "src/duality/G3D.h"
 
-#include "duality/AbstractIO.h"
 #include "duality/Error.h"
+#include "src/duality/AbstractIO.h"
 
 #include <string>
 

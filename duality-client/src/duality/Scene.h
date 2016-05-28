@@ -5,13 +5,14 @@
 #pragma once
 
 #include "IVDA/Vectors.h"
-#include "duality/GLMatrix.h"
-#include "duality/RenderDispatcher3D.h"
+#include "IVDA/GLMatrix.h"
 #include "duality/SceneMetadata.h"
-#include "duality/SceneNode.h"
+#include "src/duality/RenderDispatcher3D.h"
+#include "src/duality/SceneNode.h"
 
 #include <memory>
 #include <string>
+#include <map>
 
 class Scene {
 public:
@@ -25,7 +26,7 @@ public:
 
     void dispatch(DatasetDispatcher& dispatcher) const;
     void updateDatasets();
-    
+
     struct VariableInfos {
         std::vector<InputVariableFloat::Info> floatInfos;
         std::vector<InputVariableEnum::Info> enumInfos;

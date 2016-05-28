@@ -1,4 +1,4 @@
-#include "duality/GLMatrix.h"
+#include "IVDA/GLMatrix.h"
 
 #include <cmath>
 #include <cstring>

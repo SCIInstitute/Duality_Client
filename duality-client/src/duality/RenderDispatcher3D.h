@@ -5,10 +5,10 @@
 #pragma once
 
 #include "IVDA/Vectors.h"
-#include "duality/BoundingBox.h"
-#include "duality/DatasetDispatcher.h"
-#include "duality/MVP3D.h"
 #include "duality/ScreenInfo.h"
+#include "src/duality/BoundingBox.h"
+#include "src/duality/DatasetDispatcher.h"
+#include "src/duality/MVP3D.h"
 
 class GLFrameBufferObject;
 class GeometryRenderer3D;

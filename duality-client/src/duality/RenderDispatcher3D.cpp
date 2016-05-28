@@ -2,12 +2,12 @@
 //  Copyright © 2016 Scientific Computing and Imaging Institute. All rights reserved.
 //
 
-#include "duality/RenderDispatcher3D.h"
+#include "src/duality/RenderDispatcher3D.h"
 
-#include "IVDA/GLFrameBufferObject.h"
-#include "IVDA/GLInclude.h"
-#include "duality/GeometryDataset.h"
-#include "duality/GeometryRenderer3D.h"
+#include "src/IVDA/GLFrameBufferObject.h"
+#include "src/IVDA/GLInclude.h"
+#include "src/duality/GeometryDataset.h"
+#include "src/duality/GeometryRenderer3D.h"
 
 #include <OpenGLES/ES3/gl.h>
 

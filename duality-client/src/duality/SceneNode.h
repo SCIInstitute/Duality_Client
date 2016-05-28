@@ -4,9 +4,9 @@
 
 #pragma once
 
-#include "duality/DataProvider.h"
-#include "duality/Dataset.h"
-#include "duality/RenderDispatcher3D.h"
+#include "src/duality/DataProvider.h"
+#include "src/duality/Dataset.h"
+#include "src/duality/RenderDispatcher3D.h"
 
 #include <memory>
 #include <vector>

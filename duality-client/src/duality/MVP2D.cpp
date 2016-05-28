@@ -1,6 +1,6 @@
-#include "duality/MVP2D.h"
+#include "src/duality/MVP2D.h"
 
-#include "duality/CoordinateSystem.h"
+#include "src/duality/CoordinateSystem.h"
 
 #include <cmath>
 

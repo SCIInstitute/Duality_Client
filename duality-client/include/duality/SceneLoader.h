@@ -4,27 +4,23 @@
 
 #pragma once
 
-#include "duality/Scene.h"
 #include "duality/SceneMetadata.h"
-#include "duality/Communication.h"
+
+#include "mocca/net/Endpoint.h"
 
 #include <vector>
 #include <memory>
 
-class ServerAdapter;
+class SceneLoaderImpl;
 
 class SceneLoader {
 public:
     SceneLoader(const mocca::net::Endpoint& endpoint);
-    
+    ~SceneLoader();
+
     std::vector<SceneMetadata> listMetadata() const;
     bool loadScene(const std::string& name);
-    Scene* activeScene() const;
-    
-private:
-    JsonCpp::Value fetchScenes() const;
 
 private:
-    std::shared_ptr<LazyRpcClient> m_rpc;
-    std::unique_ptr<Scene> m_scene;
+    std::unique_ptr<SceneLoaderImpl> m_impl;
 };

@@ -2,7 +2,7 @@
 //  Copyright © 2016 Scientific Computing and Imaging Institute. All rights reserved.
 //
 
-#include "duality/DownloadProvider.h"
+#include "src/duality/DownloadProvider.h"
 
 #include <cassert>
 

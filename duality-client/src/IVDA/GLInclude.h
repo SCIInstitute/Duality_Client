@@ -4,7 +4,7 @@
 #define GLINCLUDE_H
 
 #include "IVDA/StdDefines.h"
-#include "IVDA/DebugOutHandler.h"
+#include "src/IVDA/DebugOutHandler.h"
 #include <limits>
 
 #define MAX_GL_ERROR_COUNT 20

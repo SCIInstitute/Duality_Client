@@ -25,10 +25,3 @@ private:
     std::string m_file;
     int m_line;
 };
-
-#define THROW_ERROR(ostream)                                                                                                               \
-    std::stringstream ss;                                                                                                                  \
-    do {                                                                                                                                   \
-        ss << ostream;                                                                                                                     \
-    } while (__LINE__ == -1);                                                                                                              \
-    throw Error(ss.str(), __FILE__, __LINE__);

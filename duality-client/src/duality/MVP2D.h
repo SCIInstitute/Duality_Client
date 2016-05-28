@@ -1,10 +1,10 @@
 #pragma once
 
 #include "IVDA/Vectors.h"
-#include "duality/CoordinateSystem.h"
-#include "duality/GLMatrix.h"
+#include "IVDA/GLMatrix.h"
 #include "duality/ScreenInfo.h"
-#include "duality/BoundingBox.h"
+#include "src/duality/BoundingBox.h"
+#include "src/duality/CoordinateSystem.h"
 
 class MVP2D {
 public:

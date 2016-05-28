@@ -65,7 +65,7 @@
 #define MIN(a,b)            (((a) < (b)) ? (a) : (b))
 #endif
 
-#include "IVDA/SysTools.h"
+#include "src/IVDA/SysTools.h"
 
 namespace IVDA
 {

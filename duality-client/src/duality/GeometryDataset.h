@@ -1,7 +1,7 @@
 #pragma once
 
-#include "duality/Dataset.h"
-#include "duality/G3D.h"
+#include "src/duality/Dataset.h"
+#include "src/duality/G3D.h"
 
 class DataProvider;
 class DatasetDispatcher;

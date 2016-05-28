@@ -2,12 +2,12 @@
 //  Copyright © 2016 Scientific Computing and Imaging Institute. All rights reserved.
 //
 
-#include "duality/SceneParser.h"
+#include "src/duality/SceneParser.h"
 
 #include "duality/Error.h"
-#include "duality/DownloadProvider.h"
-#include "duality/GeometryDataset.h"
-#include "duality/PythonProvider.h"
+#include "src/duality/DownloadProvider.h"
+#include "src/duality/GeometryDataset.h"
+#include "src/duality/PythonProvider.h"
 
 using namespace IVDA;
 

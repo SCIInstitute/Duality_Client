@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "duality/DatasetDispatcher.h"
+#include "src/duality/DatasetDispatcher.h"
 #include "IVDA/Vectors.h"
 
 struct BoundingBox {

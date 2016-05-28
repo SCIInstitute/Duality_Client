@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include "duality/Communication.h"
-#include "duality/DataProvider.h"
+#include "src/duality/Communication.h"
+#include "src/duality/DataProvider.h"
 
 #include <string>
 #include <memory>
