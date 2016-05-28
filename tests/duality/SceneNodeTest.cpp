@@ -2,10 +2,10 @@
 
 #include "DataProviderMock.h"
 #include "DatasetMock.h"
-#include "duality/DownloadProvider.h"
-#include "duality/PythonProvider.h"
-#include "duality/Scene.h"
 #include "duality/SceneMetadata.h"
+#include "src/duality/DownloadProvider.h"
+#include "src/duality/PythonProvider.h"
+#include "src/duality/Scene.h"
 
 using namespace ::testing;
 
@@ -36,40 +36,34 @@ TEST_F(SceneTest, UpdateDatasets) {
 }
 
 TEST_F(SceneTest, FloatVariables) {
-    InputVariableFloat::Info floatInfo1{"float1", 0, 0.f, 10.f, 1.f, 5.f};
-    InputVariableFloat floatVar1(floatInfo1);
+    FloatVariableInfo floatInfo1{"float1", 0, 0.f, 10.f, 1.f, 5.f};
+    FloatVariableInfo floatInfo2{"float2", 0, 0.f, 10.f, 1.f, 5.f};
 
-    InputVariableFloat::Info floatInfo2{"float2", 0, 0.f, 10.f, 1.f, 5.f};
-    InputVariableFloat floatVar2(floatInfo2);
-
-    auto pythonProvider = std::make_unique<PythonProvider>("SceneName", "FileName", std::vector<InputVariableFloat>{floatVar1, floatVar2},
-                                                           std::vector<InputVariableEnum>(), nullptr);
+    auto pythonProvider = std::make_unique<PythonProvider>("SceneName", "FileName", std::vector<FloatVariableInfo>{floatInfo1, floatInfo2},
+                                                           std::vector<EnumVariableInfo>(), nullptr);
 
     SceneMetadata meta("test", "test");
     Scene scene(meta);
     scene.addNode(SceneNode("node", std::move(pythonProvider), nullptr));
 
-    auto varMap = scene.variableMap();
+    auto varMap = scene.variableInfoMap();
     ASSERT_EQ(1, varMap.size());
     ASSERT_EQ(2, varMap["node"].floatInfos.size());
     ASSERT_EQ(0, varMap["node"].enumInfos.size());
 }
 
 TEST_F(SceneTest, EnumVariables) {
-    InputVariableEnum::Info enumInfo1{"enum1", 0, {"val1", "val2"}, "val2"};
-    InputVariableEnum enumVar1(enumInfo1);
+    EnumVariableInfo enumInfo1{"enum1", 0, {"val1", "val2"}, "val2"};
+    EnumVariableInfo enumInfo2{"enum2", 0, {"val1", "val2"}, "val2"};
 
-    InputVariableEnum::Info enumInfo2{"enum2", 0, {"val1", "val2"}, "val2"};
-    InputVariableEnum enumVar2(enumInfo2);
-
-    auto pythonProvider = std::make_unique<PythonProvider>("SceneName", "FileName", std::vector<InputVariableFloat>(),
-                                                           std::vector<InputVariableEnum>{enumVar1, enumVar2}, nullptr);
+    auto pythonProvider = std::make_unique<PythonProvider>("SceneName", "FileName", std::vector<FloatVariableInfo>(),
+                                                           std::vector<EnumVariableInfo>{enumInfo1, enumInfo2}, nullptr);
 
     SceneMetadata meta("test", "test");
     Scene scene(meta);
     scene.addNode(SceneNode("node", std::move(pythonProvider), nullptr));
 
-    auto varMap = scene.variableMap();
+    auto varMap = scene.variableInfoMap();
     ASSERT_EQ(1, varMap.size());
     ASSERT_EQ(0, varMap["node"].floatInfos.size());
     ASSERT_EQ(2, varMap["node"].enumInfos.size());

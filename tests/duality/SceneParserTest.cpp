@@ -1,9 +1,9 @@
 #include "gtest/gtest.h"
 
-#include "duality/DownloadProvider.h"
-#include "duality/GeometryDataset.h"
-#include "duality/PythonProvider.h"
-#include "duality/SceneParser.h"
+#include "src/duality/DownloadProvider.h"
+#include "src/duality/GeometryDataset.h"
+#include "src/duality/PythonProvider.h"
+#include "src/duality/SceneParser.h"
 
 class SceneParserTest : public ::testing::Test {
 protected:

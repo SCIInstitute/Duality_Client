@@ -4,12 +4,14 @@
 
 #pragma once
 
+#include "duality/SceneController3D.h"
 #include "duality/SceneMetadata.h"
+#include "duality/ScreenInfo.h"
 
 #include "mocca/net/Endpoint.h"
 
-#include <vector>
 #include <memory>
+#include <vector>
 
 class SceneLoaderImpl;
 
@@ -20,6 +22,7 @@ public:
 
     std::vector<SceneMetadata> listMetadata() const;
     bool loadScene(const std::string& name);
+    std::weak_ptr<SceneController3D> sceneController3D(const ScreenInfo& screenInfo);
 
 private:
     std::unique_ptr<SceneLoaderImpl> m_impl;

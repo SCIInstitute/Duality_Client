@@ -11,24 +11,15 @@
 
 #include <OpenGLES/ES3/gl.h>
 
-RenderDispatcher3D::RenderDispatcher3D(const ScreenInfo& screenInfo, const BoundingBox& boundingBox)
+RenderDispatcher3D::RenderDispatcher3D(const ScreenInfo& screenInfo)
     : m_fbo(std::make_unique<GLFrameBufferObject>(static_cast<unsigned int>(screenInfo.width / screenInfo.standardDownSampleFactor),
-                                                  static_cast<unsigned int>(screenInfo.width / screenInfo.standardDownSampleFactor), true))
-    , m_geoRenderer(std::make_unique<GeometryRenderer3D>())
-    , m_mvp(screenInfo, boundingBox) {}
+                                                  static_cast<unsigned int>(screenInfo.height / screenInfo.standardDownSampleFactor), true))
+    , m_geoRenderer(std::make_unique<GeometryRenderer3D>()) {}  
 
 RenderDispatcher3D::~RenderDispatcher3D() = default;
 
 void RenderDispatcher3D::dispatch(GeometryDataset& node) {
-    m_geoRenderer->render(node, m_mvp.calculate());
-}
-
-void RenderDispatcher3D::addTranslation(const IVDA::Vec2f& translation) {
-    m_mvp.addTranslation(translation);
-}
-
-void RenderDispatcher3D::addRotation(const IVDA::Mat4f& rotation) {
-    m_mvp.addRotation(rotation);
+    m_geoRenderer->render(node, m_mvp);
 }
 
 void RenderDispatcher3D::startDraw() {
@@ -38,4 +29,8 @@ void RenderDispatcher3D::startDraw() {
 
 void RenderDispatcher3D::finishDraw() {
     m_fbo->Read(0);
+}
+
+void RenderDispatcher3D::setMVP(const GLMatrix& mvp) {
+    m_mvp = mvp;
 }

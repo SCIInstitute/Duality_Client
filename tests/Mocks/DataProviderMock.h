@@ -1,6 +1,6 @@
 #include "gmock/gmock.h"
 
-#include "duality/DataProvider.h"
+#include "src/duality/DataProvider.h"
 
 class DataProviderMock : public DataProvider {
 public:

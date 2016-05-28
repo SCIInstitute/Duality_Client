@@ -2,10 +2,28 @@
 
 using namespace IVDA;
 
-MVP3D::MVP3D(const ScreenInfo& screenInfo, const BoundingBox& boundingBox)
-    : m_translation(Vec3f(0.f, 0.f, -3.f)) {
-    // create default model view matrix
+MVP3D::MVP3D(const ScreenInfo& screenInfo, const BoundingBox& boundingBox) {
+    createModelView(boundingBox);
+    createProjection(screenInfo);
+}
 
+GLMatrix MVP3D::calculate(const RenderParameters3D& parameters) const {
+    GLMatrix matrix = m_defaultModelView;
+    matrix.multiply((GLMatrix)parameters.rotation());
+    matrix.translate(parameters.transation().x, parameters.transation().y, parameters.transation().z);
+    matrix.multiply(m_projection);
+    return matrix;
+}
+
+void MVP3D::updateScreenInfo(const ScreenInfo& screenInfo) {
+    createProjection(screenInfo);
+}
+
+void MVP3D::updateBoundingBox(const BoundingBox& boundingBox) {
+    createModelView(boundingBox);
+}
+
+void MVP3D::createModelView(const BoundingBox& boundingBox) {
     Vec3f size = boundingBox.max - boundingBox.min;
     Vec3f center = boundingBox.min + size / 2;
 
@@ -14,8 +32,9 @@ MVP3D::MVP3D(const ScreenInfo& screenInfo, const BoundingBox& boundingBox)
 
     float maxExtend = size.maxVal();
     m_defaultModelView.scale(1.f / maxExtend, 1.f / maxExtend, 1.f / maxExtend);
+}
 
-    // create projection matrix
+void MVP3D::createProjection(const ScreenInfo& screenInfo) {
     float zNear = 0.01f;
     float zFar = 1000.0f;
     float frustSize = zNear * tanf(3.1415f / 8.0f);
@@ -23,21 +42,4 @@ MVP3D::MVP3D(const ScreenInfo& screenInfo, const BoundingBox& boundingBox)
 
     m_projection.loadIdentity();
     m_projection.frustum(-frustSize, frustSize, -frustSize * aspectRatio, frustSize * aspectRatio, zNear, zFar);
-}
-
-void MVP3D::addTranslation(const IVDA::Vec2f& translation) {
-    m_translation.x += translation.x;
-    m_translation.y += translation.y;
-}
-
-void MVP3D::addRotation(const IVDA::Mat4f& rotation) {
-    m_rotation = m_rotation * rotation;
-}
-
-GLMatrix MVP3D::calculate() const {
-    GLMatrix matrix = m_defaultModelView;
-    matrix.multiply((GLMatrix)m_rotation);
-    matrix.translate(m_translation.x, m_translation.y, m_translation.z);
-    matrix.multiply(m_projection);
-    return matrix;
 }

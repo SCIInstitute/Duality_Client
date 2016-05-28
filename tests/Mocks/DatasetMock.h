@@ -1,6 +1,6 @@
 #include "gmock/gmock.h"
 
-#include "duality/Dataset.h"
+#include "src/duality/Dataset.h"
 
 class DatasetMock : public Dataset {
 public:

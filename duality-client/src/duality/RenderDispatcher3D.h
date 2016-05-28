@@ -15,18 +15,17 @@ class GeometryRenderer3D;
 
 class RenderDispatcher3D : public DatasetDispatcher {
 public:
-    RenderDispatcher3D(const ScreenInfo& screenInfo, const BoundingBox& boundingBox);
+    RenderDispatcher3D(const ScreenInfo& screenInfo);
     ~RenderDispatcher3D();
-
-    void addTranslation(const IVDA::Vec2f& translation);
-    void addRotation(const IVDA::Mat4f& rotation);
 
     void dispatch(GeometryDataset& node) override;
     void startDraw();
     void finishDraw();
 
+    void setMVP(const GLMatrix& mvp);
+
 private:
     std::unique_ptr<GLFrameBufferObject> m_fbo;
     std::unique_ptr<GeometryRenderer3D> m_geoRenderer;
-    MVP3D m_mvp;
+    GLMatrix m_mvp;
 };

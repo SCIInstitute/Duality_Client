@@ -5,9 +5,11 @@ SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS on)
 
 SET(DUALITY_HEADER_PUBLIC
 	include/duality/Error.h
+	include/duality/SceneController3D.h
 	include/duality/SceneLoader.h
 	include/duality/SceneMetadata.h
 	include/duality/ScreenInfo.h
+	include/duality/VariableInfo.h
 
 	include/IVDA/GLMatrix.h
 	include/IVDA/StdDefines.h
@@ -26,6 +28,8 @@ SET(DUALITY_HEADER_PRIVATE
 	src/duality/PythonProvider.h
 	src/duality/RenderDispatcher2D.h
 	src/duality/RenderDispatcher3D.h
+	src/duality/RenderParameters3D.h
+	src/duality/SceneController3DImpl.h
 	src/duality/Scene.h
 	src/duality/SceneNode.h
 	src/duality/SceneParser.h
@@ -74,13 +78,16 @@ SET (DUALITY_SOURCE
 	src/duality/Communication.cpp
 	src/duality/BoundingBox.cpp
 	src/duality/AbstractIO.cpp
+	src/duality/SceneController3D.cpp
 	src/duality/SceneParser.cpp
 	src/duality/SceneNode.cpp
 	src/duality/SceneMetadata.cpp
 	src/duality/SceneLoader.cpp
 	src/duality/Scene.cpp
+	src/duality/SceneController3DImpl.cpp
 	src/duality/RenderDispatcher2D.cpp
 	src/duality/RenderDispatcher3D.cpp
+	src/duality/RenderParameters3D.cpp
 	src/duality/PythonProvider.cpp
 	src/duality/InputVariable.cpp
 	src/duality/MVP2D.cpp

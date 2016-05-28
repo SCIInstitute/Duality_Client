@@ -5,14 +5,19 @@
 #include <algorithm>
 #include <cassert>
 
-PythonProvider::PythonProvider(const std::string& sceneName, const std::string& fileName, std::vector<InputVariableFloat> floatVariables,
-                               std::vector<InputVariableEnum> enumVariables, std::shared_ptr<LazyRpcClient> rpc)
+PythonProvider::PythonProvider(const std::string& sceneName, const std::string& fileName, std::vector<FloatVariableInfo> floatInfos,
+                               std::vector<EnumVariableInfo> enumInfos, std::shared_ptr<LazyRpcClient> rpc)
     : m_sceneName(sceneName)
     , m_fileName(fileName)
-    , m_floatVariables(std::move(floatVariables))
-    , m_enumVariables(std::move(enumVariables))
     , m_rpc(rpc)
-    , m_dirty(true) {}
+    , m_dirty(true) {
+    for (const auto& info : floatInfos) {
+        m_floatVariables.emplace_back(info);
+    }
+    for (const auto& info : enumInfos) {
+        m_enumVariables.emplace_back(info);
+    }
+}
 
 std::shared_ptr<std::vector<uint8_t>> PythonProvider::fetch() {
     if (!m_dirty)
@@ -37,16 +42,16 @@ std::shared_ptr<std::vector<uint8_t>> PythonProvider::fetch() {
 }
 
 
-std::vector<InputVariableFloat::Info> PythonProvider::floatVariableInfos() const {
-    std::vector<InputVariableFloat::Info> result;
+std::vector<FloatVariableInfo> PythonProvider::floatVariableInfos() const {
+    std::vector<FloatVariableInfo> result;
     for (const auto& var : m_floatVariables) {
         result.push_back(var.info());
     }
     return result;
 }
 
-std::vector<InputVariableEnum::Info> PythonProvider::enumVariableInfos() const {
-    std::vector<InputVariableEnum::Info> result;
+std::vector<EnumVariableInfo> PythonProvider::enumVariableInfos() const {
+    std::vector<EnumVariableInfo> result;
     for (const auto& var : m_enumVariables) {
         result.push_back(var.info());
     }

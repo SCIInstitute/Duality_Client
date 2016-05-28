@@ -1,21 +1,23 @@
 #pragma once
 
+#include "duality/VariableInfo.h"
+
+#include "src/duality/Communication.h"
 #include "src/duality/DataProvider.h"
 #include "src/duality/InputVariable.h"
-#include "src/duality/Communication.h"
 
 #include <memory>
 #include <vector>
 
 class PythonProvider : public DataProvider {
 public:
-    PythonProvider(const std::string& sceneName, const std::string& fileName, std::vector<InputVariableFloat> floatVariables,
-                   std::vector<InputVariableEnum> enumVariables, std::shared_ptr<LazyRpcClient> rpc);
+    PythonProvider(const std::string& sceneName, const std::string& fileName, std::vector<FloatVariableInfo> floatInfos,
+                   std::vector<EnumVariableInfo> enumUnfos, std::shared_ptr<LazyRpcClient> rpc);
 
     // DataProvider interface
     std::shared_ptr<std::vector<uint8_t>> fetch() override;
-    std::vector<InputVariableFloat::Info> floatVariableInfos() const override;
-    std::vector<InputVariableEnum::Info> enumVariableInfos() const override;
+    std::vector<FloatVariableInfo> floatVariableInfos() const override;
+    std::vector<EnumVariableInfo> enumVariableInfos() const override;
     void setVariable(const std::string& variable, float value) override;
     void setVariable(const std::string& variable, const std::string& value) override;
 

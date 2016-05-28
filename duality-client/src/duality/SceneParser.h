@@ -4,11 +4,12 @@
 
 #pragma once
 
-#include "duality/SceneMetadata.h"
-#include "src/duality/Communication.h"
-#include "src/duality/InputVariable.h"
-#include "src/duality/Scene.h"
 #include "IVDA/Vectors.h"
+#include "duality/SceneMetadata.h"
+#include "duality/VariableInfo.h"
+
+#include "src/duality/Communication.h"
+#include "src/duality/Scene.h"
 
 #include "jsoncpp/json.h"
 
@@ -35,9 +36,9 @@ private:
     std::unique_ptr<DataProvider> parseDataSource(const JsonCpp::Value& node);
     std::unique_ptr<DataProvider> parseDownload(const JsonCpp::Value& node);
     std::unique_ptr<DataProvider> parsePython(const JsonCpp::Value& node);
-    void parseParams(const JsonCpp::Value& node, std::vector<InputVariableFloat>& floatParams, std::vector<InputVariableEnum>& enumParams);
-    InputVariableFloat parseFloatVariable(const JsonCpp::Value& node, int index);
-    InputVariableEnum parseEnumVariable(const JsonCpp::Value& node, int index);
+    void parseParams(const JsonCpp::Value& node, std::vector<FloatVariableInfo>& floatInfos, std::vector<EnumVariableInfo>& enumInfos);
+    FloatVariableInfo parseFloatVariable(const JsonCpp::Value& node, int index);
+    EnumVariableInfo parseEnumVariable(const JsonCpp::Value& node, int index);
 
 private:
     JsonCpp::Value m_root;

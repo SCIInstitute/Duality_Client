@@ -3,11 +3,11 @@
 #include "src/duality/DownloadProvider.h"
 #include "src/duality/PythonProvider.h"
 
-InputVariableFloat::InputVariableFloat(const Info& info)
+InputVariableFloat::InputVariableFloat(const FloatVariableInfo& info)
     : m_info(info)
     , m_value(info.defaultValue) {}
 
-InputVariableFloat::Info InputVariableFloat::info() const {
+FloatVariableInfo InputVariableFloat::info() const {
     return m_info;
 }
 
@@ -20,11 +20,11 @@ float InputVariableFloat::value() const {
 }
 
 
-InputVariableEnum::InputVariableEnum(const Info& info)
+InputVariableEnum::InputVariableEnum(const EnumVariableInfo& info)
     : m_info(info)
     , m_value(info.defaultValue) {}
 
-InputVariableEnum::Info InputVariableEnum::info() const {
+EnumVariableInfo InputVariableEnum::info() const {
     return m_info;
 }
 

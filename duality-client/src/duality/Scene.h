@@ -7,12 +7,13 @@
 #include "IVDA/Vectors.h"
 #include "IVDA/GLMatrix.h"
 #include "duality/SceneMetadata.h"
+#include "duality/VariableInfo.h"
+
 #include "src/duality/RenderDispatcher3D.h"
 #include "src/duality/SceneNode.h"
 
 #include <memory>
 #include <string>
-#include <map>
 
 class Scene {
 public:
@@ -27,12 +28,7 @@ public:
     void dispatch(DatasetDispatcher& dispatcher) const;
     void updateDatasets();
 
-    struct VariableInfos {
-        std::vector<InputVariableFloat::Info> floatInfos;
-        std::vector<InputVariableEnum::Info> enumInfos;
-    };
-    using VariableMap = std::map<std::string, VariableInfos>;
-    VariableMap variableMap();
+    VariableInfoMap variableInfoMap();
     void setVariable(const std::string& objectName, const std::string& variableName, float value);
     void setVariable(const std::string& objectName, const std::string& variableName, const std::string& value);
 
@@ -40,3 +36,7 @@ private:
     SceneMetadata m_metadata;
     std::vector<SceneNode> m_nodes;
 };
+
+namespace duality {
+    BoundingBox calculateSceneBoundingBox(const Scene& scene);
+}
