@@ -4,7 +4,7 @@
 #include "src/duality/Scene.h"
 
 SceneController2DImpl::SceneController2DImpl(Scene& scene, const RenderParameters2D& initialParameters,
-    std::unique_ptr<RenderDispatcher2D> renderDispatcher, std::unique_ptr<MVP2D> mvp)
+                                             std::unique_ptr<RenderDispatcher2D> renderDispatcher, std::unique_ptr<MVP2D> mvp)
     : m_scene(scene)
     , m_parameters(initialParameters)
     , m_renderDispatcher(std::move(renderDispatcher))
@@ -20,6 +20,10 @@ void SceneController2DImpl::addTranslation(const IVDA::Vec2f& translation) {
 
 void SceneController2DImpl::addRotation(const float rotationAngle) {
     m_parameters.addRotation(rotationAngle);
+}
+
+void SceneController2DImpl::addZoom(const float zoom) {
+    m_parameters.addZoom(zoom);
 }
 
 VariableInfoMap SceneController2DImpl::variableInfoMap() const {

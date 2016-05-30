@@ -18,6 +18,7 @@ public:
 
     void addTranslation(const IVDA::Vec2f& translation);
     void addRotation(const IVDA::Mat4f& rotation);
+    void addZoom(const float zoom);
 
     VariableInfoMap variableInfoMap() const;
     void setVariable(const std::string& objectName, const std::string& variableName, float value);

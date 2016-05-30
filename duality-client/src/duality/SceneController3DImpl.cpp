@@ -22,6 +22,10 @@ void SceneController3DImpl::addRotation(const IVDA::Mat4f& rotation) {
     m_parameters.addRotation(rotation);
 }
 
+void SceneController3DImpl::setZoom(const float zoom) {
+    m_parameters.addZoom(zoom);
+}
+
 VariableInfoMap SceneController3DImpl::variableInfoMap() const {
     return m_scene.variableInfoMap();
 }

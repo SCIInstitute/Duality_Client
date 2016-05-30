@@ -21,6 +21,10 @@ void SceneController2D::addRotation(const float rotationAngle) {
     m_impl->addRotation(rotationAngle);
 }
 
+void SceneController2D::addZoom(const float zoom) {
+    m_impl->setZoom(zoom);
+}
+
 VariableInfoMap SceneController2D::variableInfoMap() const {
     return m_impl->variableInfoMap();
 }

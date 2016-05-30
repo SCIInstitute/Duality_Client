@@ -1,7 +1,7 @@
 #include "duality/SceneController3D.h"
 
-#include "src/duality/SceneController3DImpl.h"
 #include "src/duality/Scene.h"
+#include "src/duality/SceneController3DImpl.h"
 
 SceneController3D::SceneController3D(std::unique_ptr<SceneController3DImpl> impl)
     : m_impl(std::move(impl)) {}
@@ -22,6 +22,10 @@ void SceneController3D::addTranslation(const IVDA::Vec2f& translation) {
 
 void SceneController3D::addRotation(const IVDA::Mat4f& rotation) {
     m_impl->addRotation(rotation);
+}
+
+void SceneController3D::addZoom(const float zoom) {
+    m_impl->setZoom(zoom);
 }
 
 VariableInfoMap SceneController3D::variableInfoMap() const {

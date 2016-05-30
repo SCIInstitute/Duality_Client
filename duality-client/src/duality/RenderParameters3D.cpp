@@ -20,3 +20,7 @@ void RenderParameters3D::addTranslation(const IVDA::Vec2f& translation) {
 void RenderParameters3D::addRotation(const IVDA::Mat4f& rotation) {
     m_rotation = m_rotation * rotation;
 }
+
+void RenderParameters3D::addZoom(const float zoom) {
+    m_translation.z += zoom;
+}

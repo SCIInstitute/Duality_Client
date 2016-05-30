@@ -11,6 +11,7 @@ public:
 
     void addTranslation(const IVDA::Vec2f& translation);
     void addRotation(const IVDA::Mat4f& rotation);
+    void addZoom(const float zoom);
 
 private:
     IVDA::Vec3f m_translation;

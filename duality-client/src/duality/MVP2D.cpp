@@ -32,7 +32,7 @@ GLMatrix MVP2D::calculate(const RenderParameters2D& parameters) const {
 
     // apply user interaction parameters
     mvp.translate(parameters.transation().x, parameters.transation().y, 0);
-    // mvp.Scale(m_fZoom, m_fZoom, 1);
+    mvp.scale(parameters.zoom(), parameters.zoom(), 1);
     mvp.rotate(-parameters.rotationAngle() * (180 / static_cast<float>(M_PI)), 0, 0, 1);
 
     // match object and screen aspects to fit the screen
