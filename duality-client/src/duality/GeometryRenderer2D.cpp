@@ -7,8 +7,7 @@
 #include <OpenGLES/ES3/gl.h>
 
 
-GeometryRenderer2D::GeometryRenderer2D()
-    : m_slice(0.0f) {
+GeometryRenderer2D::GeometryRenderer2D() {
     GlShaderAttributes attributes;
     attributes.push_back("position");
     attributes.push_back("color");
@@ -17,8 +16,8 @@ GeometryRenderer2D::GeometryRenderer2D()
 
 GeometryRenderer2D::~GeometryRenderer2D() = default;
 
-void GeometryRenderer2D::render(const GeometryDataset& dataset, const GLMatrix& mvp) {
-    auto lines = GeometryUtil::clipGeometry(dataset, GeometryUtil::Axis::AxisZ, m_slice); // FIXME
+void GeometryRenderer2D::render(const GeometryDataset& dataset, const GLMatrix& mvp, CoordinateAxis axis, float slice) {
+    auto lines = GeometryUtil::clipGeometry(dataset, axis, slice);
 
     if (lines.getPositions()) {
         GL(glVertexAttribPointer(0, 3, GL_FLOAT, 0, 0, lines.getPositions()));
@@ -42,8 +41,4 @@ void GeometryRenderer2D::render(const GeometryDataset& dataset, const GLMatrix& 
     GL(glDisableVertexAttribArray(0));
     GL(glDisableVertexAttribArray(1));
     GL(glEnable(GL_DEPTH_TEST));
-}
-
-void GeometryRenderer2D::setSlice(float slice) {
-    m_slice = slice;
 }

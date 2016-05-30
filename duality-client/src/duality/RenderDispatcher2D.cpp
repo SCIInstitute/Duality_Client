@@ -14,25 +14,12 @@
 RenderDispatcher2D::RenderDispatcher2D(const ScreenInfo& screenInfo, const BoundingBox& boundingBox)
     : m_fbo(std::make_unique<GLFrameBufferObject>(static_cast<unsigned int>(screenInfo.width / screenInfo.standardDownSampleFactor),
                                                   static_cast<unsigned int>(screenInfo.width / screenInfo.standardDownSampleFactor), true))
-    , m_geoRenderer(std::make_unique<GeometryRenderer2D>())
-    , m_mvp(screenInfo, boundingBox) {}
+    , m_geoRenderer(std::make_unique<GeometryRenderer2D>()) {}
 
 RenderDispatcher2D::~RenderDispatcher2D() = default;
 
 void RenderDispatcher2D::dispatch(GeometryDataset& node) {
-    m_geoRenderer->render(node, m_mvp.calculate());
-}
-
-// void RenderDispatcher2D::addTranslation(const IVDA::Vec2f& translation) {
-//    m_mvp.addTranslation(translation);
-//}
-
-// void RenderDispatcher2D::addRotation(const IVDA::Mat4f& rotation) {
-//    m_mvp.addRotation(rotation);
-//}
-
-void RenderDispatcher2D::setSlice(float slice) {
-    m_geoRenderer->setSlice(slice);
+    m_geoRenderer->render(node, m_mvp, m_axis, m_slice);
 }
 
 void RenderDispatcher2D::startDraw() {
@@ -42,4 +29,16 @@ void RenderDispatcher2D::startDraw() {
 
 void RenderDispatcher2D::finishDraw() {
     m_fbo->Read(0);
+}
+
+void RenderDispatcher2D::setMVP(const GLMatrix& mvp) {
+    m_mvp = mvp;
+}
+
+void RenderDispatcher2D::setSlice(float slice) {
+    m_slice = slice;
+}
+
+void RenderDispatcher2D::setAxis(CoordinateAxis axis) {
+    m_axis = axis;
 }

@@ -4,7 +4,9 @@ PROJECT(duality-client LANGUAGES CXX)
 SET_PROPERTY(GLOBAL PROPERTY USE_FOLDERS on)
 
 SET(DUALITY_HEADER_PUBLIC
+	include/duality/CoordinateSystem.h
 	include/duality/Error.h
+	include/duality/SceneController2D.h
 	include/duality/SceneController3D.h
 	include/duality/SceneLoader.h
 	include/duality/SceneMetadata.h
@@ -28,7 +30,9 @@ SET(DUALITY_HEADER_PRIVATE
 	src/duality/PythonProvider.h
 	src/duality/RenderDispatcher2D.h
 	src/duality/RenderDispatcher3D.h
+	src/duality/RenderParameters2D.h
 	src/duality/RenderParameters3D.h
+	src/duality/SceneController2DImpl.h
 	src/duality/SceneController3DImpl.h
 	src/duality/Scene.h
 	src/duality/SceneNode.h
@@ -36,7 +40,6 @@ SET(DUALITY_HEADER_PRIVATE
 	src/duality/AbstractIO.h
 	src/duality/BoundingBox.h
 	src/duality/Communication.h
-	src/duality/CoordinateSystem.h
 	src/duality/DataProvider.h
 	src/duality/Dataset.h
 	src/duality/DatasetDispatcher.h
@@ -84,9 +87,11 @@ SET (DUALITY_SOURCE
 	src/duality/SceneMetadata.cpp
 	src/duality/SceneLoader.cpp
 	src/duality/Scene.cpp
+	src/duality/SceneController2DImpl.cpp
 	src/duality/SceneController3DImpl.cpp
 	src/duality/RenderDispatcher2D.cpp
 	src/duality/RenderDispatcher3D.cpp
+	src/duality/RenderParameters2D.cpp
 	src/duality/RenderParameters3D.cpp
 	src/duality/PythonProvider.cpp
 	src/duality/InputVariable.cpp

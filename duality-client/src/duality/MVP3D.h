@@ -8,6 +8,7 @@
 class MVP3D {
 public:
     MVP3D(const ScreenInfo& screenInfo, const BoundingBox& boundingBox);
+
     GLMatrix calculate(const RenderParameters3D& parameters) const;
 
     void updateScreenInfo(const ScreenInfo& screenInfo);

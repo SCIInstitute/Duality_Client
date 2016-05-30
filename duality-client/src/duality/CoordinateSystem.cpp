@@ -1,4 +1,4 @@
-#include "src/duality/CoordinateSystem.h"
+#include "duality/CoordinateSystem.h"
 
 #include <string>
 

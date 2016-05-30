@@ -8,7 +8,7 @@ const IVDA::Vec3f& RenderParameters3D::transation() const noexcept {
     return m_translation;
 }
 
-const IVDA::Mat4f RenderParameters3D::rotation() const noexcept {
+const IVDA::Mat4f& RenderParameters3D::rotation() const noexcept {
     return m_rotation;
 }
 

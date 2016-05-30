@@ -7,7 +7,7 @@ public:
     RenderParameters3D(const IVDA::Vec3f& initialTranslation, const IVDA::Mat4f& initialRotation);
 
     const IVDA::Vec3f& transation() const noexcept;
-    const IVDA::Mat4f rotation() const noexcept;
+    const IVDA::Mat4f& rotation() const noexcept;
 
     void addTranslation(const IVDA::Vec2f& translation);
     void addRotation(const IVDA::Mat4f& rotation);
