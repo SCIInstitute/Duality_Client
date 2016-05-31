@@ -19,7 +19,13 @@ public:
     void addTranslation(const IVDA::Vec2f& translation);
     void addRotation(const float rotationAngle);
     void addZoom(const float zoom);
+    
+    std::pair<float, float> minMaxForCurrentAxis() const;
+    void setSlice(float slice);
 
+    void toggleAxis();
+    std::string labelForCurrentAxis() const;
+    
     VariableInfoMap variableInfoMap() const;
     void setVariable(const std::string& objectName, const std::string& variableName, float value);
     void setVariable(const std::string& objectName, const std::string& variableName, const std::string& value);

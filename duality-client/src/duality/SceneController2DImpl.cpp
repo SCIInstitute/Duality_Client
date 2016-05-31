@@ -2,6 +2,7 @@
 
 #include "src/duality/RenderDispatcher2D.h"
 #include "src/duality/Scene.h"
+#include "duality/CoordinateSystem.h"
 
 SceneController2DImpl::SceneController2DImpl(Scene& scene, const RenderParameters2D& initialParameters,
                                              std::shared_ptr<GLFrameBufferObject> fbo)
@@ -39,6 +40,27 @@ void SceneController2DImpl::addRotation(const float rotationAngle) {
 
 void SceneController2DImpl::addZoom(const float zoom) {
     m_parameters.addZoom(zoom);
+}
+
+std::pair<float, float> SceneController2DImpl::minMaxForCurrentAxis() const {
+    BoundingBox boundingBox = duality::calculateSceneBoundingBox(m_scene);
+    return std::make_pair(boundingBox.min[m_parameters.axis()], boundingBox.max[m_parameters.axis()]);
+}
+
+void SceneController2DImpl::setSlice(float slice) {
+    m_parameters.setSlice(slice);
+}
+
+void SceneController2DImpl::toggleAxis() {
+    m_parameters.toggleAxis();
+}
+
+std::string SceneController2DImpl::labelForCurrentAxis() const {
+    std::map<CoordinateAxis, std::string> mapper;
+    mapper[CoordinateAxis::X_Axis] = "X-Axis";
+    mapper[CoordinateAxis::Y_Axis] = "Y-Axis";
+    mapper[CoordinateAxis::Z_Axis] = "Z-Axis";
+    return mapper[m_parameters.axis()];
 }
 
 VariableInfoMap SceneController2DImpl::variableInfoMap() const {
