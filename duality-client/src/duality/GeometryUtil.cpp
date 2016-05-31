@@ -2,9 +2,9 @@
 //  Copyright © 2016 Scientific Computing and Imaging Institute. All rights reserved.
 //
 
-#include "duality/GeometryUtil.h"
+#include "src/duality/GeometryUtil.h"
 
-GeometryDataset GeometryUtil::clipGeometry(const GeometryDataset& geo, Axis axis, float position) {
+GeometryDataset GeometryUtil::clipGeometry(const GeometryDataset& geo, CoordinateAxis axis, float position) {
     // in planeIntersection
     float inPositions[9]; // xyz for 3 vertices of the given triangle
     float inColors[12];   // RGBA for 3 vertices of the given triangle
@@ -74,8 +74,7 @@ GeometryDataset GeometryUtil::clipGeometry(const GeometryDataset& geo, Axis axis
     return G3D::createLineGeometry(std::move(clipIndices), std::move(clipPositions), std::move(clipColors));
 }
 
-bool GeometryUtil::planeIntersection(const float* triPositions, const float* triColors, Axis axis, float axisPosition, float* linePositions,
-                                     float* lineColors, size_t& numberOfPoints) {
+bool GeometryUtil::planeIntersection(const float* triPositions, const float* triColors, CoordinateAxis axis, float axisPosition, float* linePositions, float* lineColors, size_t& numberOfPoints) {
     bool intersection = false;
 
     // distance clipping plane to vertices per component

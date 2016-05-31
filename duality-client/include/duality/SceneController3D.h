@@ -12,7 +12,7 @@ class SceneController3D {
 public:
     SceneController3D(std::unique_ptr<SceneController3DImpl> impl);
     ~SceneController3D();
-
+    
     void updateScreenInfo(const ScreenInfo& screenInfo);
     void render();
 

@@ -11,9 +11,8 @@
 
 #include <OpenGLES/ES3/gl.h>
 
-RenderDispatcher2D::RenderDispatcher2D(const ScreenInfo& screenInfo, const BoundingBox& boundingBox)
-    : m_fbo(std::make_unique<GLFrameBufferObject>(static_cast<unsigned int>(screenInfo.width / screenInfo.standardDownSampleFactor),
-                                                  static_cast<unsigned int>(screenInfo.width / screenInfo.standardDownSampleFactor), true))
+RenderDispatcher2D::RenderDispatcher2D(std::shared_ptr<GLFrameBufferObject> fbo)
+    : m_fbo(fbo)
     , m_geoRenderer(std::make_unique<GeometryRenderer2D>()) {}
 
 RenderDispatcher2D::~RenderDispatcher2D() = default;

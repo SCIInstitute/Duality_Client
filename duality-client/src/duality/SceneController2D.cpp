@@ -1,7 +1,13 @@
 #include "duality/SceneController2D.h"
 
+#include "src/duality/SceneController2DImpl.h"
+#include "src/duality/RenderDispatcher2D.h"
+#include "src/duality/BoundingBox.h"
+
+using namespace IVDA;
+
 SceneController2D::SceneController2D(std::unique_ptr<SceneController2DImpl> impl)
-    : m_impl(std::move(impl)) {}
+: m_impl(std::move(impl)) {}
 
 SceneController2D::~SceneController2D() = default;
 
@@ -22,7 +28,7 @@ void SceneController2D::addRotation(const float rotationAngle) {
 }
 
 void SceneController2D::addZoom(const float zoom) {
-    m_impl->setZoom(zoom);
+    m_impl->addZoom(zoom);
 }
 
 VariableInfoMap SceneController2D::variableInfoMap() const {

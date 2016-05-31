@@ -11,9 +11,8 @@
 
 #include <OpenGLES/ES3/gl.h>
 
-RenderDispatcher3D::RenderDispatcher3D(const ScreenInfo& screenInfo)
-    : m_fbo(std::make_unique<GLFrameBufferObject>(static_cast<unsigned int>(screenInfo.width / screenInfo.standardDownSampleFactor),
-                                                  static_cast<unsigned int>(screenInfo.height / screenInfo.standardDownSampleFactor), true))
+RenderDispatcher3D::RenderDispatcher3D(std::shared_ptr<GLFrameBufferObject> fbo)
+    : m_fbo(fbo)
     , m_geoRenderer(std::make_unique<GeometryRenderer3D>()) {}  
 
 RenderDispatcher3D::~RenderDispatcher3D() = default;

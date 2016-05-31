@@ -1,6 +1,5 @@
 #include "duality/SceneController3D.h"
 
-#include "src/duality/Scene.h"
 #include "src/duality/SceneController3DImpl.h"
 
 SceneController3D::SceneController3D(std::unique_ptr<SceneController3DImpl> impl)

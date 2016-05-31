@@ -8,13 +8,14 @@
 #include "duality/ScreenInfo.h"
 #include "src/duality/DatasetDispatcher.h"
 #include "src/duality/MVP2D.h"
+#include "src/duality/GeometryRenderer2D.h"
 
 class GLFrameBufferObject;
 class GeometryRenderer2D;
 
 class RenderDispatcher2D : public DatasetDispatcher {
 public:
-    RenderDispatcher2D(const ScreenInfo& screenInfo, const BoundingBox& boundingBox);
+    RenderDispatcher2D(std::shared_ptr<GLFrameBufferObject> fbo);
     ~RenderDispatcher2D();
 
     void dispatch(GeometryDataset& node) override;
@@ -26,7 +27,7 @@ public:
     void setSlice(const float slice);
 
 private:
-    std::unique_ptr<GLFrameBufferObject> m_fbo;
+    std::shared_ptr<GLFrameBufferObject> m_fbo;
     std::unique_ptr<GeometryRenderer2D> m_geoRenderer;
     GLMatrix m_mvp;
     CoordinateAxis m_axis;

@@ -83,7 +83,6 @@ void GeometryRenderer3D::render(const GeometryDataset& dataset, const GLMatrix& 
     }
 }
 
-
 int GeometryRenderer3D::primitiveTypeGL(const GeometryDataset& dataset) {
     switch (dataset.geometryInfo()->primitiveType) {
     case G3D::Point:

@@ -4,6 +4,7 @@
 
 #include "src/duality/MVP3D.h"
 #include "src/duality/RenderParameters3D.h"
+#include "src/IVDA/GLFrameBufferObject.h"
 
 #include <memory>
 
@@ -12,8 +13,8 @@ class RenderDispatcher3D;
 
 class SceneController3DImpl {
 public:
-    SceneController3DImpl(Scene& scene, const RenderParameters3D& initialParameters, std::unique_ptr<RenderDispatcher3D> renderDispatcher,
-                          std::unique_ptr<MVP3D> mvp);
+    SceneController3DImpl(Scene& scene, const RenderParameters3D& initialParameters, std::shared_ptr<GLFrameBufferObject> fbo);
+    ~SceneController3DImpl();
 
     void updateScreenInfo(const ScreenInfo& screenInfo);
 
@@ -30,6 +31,7 @@ public:
 private:
     Scene& m_scene;
     RenderParameters3D m_parameters;
+    std::shared_ptr<GLFrameBufferObject> m_fbo;
     std::unique_ptr<MVP3D> m_mvp;
     std::unique_ptr<RenderDispatcher3D> m_renderDispatcher;
 };

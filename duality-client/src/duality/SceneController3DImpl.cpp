@@ -4,14 +4,29 @@
 #include "src/duality/Scene.h"
 
 SceneController3DImpl::SceneController3DImpl(Scene& scene, const RenderParameters3D& initialParameters,
-                                             std::unique_ptr<RenderDispatcher3D> renderDispatcher, std::unique_ptr<MVP3D> mvp)
+                                             std::shared_ptr<GLFrameBufferObject> fbo)
     : m_scene(scene)
     , m_parameters(initialParameters)
-    , m_renderDispatcher(std::move(renderDispatcher))
-    , m_mvp(std::move(mvp)) {}
+    , m_fbo(fbo) {
+    m_scene.updateDatasets();
+}
+
+SceneController3DImpl::~SceneController3DImpl() = default;
 
 void SceneController3DImpl::updateScreenInfo(const ScreenInfo& screenInfo) {
-    m_mvp->updateScreenInfo(screenInfo);
+    m_fbo->Resize(static_cast<unsigned int>(screenInfo.width / screenInfo.standardDownSampleFactor),
+                  static_cast<unsigned int>(screenInfo.height / screenInfo.standardDownSampleFactor), true);
+    if (m_mvp == nullptr) {
+        BoundingBox boundingBox = duality::calculateSceneBoundingBox(m_scene);
+        m_mvp = std::make_unique<MVP3D>(screenInfo, boundingBox);
+    } else {
+        m_mvp->updateScreenInfo(screenInfo);
+    }
+    if (m_renderDispatcher == nullptr) {
+        m_renderDispatcher = std::make_unique<RenderDispatcher3D>(m_fbo);
+    } else {
+        // m_renderDispatcher->updateScreenInfo(); // FIXME
+    }
 }
 
 void SceneController3DImpl::addTranslation(const IVDA::Vec2f& translation) {
@@ -46,5 +61,7 @@ void SceneController3DImpl::setVariable(const std::string& objectName, const std
 
 void SceneController3DImpl::render() {
     m_renderDispatcher->setMVP(m_mvp->calculate(m_parameters));
+    m_renderDispatcher->startDraw();
     m_scene.dispatch(*m_renderDispatcher);
+    m_renderDispatcher->finishDraw();
 }

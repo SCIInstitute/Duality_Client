@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "duality/SceneController2D.h"
 #include "duality/SceneController3D.h"
 #include "duality/SceneMetadata.h"
 #include "duality/ScreenInfo.h"
@@ -22,7 +23,9 @@ public:
 
     std::vector<SceneMetadata> listMetadata() const;
     bool loadScene(const std::string& name);
-    std::weak_ptr<SceneController3D> sceneController3D(const ScreenInfo& screenInfo);
+    bool isSceneLoaded() const;
+    std::weak_ptr<SceneController2D> sceneController2D();
+    std::weak_ptr<SceneController3D> sceneController3D();
 
 private:
     std::unique_ptr<SceneLoaderImpl> m_impl;

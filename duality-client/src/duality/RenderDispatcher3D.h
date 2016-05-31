@@ -15,7 +15,7 @@ class GeometryRenderer3D;
 
 class RenderDispatcher3D : public DatasetDispatcher {
 public:
-    RenderDispatcher3D(const ScreenInfo& screenInfo);
+    RenderDispatcher3D(std::shared_ptr<GLFrameBufferObject> fbo);
     ~RenderDispatcher3D();
 
     void dispatch(GeometryDataset& node) override;
@@ -25,7 +25,7 @@ public:
     void setMVP(const GLMatrix& mvp);
 
 private:
-    std::unique_ptr<GLFrameBufferObject> m_fbo;
+    std::shared_ptr<GLFrameBufferObject> m_fbo;
     std::unique_ptr<GeometryRenderer3D> m_geoRenderer;
     GLMatrix m_mvp;
 };

@@ -4,6 +4,7 @@
 
 #include "src/duality/MVP2D.h"
 #include "src/duality/RenderParameters2D.h"
+#include "src/IVDA/GLFrameBufferObject.h"
 
 #include <memory>
 
@@ -12,8 +13,8 @@ class RenderDispatcher2D;
 
 class SceneController2DImpl {
 public:
-    SceneController2DImpl(Scene& scene, const RenderParameters2D& initialParameters, std::unique_ptr<RenderDispatcher2D> renderDispatcher,
-        std::unique_ptr<MVP2D> mvp);
+    SceneController2DImpl(Scene& scene, const RenderParameters2D& initialParameters, std::shared_ptr<GLFrameBufferObject> fbo);
+    ~SceneController2DImpl();
 
     void updateScreenInfo(const ScreenInfo& screenInfo);
 
@@ -30,6 +31,7 @@ public:
 private:
     Scene& m_scene;
     RenderParameters2D m_parameters;
+    std::shared_ptr<GLFrameBufferObject> m_fbo;
     std::unique_ptr<MVP2D> m_mvp;
     std::unique_ptr<RenderDispatcher2D> m_renderDispatcher;
 };

@@ -25,5 +25,5 @@ public:
     void setVariable(const std::string& objectName, const std::string& variableName, const std::string& value);
 
 private:
-    std::unique_ptr<SceneController2D> m_impl;
+    std::unique_ptr<SceneController2DImpl> m_impl;
 };

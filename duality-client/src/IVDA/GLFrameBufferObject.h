@@ -5,7 +5,7 @@
 
 class GLFrameBufferObject : public GLObject {
 public:
-	GLFrameBufferObject(unsigned int width, unsigned int height, bool bCreateDepth=false);
+	GLFrameBufferObject();
 	virtual ~GLFrameBufferObject();
 	
 	bool Resize(unsigned int width, unsigned int height, bool bCreateDepth=false);
