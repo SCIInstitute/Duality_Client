@@ -1,8 +1,5 @@
 #pragma once
 
-#ifndef IVDA_LOG_H
-#define IVDA_LOG_H
-
 #include "Singleton.h"
 #include "MultiplexOut.h"
 #include "ConsoleOut.h"
@@ -86,6 +83,3 @@ namespace IVDA
     ss << ostream;                                                                              \
     IVDA::DebugOutHandler::Instance().DebugOut()->Other(_IVDA_func_, "%s", ss.str().c_str());   \
   } while( __LINE__ == -1)
-
-
-#endif // IVDA_LOG_H

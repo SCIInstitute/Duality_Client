@@ -1,5 +1,4 @@
-#ifndef IVDA_MACROS
-#define IVDA_MACROS
+#pragma once
 
 #include <iostream>
 #include <type_traits>
@@ -139,5 +138,3 @@ bool isBigEndian();
 
   
 } // namespace IVDA
-
-#endif

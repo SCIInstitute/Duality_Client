@@ -1,8 +1,5 @@
 #pragma once
 
-#ifndef GLINCLUDE_H
-#define GLINCLUDE_H
-
 #include "IVDA/StdDefines.h"
 #include "src/IVDA/DebugOutHandler.h"
 #include <limits>
@@ -30,5 +27,3 @@ do {                                                              \
 #else
 # define GL(stmt) do { stmt; } while(0)
 #endif
-
-#endif // GLINCLUDE_H

@@ -1,5 +1,4 @@
-#ifndef GLFRAMEBUFFEROBJECT_H
-#define GLFRAMEBUFFEROBJECT_H
+#pragma once
 
 #include "GLObject.h"
 
@@ -29,5 +28,3 @@ private:
 	
 	void FreeGL();
 };
-
-#endif  // GLFRAMEBUFFEROBJECT_H

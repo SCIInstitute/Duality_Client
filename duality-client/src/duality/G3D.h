@@ -1,10 +1,8 @@
-#ifndef G3D_H
-#define G3D_H
+#pragma once
 
-#include "stdint.h"
-
-#include <memory>
+#include <cstdint>
 #include <iostream>
+#include <memory>
 #include <vector>
 
 class AbstractReader;
@@ -92,7 +90,8 @@ private:
     static void writeHeader(AbstractWriter& writer, const GeometryInfo& info, const uint32_t* const vertexType = nullptr);
     static void writeIndices(AbstractWriter& writer, const std::vector<uint32_t>& indices, const GeometryInfo& info);
     static void writeVertices(AbstractWriter& writer, const std::vector<float>& vertices, const GeometryInfo& info);
-    static void writeVertexAttributes(AbstractWriter& writer, const std::vector<std::vector<float>>& vertexAttributes, const GeometryInfo& info);
+    static void writeVertexAttributes(AbstractWriter& writer, const std::vector<std::vector<float>>& vertexAttributes,
+                                      const GeometryInfo& info);
     static void writeContent(AbstractWriter& writer, const GeometryAoS& geometry);
     static void writeContent(AbstractWriter& writer, const GeometrySoA& geometry);
 
@@ -106,8 +105,6 @@ private:
     static std::vector<float> convertVertices(const std::vector<std::vector<float>>& vertexAttributes, const GeometryInfo& info);
     static std::vector<std::vector<float>> convertVertices(const std::vector<float>& vertices, const GeometryInfo& info);
 };
-
-#endif // G3D_H
 
 /*
  The MIT License

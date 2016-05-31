@@ -1,5 +1,4 @@
-#ifndef IVDA_SINGLETON_H
-#define IVDA_SINGLETON_H
+#pragma once
 
 #define SINGLETON_IVDA_STACK(ClassName)\
  public:\
@@ -28,5 +27,3 @@
  ClassName();\
  ClassName(const ClassName&);
 #endif
-
-#endif // IVDA_SINGLETON_H

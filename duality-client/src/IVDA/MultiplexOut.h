@@ -38,9 +38,6 @@
 
 #pragma once
 
-#ifndef IVDA_MULTIPLEXOUT_H
-#define IVDA_MULTIPLEXOUT_H
-
 #include <vector>
 #include "AbstrDebugOut.h"
 
@@ -71,4 +68,3 @@ class MultiplexOut : public AbstrDebugOut {
     std::vector<AbstrDebugOut*> m_vpDebugger;
 };
 }; // namespace IVDA
-#endif // IVDA_MULTIPLEXOUT_H

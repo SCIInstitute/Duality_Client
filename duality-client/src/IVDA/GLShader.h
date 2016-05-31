@@ -1,10 +1,8 @@
 #pragma once
 
-#ifndef GLSHADER_H
-#define GLSHADER_H
-
 #include "src/IVDA/GLObject.h"
 #include "IVDA/Vectors.h"
+
 #include <map>
 #include <string>
 #include <vector>
@@ -53,5 +51,3 @@ protected:
     bool LinkProgram(unsigned int prog);
     bool ValidateProgram(unsigned int prog);
 };
-
-#endif // GLSHADER_H

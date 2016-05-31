@@ -1,9 +1,7 @@
 #pragma once
 
-#ifndef IVDA_THREADS_H
-#define IVDA_THREADS_H
-
 #include "IVDA/StdDefines.h"
+
 #include <memory>
 #include <functional>
 #include <cassert>
@@ -180,5 +178,3 @@ namespace IVDA
     std::unique_ptr<CriticalSection> m_pGuard;
   };
 }
-
-#endif // IVDA_THREADS_H

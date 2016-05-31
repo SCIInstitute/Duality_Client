@@ -1,7 +1,3 @@
-//  Created by David McCann on 5/10/16.
-//  Copyright © 2016 Scientific Computing and Imaging Institute. All rights reserved.
-//
-
 #include "duality/SceneLoader.h"
 
 #include "src/duality/Communication.h"

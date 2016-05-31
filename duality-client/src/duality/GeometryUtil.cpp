@@ -1,7 +1,3 @@
-//  Created by David McCann on 5/26/16.
-//  Copyright © 2016 Scientific Computing and Imaging Institute. All rights reserved.
-//
-
 #include "src/duality/GeometryUtil.h"
 
 GeometryDataset GeometryUtil::clipGeometry(const GeometryDataset& geo, CoordinateAxis axis, float position) {
