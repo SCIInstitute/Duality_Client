@@ -63,9 +63,9 @@ void SceneController2DImpl::toggleAxis() {
 
 std::string SceneController2DImpl::labelForCurrentAxis() const {
     std::map<CoordinateAxis, std::string> mapper;
-    mapper[CoordinateAxis::X_Axis] = "X-Axis";
-    mapper[CoordinateAxis::Y_Axis] = "Y-Axis";
-    mapper[CoordinateAxis::Z_Axis] = "Z-Axis";
+    mapper[CoordinateAxis::X_Axis] = "yz-plane";
+    mapper[CoordinateAxis::Y_Axis] = "xz-plane";
+    mapper[CoordinateAxis::Z_Axis] = "xy-plane";
     return mapper[m_parameters.axis()];
 }
 
