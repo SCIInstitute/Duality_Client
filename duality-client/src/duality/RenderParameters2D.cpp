@@ -21,11 +21,19 @@ float RenderParameters2D::zoom() const noexcept {
 }
 
 void RenderParameters2D::addTranslation(const IVDA::Vec2f& translation) {
-    // TODO: implement
+    IVDA::Vec2f o = translation * 2.0f / m_zoom;
+    float c = cos(-m_rotationAngle);
+    float s = sin(-m_rotationAngle);
+    const float xOffset = o.x * c - o.y * s;
+    const float yOffset = o.y * c + o.x * s;
+    m_translation += IVDA::Vec2f(xOffset, yOffset);
 }
 
 void RenderParameters2D::addRotation(const float rotationAngle) {
-    // TODO:implement
+    if (rotationAngle > 1) {
+        return;
+    }
+    m_rotationAngle += rotationAngle;
 }
 
 void RenderParameters2D::addZoom(const float zoom) {
