@@ -1,8 +1,8 @@
 #include "src/duality/SceneController2DImpl.h"
 
+#include "duality/CoordinateSystem.h"
 #include "src/duality/RenderDispatcher2D.h"
 #include "src/duality/Scene.h"
-#include "duality/CoordinateSystem.h"
 
 SceneController2DImpl::SceneController2DImpl(Scene& scene, const RenderParameters2D& initialParameters,
                                              std::shared_ptr<GLFrameBufferObject> fbo)
@@ -10,6 +10,8 @@ SceneController2DImpl::SceneController2DImpl(Scene& scene, const RenderParameter
     , m_parameters(initialParameters)
     , m_fbo(fbo) {
     m_scene.updateDatasets();
+    auto minMax = minMaxForCurrentAxis();
+    m_parameters.setSlice((minMax.first + minMax.second) / 2);
 }
 
 SceneController2DImpl::~SceneController2DImpl() = default;
@@ -49,6 +51,10 @@ std::pair<float, float> SceneController2DImpl::minMaxForCurrentAxis() const {
 
 void SceneController2DImpl::setSlice(float slice) {
     m_parameters.setSlice(slice);
+}
+
+float SceneController2DImpl::slice() const {
+    return m_parameters.slice();
 }
 
 void SceneController2DImpl::toggleAxis() {

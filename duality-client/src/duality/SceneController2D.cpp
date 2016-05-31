@@ -39,6 +39,10 @@ void SceneController2D::setSlice(float slice) {
     m_impl->setSlice(slice);
 }
 
+float SceneController2D::slice() const {
+    return m_impl->slice();
+}
+
 void SceneController2D::toggleAxis() {
     m_impl->toggleAxis();
 }

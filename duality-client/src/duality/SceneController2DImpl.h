@@ -26,6 +26,7 @@ public:
 
     std::pair<float, float> minMaxForCurrentAxis() const;
     void setSlice(float slice);
+    float slice() const;
     
     void toggleAxis();
     std::string labelForCurrentAxis() const;
