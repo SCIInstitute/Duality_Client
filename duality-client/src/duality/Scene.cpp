@@ -2,6 +2,7 @@
 
 #include "IVDA/Vectors.h"
 #include "src/duality/SceneParser.h"
+#include "src/duality/View.h"
 
 using namespace IVDA;
 
@@ -24,9 +25,11 @@ std::vector<SceneNode>& Scene::nodes() {
     return m_nodes;
 }
 
-void Scene::dispatch(DatasetDispatcher& dispatcher) const {
+void Scene::dispatch(DatasetDispatcher& dispatcher, View view) const {
     for (auto& node : m_nodes) {
-        node.dispatch(dispatcher);
+        if (node.dataset()->isVisibleInView(view)) {
+            node.dispatch(dispatcher);
+        }
     }
 }
 
@@ -36,11 +39,13 @@ void Scene::updateDatasets() {
     }
 }
 
-VariableInfoMap Scene::variableInfoMap() {
+VariableInfoMap Scene::variableInfoMap(View view) {
     VariableInfoMap result;
     for (auto& node : m_nodes) {
-        result[node.name()].floatInfos = node.dataProvider()->floatVariableInfos();
-        result[node.name()].enumInfos = node.dataProvider()->enumVariableInfos();
+        if (node.dataset()->isVisibleInView(view)) {
+            result[node.name()].floatInfos = node.dataProvider()->floatVariableInfos();
+            result[node.name()].enumInfos = node.dataProvider()->enumVariableInfos();
+        }
     }
     return result;
 }
@@ -57,8 +62,8 @@ void Scene::setVariable(const std::string& objectName, const std::string& variab
     it->setVariable(variableName, value);
 }
 
-BoundingBox duality::calculateSceneBoundingBox(const Scene& scene) {
+BoundingBox duality::calculateSceneBoundingBox(const Scene& scene, View view) {
     BoundingBoxCalculator bbCalc;
-    scene.dispatch(bbCalc);
+    scene.dispatch(bbCalc, view);
     return bbCalc.boundingBox();
 }

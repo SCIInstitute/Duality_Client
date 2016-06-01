@@ -17,7 +17,7 @@ void SceneController3DImpl::updateScreenInfo(const ScreenInfo& screenInfo) {
     m_fbo->Resize(static_cast<unsigned int>(screenInfo.width / screenInfo.standardDownSampleFactor),
                   static_cast<unsigned int>(screenInfo.height / screenInfo.standardDownSampleFactor), true);
     if (m_mvp == nullptr) {
-        BoundingBox boundingBox = duality::calculateSceneBoundingBox(m_scene);
+        BoundingBox boundingBox = duality::calculateSceneBoundingBox(m_scene, View::View3D);
         m_mvp = std::make_unique<MVP3D>(screenInfo, boundingBox);
     } else {
         m_mvp->updateScreenInfo(screenInfo);
@@ -42,26 +42,26 @@ void SceneController3DImpl::setZoom(const float zoom) {
 }
 
 VariableInfoMap SceneController3DImpl::variableInfoMap() const {
-    return m_scene.variableInfoMap();
+    return m_scene.variableInfoMap(View::View3D);
 }
 
 void SceneController3DImpl::setVariable(const std::string& objectName, const std::string& variableName, float value) {
     m_scene.setVariable(objectName, variableName, value);
     m_scene.updateDatasets();
-    BoundingBox boudningBox = duality::calculateSceneBoundingBox(m_scene);
+    BoundingBox boudningBox = duality::calculateSceneBoundingBox(m_scene, View::View3D);
     m_mvp->updateBoundingBox(boudningBox);
 }
 
 void SceneController3DImpl::setVariable(const std::string& objectName, const std::string& variableName, const std::string& value) {
     m_scene.setVariable(objectName, variableName, value);
     m_scene.updateDatasets();
-    BoundingBox boudningBox = duality::calculateSceneBoundingBox(m_scene);
+    BoundingBox boudningBox = duality::calculateSceneBoundingBox(m_scene, View::View3D);
     m_mvp->updateBoundingBox(boudningBox);
 }
 
 void SceneController3DImpl::render() {
     m_renderDispatcher->setMVP(m_mvp->calculate(m_parameters));
     m_renderDispatcher->startDraw();
-    m_scene.dispatch(*m_renderDispatcher);
+    m_scene.dispatch(*m_renderDispatcher, View::View3D);
     m_renderDispatcher->finishDraw();
 }

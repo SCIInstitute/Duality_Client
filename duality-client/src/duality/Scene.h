@@ -21,10 +21,10 @@ public:
     const std::vector<SceneNode>& nodes() const;
     std::vector<SceneNode>& nodes();
 
-    void dispatch(DatasetDispatcher& dispatcher) const;
+    void dispatch(DatasetDispatcher& dispatcher, View view) const;
     void updateDatasets();
 
-    VariableInfoMap variableInfoMap();
+    VariableInfoMap variableInfoMap(View view);
     void setVariable(const std::string& objectName, const std::string& variableName, float value);
     void setVariable(const std::string& objectName, const std::string& variableName, const std::string& value);
 
@@ -34,5 +34,5 @@ private:
 };
 
 namespace duality {
-    BoundingBox calculateSceneBoundingBox(const Scene& scene);
+    BoundingBox calculateSceneBoundingBox(const Scene& scene, View view);
 }

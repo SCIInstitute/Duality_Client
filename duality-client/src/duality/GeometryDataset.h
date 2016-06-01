@@ -8,7 +8,7 @@ class DatasetDispatcher;
 
 class GeometryDataset : public Dataset {
 public:
-    GeometryDataset(std::vector<IVDA::Mat4f> transforms = {});
+    GeometryDataset(std::vector<IVDA::Mat4f> transforms = {}, Visibility visibility = Visibility::VisibleBoth);
     GeometryDataset(std::unique_ptr<G3D::GeometrySoA> geometry, std::vector<IVDA::Mat4f> transforms = {});
 
     // SceneNode interface

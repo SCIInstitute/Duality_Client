@@ -5,6 +5,8 @@
 #include "src/duality/GeometryDataset.h"
 #include "src/duality/PythonProvider.h"
 
+#include "mocca/log/LogManager.h"
+
 using namespace IVDA;
 
 SceneParser::SceneParser(const JsonCpp::Value& root, std::shared_ptr<LazyRpcClient> rpc)
@@ -46,7 +48,18 @@ std::unique_ptr<Dataset> SceneParser::parseGeometry(const JsonCpp::Value& node) 
     if (node.isMember("transforms")) {
         transforms = parseMatrices(node["transforms"]);
     }
-    return std::make_unique<GeometryDataset>(std::move(transforms));
+    Dataset::Visibility visibility = Dataset::Visibility::VisibleBoth;
+    if (node.isMember("view2d") && node["view2d"] == false) {
+        visibility = Dataset::Visibility::Visible3D;
+    }
+    if (node.isMember("view3d") && node["view3d"] == false) {
+        visibility = Dataset::Visibility::Visible2D;
+    }
+    if (node.isMember("view2d") && node["view2d"] == false && node.isMember("view3d") && node["view3d"] == false) {
+        visibility = Dataset::Visibility::VisibleNone;
+        LWARNING("Node is invisible in 2d-view and 3d-view");
+    }
+    return std::make_unique<GeometryDataset>(std::move(transforms), visibility);
 }
 
 std::unique_ptr<DataProvider> SceneParser::parseDataSource(const JsonCpp::Value& node) {

@@ -7,8 +7,8 @@
 
 using namespace IVDA;
 
-GeometryDataset::GeometryDataset(std::vector<IVDA::Mat4f> transforms)
-    : Dataset(std::move(transforms))
+GeometryDataset::GeometryDataset(std::vector<IVDA::Mat4f> transforms, Visibility visibility)
+    : Dataset(std::move(transforms), visibility)
     , m_geometry(nullptr)
     , m_positions(nullptr)
     , m_normals(nullptr)
