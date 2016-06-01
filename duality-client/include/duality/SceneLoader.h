@@ -16,6 +16,8 @@ class SceneLoader {
 public:
     SceneLoader(const mocca::net::Endpoint& endpoint);
     ~SceneLoader();
+    
+    void updateEndpoint(const mocca::net::Endpoint& endpoint);
 
     std::vector<SceneMetadata> listMetadata() const;
     bool loadScene(const std::string& name);

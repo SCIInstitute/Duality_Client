@@ -21,6 +21,8 @@ class SceneLoaderImpl {
 public:
     SceneLoaderImpl(const mocca::net::Endpoint& endpoint);
 
+    void updateEndpoint(const mocca::net::Endpoint& endpoint);
+    
     std::vector<SceneMetadata> listMetadata() const;
     bool loadScene(const std::string& name);
     bool isSceneLoaded() const;
@@ -43,6 +45,10 @@ private:
 SceneLoaderImpl::SceneLoaderImpl(const mocca::net::Endpoint& endpoint)
     : m_rpc(std::make_shared<LazyRpcClient>(endpoint))
     , m_resultFbo(std::make_shared<GLFrameBufferObject>()) {}
+
+void SceneLoaderImpl::updateEndpoint(const mocca::net::Endpoint &endpoint) {
+    m_rpc = std::make_shared<LazyRpcClient>(endpoint);
+}
 
 std::vector<SceneMetadata> SceneLoaderImpl::listMetadata() const {
     m_rpc->send("listScenes", JsonCpp::Value());
@@ -93,9 +99,6 @@ std::weak_ptr<SceneController3D> SceneLoaderImpl::sceneController3D() {
 void SceneLoaderImpl::createSceneController2D() {
     m_scene->updateDatasets();
     RenderParameters2D initialParameters(Vec2f(0.0f, 0.0f), 0.0f, 1.0f, CoordinateAxis::X_Axis);
-    // BoundingBox boundingBox = duality::calculateSceneBoundingBox(*m_scene);
-    // auto mvp = std::make_unique<MVP2D>(screenInfo, boundingBox);
-    // auto renderDispatcher = std::make_unique<RenderDispatcher2D>(screenInfo);
     auto impl = std::make_unique<SceneController2DImpl>(*m_scene, initialParameters, m_resultFbo);
     m_sceneController2D = std::make_shared<SceneController2D>(std::move(impl));
 }
@@ -103,9 +106,6 @@ void SceneLoaderImpl::createSceneController2D() {
 void SceneLoaderImpl::createSceneController3D() {
     m_scene->updateDatasets();
     RenderParameters3D initialParameters(Vec3f(0.0f, 0.0f, -3.0f), Mat4f());
-    // BoundingBox boundingBox = duality::calculateSceneBoundingBox(*m_scene);
-    // auto mvp = std::make_unique<MVP3D>(screenInfo, boundingBox);
-    // auto renderDispatcher = std::make_unique<RenderDispatcher3D>(screenInfo);
     auto impl = std::make_unique<SceneController3DImpl>(*m_scene, initialParameters, m_resultFbo);
     m_sceneController3D = std::make_shared<SceneController3D>(std::move(impl));
 }
@@ -114,6 +114,10 @@ SceneLoader::SceneLoader(const mocca::net::Endpoint& endpoint)
     : m_impl(std::make_unique<SceneLoaderImpl>(endpoint)) {}
 
 SceneLoader::~SceneLoader() = default;
+
+void SceneLoader::updateEndpoint(const mocca::net::Endpoint& endpoint) {
+    m_impl->updateEndpoint(endpoint);
+}
 
 std::vector<SceneMetadata> SceneLoader::listMetadata() const {
     return m_impl->listMetadata();
