@@ -1,6 +1,7 @@
 #pragma once
 
 #include "duality/VariableInfo.h"
+#include "duality/SceneController2D.h"
 
 #include "src/duality/MVP2D.h"
 #include "src/duality/RenderParameters2D.h"
@@ -29,7 +30,7 @@ public:
     float slice() const;
     
     void toggleAxis();
-    std::string labelForCurrentAxis() const;
+    std::string labelForCurrentAxis(SceneController2D::AxisLabelMode mode) const;
     
     VariableInfoMap variableInfoMap() const;
     void setVariable(const std::string& objectName, const std::string& variableName, float value);

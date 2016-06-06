@@ -61,11 +61,18 @@ void SceneController2DImpl::toggleAxis() {
     m_parameters.toggleAxis();
 }
 
-std::string SceneController2DImpl::labelForCurrentAxis() const {
+std::string SceneController2DImpl::labelForCurrentAxis(SceneController2D::AxisLabelMode mode) const {
     std::map<CoordinateAxis, std::string> mapper;
-    mapper[CoordinateAxis::X_Axis] = "yz-plane";
-    mapper[CoordinateAxis::Y_Axis] = "xz-plane";
-    mapper[CoordinateAxis::Z_Axis] = "xy-plane";
+    if (mode == SceneController2D::AxisLabelMode::Mathematical) {
+        mapper[CoordinateAxis::X_Axis] = "yz-plane";
+        mapper[CoordinateAxis::Y_Axis] = "xz-plane";
+        mapper[CoordinateAxis::Z_Axis] = "xy-plane";
+    }
+    else {
+        mapper[CoordinateAxis::X_Axis] = "sagittal";
+        mapper[CoordinateAxis::Y_Axis] = "axial";
+        mapper[CoordinateAxis::Z_Axis] = "coronal";
+    }
     return mapper[m_parameters.axis()];
 }
 

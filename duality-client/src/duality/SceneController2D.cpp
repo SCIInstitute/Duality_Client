@@ -47,8 +47,8 @@ void SceneController2D::toggleAxis() {
     m_impl->toggleAxis();
 }
 
-std::string SceneController2D::labelForCurrentAxis() const {
-    return m_impl->labelForCurrentAxis();
+std::string SceneController2D::labelForCurrentAxis(AxisLabelMode mode) const {
+    return m_impl->labelForCurrentAxis(mode);
 }
 
 VariableInfoMap SceneController2D::variableInfoMap() const {

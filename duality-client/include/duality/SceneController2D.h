@@ -25,7 +25,8 @@ public:
     float slice() const;
 
     void toggleAxis();
-    std::string labelForCurrentAxis() const;
+    enum class AxisLabelMode { Mathematical, Anatomical };
+    std::string labelForCurrentAxis(AxisLabelMode mode) const;
     
     VariableInfoMap variableInfoMap() const;
     void setVariable(const std::string& objectName, const std::string& variableName, float value);
