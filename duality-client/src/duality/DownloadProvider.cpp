@@ -1,5 +1,7 @@
 #include "src/duality/DownloadProvider.h"
 
+#include "duality/Error.h"
+
 #include <cassert>
 
 DownloadProvider::DownloadProvider(std::string sceneName, std::string fileName, std::shared_ptr<LazyRpcClient> rpc)
@@ -17,6 +19,9 @@ std::shared_ptr<std::vector<uint8_t>> DownloadProvider::fetch() {
     params["filename"] = m_fileName;
     m_rpc->send("download", params);
     auto reply = m_rpc->receive();
+    if (reply.second.empty()) {
+        throw Error("Could not download file '" + m_fileName + "'", __FILE__, __LINE__);
+    }
     m_dirty = false;
     return reply.second[0];
 }

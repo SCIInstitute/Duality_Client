@@ -20,7 +20,7 @@ public:
     void updateEndpoint(const mocca::net::Endpoint& endpoint);
 
     std::vector<SceneMetadata> listMetadata() const;
-    bool loadScene(const std::string& name);
+    void loadScene(const std::string& name);
     bool isSceneLoaded() const;
     std::weak_ptr<SceneController2D> sceneController2D();
     std::weak_ptr<SceneController3D> sceneController3D();

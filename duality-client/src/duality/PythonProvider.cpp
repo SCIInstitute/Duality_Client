@@ -37,6 +37,9 @@ std::shared_ptr<std::vector<uint8_t>> PythonProvider::fetch() {
     params["variables"] = values;
     m_rpc->send("python", params);
     auto reply = m_rpc->receive();
+    if (reply.second.empty()) {
+        throw Error("Python script filename '" + m_fileName + "' did not return any data", __FILE__, __LINE__);
+    }
     m_dirty = false;
     return reply.second[0];
 }

@@ -24,7 +24,7 @@ public:
     void updateEndpoint(const mocca::net::Endpoint& endpoint);
     
     std::vector<SceneMetadata> listMetadata() const;
-    bool loadScene(const std::string& name);
+    void loadScene(const std::string& name);
     bool isSceneLoaded() const;
 
     std::weak_ptr<SceneController2D> sceneController2D();
@@ -60,9 +60,7 @@ std::vector<SceneMetadata> SceneLoaderImpl::listMetadata() const {
     return result;
 }
 
-bool SceneLoaderImpl::loadScene(const std::string& name) {
-    if (m_scene != nullptr && m_scene->metadata().name() == name)
-        return false;
+void SceneLoaderImpl::loadScene(const std::string& name) {
     m_rpc->send("listScenes", JsonCpp::Value());
     auto root = m_rpc->receive().first;
     for (auto it = root.begin(); it != root.end(); ++it) {
@@ -72,7 +70,7 @@ bool SceneLoaderImpl::loadScene(const std::string& name) {
             m_scene = parser.parseScene();
             m_sceneController2D = nullptr;
             m_sceneController3D = nullptr;
-            return true;
+            return;
         }
     }
     throw Error("Scene named '" + name + "' does not exist", __FILE__, __LINE__);
@@ -123,8 +121,8 @@ std::vector<SceneMetadata> SceneLoader::listMetadata() const {
     return m_impl->listMetadata();
 }
 
-bool SceneLoader::loadScene(const std::string& name) {
-    return m_impl->loadScene(name);
+void SceneLoader::loadScene(const std::string& name) {
+    m_impl->loadScene(name);
 }
 
 bool SceneLoader::isSceneLoaded() const {
