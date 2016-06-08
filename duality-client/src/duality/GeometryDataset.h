@@ -11,7 +11,7 @@ public:
     GeometryDataset(std::vector<IVDA::Mat4f> transforms = {}, Visibility visibility = Visibility::VisibleBoth);
     GeometryDataset(std::unique_ptr<G3D::GeometrySoA> geometry, std::vector<IVDA::Mat4f> transforms = {});
 
-    // SceneNode interface
+    // Dataset interface
     void applyTransform(const IVDA::Mat4f& matrix) override;
     void accept(DatasetDispatcher& renderer) override;
     void read(std::shared_ptr<std::vector<uint8_t>> data) override;
