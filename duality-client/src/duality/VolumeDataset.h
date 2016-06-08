@@ -25,5 +25,5 @@ private:
 
 private:
     std::unique_ptr<I3M::Volume> m_volume;
-    std::array<SliceInfo, 3> m_sliceInfos;
+    std::array<std::vector<SliceInfo>, 3> m_sliceInfos;
 };

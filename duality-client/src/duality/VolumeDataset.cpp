@@ -1,6 +1,8 @@
 #include "src/duality/AbstractIO.h"
 #include "src/duality/VolumeDataset.h"
 
+#include <algorithm>
+
 VolumeDataset::VolumeDataset(Dataset::Visibility visibility)
     : Dataset({}, visibility) {}
 
@@ -30,7 +32,13 @@ void VolumeDataset::initSliceInfos(const I3M::VolumeInfo& volumeInfo) {
             size_t sliceIndex1 = std::min<size_t>(static_cast<size_t>(sliceIndex), volumeInfo.size[dir] - 1);
             size_t sliceIndex2 = std::min<size_t>(sliceIndex1 + 1, volumeInfo.size[dir] - 1);
             float interpolationParam = sliceIndex - sliceIndex1;
-            m_sliceInfos[dir] = SliceInfo{depth, sliceIndex1, sliceIndex2, interpolationParam};
+            m_sliceInfos[dir].push_back(SliceInfo{depth, sliceIndex1, sliceIndex2, interpolationParam});
         }
+    }
+    
+    for (size_t dir = 0; dir < 3; ++dir) {
+        std::sort(begin(m_sliceInfos[dir]), end(m_sliceInfos[dir]), [](const SliceInfo& s1, const SliceInfo& s2) {
+            return s1.depth < s2.depth;
+        });
     }
 }

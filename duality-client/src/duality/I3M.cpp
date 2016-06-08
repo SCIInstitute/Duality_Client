@@ -22,7 +22,7 @@ void I3M::read(AbstractReader& reader, Volume& volume) {
 
     size_t lastChunkSize = size % chunkSize;
     if (lastChunkSize > 0) {
-        int32_t chunkSizeBytes = lastChunkSize * 4;
+        size_t chunkSizeBytes = lastChunkSize * 4;
         auto ptr = reinterpret_cast<char*>(&volume.voxels[loopCount]);
         reader.read(ptr, chunkSizeBytes);
     }
