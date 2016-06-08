@@ -4,6 +4,7 @@
 #include "src/duality/DownloadProvider.h"
 #include "src/duality/GeometryDataset.h"
 #include "src/duality/PythonProvider.h"
+#include "src/duality/VolumeDataset.h"
 
 #include "mocca/log/LogManager.h"
 
@@ -39,6 +40,8 @@ std::unique_ptr<Dataset> SceneParser::parseDataset(const JsonCpp::Value& node) {
     std::string type = node["type"].asString();
     if (type == "geometry") {
         return parseGeometry(node);
+    } else if (type == "volume") {
+        return parseVolume(node);
     }
     throw Error("Invalid node type: " + type, __FILE__, __LINE__);
 }
@@ -48,6 +51,19 @@ std::unique_ptr<Dataset> SceneParser::parseGeometry(const JsonCpp::Value& node) 
     if (node.isMember("transforms")) {
         transforms = parseMatrices(node["transforms"]);
     }
+    Dataset::Visibility visibility = parseDatasetVisibility(node);
+    return std::make_unique<GeometryDataset>(std::move(transforms), visibility);
+}
+
+std::unique_ptr<Dataset> SceneParser::parseVolume(const JsonCpp::Value& node) {
+    if (node.isMember("transforms")) {
+        throw Error("Transforms not yet supported for volume datasets", __FILE__, __LINE__);
+    }
+    Dataset::Visibility visibility = parseDatasetVisibility(node);
+    return std::make_unique<VolumeDataset>(visibility);
+}
+
+Dataset::Visibility SceneParser::parseDatasetVisibility(const JsonCpp::Value& node) {
     Dataset::Visibility visibility = Dataset::Visibility::VisibleBoth;
     if (node.isMember("view2d") && node["view2d"] == false) {
         visibility = Dataset::Visibility::Visible3D;
@@ -59,7 +75,7 @@ std::unique_ptr<Dataset> SceneParser::parseGeometry(const JsonCpp::Value& node) 
         visibility = Dataset::Visibility::VisibleNone;
         LWARNING("Node is invisible in 2d-view and 3d-view");
     }
-    return std::make_unique<GeometryDataset>(std::move(transforms), visibility);
+    return visibility;
 }
 
 std::unique_ptr<DataProvider> SceneParser::parseDataSource(const JsonCpp::Value& node) {

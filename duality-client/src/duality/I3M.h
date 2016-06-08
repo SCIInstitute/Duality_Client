@@ -15,8 +15,8 @@ public:
         std::vector<uint32_t> voxels;
     };
 
-    void read(AbstractReader& reader, Volume& volume);
+    static void read(AbstractReader& reader, Volume& volume);
 
 private:
-    void readHeader(AbstractReader& reader, VolumeInfo& info);
+    static void readHeader(AbstractReader& reader, VolumeInfo& info);
 };

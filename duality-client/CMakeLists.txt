@@ -22,6 +22,7 @@ SET(DUALITY_HEADER_PRIVATE
 	src/duality/G3D.h
 	src/duality/I3M.h
 	src/duality/GeometryDataset.h
+	src/duality/VolumeDataset.h
 	src/duality/GeometryRenderer2D.h
 	src/duality/GeometryRenderer3D.h
 	src/duality/GeometryUtil.h
@@ -76,6 +77,7 @@ SET (DUALITY_SOURCE
 	src/duality/GeometryRenderer2D.cpp
 	src/duality/GeometryRenderer3D.cpp
 	src/duality/GeometryDataset.cpp
+	src/duality/VolumeDataset.cpp
 	src/duality/G3D.cpp
 	src/duality/I3M.cpp
 	src/duality/DownloadProvider.cpp

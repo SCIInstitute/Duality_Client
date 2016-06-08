@@ -24,7 +24,9 @@ private:
     SceneNode parseNode(const JsonCpp::Value& node);
 
     std::unique_ptr<Dataset> parseDataset(const JsonCpp::Value& node);
+    Dataset::Visibility parseDatasetVisibility(const JsonCpp::Value &node);
     std::unique_ptr<Dataset> parseGeometry(const JsonCpp::Value& node);
+    std::unique_ptr<Dataset> parseVolume(const JsonCpp::Value& node);
 
     IVDA::Mat4f parseMatrix(const JsonCpp::Value& node);
     std::vector<IVDA::Mat4f> parseMatrices(const JsonCpp::Value& node);
