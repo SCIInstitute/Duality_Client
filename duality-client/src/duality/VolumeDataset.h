@@ -29,7 +29,7 @@ private:
     virtual void read(std::shared_ptr<std::vector<uint8_t>> data) override;
     virtual void applyTransform(const IVDA::Mat4f& matrix) override;
 
-    void initSliceInfos(const I3M::VolumeInfo& volumeInfo);
+    void initSliceInfos();
     void initTextures();
     size_t texelIndexInVolume(size_t x, size_t y, size_t z);
     void initTransferFunction(const TransferFunction& tf);

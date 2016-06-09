@@ -16,7 +16,7 @@ const std::array<std::vector<VolumeDataset::SliceInfo>, 3>& VolumeDataset::slice
 }
 
 BoundingBox VolumeDataset::boundingBox() const {
-    return BoundingBox{-0.5f * m_volume->info().scale, 0.5f * m_volume->info().scale};
+    return BoundingBox{-0.5f * m_volume->info.scale, 0.5f * m_volume->info.scale};
 }
 
 void VolumeDataset::bindTextures(size_t dir, size_t slice) const {
@@ -29,7 +29,7 @@ void VolumeDataset::read(std::shared_ptr<std::vector<uint8_t>> data) {
     m_volume = std::make_unique<I3M::Volume>();
     I3M::read(reader, *m_volume);
     initTransferFunction(duality::defaultTransferFunction());
-    initSliceInfos(m_volume->info);
+    initSliceInfos();
     initTextures();
 }
 
@@ -37,8 +37,9 @@ void VolumeDataset::applyTransform(const IVDA::Mat4f& matrix) {
     // FIXME: how to apply transforms to volumetric dataset?
 }
 
-void VolumeDataset::initSliceInfos(const I3M::VolumeInfo& volumeInfo) {
+void VolumeDataset::initSliceInfos() {
     BoundingBox bb = boundingBox();
+    const auto& volumeInfo = m_volume->info;
     for (size_t dir = 0; dir < 3; ++dir) {
         for (size_t i = 0; i < volumeInfo.size[dir]; ++i) {
             float normalizedPosInStack = static_cast<float>(i) / static_cast<float>(volumeInfo.size[dir] - 1);
@@ -98,8 +99,8 @@ void VolumeDataset::initTextures() {
                                              m_volume->voxels[index][3]};
                 }
             }
+            m_textures[dir].emplace_back(pixels.data(), GLTexture2D::TextureData::Color, sizeU, sizeV);
         }
-        m_textures[dir].emplace_back(pixels.data(), GLTexture2D::TextureData::Color, sizeU, sizeV);
     }
 }
 
