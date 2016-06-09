@@ -33,6 +33,14 @@ void RenderDispatcher3D::finishDraw() {
     m_fbo->Read(0);
 }
 
-void RenderDispatcher3D::setMVP(const GLMatrix& mvp) {
-    m_mvp = mvp;
+void RenderDispatcher3D::updateParameters(const RenderParameters3D& parameters) {
+    m_mvp.updateParameters(parameters);
+}
+
+void RenderDispatcher3D::updateScreenInfo(const ScreenInfo& screenInfo) {
+    m_mvp.updateScreenInfo(screenInfo);
+}
+
+void RenderDispatcher3D::updateBoundingBox(const BoundingBox& boundingBox) {
+    m_mvp.updateBoundingBox(boundingBox);
 }

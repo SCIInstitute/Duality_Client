@@ -20,11 +20,13 @@ public:
     void startDraw();
     void finishDraw();
 
-    void setMVP(const GLMatrix& mvp);
+    void updateParameters(const RenderParameters3D& parameters);
+    void updateScreenInfo(const ScreenInfo& screenInfo);
+    void updateBoundingBox(const BoundingBox& boundingBox);
 
 private:
     std::shared_ptr<GLFrameBufferObject> m_fbo;
     std::unique_ptr<GeometryRenderer3D> m_geoRenderer;
     std::unique_ptr<VolumeRenderer3D> m_volumeRenderer;
-    GLMatrix m_mvp;
+    MVP3D m_mvp;
 };

@@ -64,11 +64,11 @@ GeometryRenderer3D::GeometryRenderer3D() {
 
 GeometryRenderer3D::~GeometryRenderer3D() = default;
 
-void GeometryRenderer3D::render(const GeometryDataset& dataset, const GLMatrix& mvp) {
+void GeometryRenderer3D::render(const GeometryDataset& dataset, const MVP3D& mvp) {
     auto& shader = determineActiveShader(dataset);
     shader.Enable();
 
-    shader.SetValue("mvpMatrix", static_cast<IVDA::Mat4f>(mvp));
+    shader.SetValue("mvpMatrix", static_cast<IVDA::Mat4f>(mvp.mvp()));
 
     GL(glEnable(GL_DEPTH_TEST));
 

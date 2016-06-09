@@ -1,8 +1,9 @@
 #include "src/duality/VolumeRenderer3D.h"
 
 #include "src/IVDA/GLShader.h"
+#include "src/IVDA/GLInclude.h"
 
-#include "mocca/log/LogManager.h"
+using namespace IVDA;
 
 VolumeRenderer3D::VolumeRenderer3D() {
     GlShaderAttributes attributes;
@@ -34,6 +35,18 @@ VolumeRenderer3D::VolumeRenderer3D() {
 
 VolumeRenderer3D::~VolumeRenderer3D() = default;
 
-void VolumeRenderer3D::render(const VolumeDataset& dataset, const GLMatrix& mvp) {
-    LINFO("Render volume dataset");
+void VolumeRenderer3D::render(const VolumeDataset& dataset, const MVP3D& mvp) {
+    GLShader& shader = determineActiveShader();
+    shader.Enable();
+
+    shader.SetValue("mMVP", static_cast<IVDA::Mat4f>(mvp.mvp()));
+
+    GL(glDepthMask(GL_FALSE));
+    GL(glEnable(GL_BLEND));
+    GL(glEnableVertexAttribArray(0));
+    GL(glEnableVertexAttribArray(1));
+}
+
+GLShader& VolumeRenderer3D::determineActiveShader() const {
+    return *m_shaderL;
 }

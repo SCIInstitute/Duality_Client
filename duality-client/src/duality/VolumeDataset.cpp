@@ -11,6 +11,10 @@ void VolumeDataset::accept(DatasetDispatcher& dispatcher) {
     dispatcher.dispatch(*this);
 }
 
+const std::array<std::vector<VolumeDataset::SliceInfo>, 3>& VolumeDataset::sliceInfos() const {
+    return m_sliceInfos;
+}
+
 void VolumeDataset::read(std::shared_ptr<std::vector<uint8_t>> data) {
     ReaderFromMemory reader(reinterpret_cast<const char*>(data->data()), data->size());
     m_volume = std::make_unique<I3M::Volume>();
@@ -61,7 +65,7 @@ void VolumeDataset::initTextures() {
             break;
         case 2:
             sizeU = m_volume->info.size.x;
-                sizeV = m_volume->info.size.y;
+            sizeV = m_volume->info.size.y;
             sizeW = m_volume->info.size.z;
             break;
         }

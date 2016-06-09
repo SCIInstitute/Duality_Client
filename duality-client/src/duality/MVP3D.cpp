@@ -2,17 +2,18 @@
 
 using namespace IVDA;
 
-MVP3D::MVP3D(const ScreenInfo& screenInfo, const BoundingBox& boundingBox) {
-    createModelView(boundingBox);
+MVP3D::MVP3D(const ScreenInfo& screenInfo, const BoundingBox& boundingBox, const RenderParameters3D& parameters) {
+    createDefaultModelView(boundingBox);
     createProjection(screenInfo);
+    updateParameters(parameters);
 }
 
-GLMatrix MVP3D::calculate(const RenderParameters3D& parameters) const {
-    GLMatrix matrix = m_defaultModelView;
-    matrix.multiply((GLMatrix)parameters.rotation());
-    matrix.translate(parameters.transation().x, parameters.transation().y, parameters.transation().z);
-    matrix.multiply(m_projection);
-    return matrix;
+void MVP3D::updateParameters(const RenderParameters3D& parameters) {
+    m_mv = m_defaultModelView;
+    m_mv.multiply((GLMatrix)parameters.rotation());
+    m_mv.translate(parameters.transation().x, parameters.transation().y, parameters.transation().z);
+    m_mvp = m_mv;
+    m_mvp.multiply(m_projection);
 }
 
 void MVP3D::updateScreenInfo(const ScreenInfo& screenInfo) {
@@ -20,10 +21,18 @@ void MVP3D::updateScreenInfo(const ScreenInfo& screenInfo) {
 }
 
 void MVP3D::updateBoundingBox(const BoundingBox& boundingBox) {
-    createModelView(boundingBox);
+    createDefaultModelView(boundingBox);
 }
 
-void MVP3D::createModelView(const BoundingBox& boundingBox) {
+const GLMatrix& MVP3D::mv() const {
+    return m_mv;
+}
+
+const GLMatrix& MVP3D::mvp() const {
+    return m_mvp;
+}
+
+void MVP3D::createDefaultModelView(const BoundingBox& boundingBox) {
     Vec3f size = boundingBox.max - boundingBox.min;
     Vec3f center = boundingBox.min + size / 2;
 

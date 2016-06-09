@@ -1,7 +1,7 @@
 #pragma once
 
 #include "src/duality/GeometryDataset.h"
-#include "IVDA/GLMatrix.h"
+#include "src/duality/MVP3D.h"
 #include "duality/ScreenInfo.h"
 
 class GLShader;
@@ -11,7 +11,7 @@ public:
     GeometryRenderer3D();
     ~GeometryRenderer3D();
 
-    void render(const GeometryDataset& dataset, const GLMatrix& mvp);
+    void render(const GeometryDataset& dataset, const MVP3D& mvp);
 
 private:
     static int primitiveTypeGL(const GeometryDataset& dataset);
