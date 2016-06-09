@@ -45,6 +45,32 @@ void VolumeRenderer3D::render(const VolumeDataset& dataset, const MVP3D& mvp) {
     GL(glEnable(GL_BLEND));
     GL(glEnableVertexAttribArray(0));
     GL(glEnableVertexAttribArray(1));
+
+    size_t slice = 1; // FIXME
+    size_t dir = 0;
+
+    dataset.bindTextures(dir, slice);
+
+    const auto& si = dataset.sliceInfos()[dir][slice];
+    BoundingBox bb = dataset.boundingBox();
+    std::array< IVDA::FLOATVECTOR3, 4> vertices = {
+        FLOATVECTOR3(si.depth, bb.min.y, bb.min.z),
+        FLOATVECTOR3(si.depth, bb.min.y, bb.max.z),
+        FLOATVECTOR3(si.depth, bb.max.y, bb.min.z),
+        FLOATVECTOR3(si.depth, bb.max.y, bb.max.z)
+    };
+    GL(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, &vertices[0]));
+
+    const std::array<Vec2f, 4> texCoords = { Vec2f(0,0), Vec2f(0,1), Vec2f(1,0), Vec2f(1,1) };
+    GL(glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, &texCoords[0]));
+    
+    const std::array<GLshort, 6> indices = { 0,1,2,2,1,3 };
+    GL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, &indices[0]));
+
+    GL(glDepthMask(GL_TRUE));
+    GL(glDisable(GL_BLEND));
+    GL(glDisableVertexAttribArray(0));
+    GL(glDisableVertexAttribArray(1));
 }
 
 GLShader& VolumeRenderer3D::determineActiveShader() const {

@@ -4,6 +4,7 @@
 #include "src/duality/I3M.h"
 #include "src/duality/GLTexture2D.h"
 #include "src/duality/TransferFunction.h"
+#include "src/duality/BoundingBox.h"
 
 #include <array>
 
@@ -20,6 +21,9 @@ public:
         float interpolationParam;
     };
     const std::array<std::vector<SliceInfo>, 3>& sliceInfos() const;
+    BoundingBox boundingBox() const;
+
+    void bindTextures(size_t dir, size_t slice) const;
 
 private:
     virtual void read(std::shared_ptr<std::vector<uint8_t>> data) override;

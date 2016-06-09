@@ -18,6 +18,8 @@ void SceneController3DImpl::updateScreenInfo(const ScreenInfo& screenInfo) {
                   static_cast<unsigned int>(screenInfo.height / screenInfo.standardDownSampleFactor), true);
     if (m_renderDispatcher == nullptr) {
         m_renderDispatcher = std::make_unique<RenderDispatcher3D>(m_fbo);
+        BoundingBox boundingBox = duality::calculateSceneBoundingBox(m_scene, View::View3D);
+        m_renderDispatcher->updateBoundingBox(boundingBox);
     }
     m_renderDispatcher->updateScreenInfo(screenInfo);
 }

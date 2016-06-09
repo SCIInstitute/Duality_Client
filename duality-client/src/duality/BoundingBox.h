@@ -12,8 +12,8 @@ class BoundingBoxCalculator : public DatasetDispatcher {
 public:
     BoundingBoxCalculator();
     
-    void dispatch(GeometryDataset& node) override;
-    // void dispatch(VolumeNode& node) override;
+    void dispatch(GeometryDataset& dataset) override;
+    void dispatch(VolumeDataset& dataset) override;
 
     BoundingBox boundingBox() const;
     

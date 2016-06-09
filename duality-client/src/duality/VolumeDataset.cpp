@@ -15,6 +15,15 @@ const std::array<std::vector<VolumeDataset::SliceInfo>, 3>& VolumeDataset::slice
     return m_sliceInfos;
 }
 
+BoundingBox VolumeDataset::boundingBox() const {
+    return BoundingBox{-0.5f * m_volume->info().scale, 0.5f * m_volume->info().scale};
+}
+
+void VolumeDataset::bindTextures(size_t dir, size_t slice) const {
+    m_tf->bindWithUnit(0);
+    m_textures[dir][slice].bindWithUnit(1);
+}
+
 void VolumeDataset::read(std::shared_ptr<std::vector<uint8_t>> data) {
     ReaderFromMemory reader(reinterpret_cast<const char*>(data->data()), data->size());
     m_volume = std::make_unique<I3M::Volume>();
@@ -29,12 +38,11 @@ void VolumeDataset::applyTransform(const IVDA::Mat4f& matrix) {
 }
 
 void VolumeDataset::initSliceInfos(const I3M::VolumeInfo& volumeInfo) {
-    IVDA::Vec3f vMin = volumeInfo.scale * -0.5f;
-    IVDA::Vec3f vMax = volumeInfo.scale * 0.5f;
+    BoundingBox bb = boundingBox();
     for (size_t dir = 0; dir < 3; ++dir) {
         for (size_t i = 0; i < volumeInfo.size[dir]; ++i) {
             float normalizedPosInStack = static_cast<float>(i) / static_cast<float>(volumeInfo.size[dir] - 1);
-            float depth = vMin[dir] * (1.0f - normalizedPosInStack) + vMax[dir] * normalizedPosInStack;
+            float depth = bb.min[dir] * (1.0f - normalizedPosInStack) + bb.max[dir] * normalizedPosInStack;
             float sliceIndex = normalizedPosInStack * (volumeInfo.size[dir] - 1);
             size_t sliceIndex1 = std::min<size_t>(static_cast<size_t>(sliceIndex), volumeInfo.size[dir] - 1);
             size_t sliceIndex2 = std::min<size_t>(sliceIndex1 + 1, volumeInfo.size[dir] - 1);
