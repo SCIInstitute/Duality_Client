@@ -46,6 +46,7 @@ SET(DUALITY_HEADER_PRIVATE
 	src/duality/Dataset.h
 	src/duality/DatasetDispatcher.h
 	src/duality/GLTexture2D.h
+	src/duality/TransferFunction.h
 
 	src/IVDA/ArcBall.h
 	src/IVDA/Console.h
@@ -102,7 +103,8 @@ SET (DUALITY_SOURCE
 	src/duality/InputVariable.cpp
 	src/duality/MVP2D.cpp
 	src/duality/MVP3D.cpp
-	src/duality/GLTexture2D.cpp)
+	src/duality/GLTexture2D.cpp
+	src/duality/TransferFunction.cpp)
 	
 SOURCE_GROUP("Public Headers" FILES ${DUALITY_HEADER_PUBLIC})	
 SOURCE_GROUP("Private Headers" FILES ${DUALITY_HEADER_PRIVATE})

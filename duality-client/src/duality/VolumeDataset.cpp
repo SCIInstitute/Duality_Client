@@ -2,6 +2,7 @@
 #include "src/duality/VolumeDataset.h"
 
 #include <algorithm>
+#include <cmath>
 
 VolumeDataset::VolumeDataset(Dataset::Visibility visibility)
     : Dataset({}, visibility) {}
@@ -14,7 +15,9 @@ void VolumeDataset::read(std::shared_ptr<std::vector<uint8_t>> data) {
     ReaderFromMemory reader(reinterpret_cast<const char*>(data->data()), data->size());
     m_volume = std::make_unique<I3M::Volume>();
     I3M::read(reader, *m_volume);
+    înitTransferFunction(duality::defaultTransferFunction());
     initSliceInfos(m_volume->info);
+    initTextures();
 }
 
 void VolumeDataset::applyTransform(const IVDA::Mat4f& matrix) {
@@ -90,4 +93,16 @@ void VolumeDataset::initTextures() {
 
 size_t VolumeDataset::texelIndexInVolume(size_t x, size_t y, size_t z) {
     return x + y * m_volume->info.size.x + z * m_volume->info.size.x * m_volume->info.size.y;
+}
+
+void VolumeDataset::înitTransferFunction(const TransferFunction& tf) {
+    // apply opacity correction
+    TransferFunction correctedTf = tf;
+    float quality = 1.0f;
+    for (int i = 0; i < 256; i++) {
+        double alpha = correctedTf[i][3] / 255.0;
+        alpha = 1.0 - std::pow(1.0 - alpha, 1.0 / quality);
+        correctedTf[i][3] = static_cast<uint8_t>(255.0 * alpha);
+    }
+    m_tf = std::make_unique<GLTexture2D>(correctedTf.data(), GLTexture2D::TextureData::Color, 256, 1);
 }
