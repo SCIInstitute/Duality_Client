@@ -3,6 +3,9 @@
 #include "IVDA/Vectors.h"
 #include "src/duality/AbstractIO.h"
 
+#include <array>
+#include <vector>
+
 class I3M {
 public:
     struct VolumeInfo {
@@ -12,7 +15,7 @@ public:
 
     struct Volume {
         VolumeInfo info;
-        std::vector<uint32_t> voxels;
+        std::vector<std::array<uint8_t, 4>> voxels;
     };
 
     static void read(AbstractReader& reader, Volume& volume);

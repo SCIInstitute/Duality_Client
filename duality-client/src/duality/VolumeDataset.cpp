@@ -15,7 +15,7 @@ void VolumeDataset::read(std::shared_ptr<std::vector<uint8_t>> data) {
     ReaderFromMemory reader(reinterpret_cast<const char*>(data->data()), data->size());
     m_volume = std::make_unique<I3M::Volume>();
     I3M::read(reader, *m_volume);
-    înitTransferFunction(duality::defaultTransferFunction());
+    initTransferFunction(duality::defaultTransferFunction());
     initSliceInfos(m_volume->info);
     initTextures();
 }
@@ -47,7 +47,7 @@ void VolumeDataset::initSliceInfos(const I3M::VolumeInfo& volumeInfo) {
 
 void VolumeDataset::initTextures() {
     for (size_t dir = 0; dir < 3; ++dir) {
-        int sizeU, sizeV, sizeW;
+        int sizeU = 0, sizeV = 0, sizeW = 0;
         switch (dir) {
         case 0:
             sizeU = m_volume->info.size.y;
@@ -61,7 +61,7 @@ void VolumeDataset::initTextures() {
             break;
         case 2:
             sizeU = m_volume->info.size.x;
-            sizeV = m_volume->info.size.y;
+                sizeV = m_volume->info.size.y;
             sizeW = m_volume->info.size.z;
             break;
         }
@@ -82,8 +82,8 @@ void VolumeDataset::initTextures() {
                         index = texelIndexInVolume(u, v, slice);
                         break;
                     }
-                    pixels[v * sizeU + u] = {m_volume->voxels[index], m_volume->voxels[index + 1], m_volume->voxels[index + 2],
-                                             m_volume->voxels[index + 3]};
+                    pixels[v * sizeU + u] = {m_volume->voxels[index][0], m_volume->voxels[index][1], m_volume->voxels[index][2],
+                                             m_volume->voxels[index][3]};
                 }
             }
         }
@@ -95,7 +95,7 @@ size_t VolumeDataset::texelIndexInVolume(size_t x, size_t y, size_t z) {
     return x + y * m_volume->info.size.x + z * m_volume->info.size.x * m_volume->info.size.y;
 }
 
-void VolumeDataset::înitTransferFunction(const TransferFunction& tf) {
+void VolumeDataset::initTransferFunction(const TransferFunction& tf) {
     // apply opacity correction
     TransferFunction correctedTf = tf;
     float quality = 1.0f;

@@ -26,7 +26,7 @@ private:
     void initSliceInfos(const I3M::VolumeInfo& volumeInfo);
     void initTextures();
     size_t texelIndexInVolume(size_t x, size_t y, size_t z);
-    void înitTransferFunction(const TransferFunction& tf);
+    void initTransferFunction(const TransferFunction& tf);
 
 private:
     std::unique_ptr<I3M::Volume> m_volume;
