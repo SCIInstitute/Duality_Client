@@ -25,6 +25,7 @@ SET(DUALITY_HEADER_PRIVATE
 	src/duality/VolumeDataset.h
 	src/duality/GeometryRenderer2D.h
 	src/duality/GeometryRenderer3D.h
+	src/duality/VolumeRenderer3D.h
 	src/duality/GeometryUtil.h
 	src/duality/InputVariable.h
 	src/duality/MVP2D.h
@@ -78,6 +79,7 @@ SET (DUALITY_SOURCE
 	src/duality/CoordinateSystem.cpp
 	src/duality/GeometryRenderer2D.cpp
 	src/duality/GeometryRenderer3D.cpp
+	src/duality/VolumeRenderer3D.cpp
 	src/duality/GeometryDataset.cpp
 	src/duality/VolumeDataset.cpp
 	src/duality/G3D.cpp

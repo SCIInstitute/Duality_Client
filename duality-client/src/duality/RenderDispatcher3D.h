@@ -8,6 +8,7 @@
 
 class GLFrameBufferObject;
 class GeometryRenderer3D;
+class VolumeRenderer3D;
 
 class RenderDispatcher3D : public DatasetDispatcher {
 public:
@@ -15,6 +16,7 @@ public:
     ~RenderDispatcher3D();
 
     void dispatch(GeometryDataset& node) override;
+    void dispatch(VolumeDataset& dataset) override;
     void startDraw();
     void finishDraw();
 
@@ -23,5 +25,6 @@ public:
 private:
     std::shared_ptr<GLFrameBufferObject> m_fbo;
     std::unique_ptr<GeometryRenderer3D> m_geoRenderer;
+    std::unique_ptr<VolumeRenderer3D> m_volumeRenderer;
     GLMatrix m_mvp;
 };

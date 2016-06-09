@@ -4,17 +4,24 @@
 #include "src/IVDA/GLInclude.h"
 #include "src/duality/GeometryDataset.h"
 #include "src/duality/GeometryRenderer3D.h"
+#include "src/duality/VolumeDataset.h"
+#include "src/duality/VolumeRenderer3D.h"
 
 #include <OpenGLES/ES3/gl.h>
 
 RenderDispatcher3D::RenderDispatcher3D(std::shared_ptr<GLFrameBufferObject> fbo)
     : m_fbo(fbo)
-    , m_geoRenderer(std::make_unique<GeometryRenderer3D>()) {}  
+    , m_geoRenderer(std::make_unique<GeometryRenderer3D>())
+    , m_volumeRenderer(std::make_unique<VolumeRenderer3D>()) {}
 
 RenderDispatcher3D::~RenderDispatcher3D() = default;
 
-void RenderDispatcher3D::dispatch(GeometryDataset& node) {
-    m_geoRenderer->render(node, m_mvp);
+void RenderDispatcher3D::dispatch(GeometryDataset& dataset) {
+    m_geoRenderer->render(dataset, m_mvp);
+}
+
+void RenderDispatcher3D::dispatch(VolumeDataset& dataset) {
+    m_volumeRenderer->render(dataset, m_mvp);
 }
 
 void RenderDispatcher3D::startDraw() {
