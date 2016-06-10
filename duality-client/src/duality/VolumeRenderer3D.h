@@ -17,6 +17,7 @@ public:
 
 private:
     GLShader& determineActiveShader() const;
+    void updateStackDirection(const IVDA::Mat4f& mv);
 
 private:
     std::unique_ptr<GLShader> m_shaderL;

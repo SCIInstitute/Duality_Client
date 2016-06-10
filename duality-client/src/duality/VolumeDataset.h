@@ -38,5 +38,5 @@ private:
     std::unique_ptr<I3M::Volume> m_volume;
     std::unique_ptr<GLTexture2D> m_tf;
     std::array<std::vector<SliceInfo>, 3> m_sliceInfos;
-    std::array<std::vector<GLTexture2D>, 3> m_textures;
+    std::array<std::vector<std::unique_ptr<GLTexture2D>>, 3> m_textures;
 };

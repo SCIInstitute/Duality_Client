@@ -15,15 +15,15 @@ void I3M::read(AbstractReader& reader, Volume& volume) {
     constexpr size_t chunkSize = 102400;
     size_t loopCount = size / chunkSize;
     for (size_t i = 0; i < loopCount; ++i) {
-        int32_t chunkSizeBytes = chunkSize * 4;
         auto ptr = reinterpret_cast<char*>(&volume.voxels[i * chunkSize]);
+        int32_t chunkSizeBytes = chunkSize * 4;
         reader.read(ptr, chunkSizeBytes);
     }
 
     size_t lastChunkSize = size % chunkSize;
     if (lastChunkSize > 0) {
+        auto ptr = reinterpret_cast<char*>(&volume.voxels[loopCount * chunkSize]);
         size_t chunkSizeBytes = lastChunkSize * 4;
-        auto ptr = reinterpret_cast<char*>(&volume.voxels[loopCount]);
         reader.read(ptr, chunkSizeBytes);
     }
 }

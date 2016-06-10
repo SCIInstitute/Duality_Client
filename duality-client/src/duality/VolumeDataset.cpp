@@ -21,7 +21,7 @@ BoundingBox VolumeDataset::boundingBox() const {
 
 void VolumeDataset::bindTextures(size_t dir, size_t slice) const {
     m_tf->bindWithUnit(0);
-    m_textures[dir][slice].bindWithUnit(1);
+    m_textures[dir][slice]->bindWithUnit(1);
 }
 
 void VolumeDataset::read(std::shared_ptr<std::vector<uint8_t>> data) {
@@ -95,11 +95,10 @@ void VolumeDataset::initTextures() {
                         index = texelIndexInVolume(u, v, slice);
                         break;
                     }
-                    pixels[v * sizeU + u] = {m_volume->voxels[index][0], m_volume->voxels[index][1], m_volume->voxels[index][2],
-                                             m_volume->voxels[index][3]};
+                    pixels[v * sizeU + u] = m_volume->voxels[index];
                 }
             }
-            m_textures[dir].emplace_back(pixels.data(), GLTexture2D::TextureData::Color, sizeU, sizeV);
+            m_textures[dir].push_back(std::make_unique<GLTexture2D>(pixels.data(), GLTexture2D::TextureData::Color, sizeU, sizeV));
         }
     }
 }
