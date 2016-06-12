@@ -2,7 +2,6 @@
 
 #include "IVDA/GLMatrix.h"
 #include "duality/CoordinateSystem.h"
-#include "duality/ScreenInfo.h"
 #include "src/duality/GeometryDataset.h"
 
 #include <memory>

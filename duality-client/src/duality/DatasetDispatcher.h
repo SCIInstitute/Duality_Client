@@ -6,7 +6,5 @@ class VolumeDataset;
 class DatasetDispatcher {
 public:
     virtual void dispatch(GeometryDataset& dataset) = 0;
-    virtual void dispatch(VolumeDataset& dataset) {
-        // FIXME: should be pure virtual
-    }
+    virtual void dispatch(VolumeDataset& dataset) = 0;
 };

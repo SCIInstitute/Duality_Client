@@ -5,6 +5,7 @@
 #include "src/duality/DatasetDispatcher.h"
 #include "src/duality/MVP2D.h"
 #include "src/duality/GeometryRenderer2D.h"
+#include "src/duality/VolumeRenderer2D.h"
 
 class GLFrameBufferObject;
 class GeometryRenderer2D;
@@ -14,7 +15,8 @@ public:
     RenderDispatcher2D(std::shared_ptr<GLFrameBufferObject> fbo);
     ~RenderDispatcher2D();
 
-    void dispatch(GeometryDataset& node) override;
+    void dispatch(GeometryDataset& dataset) override;
+    void dispatch(VolumeDataset& dataset) override;
     void startDraw();
     void finishDraw();
 
@@ -25,6 +27,7 @@ public:
 private:
     std::shared_ptr<GLFrameBufferObject> m_fbo;
     std::unique_ptr<GeometryRenderer2D> m_geoRenderer;
+    std::unique_ptr<VolumeRenderer2D> m_volRenderer;
     GLMatrix m_mvp;
     CoordinateAxis m_axis;
     float m_slice;

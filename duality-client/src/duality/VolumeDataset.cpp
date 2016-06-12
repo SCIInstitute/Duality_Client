@@ -19,9 +19,10 @@ BoundingBox VolumeDataset::boundingBox() const {
     return BoundingBox{-0.5f * m_volume->info.scale, 0.5f * m_volume->info.scale};
 }
 
-void VolumeDataset::bindTextures(size_t dir, size_t slice) const {
+void VolumeDataset::bindTextures(size_t dir, size_t texIndex1, size_t texIndex2) const {
     m_tf->bindWithUnit(0);
-    m_textures[dir][slice]->bindWithUnit(1);
+    m_textures[dir][texIndex1]->bindWithUnit(1);
+    m_textures[dir][texIndex2]->bindWithUnit(2);
 }
 
 void VolumeDataset::read(std::shared_ptr<std::vector<uint8_t>> data) {

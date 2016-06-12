@@ -9,12 +9,17 @@
 
 RenderDispatcher2D::RenderDispatcher2D(std::shared_ptr<GLFrameBufferObject> fbo)
     : m_fbo(fbo)
-    , m_geoRenderer(std::make_unique<GeometryRenderer2D>()) {}
+    , m_geoRenderer(std::make_unique<GeometryRenderer2D>())
+    , m_volRenderer(std::make_unique<VolumeRenderer2D>()) {}
 
 RenderDispatcher2D::~RenderDispatcher2D() = default;
 
-void RenderDispatcher2D::dispatch(GeometryDataset& node) {
-    m_geoRenderer->render(node, m_mvp, m_axis, m_slice);
+void RenderDispatcher2D::dispatch(GeometryDataset& dataset) {
+    m_geoRenderer->render(dataset, m_mvp, m_axis, m_slice);
+}
+
+void RenderDispatcher2D::dispatch(VolumeDataset& dataset) {
+    m_volRenderer->render(dataset, m_mvp, m_axis, m_slice);
 }
 
 void RenderDispatcher2D::startDraw() {

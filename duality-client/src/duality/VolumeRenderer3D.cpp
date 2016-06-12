@@ -53,7 +53,7 @@ void VolumeRenderer3D::render(const VolumeDataset& dataset, const MVP3D& mvp) {
         size_t index = m_reverseStackOrdering ? (stackSize - 1 - slice) : slice;
         const auto& si = dataset.sliceInfos()[m_stackDirection][index];
 
-        dataset.bindTextures(m_stackDirection, m_reverseStackOrdering ? si.textureIndex2 : si.textureIndex1);
+        dataset.bindTextures(m_stackDirection, si.textureIndex1, si.textureIndex2);
 
         BoundingBox bb = dataset.boundingBox();
         switch (m_stackDirection) {

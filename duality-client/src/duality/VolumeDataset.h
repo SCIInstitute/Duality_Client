@@ -23,7 +23,7 @@ public:
     const std::array<std::vector<SliceInfo>, 3>& sliceInfos() const;
     BoundingBox boundingBox() const;
 
-    void bindTextures(size_t dir, size_t slice) const;
+    void bindTextures(size_t dir, size_t texIndex1, size_t texIndex2) const;
 
 private:
     virtual void read(std::shared_ptr<std::vector<uint8_t>> data) override;
