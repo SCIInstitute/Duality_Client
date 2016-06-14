@@ -4,9 +4,10 @@
 
 using namespace IVDA;
 
-MVP2D::MVP2D(const ScreenInfo& screenInfo, const BoundingBox& boundingBox) {
-    updateScreenInfo(screenInfo);
-    updateBoundingBox(boundingBox);
+MVP2D::MVP2D(const ScreenInfo& screenInfo, const BoundingBox& boundingBox, const RenderParameters2D& initialParameters)
+    : m_screenAspect(static_cast<float>(screenInfo.width) / static_cast<float>(screenInfo.height))
+    , m_boundingBox(boundingBox) {
+    updateParameters(initialParameters);
 }
 
 void MVP2D::updateParameters(const RenderParameters2D& parameters) {
@@ -79,14 +80,6 @@ void MVP2D::updateParameters(const RenderParameters2D& parameters) {
         break;
     }
     }
-}
-
-void MVP2D::updateScreenInfo(const ScreenInfo& screenInfo) {
-    m_screenAspect = static_cast<float>(screenInfo.width) / static_cast<float>(screenInfo.height);
-}
-
-void MVP2D::updateBoundingBox(const BoundingBox& boundingBox) {
-    m_boundingBox = boundingBox;
 }
 
 const GLMatrix& MVP2D::mvp() const {

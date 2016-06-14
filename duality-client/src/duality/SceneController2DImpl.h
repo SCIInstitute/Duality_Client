@@ -25,11 +25,11 @@ public:
     void addRotation(const float rotationAngle);
     void addZoom(const float zoom);
 
-    std::pair<float, float> minMaxForCurrentAxis() const;
     void setSlice(float slice);
     float slice() const;
-    
+
     void toggleAxis();
+    std::pair<float, float> minMaxForCurrentAxis() const;
     std::string labelForCurrentAxis(SceneController2D::AxisLabelMode mode) const;
     
     VariableInfoMap variableInfoMap() const;
@@ -38,7 +38,5 @@ public:
 
 private:
     Scene& m_scene;
-    RenderParameters2D m_parameters;
-    std::shared_ptr<GLFrameBufferObject> m_fbo;
     std::unique_ptr<RenderDispatcher2D> m_renderDispatcher;
 };

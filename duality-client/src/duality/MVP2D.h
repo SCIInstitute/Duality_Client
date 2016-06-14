@@ -8,12 +8,9 @@
 class MVP2D {
 public:
     MVP2D() = default;
-    MVP2D(const ScreenInfo& screenInfo, const BoundingBox& boundingBox);
+    MVP2D(const ScreenInfo& screenInfo, const BoundingBox& boundingBox, const RenderParameters2D& initialParameters);
 
     void updateParameters(const RenderParameters2D& parameters);
-    void updateScreenInfo(const ScreenInfo& screenInfo);
-    void updateBoundingBox(const BoundingBox& boundingBox);
-    
     const GLMatrix& mvp() const;
 
 private:

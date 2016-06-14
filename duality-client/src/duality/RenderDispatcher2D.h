@@ -12,7 +12,7 @@ class GeometryRenderer2D;
 
 class RenderDispatcher2D : public DatasetDispatcher {
 public:
-    RenderDispatcher2D(std::shared_ptr<GLFrameBufferObject> fbo);
+    RenderDispatcher2D(std::shared_ptr<GLFrameBufferObject> fbo, const RenderParameters2D& initialParameters);
     ~RenderDispatcher2D();
 
     void dispatch(GeometryDataset& dataset) override;
@@ -20,15 +20,25 @@ public:
     void startDraw();
     void finishDraw();
 
-    void updateParameters(const RenderParameters2D& parameters);
     void updateScreenInfo(const ScreenInfo& screenInfo);
     void updateBoundingBox(const BoundingBox& boundingBox);
 
+    void addTranslation(const IVDA::Vec2f& translation);
+    void addRotation(const float rotationAngle);
+    void addZoom(const float zoom);
+    void setSlice(float slice);
+    void toggleAxis();
+    
+    float slice() const;
+    CoordinateAxis currentAxis() const;
+    
 private:
     std::shared_ptr<GLFrameBufferObject> m_fbo;
     std::unique_ptr<GeometryRenderer2D> m_geoRenderer;
     std::unique_ptr<VolumeRenderer2D> m_volRenderer;
+    RenderParameters2D m_parameters;
+    ScreenInfo m_screenInfo;
+    BoundingBox m_boundingBox;
     MVP2D m_mvp;
-    RenderParameters2D m_currentParams;
     bool m_redraw;
 };

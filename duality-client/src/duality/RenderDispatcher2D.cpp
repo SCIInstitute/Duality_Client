@@ -7,23 +7,27 @@
 
 #include <OpenGLES/ES3/gl.h>
 
-RenderDispatcher2D::RenderDispatcher2D(std::shared_ptr<GLFrameBufferObject> fbo)
+RenderDispatcher2D::RenderDispatcher2D(std::shared_ptr<GLFrameBufferObject> fbo, const RenderParameters2D& initialParameters)
     : m_fbo(fbo)
     , m_geoRenderer(std::make_unique<GeometryRenderer2D>())
     , m_volRenderer(std::make_unique<VolumeRenderer2D>())
+    , m_parameters(initialParameters)
+    , m_screenInfo()
+    , m_boundingBox()
+    , m_mvp()
     , m_redraw(true) {}
 
 RenderDispatcher2D::~RenderDispatcher2D() = default;
 
 void RenderDispatcher2D::dispatch(GeometryDataset& dataset) {
     if (m_redraw) {
-        m_geoRenderer->render(dataset, m_mvp.mvp(), m_currentParams.axis(), m_currentParams.slice());
+        m_geoRenderer->render(dataset, m_mvp.mvp(), m_parameters.axis(), m_parameters.slice());
     }
 }
 
 void RenderDispatcher2D::dispatch(VolumeDataset& dataset) {
     if (m_redraw) {
-        m_volRenderer->render(dataset, m_mvp.mvp(), m_currentParams.axis(), m_currentParams.slice());
+        m_volRenderer->render(dataset, m_mvp.mvp(), m_parameters.axis(), m_parameters.slice());
     }
 }
 
@@ -40,21 +44,57 @@ void RenderDispatcher2D::finishDraw() {
         m_redraw = false;
     }
 }
-
-void RenderDispatcher2D::updateParameters(const RenderParameters2D& parameters) {
-    if (m_currentParams != parameters) {
-        m_mvp.updateParameters(parameters);
-        m_redraw = true;
-        m_currentParams = parameters;
-    }
-}
-
 void RenderDispatcher2D::updateScreenInfo(const ScreenInfo& screenInfo) {
-    m_mvp.updateScreenInfo(screenInfo);
+    m_fbo->Resize(static_cast<unsigned int>(screenInfo.width / screenInfo.standardDownSampleFactor),
+                  static_cast<unsigned int>(screenInfo.height / screenInfo.standardDownSampleFactor), true);
+    m_screenInfo = screenInfo;
+    m_mvp = MVP2D(m_screenInfo, m_boundingBox, m_parameters);
     m_redraw = true;
 }
 
 void RenderDispatcher2D::updateBoundingBox(const BoundingBox& boundingBox) {
-    m_mvp.updateBoundingBox(boundingBox);
+    m_boundingBox = boundingBox;
+    if (m_parameters == RenderParameters2D()) {
+         m_parameters.setSlice((boundingBox.min[m_parameters.axis()] + boundingBox.max[m_parameters.axis()]) / 2);
+    }
+    m_mvp = MVP2D(m_screenInfo, m_boundingBox, m_parameters);
     m_redraw = true;
+}
+
+void RenderDispatcher2D::addTranslation(const IVDA::Vec2f& translation) {
+    m_parameters.addTranslation(translation);
+    m_mvp.updateParameters(m_parameters);
+    m_redraw = true;
+}
+
+void RenderDispatcher2D::addRotation(const float rotationAngle) {
+    m_parameters.addRotation(rotationAngle);
+    m_mvp.updateParameters(m_parameters);
+    m_redraw = true;
+}
+
+void RenderDispatcher2D::addZoom(const float zoom) {
+    m_parameters.addZoom(zoom);
+    m_mvp.updateParameters(m_parameters);
+    m_redraw = true;
+}
+
+void RenderDispatcher2D::setSlice(float slice) {
+    m_parameters.setSlice(slice);
+    m_mvp.updateParameters(m_parameters);
+    m_redraw = true;
+}
+
+void RenderDispatcher2D::toggleAxis() {
+    m_parameters.toggleAxis();
+    m_mvp.updateParameters(m_parameters);
+    m_redraw = true;
+}
+
+float RenderDispatcher2D::slice() const {
+    return m_parameters.slice();
+}
+
+CoordinateAxis RenderDispatcher2D::currentAxis() const {
+    return m_parameters.axis();
 }
