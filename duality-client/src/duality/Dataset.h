@@ -1,30 +1,24 @@
 #pragma once
 
-#include "IVDA/Vectors.h"
 #include "src/duality/DatasetDispatcher.h"
 #include "src/duality/View.h"
-
-#include <memory>
-#include <vector>
+#include "src/duality/DataProvider.h"
 
 class Dataset {
 public:
-    enum class Visibility : int { VisibleNone = 0, Visible2D = 1, Visible3D = 2, VisibleBoth = 3 };
-    Dataset(std::vector<IVDA::Mat4f> transforms = {}, Visibility visibility = Visibility::VisibleBoth);
-    virtual ~Dataset();
+    Dataset(std::unique_ptr<DataProvider> provider, Visibility visibility);
 
-    virtual void accept(DatasetDispatcher& dispatcher) = 0;
-
-    void load(std::shared_ptr<std::vector<uint8_t>> data);
-    std::vector<IVDA::Mat4f> transforms() const;
-
-    bool isVisibleInView(View view) const;
+    virtual void accept(DatasetDispatcher& renderer) = 0;
     
-private:
-    virtual void read(std::shared_ptr<std::vector<uint8_t>> data) = 0;
-    virtual void applyTransform(const IVDA::Mat4f& matrix) = 0;
+    void fetch();
+    std::vector<FloatVariableInfo> floatVariableInfos() const;
+    std::vector<EnumVariableInfo> enumVariableInfos() const;
+    void setVariable(const std::string& variableName, float value);
+    void setVariable(const std::string& variableName, const std::string& value);
 
 private:
-    std::vector<IVDA::Mat4f> m_transforms;
-    Visibility m_visibility;
+    virtual void readData(const std::vector<uint8_t>& data) = 0;
+
+private:
+    std::unique_ptr<DataProvider> m_provider;
 };

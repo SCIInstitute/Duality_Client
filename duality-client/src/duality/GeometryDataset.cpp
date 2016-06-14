@@ -1,14 +1,16 @@
 #include "src/duality/GeometryDataset.h"
 
-#include "IVDA/Vectors.h"
 #include "src/duality/AbstractIO.h"
 #include "src/duality/DatasetDispatcher.h"
+
+#include "IVDA/Vectors.h"
 #include "duality/Error.h"
 
 using namespace IVDA;
 
-GeometryDataset::GeometryDataset(std::vector<IVDA::Mat4f> transforms, Visibility visibility)
-    : Dataset(std::move(transforms), visibility)
+GeometryDataset::GeometryDataset(std::unique_ptr<DataProvider> provider, Visibility visibility, std::vector<IVDA::Mat4f> transforms)
+    : Dataset(std::move(provider), visibility)
+    , m_transforms(transforms)
     , m_geometry(nullptr)
     , m_positions(nullptr)
     , m_normals(nullptr)
@@ -16,12 +18,6 @@ GeometryDataset::GeometryDataset(std::vector<IVDA::Mat4f> transforms, Visibility
     , m_colors(nullptr)
     , m_texcoords(nullptr)
     , m_alphas(nullptr) {}
-
-GeometryDataset::GeometryDataset(std::unique_ptr<G3D::GeometrySoA> geometry, std::vector<IVDA::Mat4f> transforms)
-    : Dataset(transforms)
-    , m_geometry(std::move(geometry)) {
-    assignShortcutPointers();
-}
 
 void GeometryDataset::applyTransform(const Mat4f& matrix) {
     uint32_t numVertices = m_geometry->info.numberVertices;
@@ -68,9 +64,9 @@ void GeometryDataset::accept(DatasetDispatcher& dispatcher) {
     dispatcher.dispatch(*this);
 }
 
-void GeometryDataset::read(std::shared_ptr<std::vector<uint8_t>> data) {
-    ReaderFromMemory reader(reinterpret_cast<const char*>(data->data()), data->size());
-    m_geometry = std::make_unique<G3D::GeometrySoA>();
+void GeometryDataset::readData(const std::vector<uint8_t>& data) {
+    ReaderFromMemory reader(reinterpret_cast<const char*>(data.data()), data.size());
+    m_geometry = std::make_unique<G3D::GeometrySoA>();      
     G3D::readSoA(reader, *m_geometry);
     assignShortcutPointers();
 }

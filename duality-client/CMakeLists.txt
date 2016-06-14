@@ -21,11 +21,13 @@ SET(DUALITY_HEADER_PRIVATE
 	src/duality/DownloadProvider.h
 	src/duality/G3D.h
 	src/duality/I3M.h
+	src/duality/Dataset.h
 	src/duality/GeometryDataset.h
 	src/duality/VolumeDataset.h
 	src/duality/GeometryRenderer2D.h
 	src/duality/GeometryRenderer3D.h
 	src/duality/VolumeRenderer3D.h
+	src/duality/GeometryUtil.h
 	src/duality/GeometryUtil.h
 	src/duality/InputVariable.h
 	src/duality/MVP2D.h
@@ -39,16 +41,18 @@ SET(DUALITY_HEADER_PRIVATE
 	src/duality/SceneController3DImpl.h
 	src/duality/Scene.h
 	src/duality/SceneNode.h
+	src/duality/GeometryNode.h
+	src/duality/VolumeNode.h
 	src/duality/SceneParser.h
 	src/duality/AbstractIO.h
 	src/duality/BoundingBox.h
 	src/duality/Communication.h
 	src/duality/DataProvider.h
-	src/duality/Dataset.h
 	src/duality/DatasetDispatcher.h
 	src/duality/GLTexture2D.h
 	src/duality/TransferFunction.h
-
+	src/duality/View.h
+	
 	src/IVDA/ArcBall.h
 	src/IVDA/Console.h
 	src/IVDA/ConsoleOut.h
@@ -80,18 +84,20 @@ SET (DUALITY_SOURCE
 	src/duality/GeometryRenderer2D.cpp
 	src/duality/GeometryRenderer3D.cpp
 	src/duality/VolumeRenderer3D.cpp
+	src/duality/Dataset.cpp
 	src/duality/GeometryDataset.cpp
 	src/duality/VolumeDataset.cpp
 	src/duality/G3D.cpp
 	src/duality/I3M.cpp
 	src/duality/DownloadProvider.cpp
-	src/duality/Dataset.cpp
 	src/duality/Communication.cpp
 	src/duality/BoundingBox.cpp
 	src/duality/AbstractIO.cpp
 	src/duality/SceneController3D.cpp
 	src/duality/SceneParser.cpp
 	src/duality/SceneNode.cpp
+	src/duality/GeometryNode.cpp
+	src/duality/VolumeNode.cpp
 	src/duality/SceneMetadata.cpp
 	src/duality/SceneLoader.cpp
 	src/duality/Scene.cpp

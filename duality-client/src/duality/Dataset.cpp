@@ -1,22 +1,24 @@
 #include "src/duality/Dataset.h"
 
-Dataset::Dataset(std::vector<IVDA::Mat4f> transforms, Visibility visibility)
-    : m_transforms(std::move(transforms))
-    , m_visibility(visibility) {}
+Dataset::Dataset(std::unique_ptr<DataProvider> provider, Visibility visibility)
+    : m_provider(std::move(provider)) {}
 
-Dataset::~Dataset() = default;
-
-void Dataset::load(std::shared_ptr<std::vector<uint8_t>> data) {
-    read(data);
-    for (const auto& transform : m_transforms) {
-        applyTransform(transform);
-    }
+void Dataset::fetch() {
+    readData(*m_provider->fetch());
 }
 
-std::vector<IVDA::Mat4f> Dataset::transforms() const {
-    return m_transforms;
+std::vector<FloatVariableInfo> Dataset::floatVariableInfos() const {
+    return m_provider->floatVariableInfos();
 }
 
-bool Dataset::isVisibleInView(View view) const {
-    return (static_cast<int>(m_visibility) & static_cast<int>(view)) != 0;
+std::vector<EnumVariableInfo> Dataset::enumVariableInfos() const {
+    return m_provider->enumVariableInfos();
+}
+
+void Dataset::setVariable(const std::string& variableName, float value) {
+    m_provider->setVariable(variableName, value);
+}
+
+void Dataset::setVariable(const std::string& variableName, const std::string& value) {
+    m_provider->setVariable(variableName, value);
 }

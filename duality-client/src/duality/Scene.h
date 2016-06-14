@@ -17,9 +17,8 @@ public:
 
     SceneMetadata metadata() const;
 
-    void addNode(SceneNode node);
-    const std::vector<SceneNode>& nodes() const;
-    std::vector<SceneNode>& nodes();
+    void addNode(std::unique_ptr<SceneNode> node);
+    const std::vector<std::unique_ptr<SceneNode>>& nodes() const;
 
     void dispatch(DatasetDispatcher& dispatcher, View view) const;
     void updateDatasets();
@@ -30,7 +29,7 @@ public:
 
 private:
     SceneMetadata m_metadata;
-    std::vector<SceneNode> m_nodes;
+    std::vector<std::unique_ptr<SceneNode>> m_nodes;
 };
 
 namespace duality {
