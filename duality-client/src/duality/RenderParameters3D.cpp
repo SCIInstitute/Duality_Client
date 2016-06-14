@@ -24,3 +24,11 @@ void RenderParameters3D::addRotation(const IVDA::Mat4f& rotation) {
 void RenderParameters3D::addZoom(const float zoom) {
     m_translation.z += zoom;
 }
+
+bool operator==(const RenderParameters3D& lhs, const RenderParameters3D& rhs) {
+    return lhs.transation() == rhs.transation() && lhs.rotation() == rhs.rotation();
+}
+
+bool operator!=(const RenderParameters3D& lhs, const RenderParameters3D& rhs) {
+    return !(lhs == rhs);
+}

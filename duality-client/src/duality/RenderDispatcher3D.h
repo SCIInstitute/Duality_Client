@@ -29,4 +29,6 @@ private:
     std::unique_ptr<GeometryRenderer3D> m_geoRenderer;
     std::unique_ptr<VolumeRenderer3D> m_volumeRenderer;
     MVP3D m_mvp;
+    RenderParameters3D m_currentParams;
+    bool m_redraw;
 };

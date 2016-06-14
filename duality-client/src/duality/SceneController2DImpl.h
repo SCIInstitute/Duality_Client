@@ -40,6 +40,5 @@ private:
     Scene& m_scene;
     RenderParameters2D m_parameters;
     std::shared_ptr<GLFrameBufferObject> m_fbo;
-    std::unique_ptr<MVP2D> m_mvp;
     std::unique_ptr<RenderDispatcher2D> m_renderDispatcher;
 };

@@ -19,17 +19,12 @@ SceneController2DImpl::~SceneController2DImpl() = default;
 void SceneController2DImpl::updateScreenInfo(const ScreenInfo& screenInfo) {
     m_fbo->Resize(static_cast<unsigned int>(screenInfo.width / screenInfo.standardDownSampleFactor),
                   static_cast<unsigned int>(screenInfo.height / screenInfo.standardDownSampleFactor), true);
-    if (m_mvp == nullptr) {
-        BoundingBox boundingBox = duality::calculateSceneBoundingBox(m_scene, View::View2D);
-        m_mvp = std::make_unique<MVP2D>(screenInfo, boundingBox);
-    } else {
-        m_mvp->updateScreenInfo(screenInfo);
-    }
     if (m_renderDispatcher == nullptr) {
         m_renderDispatcher = std::make_unique<RenderDispatcher2D>(m_fbo);
-    } else {
-        // m_renderDispatcher->updateScreenInfo(); // FIXME
+        BoundingBox boundingBox = duality::calculateSceneBoundingBox(m_scene, View::View3D);
+        m_renderDispatcher->updateBoundingBox(boundingBox);
     }
+    m_renderDispatcher->updateScreenInfo(screenInfo);
 }
 
 void SceneController2DImpl::addTranslation(const IVDA::Vec2f& translation) {
@@ -84,20 +79,18 @@ void SceneController2DImpl::setVariable(const std::string& objectName, const std
     m_scene.setVariable(objectName, variableName, value);
     m_scene.updateDatasets();
     BoundingBox boudningBox = duality::calculateSceneBoundingBox(m_scene, View::View2D);
-    m_mvp->updateBoundingBox(boudningBox);
+    m_renderDispatcher->updateBoundingBox(boudningBox);
 }
 
 void SceneController2DImpl::setVariable(const std::string& objectName, const std::string& variableName, const std::string& value) {
     m_scene.setVariable(objectName, variableName, value);
     m_scene.updateDatasets();
     BoundingBox boudningBox = duality::calculateSceneBoundingBox(m_scene, View::View2D);
-    m_mvp->updateBoundingBox(boudningBox);
+    m_renderDispatcher->updateBoundingBox(boudningBox);
 }
 
 void SceneController2DImpl::render() {
-    m_renderDispatcher->setMVP(m_mvp->calculate(m_parameters));
-    m_renderDispatcher->setAxis(m_parameters.axis());
-    m_renderDispatcher->setSlice(m_parameters.slice());
+    m_renderDispatcher->updateParameters(m_parameters);
     m_renderDispatcher->startDraw();
     m_scene.dispatch(*m_renderDispatcher, View::View2D);
     m_renderDispatcher->finishDraw();

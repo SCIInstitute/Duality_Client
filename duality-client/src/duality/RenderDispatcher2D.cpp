@@ -10,35 +10,51 @@
 RenderDispatcher2D::RenderDispatcher2D(std::shared_ptr<GLFrameBufferObject> fbo)
     : m_fbo(fbo)
     , m_geoRenderer(std::make_unique<GeometryRenderer2D>())
-    , m_volRenderer(std::make_unique<VolumeRenderer2D>()) {}
+    , m_volRenderer(std::make_unique<VolumeRenderer2D>())
+    , m_redraw(true) {}
 
 RenderDispatcher2D::~RenderDispatcher2D() = default;
 
 void RenderDispatcher2D::dispatch(GeometryDataset& dataset) {
-    m_geoRenderer->render(dataset, m_mvp, m_axis, m_slice);
+    if (m_redraw) {
+        m_geoRenderer->render(dataset, m_mvp.mvp(), m_currentParams.axis(), m_currentParams.slice());
+    }
 }
 
 void RenderDispatcher2D::dispatch(VolumeDataset& dataset) {
-    m_volRenderer->render(dataset, m_mvp, m_axis, m_slice);
+    if (m_redraw) {
+        m_volRenderer->render(dataset, m_mvp.mvp(), m_currentParams.axis(), m_currentParams.slice());
+    }
 }
 
 void RenderDispatcher2D::startDraw() {
-    GL(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
-    GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+    if (m_redraw) {
+        GL(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
+        GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+    }
 }
 
 void RenderDispatcher2D::finishDraw() {
-    m_fbo->Read(0);
+    if (m_redraw) {
+        m_fbo->Read(0);
+        m_redraw = false;
+    }
 }
 
-void RenderDispatcher2D::setMVP(const GLMatrix& mvp) {
-    m_mvp = mvp;
+void RenderDispatcher2D::updateParameters(const RenderParameters2D& parameters) {
+    if (m_currentParams != parameters) {
+        m_mvp.updateParameters(parameters);
+        m_redraw = true;
+        m_currentParams = parameters;
+    }
 }
 
-void RenderDispatcher2D::setSlice(float slice) {
-    m_slice = slice;
+void RenderDispatcher2D::updateScreenInfo(const ScreenInfo& screenInfo) {
+    m_mvp.updateScreenInfo(screenInfo);
+    m_redraw = true;
 }
 
-void RenderDispatcher2D::setAxis(CoordinateAxis axis) {
-    m_axis = axis;
+void RenderDispatcher2D::updateBoundingBox(const BoundingBox& boundingBox) {
+    m_mvp.updateBoundingBox(boundingBox);
+    m_redraw = true;
 }

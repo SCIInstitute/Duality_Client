@@ -7,12 +7,14 @@
 
 class MVP2D {
 public:
+    MVP2D() = default;
     MVP2D(const ScreenInfo& screenInfo, const BoundingBox& boundingBox);
 
-    GLMatrix calculate(const RenderParameters2D& parameters) const;
-
+    void updateParameters(const RenderParameters2D& parameters);
     void updateScreenInfo(const ScreenInfo& screenInfo);
     void updateBoundingBox(const BoundingBox& boundingBox);
+    
+    const GLMatrix& mvp() const;
 
 private:
     static IVDA::Mat3i getSliceViewMatrix(const CoordinateAxis axis);
@@ -21,4 +23,5 @@ private:
 private:
     float m_screenAspect;
     BoundingBox m_boundingBox;
+    GLMatrix m_mvp;
 };

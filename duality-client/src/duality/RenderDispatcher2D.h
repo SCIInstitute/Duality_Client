@@ -20,15 +20,15 @@ public:
     void startDraw();
     void finishDraw();
 
-    void setMVP(const GLMatrix& mvp);
-    void setAxis(CoordinateAxis axis);
-    void setSlice(const float slice);
+    void updateParameters(const RenderParameters2D& parameters);
+    void updateScreenInfo(const ScreenInfo& screenInfo);
+    void updateBoundingBox(const BoundingBox& boundingBox);
 
 private:
     std::shared_ptr<GLFrameBufferObject> m_fbo;
     std::unique_ptr<GeometryRenderer2D> m_geoRenderer;
     std::unique_ptr<VolumeRenderer2D> m_volRenderer;
-    GLMatrix m_mvp;
-    CoordinateAxis m_axis;
-    float m_slice;
+    MVP2D m_mvp;
+    RenderParameters2D m_currentParams;
+    bool m_redraw;
 };

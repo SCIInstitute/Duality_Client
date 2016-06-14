@@ -12,35 +12,51 @@
 RenderDispatcher3D::RenderDispatcher3D(std::shared_ptr<GLFrameBufferObject> fbo)
     : m_fbo(fbo)
     , m_geoRenderer(std::make_unique<GeometryRenderer3D>())
-    , m_volumeRenderer(std::make_unique<VolumeRenderer3D>()) {}
+    , m_volumeRenderer(std::make_unique<VolumeRenderer3D>())
+    , m_redraw(true) {}
 
 RenderDispatcher3D::~RenderDispatcher3D() = default;
 
 void RenderDispatcher3D::dispatch(GeometryDataset& dataset) {
-    m_geoRenderer->render(dataset, m_mvp);
+    if (m_redraw) {
+        m_geoRenderer->render(dataset, m_mvp);
+    }
 }
 
 void RenderDispatcher3D::dispatch(VolumeDataset& dataset) {
-    m_volumeRenderer->render(dataset, m_mvp);
+    if (m_redraw) {
+        m_volumeRenderer->render(dataset, m_mvp);
+    }
 }
 
 void RenderDispatcher3D::startDraw() {
-    GL(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
-    GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+    if (m_redraw) {
+        GL(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
+        GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+    }
 }
 
 void RenderDispatcher3D::finishDraw() {
-    m_fbo->Read(0);
+    if (m_redraw) {
+        m_fbo->Read(0);
+        m_redraw = false;
+    }
 }
 
 void RenderDispatcher3D::updateParameters(const RenderParameters3D& parameters) {
-    m_mvp.updateParameters(parameters);
+    if (m_currentParams != parameters) {
+        m_mvp.updateParameters(parameters);
+        m_redraw = true;
+        m_currentParams = parameters;
+    }
 }
 
 void RenderDispatcher3D::updateScreenInfo(const ScreenInfo& screenInfo) {
     m_mvp.updateScreenInfo(screenInfo);
+    m_redraw = true;
 }
 
 void RenderDispatcher3D::updateBoundingBox(const BoundingBox& boundingBox) {
     m_mvp.updateBoundingBox(boundingBox);
+    m_redraw = true;
 }

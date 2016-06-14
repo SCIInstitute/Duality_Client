@@ -1,5 +1,11 @@
 #include "src/duality/RenderParameters2D.h"
 
+RenderParameters2D::RenderParameters2D()
+    : m_translation()
+    , m_rotationAngle(0.0f)
+    , m_zoom(0.0f)
+    , m_axis(CoordinateAxis::X_Axis)
+    , m_slice(0.0f) {}
 
 RenderParameters2D::RenderParameters2D(const IVDA::Vec2f& initialTranslation, const float initialRotationAngle, const float initialZoom,
                                        CoordinateAxis initialAxis)
@@ -54,4 +60,13 @@ void RenderParameters2D::toggleAxis() {
 
 CoordinateAxis RenderParameters2D::axis() const noexcept {
     return m_axis;
+}
+
+bool operator==(const RenderParameters2D& lhs, const RenderParameters2D& rhs) {
+    return lhs.transation() == rhs.transation() && lhs.rotationAngle() == rhs.rotationAngle() && lhs.zoom() == rhs.zoom() &&
+           lhs.axis() == rhs.axis() && lhs.slice() == rhs.slice();
+}
+
+bool operator!=(const RenderParameters2D& lhs, const RenderParameters2D& rhs) {
+    return !(lhs == rhs);
 }

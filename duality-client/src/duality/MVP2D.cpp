@@ -9,7 +9,7 @@ MVP2D::MVP2D(const ScreenInfo& screenInfo, const BoundingBox& boundingBox) {
     updateBoundingBox(boundingBox);
 }
 
-GLMatrix MVP2D::calculate(const RenderParameters2D& parameters) const {
+void MVP2D::updateParameters(const RenderParameters2D& parameters) {
     const Mat3i svm = getSliceViewMatrix(parameters.axis());
     const Vec3i ex(1, 0, 0), ey(0, 1, 0);
     const Vec3i svex = svm * ex;
@@ -23,17 +23,17 @@ GLMatrix MVP2D::calculate(const RenderParameters2D& parameters) const {
 
     const Vec2f size = Vec2f(size3[ax.axis], size3[ay.axis]);
 
-    GLMatrix mvp;
+    m_mvp.loadIdentity();
     // move center of bbox to origin
-    mvp.translate(-center3.x, -center3.y, -center3.z);
+    m_mvp.translate(-center3.x, -center3.y, -center3.z);
 
     // apply view direction and orientation
-    mvp.multiply((GLMatrix)Mat4f(svm));
+    m_mvp.multiply((GLMatrix)Mat4f(svm));
 
     // apply user interaction parameters
-    mvp.translate(parameters.transation().x, parameters.transation().y, 0);
-    mvp.scale(parameters.zoom(), parameters.zoom(), 1);
-    mvp.rotate(-parameters.rotationAngle() * (180 / static_cast<float>(M_PI)), 0, 0, 1);
+    m_mvp.translate(parameters.transation().x, parameters.transation().y, 0);
+    m_mvp.scale(parameters.zoom(), parameters.zoom(), 1);
+    m_mvp.rotate(-parameters.rotationAngle() * (180 / static_cast<float>(M_PI)), 0, 0, 1);
 
     // match object and screen aspects to fit the screen
     const float objectAspect = size.x / size.y;
@@ -41,15 +41,15 @@ GLMatrix MVP2D::calculate(const RenderParameters2D& parameters) const {
     if (objectAspect < m_screenAspect) {
         // norm y axis to two
         const float s = 2 / size.y;
-        mvp.scale(s, s, 1);
+        m_mvp.scale(s, s, 1);
         // stretch x axis to screen aspect
-        mvp.scale(1 / m_screenAspect, 1, 1);
+        m_mvp.scale(1 / m_screenAspect, 1, 1);
     } else {
         // norm x axis to two
         const float s = 2 / size.x;
-        mvp.scale(s, s, 1);
+        m_mvp.scale(s, s, 1);
         // stretch y axis to screen aspect
-        mvp.scale(1, m_screenAspect, 1);
+        m_mvp.scale(1, m_screenAspect, 1);
     }
 
     // setup projection parameters
@@ -61,25 +61,24 @@ GLMatrix MVP2D::calculate(const RenderParameters2D& parameters) const {
         const float off = size3.x * d;
         const float min = min3.x - off;
         const float max = max3.x + off;
-        mvp.ortho(-1, 1, -1, 1, min, max);
+        m_mvp.ortho(-1, 1, -1, 1, min, max);
         break;
     }
     case CoordinateAxis::Y_Axis: {
         const float off = size3.y * d;
         const float min = min3.y - off;
         const float max = max3.y + off;
-        mvp.ortho(-1, 1, -1, 1, min, max);
+        m_mvp.ortho(-1, 1, -1, 1, min, max);
         break;
     }
     case CoordinateAxis::Z_Axis: {
         const float off = size3.z * d;
         const float min = min3.z - off;
         const float max = max3.z + off;
-        mvp.ortho(-1, 1, -1, 1, -max, -min);
+        m_mvp.ortho(-1, 1, -1, 1, -max, -min);
         break;
     }
     }
-    return mvp;
 }
 
 void MVP2D::updateScreenInfo(const ScreenInfo& screenInfo) {
@@ -88,6 +87,10 @@ void MVP2D::updateScreenInfo(const ScreenInfo& screenInfo) {
 
 void MVP2D::updateBoundingBox(const BoundingBox& boundingBox) {
     m_boundingBox = boundingBox;
+}
+
+const GLMatrix& MVP2D::mvp() const {
+    return m_mvp;
 }
 
 Mat3i MVP2D::getSliceViewerBasis(const Axis viewerUp, const Axis viewerFace) {
