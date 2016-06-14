@@ -16,14 +16,6 @@ void MVP3D::updateParameters(const RenderParameters3D& parameters) {
     m_mvp.multiply(m_projection);
 }
 
-void MVP3D::updateScreenInfo(const ScreenInfo& screenInfo) {
-    createProjection(screenInfo);
-}
-
-void MVP3D::updateBoundingBox(const BoundingBox& boundingBox) {
-    createDefaultModelView(boundingBox);
-}
-
 const GLMatrix& MVP3D::mv() const {
     return m_mv;
 }

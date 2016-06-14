@@ -30,7 +30,5 @@ public:
 
 private:
     Scene& m_scene;
-    RenderParameters3D m_parameters;
-    std::shared_ptr<GLFrameBufferObject> m_fbo;
     std::unique_ptr<RenderDispatcher3D> m_renderDispatcher;
 };

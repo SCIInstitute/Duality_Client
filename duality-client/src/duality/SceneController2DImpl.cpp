@@ -21,7 +21,7 @@ void SceneController2DImpl::updateScreenInfo(const ScreenInfo& screenInfo) {
                   static_cast<unsigned int>(screenInfo.height / screenInfo.standardDownSampleFactor), true);
     if (m_renderDispatcher == nullptr) {
         m_renderDispatcher = std::make_unique<RenderDispatcher2D>(m_fbo);
-        BoundingBox boundingBox = duality::calculateSceneBoundingBox(m_scene, View::View3D);
+        BoundingBox boundingBox = duality::calculateSceneBoundingBox(m_scene, View::View2D);
         m_renderDispatcher->updateBoundingBox(boundingBox);
     }
     m_renderDispatcher->updateScreenInfo(screenInfo);
@@ -78,15 +78,15 @@ VariableInfoMap SceneController2DImpl::variableInfoMap() const {
 void SceneController2DImpl::setVariable(const std::string& objectName, const std::string& variableName, float value) {
     m_scene.setVariable(objectName, variableName, value);
     m_scene.updateDatasets();
-    BoundingBox boudningBox = duality::calculateSceneBoundingBox(m_scene, View::View2D);
-    m_renderDispatcher->updateBoundingBox(boudningBox);
+    BoundingBox boundingBox = duality::calculateSceneBoundingBox(m_scene, View::View2D);
+    m_renderDispatcher->updateBoundingBox(boundingBox);
 }
 
 void SceneController2DImpl::setVariable(const std::string& objectName, const std::string& variableName, const std::string& value) {
     m_scene.setVariable(objectName, variableName, value);
     m_scene.updateDatasets();
-    BoundingBox boudningBox = duality::calculateSceneBoundingBox(m_scene, View::View2D);
-    m_renderDispatcher->updateBoundingBox(boudningBox);
+    BoundingBox boundingBox = duality::calculateSceneBoundingBox(m_scene, View::View2D);
+    m_renderDispatcher->updateBoundingBox(boundingBox);
 }
 
 void SceneController2DImpl::render() {

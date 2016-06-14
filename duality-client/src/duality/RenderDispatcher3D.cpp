@@ -9,10 +9,14 @@
 
 #include <OpenGLES/ES3/gl.h>
 
-RenderDispatcher3D::RenderDispatcher3D(std::shared_ptr<GLFrameBufferObject> fbo)
+RenderDispatcher3D::RenderDispatcher3D(std::shared_ptr<GLFrameBufferObject> fbo, const RenderParameters3D& initialParameters)
     : m_fbo(fbo)
     , m_geoRenderer(std::make_unique<GeometryRenderer3D>())
     , m_volumeRenderer(std::make_unique<VolumeRenderer3D>())
+    , m_parameters(initialParameters)
+    , m_screenInfo()
+    , m_boundingBox()
+    , m_mvp()
     , m_redraw(true) {}
 
 RenderDispatcher3D::~RenderDispatcher3D() = default;
@@ -43,20 +47,34 @@ void RenderDispatcher3D::finishDraw() {
     }
 }
 
-void RenderDispatcher3D::updateParameters(const RenderParameters3D& parameters) {
-    if (m_currentParams != parameters) {
-        m_mvp.updateParameters(parameters);
-        m_redraw = true;
-        m_currentParams = parameters;
-    }
+void RenderDispatcher3D::addTranslation(const IVDA::Vec2f& translation) {
+    m_parameters.addTranslation(translation);
+    m_mvp.updateParameters(m_parameters);
+    m_redraw = true;
+}
+
+void RenderDispatcher3D::addRotation(const IVDA::Mat4f& rotation) {
+    m_parameters.addRotation(rotation);
+    m_mvp.updateParameters(m_parameters);
+    m_redraw = true;
+}
+
+void RenderDispatcher3D::addZoom(const float zoom) {
+    m_parameters.addZoom(zoom);
+    m_mvp.updateParameters(m_parameters);
+    m_redraw = true;
 }
 
 void RenderDispatcher3D::updateScreenInfo(const ScreenInfo& screenInfo) {
-    m_mvp.updateScreenInfo(screenInfo);
+    m_fbo->Resize(static_cast<unsigned int>(screenInfo.width / screenInfo.standardDownSampleFactor),
+                  static_cast<unsigned int>(screenInfo.height / screenInfo.standardDownSampleFactor), true);
+    m_screenInfo = screenInfo;
+    m_mvp = MVP3D(m_screenInfo, m_boundingBox, m_parameters);
     m_redraw = true;
 }
 
 void RenderDispatcher3D::updateBoundingBox(const BoundingBox& boundingBox) {
-    m_mvp.updateBoundingBox(boundingBox);
+    m_boundingBox = boundingBox;
+    m_mvp = MVP3D(m_screenInfo, m_boundingBox, m_parameters);
     m_redraw = true;
 }

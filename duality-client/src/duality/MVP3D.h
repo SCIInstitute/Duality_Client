@@ -11,8 +11,6 @@ public:
     MVP3D(const ScreenInfo& screenInfo, const BoundingBox& boundingBox, const RenderParameters3D& parameters);
 
     void updateParameters(const RenderParameters3D& parameters);
-    void updateScreenInfo(const ScreenInfo& screenInfo);
-    void updateBoundingBox(const BoundingBox& boundingBox);
 
     const GLMatrix& mv() const;
     const GLMatrix& mvp() const;

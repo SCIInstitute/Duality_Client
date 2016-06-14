@@ -12,7 +12,7 @@ class VolumeRenderer3D;
 
 class RenderDispatcher3D : public DatasetDispatcher {
 public:
-    RenderDispatcher3D(std::shared_ptr<GLFrameBufferObject> fbo);
+    RenderDispatcher3D(std::shared_ptr<GLFrameBufferObject> fbo, const RenderParameters3D& initialParameters);
     ~RenderDispatcher3D();
 
     void dispatch(GeometryDataset& node) override;
@@ -20,15 +20,20 @@ public:
     void startDraw();
     void finishDraw();
 
-    void updateParameters(const RenderParameters3D& parameters);
     void updateScreenInfo(const ScreenInfo& screenInfo);
     void updateBoundingBox(const BoundingBox& boundingBox);
 
+    void addTranslation(const IVDA::Vec2f& translation);
+    void addRotation(const IVDA::Mat4f& rotation);
+    void addZoom(const float zoom);
+    
 private:
     std::shared_ptr<GLFrameBufferObject> m_fbo;
     std::unique_ptr<GeometryRenderer3D> m_geoRenderer;
     std::unique_ptr<VolumeRenderer3D> m_volumeRenderer;
+    RenderParameters3D m_parameters;
+    ScreenInfo m_screenInfo;
+    BoundingBox m_boundingBox;
     MVP3D m_mvp;
-    RenderParameters3D m_currentParams;
     bool m_redraw;
 };

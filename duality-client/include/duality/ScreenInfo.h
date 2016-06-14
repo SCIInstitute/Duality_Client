@@ -1,6 +1,7 @@
 #pragma once
 
 struct ScreenInfo {
+    ScreenInfo() = default;
     ScreenInfo(unsigned int _width, unsigned int _height, float _xOffset, float _yOffset, float _standardDownSampleFactor,
                float _interactiveDownSampleFactor, float _windowWidth, float _windowHeight)
         : width(_width)
