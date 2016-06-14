@@ -28,11 +28,12 @@ private:
     std::unique_ptr<SceneNode> parseGeometryNode(const JsonCpp::Value& node);
     std::unique_ptr<GeometryDataset> parseGeometryDataset(const JsonCpp::Value& node);
 
+    std::unique_ptr<SceneNode> parseVolumeNode(const JsonCpp::Value& node);
+    std::unique_ptr<VolumeDataset> parseVolumeDataset(const JsonCpp::Value& node);
+    
     std::unique_ptr<DataProvider> parseProvider(const JsonCpp::Value& node);
     std::unique_ptr<DataProvider> parseDownload(const JsonCpp::Value& node);
     std::unique_ptr<DataProvider> parsePython(const JsonCpp::Value& node);
-
-    std::unique_ptr<VolumeDataset> parseVolume(const JsonCpp::Value& node);
 
     IVDA::Mat4f parseMatrix(const JsonCpp::Value& node);
     std::vector<IVDA::Mat4f> parseMatrices(const JsonCpp::Value& node);

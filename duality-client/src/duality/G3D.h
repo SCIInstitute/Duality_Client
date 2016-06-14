@@ -91,6 +91,7 @@ public:
 
     static std::unique_ptr<GeometrySoA> createLineGeometry(std::vector<uint32_t> indices, std::vector<float> positions,
                                                            std::vector<float> colors);
+    static void applyTransform(G3D::GeometrySoA& geometry, const IVDA::Mat4f& matrix);
 
     static void write(AbstractWriter& writer, const GeometryAoS& geometry, uint32_t vertexType = AoS);
     static void write(AbstractWriter& writer, const GeometrySoA& geometry, uint32_t vertexType = SoA);
@@ -118,8 +119,7 @@ private:
     static void readContent(AbstractReader& reader, GeometrySoA& geometry);
 
     static void assignShortcutPointers(G3D::GeometrySoA& geometry);
-    static void applyTransform(G3D::GeometrySoA& geometry, const IVDA::Mat4f& matrix);
-
+    
     static std::vector<float> convertVertices(const std::vector<std::vector<float>>& vertexAttributes, const GeometryInfo& info);
     static std::vector<std::vector<float>> convertVertices(const std::vector<float>& vertices, const GeometryInfo& info);
 };

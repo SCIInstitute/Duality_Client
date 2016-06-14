@@ -19,8 +19,11 @@ void GeometryDataset::accept(DatasetDispatcher& dispatcher) {
 
 void GeometryDataset::readData(const std::vector<uint8_t>& data) {
     ReaderFromMemory reader(reinterpret_cast<const char*>(data.data()), data.size());
-    m_geometry = std::make_unique<G3D::GeometrySoA>();      
+    m_geometry = std::make_unique<G3D::GeometrySoA>();
     G3D::readSoA(reader, *m_geometry);
+    for (const auto& transform : m_transforms) {
+        G3D::applyTransform(*m_geometry, transform);
+    }
 }
 
 const G3D::GeometrySoA& GeometryDataset::geometry() const {
