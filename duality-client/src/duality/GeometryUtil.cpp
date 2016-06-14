@@ -1,6 +1,6 @@
 #include "src/duality/GeometryUtil.h"
 
-GeometryDataset GeometryUtil::clipGeometry(const GeometryDataset& geo, CoordinateAxis axis, float position) {
+std::unique_ptr<G3D::GeometrySoA> GeometryUtil::clipGeometry(const G3D::GeometrySoA& geo, CoordinateAxis axis, float position) {
     // in planeIntersection
     float inPositions[9]; // xyz for 3 vertices of the given triangle
     float inColors[12];   // RGBA for 3 vertices of the given triangle
@@ -9,16 +9,16 @@ GeometryDataset GeometryUtil::clipGeometry(const GeometryDataset& geo, Coordinat
     float outColors[12];   // max 3 lines
     size_t points;         // number of intersection points
 
-    const std::vector<uint32_t>& is = geo.getIndices();
-    const float* ps = geo.getPositions();
-    const float* cs = geo.getColors();
+    const std::vector<uint32_t>& is = geo.indices;
+    const float* ps = geo.positions;
+    const float* cs = geo.colors;
 
     // resulting lines
     std::vector<uint32_t> clipIndices;
     std::vector<float> clipPositions;
     std::vector<float> clipColors;
 
-    for (int i = 0; i < geo.geometryInfo()->numberIndices; i += 3) {
+    for (int i = 0; i < geo.info.numberIndices; i += 3) {
         // assemble in parameters for plane intersection
         for (int j = 0; j < 3; j++) // copy all three vertices per triangle
         {
@@ -67,7 +67,8 @@ GeometryDataset GeometryUtil::clipGeometry(const GeometryDataset& geo, Coordinat
             }
         }
     }
-    return G3D::createLineGeometry(std::move(clipIndices), std::move(clipPositions), std::move(clipColors));
+    auto lines = G3D::createLineGeometry(std::move(clipIndices), std::move(clipPositions), std::move(clipColors));
+    return lines;
 }
 
 bool GeometryUtil::planeIntersection(const float* triPositions, const float* triColors, CoordinateAxis axis, float axisPosition, float* linePositions, float* lineColors, size_t& numberOfPoints) {

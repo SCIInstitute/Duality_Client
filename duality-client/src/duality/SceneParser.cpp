@@ -26,9 +26,10 @@ std::unique_ptr<Scene> SceneParser::parseScene() {
     auto sceneJson = m_root["scene"];
     for (auto it = sceneJson.begin(); it != sceneJson.end(); ++it) {
         const auto& sceneNode = *it;
-        if (sceneNode["type"] == "geometry") {
+        auto type = sceneNode["type"].asString();
+        if (type == "geometry") {
             m_scene->addNode(parseGeometryNode(sceneNode));
-        //} else if (sceneNode["type"] == "volume") {
+        //} else if (type == "volume") {
         //    m_scene->addNode(parseVolumeNode(sceneNode));
         } else {
             throw Error("Invalid node type: " + type, __FILE__, __LINE__);
@@ -39,18 +40,18 @@ std::unique_ptr<Scene> SceneParser::parseScene() {
 
 std::unique_ptr<SceneNode> SceneParser::parseGeometryNode(const JsonCpp::Value& node) {
     std::string name = node["name"].asString();
+    Visibility visibility = parseVisibility(node);
     auto dataset = parseGeometryDataset(node["dataset"]);
-    return std::make_unique<GeometryNode>(name, std::move(dataset));
+    return std::make_unique<GeometryNode>(name, visibility, std::move(dataset));
 }
 
-std::unique_ptr<Dataset> SceneParser::parseGeometryDataset(const JsonCpp::Value& node) {
-    auto provider = parseProvider(node["provider"]);
-    Visibility visibility = parseDatasetVisibility(node);
+std::unique_ptr<GeometryDataset> SceneParser::parseGeometryDataset(const JsonCpp::Value& node) {
+    auto provider = parseProvider(node["source"]);
     std::vector<Mat4f> transforms;
     if (node.isMember("transforms")) {
         transforms = parseMatrices(node["transforms"]);
     }
-    return std::make_unique<GeometryDataset>(std::move(provider), std::move(transforms), visibility);
+    return std::make_unique<GeometryDataset>(std::move(provider), std::move(transforms));
 }
 
 std::unique_ptr<DataProvider> SceneParser::parseProvider(const JsonCpp::Value& node) {
@@ -63,15 +64,15 @@ std::unique_ptr<DataProvider> SceneParser::parseProvider(const JsonCpp::Value& n
     throw Error("Invalid data source type: " + type, __FILE__, __LINE__);
 }
 
-std::unique_ptr<Dataset> SceneParser::parseVolume(const JsonCpp::Value& node) {
+std::unique_ptr<VolumeDataset> SceneParser::parseVolume(const JsonCpp::Value& node) {
     if (node.isMember("transforms")) {
         throw Error("Transforms not yet supported for volume datasets", __FILE__, __LINE__);
     }
-    Visibility visibility = parseDatasetVisibility(node);
-    return std::make_unique<VolumeDataset>(visibility);
+    auto provider = parseProvider(node["source"]);
+    return std::make_unique<VolumeDataset>(std::move(provider));
 }
 
-Visibility SceneParser::parseDatasetVisibility(const JsonCpp::Value& node) {
+Visibility SceneParser::parseVisibility(const JsonCpp::Value& node) {
     Visibility visibility = Visibility::VisibleBoth;
     if (node.isMember("view2d") && node["view2d"] == false) {
         visibility = Visibility::Visible3D;

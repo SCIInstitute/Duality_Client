@@ -17,14 +17,14 @@ GeometryRenderer2D::GeometryRenderer2D() {
 GeometryRenderer2D::~GeometryRenderer2D() = default;
 
 void GeometryRenderer2D::render(const GeometryDataset& dataset, const GLMatrix& mvp, CoordinateAxis axis, float slice) {
-    auto lines = GeometryUtil::clipGeometry(dataset, axis, slice);
+    auto lines = GeometryUtil::clipGeometry(dataset.geometry(), axis, slice);
 
-    if (lines.getPositions()) {
-        GL(glVertexAttribPointer(0, 3, GL_FLOAT, 0, 0, lines.getPositions()));
+    if (lines->positions) {
+        GL(glVertexAttribPointer(0, 3, GL_FLOAT, 0, 0, lines->positions));
         GL(glEnableVertexAttribArray(0));
     }
-    if (lines.getColors()) {
-        GL(glVertexAttribPointer(1, 4, GL_FLOAT, 0, 0, lines.getColors()));
+    if (lines->colors) {
+        GL(glVertexAttribPointer(1, 4, GL_FLOAT, 0, 0, lines->colors));
         GL(glEnableVertexAttribArray(1));
     }
 
@@ -34,7 +34,7 @@ void GeometryRenderer2D::render(const GeometryDataset& dataset, const GLMatrix& 
     GL(glLineWidth(5.0));
     GL(glDisable(GL_DEPTH_TEST));
     GL(glEnable(GL_BLEND));
-    GL(glDrawElements(GL_LINES, (GLsizei)lines.geometryInfo()->numberIndices, GL_UNSIGNED_INT, lines.getIndices().data()));
+    GL(glDrawElements(GL_LINES, (GLsizei)lines->info.numberIndices, GL_UNSIGNED_INT, lines->indices.data()));
 
     GL(glLineWidth(1.0));
     GL(glDisable(GL_BLEND));

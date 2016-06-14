@@ -12,11 +12,10 @@ BoundingBoxCalculator::BoundingBoxCalculator() {
 }
 
 void BoundingBoxCalculator::dispatch(GeometryDataset& dataset) {
-    if (dataset.geometryInfo() == nullptr) return;
-    assert(dataset.getPositions() != nullptr);
-    for (size_t i = 0; i < dataset.geometryInfo()->numberIndices; ++i) {
-        auto offset = 3 * dataset.getIndices()[i];
-        const auto positions = dataset.getPositions();
+    assert(dataset.geometry().positions != nullptr);
+    for (size_t i = 0; i < dataset.geometry().info.numberIndices; ++i) {
+        auto offset = 3 * dataset.geometry().indices[i];
+        const auto positions = dataset.geometry().positions;
         IVDA::Vec3f pos(positions[offset + 0], positions[offset + 1], positions[offset + 2]);
         m_min.StoreMin(pos);
         m_max.StoreMax(pos);

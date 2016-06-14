@@ -30,6 +30,8 @@ std::unique_ptr<G3D::GeometrySoA> G3D::createLineGeometry(std::vector<uint32_t> 
     geometry->vertexAttributes.push_back(std::move(positions));
     geometry->vertexAttributes.push_back(std::move(colors));
 
+    assignShortcutPointers(*geometry);
+    
     return geometry;
 }
 
@@ -236,6 +238,80 @@ void G3D::readSoA(AbstractReader& reader, G3D::GeometrySoA& geometry) {
             geometry.indices = readIndices(reader, geometry.info);
             std::vector<float> vertices = readVertices(reader, geometry.info);
             geometry.vertexAttributes = convertVertices(vertices, geometry.info);
+        }
+        assignShortcutPointers(geometry);
+    }
+}
+
+
+void G3D::assignShortcutPointers(G3D::GeometrySoA& geometry) {
+    for (size_t i = 0; i < geometry.info.attributeSemantics.size(); ++i) {
+        switch (geometry.info.attributeSemantics[i]) {
+        case G3D::Position: {
+            geometry.positions = geometry.vertexAttributes.at(i).data();
+            break;
+        }
+        case G3D::Normal: {
+            geometry.normals = geometry.vertexAttributes.at(i).data();
+            break;
+        }
+        case G3D::Tangent: {
+            geometry.tangents = geometry.vertexAttributes.at(i).data();
+            break;
+        }
+        case G3D::Color: {
+            geometry.colors = geometry.vertexAttributes.at(i).data();
+            break;
+        }
+        case G3D::Tex: {
+            geometry.texcoords = geometry.vertexAttributes.at(i).data();
+            break;
+        }
+        case G3D::Float: {
+            geometry.alphas = geometry.vertexAttributes.at(i).data();
+            break;
+        }
+        }
+    }
+}
+
+void G3D::applyTransform(G3D::GeometrySoA& geometry, const IVDA::Mat4f& matrix) {
+    uint32_t numVertices = geometry.info.numberVertices;
+    {
+        if (geometry.positions != nullptr) {
+            float* positions = const_cast<float*>(geometry.positions);
+            for (uint32_t i = 0; i < numVertices; ++i, positions += 3) {
+                IVDA::Vec4f position(IVDA::Vec3f(positions), 1);
+                position = matrix * position;
+                positions[0] = position.x;
+                positions[1] = position.y;
+                positions[2] = position.z;
+            }
+        }
+    }
+    {
+        if (geometry.normals != nullptr) {
+            float* normals = const_cast<float*>(geometry.normals);
+            IVDA::Mat4f normalMatrix = matrix.inverse().Transpose();
+            for (uint32_t i = 0; i < numVertices; ++i, normals += 3) {
+                IVDA::Vec4f normal(IVDA::Vec3f(normals), 0);
+                normal = normalMatrix * normal;
+                normals[0] = normal.x;
+                normals[1] = normal.y;
+                normals[2] = normal.z;
+            }
+        }
+    }
+    {
+        if (geometry.tangents != nullptr) {
+            float* tangents = const_cast<float*>(geometry.tangents);
+            for (uint32_t i = 0; i < numVertices; ++i, tangents += 3) {
+                IVDA::Vec4f tangent(IVDA::Vec3f(tangents), 0);
+                tangent = matrix * tangent;
+                tangents[0] = tangent.x;
+                tangents[1] = tangent.y;
+                tangents[2] = tangent.z;
+            }
         }
     }
 }

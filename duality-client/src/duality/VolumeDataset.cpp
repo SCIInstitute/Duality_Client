@@ -4,8 +4,8 @@
 #include <algorithm>
 #include <cmath>
 
-VolumeDataset::VolumeDataset(Dataset::Visibility visibility)
-    : Dataset({}, visibility) {}
+VolumeDataset::VolumeDataset(std::unique_ptr<DataProvider> provider)
+    : Dataset(std::move(provider)) {}
 
 void VolumeDataset::accept(DatasetDispatcher& dispatcher) {
     dispatcher.dispatch(*this);
@@ -25,17 +25,13 @@ void VolumeDataset::bindTextures(size_t dir, size_t texIndex1, size_t texIndex2)
     m_textures[dir][texIndex2]->bindWithUnit(2);
 }
 
-void VolumeDataset::read(std::shared_ptr<std::vector<uint8_t>> data) {
-    ReaderFromMemory reader(reinterpret_cast<const char*>(data->data()), data->size());
+void VolumeDataset::readData(const std::vector<uint8_t>& data) {
+    ReaderFromMemory reader(reinterpret_cast<const char*>(data.data()), data.size());
     m_volume = std::make_unique<I3M::Volume>();
     I3M::read(reader, *m_volume);
     initTransferFunction(duality::defaultTransferFunction());
     initSliceInfos();
     initTextures();
-}
-
-void VolumeDataset::applyTransform(const IVDA::Mat4f& matrix) {
-    // FIXME: how to apply transforms to volumetric dataset?
 }
 
 void VolumeDataset::initSliceInfos() {

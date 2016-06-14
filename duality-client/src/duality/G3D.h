@@ -1,5 +1,7 @@
 #pragma once
 
+#include "IVDA/Vectors.h"
+
 #include <cstdint>
 #include <iostream>
 #include <memory>
@@ -48,9 +50,25 @@ public:
     };
 
     struct GeometrySoA : Geometry {
-        GeometrySoA() { info.vertexType = SoA; }
+        GeometrySoA()
+            : positions(nullptr)
+            , normals(nullptr)
+            , tangents(nullptr)
+            , colors(nullptr)
+            , texcoords(nullptr)
+            , alphas(nullptr) {
+            info.vertexType = SoA;
+        }
 
         std::vector<std::vector<float>> vertexAttributes;
+
+        // vertex attributes
+        float* positions;
+        float* normals;
+        float* tangents;
+        float* colors;
+        float* texcoords;
+        float* alphas;
     };
 
     static uint32_t floats(uint32_t semantic) {
@@ -98,6 +116,9 @@ private:
     static std::vector<std::vector<float>> readVertexAttributes(AbstractReader& reader, const GeometryInfo& info);
     static void readContent(AbstractReader& reader, GeometryAoS& geometry);
     static void readContent(AbstractReader& reader, GeometrySoA& geometry);
+
+    static void assignShortcutPointers(G3D::GeometrySoA& geometry);
+    static void applyTransform(G3D::GeometrySoA& geometry, const IVDA::Mat4f& matrix);
 
     static std::vector<float> convertVertices(const std::vector<std::vector<float>>& vertexAttributes, const GeometryInfo& info);
     static std::vector<std::vector<float>> convertVertices(const std::vector<float>& vertices, const GeometryInfo& info);

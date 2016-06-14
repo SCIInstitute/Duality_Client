@@ -6,7 +6,7 @@
 
 class Dataset {
 public:
-    Dataset(std::unique_ptr<DataProvider> provider, Visibility visibility);
+    Dataset(std::unique_ptr<DataProvider> provider);
 
     virtual void accept(DatasetDispatcher& renderer) = 0;
     

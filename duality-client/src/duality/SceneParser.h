@@ -10,7 +10,8 @@
 
 #include "jsoncpp/json.h"
 
-class Dataset;
+class GeometryDataset;
+class VolumeDataset;
 class SceneNode;
 class DataProvider;
 
@@ -22,15 +23,16 @@ public:
     static SceneMetadata parseMetadata(const JsonCpp::Value& root);
 
 private:
+    Visibility parseVisibility(const JsonCpp::Value &node);
+    
     std::unique_ptr<SceneNode> parseGeometryNode(const JsonCpp::Value& node);
-    std::unique_ptr<Dataset> parseGeometryDataset(const JsonCpp::Value& node);
+    std::unique_ptr<GeometryDataset> parseGeometryDataset(const JsonCpp::Value& node);
 
     std::unique_ptr<DataProvider> parseProvider(const JsonCpp::Value& node);
     std::unique_ptr<DataProvider> parseDownload(const JsonCpp::Value& node);
     std::unique_ptr<DataProvider> parsePython(const JsonCpp::Value& node);
 
-    Visibility parseDatasetVisibility(const JsonCpp::Value &node);
-    std::unique_ptr<Dataset> parseVolume(const JsonCpp::Value& node);
+    std::unique_ptr<VolumeDataset> parseVolume(const JsonCpp::Value& node);
 
     IVDA::Mat4f parseMatrix(const JsonCpp::Value& node);
     std::vector<IVDA::Mat4f> parseMatrices(const JsonCpp::Value& node);

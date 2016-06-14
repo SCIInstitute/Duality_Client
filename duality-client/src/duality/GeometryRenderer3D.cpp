@@ -75,8 +75,8 @@ void GeometryRenderer3D::render(const GeometryDataset& dataset, const MVP3D& mvp
     int attributeCount = enableAttributeArrays(dataset);
 
     int primitiveType = primitiveTypeGL(dataset);
-    uint32_t numIndices = dataset.geometryInfo()->numberIndices;
-    GL(glDrawElements(primitiveType, (GLsizei)numIndices, GL_UNSIGNED_INT, dataset.getIndices().data()));
+    size_t numIndices = dataset.geometry().indices.size();
+    GL(glDrawElements(primitiveType, (GLsizei)numIndices, GL_UNSIGNED_INT, dataset.geometry().indices.data()));
 
     for (int i = 0; i < attributeCount; ++i) {
         GL(glDisableVertexAttribArray(i));
@@ -84,7 +84,7 @@ void GeometryRenderer3D::render(const GeometryDataset& dataset, const MVP3D& mvp
 }
 
 int GeometryRenderer3D::primitiveTypeGL(const GeometryDataset& dataset) {
-    switch (dataset.geometryInfo()->primitiveType) {
+    switch (dataset.geometry().info.primitiveType) {
     case G3D::Point:
         return GL_POINTS;
     case G3D::Line:
@@ -100,39 +100,39 @@ int GeometryRenderer3D::primitiveTypeGL(const GeometryDataset& dataset) {
 }
 
 GLShader& GeometryRenderer3D::determineActiveShader(const GeometryDataset& dataset) const {
-    if (dataset.getNormals() && !dataset.getColors() && !dataset.getTexCoords() && !dataset.getAlphas())
+    if (dataset.geometry().normals && !dataset.geometry().colors && !dataset.geometry().texcoords && !dataset.geometry().alphas)
         return *m_normShader;
-    else if (dataset.getNormals() && !dataset.getColors() && !dataset.getTexCoords() && dataset.getAlphas())
+    else if (dataset.geometry().normals && !dataset.geometry().colors && !dataset.geometry().texcoords && dataset.geometry().alphas)
         return *m_normAlphaShader;
-    else if (dataset.getNormals() && !dataset.getColors() && dataset.getTexCoords() && dataset.getAlphas())
+    else if (dataset.geometry().normals && !dataset.geometry().colors && dataset.geometry().texcoords && dataset.geometry().alphas)
         return *m_normTexAlphaShader;
-    else if (dataset.getNormals() && dataset.getColors() && !dataset.getTexCoords() && !dataset.getAlphas())
+    else if (dataset.geometry().normals && dataset.geometry().colors && !dataset.geometry().texcoords && !dataset.geometry().alphas)
         return *m_normColShader;
-    else if (!dataset.getNormals() && dataset.getColors() && !dataset.getTexCoords() && !dataset.getAlphas())
+    else if (!dataset.geometry().normals && dataset.geometry().colors && !dataset.geometry().texcoords && !dataset.geometry().alphas)
         return *m_colShader;
-    else if (dataset.getNormals() && !dataset.getColors() && dataset.getTexCoords() && !dataset.getAlphas())
+    else if (dataset.geometry().normals && !dataset.geometry().colors && dataset.geometry().texcoords && !dataset.geometry().alphas)
         return *m_normTexShader;
-    else if (!dataset.getNormals() && !dataset.getColors() && dataset.getTexCoords() && !dataset.getAlphas())
+    else if (!dataset.geometry().normals && !dataset.geometry().colors && dataset.geometry().texcoords && !dataset.geometry().alphas)
         return *m_texShader;
     throw Error("Cannot determine shader for geometry dataset", __FILE__, __LINE__);
 }
 
 int GeometryRenderer3D::enableAttributeArrays(const GeometryDataset& dataset) {
     int attributeIndex = 0;
-    if (dataset.getPositions()) {
-        GL(glVertexAttribPointer(attributeIndex, 3, GL_FLOAT, 0, 0, dataset.getPositions()));
+    if (dataset.geometry().positions) {
+        GL(glVertexAttribPointer(attributeIndex, 3, GL_FLOAT, 0, 0, dataset.geometry().positions));
         GL(glEnableVertexAttribArray(attributeIndex++));
     }
-    if (dataset.getNormals()) {
-        GL(glVertexAttribPointer(attributeIndex, 3, GL_FLOAT, 0, 0, dataset.getNormals()));
+    if (dataset.geometry().normals) {
+        GL(glVertexAttribPointer(attributeIndex, 3, GL_FLOAT, 0, 0, dataset.geometry().normals));
         GL(glEnableVertexAttribArray(attributeIndex++));
     }
-    if (dataset.getTangents()) {
-        GL(glVertexAttribPointer(attributeIndex, 3, GL_FLOAT, 0, 0, dataset.getTangents()));
+    if (dataset.geometry().tangents) {
+        GL(glVertexAttribPointer(attributeIndex, 3, GL_FLOAT, 0, 0, dataset.geometry().tangents));
         GL(glEnableVertexAttribArray(attributeIndex++));
     }
-    if (dataset.getColors()) {
-        GL(glVertexAttribPointer(attributeIndex, 4, GL_FLOAT, 0, 0, dataset.getColors()));
+    if (dataset.geometry().colors) {
+        GL(glVertexAttribPointer(attributeIndex, 4, GL_FLOAT, 0, 0, dataset.geometry().colors));
         GL(glEnableVertexAttribArray(attributeIndex++));
     }
     // FIXME: textures
@@ -143,8 +143,8 @@ int GeometryRenderer3D::enableAttributeArrays(const GeometryDataset& dataset) {
     //    GL(glEnableVertexAttribArray(attributeIndex++));
     //    dataset.getTexture()->bind();
     //}
-    if (dataset.getAlphas()) {
-        GL(glVertexAttribPointer(attributeIndex, 1, GL_FLOAT, 0, 0, dataset.getAlphas()));
+    if (dataset.geometry().alphas) {
+        GL(glVertexAttribPointer(attributeIndex, 1, GL_FLOAT, 0, 0, dataset.geometry().alphas));
         GL(glEnableVertexAttribArray(attributeIndex++));
     }
 

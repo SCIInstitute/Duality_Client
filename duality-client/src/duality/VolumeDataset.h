@@ -10,7 +10,7 @@
 
 class VolumeDataset : public Dataset {
 public:
-    VolumeDataset(Dataset::Visibility visibility);
+    VolumeDataset(std::unique_ptr<DataProvider> provider);
 
     virtual void accept(DatasetDispatcher& dispatcher) override;
 
@@ -26,8 +26,7 @@ public:
     void bindTextures(size_t dir, size_t texIndex1, size_t texIndex2) const;
 
 private:
-    virtual void read(std::shared_ptr<std::vector<uint8_t>> data) override;
-    virtual void applyTransform(const IVDA::Mat4f& matrix) override;
+    virtual void readData(const std::vector<uint8_t>& data) override;
 
     void initSliceInfos();
     void initTextures();
