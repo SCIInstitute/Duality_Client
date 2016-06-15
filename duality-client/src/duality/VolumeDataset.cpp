@@ -7,10 +7,6 @@
 VolumeDataset::VolumeDataset(std::unique_ptr<DataProvider> provider)
     : Dataset(std::move(provider)) {}
 
-void VolumeDataset::accept(NodeDispatcher& dispatcher) {
-    dispatcher.dispatch(*this);
-}
-
 const std::array<std::vector<VolumeDataset::SliceInfo>, 3>& VolumeDataset::sliceInfos() const {
     return m_sliceInfos;
 }

@@ -11,9 +11,7 @@
 class VolumeDataset : public Dataset {
 public:
     VolumeDataset(std::unique_ptr<DataProvider> provider);
-
-    virtual void accept(NodeDispatcher& dispatcher) override;
-
+    
     struct SliceInfo {
         float depth;
         size_t textureIndex1;

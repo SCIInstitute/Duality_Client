@@ -24,7 +24,7 @@ const std::vector<std::unique_ptr<SceneNode>>& Scene::nodes() const {
 void Scene::dispatch(NodeDispatcher& dispatcher, View view) const {
     for (auto& node : m_nodes) {
         if (node->isVisibleInView(view)) {
-            node->dispatch(dispatcher);
+            node->accept(dispatcher);
         }
     }
 }

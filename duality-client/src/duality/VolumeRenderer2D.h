@@ -4,6 +4,7 @@
 #include "IVDA/Vectors.h"
 #include "duality/CoordinateSystem.h"
 #include "src/duality/VolumeDataset.h"
+#include "src/duality/TransferFunction.h"
 
 #include <memory>
 #include <array>
@@ -15,7 +16,7 @@ public:
     VolumeRenderer2D();
     ~VolumeRenderer2D();
     
-    void render(const VolumeDataset& dataset, const GLMatrix& mvp, , const TransferFunction& tf, CoordinateAxis axis, float slice);
+    void render(const VolumeDataset& dataset, const GLMatrix& mvp, const TransferFunction& tf, CoordinateAxis axis, float slice);
     
 private:
     std::unique_ptr<GLShader> m_shader;
