@@ -15,6 +15,13 @@ public:
     void fetch();
     void bindTexture() const;
 
+    std::vector<FloatVariableInfo> floatVariableInfos() const;
+    std::vector<EnumVariableInfo> enumVariableInfos() const;
+    bool hasFloatVariable(const std::string& variableName) const;
+    bool hasEnumVariable(const std::string& variableName) const;
+    void setVariable(const std::string& variableName, float value);
+    void setVariable(const std::string& variableName, const std::string& value);
+
 private:
     void readData(const std::vector<uint8_t>& data);
     void initTexture();

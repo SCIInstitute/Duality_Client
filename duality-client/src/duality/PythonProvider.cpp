@@ -61,6 +61,18 @@ std::vector<EnumVariableInfo> PythonProvider::enumVariableInfos() const {
     return result;
 }
 
+bool PythonProvider::hasFloatVariable(const std::string& variable) const {
+    auto it = std::find_if(begin(m_floatVariables), end(m_floatVariables),
+                           [&variable](const InputVariableFloat& var) { return var.info().name == variable; });
+    return it != end(m_floatVariables);
+}
+
+bool PythonProvider::hasEnumVariable(const std::string& variable) const {
+    auto it = std::find_if(begin(m_enumVariables), end(m_enumVariables),
+                           [&variable](const InputVariableEnum& var) { return var.info().name == variable; });
+    return it != end(m_enumVariables);
+}
+
 void PythonProvider::setVariable(const std::string& variable, float value) {
     auto it = std::find_if(begin(m_floatVariables), end(m_floatVariables),
                            [&variable](const InputVariableFloat& var) { return var.info().name == variable; });

@@ -11,6 +11,8 @@ public:
     void fetch();
     std::vector<FloatVariableInfo> floatVariableInfos() const;
     std::vector<EnumVariableInfo> enumVariableInfos() const;
+    bool hasFloatVariable(const std::string& variableName) const;
+    bool hasEnumVariable(const std::string& variableName) const;
     void setVariable(const std::string& variableName, float value);
     void setVariable(const std::string& variableName, const std::string& value);
 

@@ -18,6 +18,8 @@ public:
     std::shared_ptr<std::vector<uint8_t>> fetch() override;
     std::vector<FloatVariableInfo> floatVariableInfos() const override;
     std::vector<EnumVariableInfo> enumVariableInfos() const override;
+    bool hasFloatVariable(const std::string& variable) const override;
+    bool hasEnumVariable(const std::string& variable) const override;
     void setVariable(const std::string& variable, float value) override;
     void setVariable(const std::string& variable, const std::string& value) override;
 
