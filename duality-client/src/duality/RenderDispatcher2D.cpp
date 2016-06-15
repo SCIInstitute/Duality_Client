@@ -2,7 +2,8 @@
 
 #include "src/IVDA/GLFrameBufferObject.h"
 #include "src/IVDA/GLInclude.h"
-#include "src/duality/GeometryDataset.h"
+#include "src/duality/GeometryNode.h"
+#include "src/duality/VolumeNode.h"
 #include "src/duality/GeometryRenderer2D.h"
 
 #include <OpenGLES/ES3/gl.h>
@@ -19,15 +20,15 @@ RenderDispatcher2D::RenderDispatcher2D(std::shared_ptr<GLFrameBufferObject> fbo,
 
 RenderDispatcher2D::~RenderDispatcher2D() = default;
 
-void RenderDispatcher2D::dispatch(GeometryDataset& dataset) {
+void RenderDispatcher2D::dispatch(GeometryNode& node) {
     if (m_redraw) {
-        m_geoRenderer->render(dataset, m_mvp.mvp(), m_parameters.axis(), m_parameters.slice());
+        m_geoRenderer->render(node.dataset(), m_mvp.mvp(), m_parameters.axis(), m_parameters.slice());
     }
 }
 
-void RenderDispatcher2D::dispatch(VolumeDataset& dataset) {
+void RenderDispatcher2D::dispatch(VolumeNode& node) {
     if (m_redraw) {
-        m_volRenderer->render(dataset, m_mvp.mvp(), m_parameters.axis(), m_parameters.slice());
+        m_volRenderer->render(node.dataset(), m_mvp.mvp(), node.transferFunction(), m_parameters.axis(), m_parameters.slice());
     }
 }
 

@@ -59,12 +59,23 @@ std::unique_ptr<SceneNode> SceneParser::parseVolumeNode(const JsonCpp::Value& no
     std::string name = node["name"].asString();
     Visibility visibility = parseVisibility(node);
     auto dataset = parseVolumeDataset(node["dataset"]);
-    return std::make_unique<VolumeNode>(name, visibility, std::move(dataset));
+    std::unique_ptr<TransferFunction> tf;
+    if (node.isMember("tf")) {
+        tf = parseTransferFunction(node["tf"]);
+    } else {
+        tf = std::make_unique<TransferFunction>(nullptr);
+    }
+    return std::make_unique<VolumeNode>(name, visibility, std::move(dataset), std::move(tf));
 }
 
 std::unique_ptr<VolumeDataset> SceneParser::parseVolumeDataset(const JsonCpp::Value& node) {
     auto provider = parseProvider(node["source"]);
     return std::make_unique<VolumeDataset>(std::move(provider));
+}
+
+std::unique_ptr<TransferFunction> SceneParser::parseTransferFunction(const JsonCpp::Value& node) {
+    auto provider = parseProvider(node["source"]);
+    return std::make_unique<TransferFunction>(std::move(provider));
 }
 
 std::unique_ptr<DataProvider> SceneParser::parseProvider(const JsonCpp::Value& node) {

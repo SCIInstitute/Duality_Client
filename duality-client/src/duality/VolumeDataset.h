@@ -12,7 +12,7 @@ class VolumeDataset : public Dataset {
 public:
     VolumeDataset(std::unique_ptr<DataProvider> provider);
 
-    virtual void accept(DatasetDispatcher& dispatcher) override;
+    virtual void accept(NodeDispatcher& dispatcher) override;
 
     struct SliceInfo {
         float depth;
@@ -31,11 +31,9 @@ private:
     void initSliceInfos();
     void initTextures();
     size_t texelIndexInVolume(size_t x, size_t y, size_t z);
-    void initTransferFunction(const TransferFunction& tf);
 
 private:
     std::unique_ptr<I3M::Volume> m_volume;
-    std::unique_ptr<GLTexture2D> m_tf;
     std::array<std::vector<SliceInfo>, 3> m_sliceInfos;
     std::array<std::vector<std::unique_ptr<GLTexture2D>>, 3> m_textures;
 };

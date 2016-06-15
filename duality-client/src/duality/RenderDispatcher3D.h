@@ -3,20 +3,20 @@
 #include "IVDA/Vectors.h"
 #include "duality/ScreenInfo.h"
 #include "src/duality/BoundingBox.h"
-#include "src/duality/DatasetDispatcher.h"
+#include "src/duality/NodeDispatcher.h"
 #include "src/duality/MVP3D.h"
 
 class GLFrameBufferObject;
 class GeometryRenderer3D;
 class VolumeRenderer3D;
 
-class RenderDispatcher3D : public DatasetDispatcher {
+class RenderDispatcher3D : public NodeDispatcher {
 public:
     RenderDispatcher3D(std::shared_ptr<GLFrameBufferObject> fbo, const RenderParameters3D& initialParameters);
     ~RenderDispatcher3D();
 
-    void dispatch(GeometryDataset& node) override;
-    void dispatch(VolumeDataset& dataset) override;
+    void dispatch(GeometryNode& node) override;
+    void dispatch(VolumeNode& node) override;
     void startDraw();
     void finishDraw();
 

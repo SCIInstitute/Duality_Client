@@ -15,7 +15,7 @@ public:
     VolumeRenderer2D();
     ~VolumeRenderer2D();
     
-    void render(const VolumeDataset& dataset, const GLMatrix& mvp, CoordinateAxis axis, float slice);
+    void render(const VolumeDataset& dataset, const GLMatrix& mvp, , const TransferFunction& tf, CoordinateAxis axis, float slice);
     
 private:
     std::unique_ptr<GLShader> m_shader;

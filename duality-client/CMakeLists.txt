@@ -33,6 +33,7 @@ SET(DUALITY_HEADER_PRIVATE
 	src/duality/MVP2D.h
 	src/duality/MVP3D.h
 	src/duality/PythonProvider.h
+	src/duality/NodeDispatcher.h
 	src/duality/RenderDispatcher2D.h
 	src/duality/RenderDispatcher3D.h
 	src/duality/RenderParameters2D.h
@@ -48,7 +49,6 @@ SET(DUALITY_HEADER_PRIVATE
 	src/duality/BoundingBox.h
 	src/duality/Communication.h
 	src/duality/DataProvider.h
-	src/duality/DatasetDispatcher.h
 	src/duality/GLTexture2D.h
 	src/duality/TransferFunction.h
 	src/duality/View.h
@@ -83,6 +83,7 @@ SET (DUALITY_SOURCE
 	src/duality/CoordinateSystem.cpp
 	src/duality/GeometryRenderer2D.cpp
 	src/duality/GeometryRenderer3D.cpp
+	src/duality/VolumeRenderer2D.cpp
 	src/duality/VolumeRenderer3D.cpp
 	src/duality/Dataset.cpp
 	src/duality/GeometryDataset.cpp

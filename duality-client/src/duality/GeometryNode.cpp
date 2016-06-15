@@ -4,12 +4,12 @@ GeometryNode::GeometryNode(const std::string& name, Visibility visibility, std::
     : SceneNode(name, visibility)
     , m_dataset(std::move(dataset)) {}
 
-void GeometryNode::updateDataset() {
-    m_dataset->fetch();
+void GeometryNode::accept(NodeDispatcher& dispatcher) {
+    dispatcher.dispatch(*this);
 }
 
-void GeometryNode::dispatch(DatasetDispatcher& dispatcher) const {
-    m_dataset->accept(dispatcher);
+void GeometryNode::updateDataset() {
+    m_dataset->fetch();
 }
 
 std::vector<FloatVariableInfo> GeometryNode::floatVariableInfos() const {
@@ -26,4 +26,8 @@ void GeometryNode::setVariable(const std::string& variableName, float value) {
 
 void GeometryNode::setVariable(const std::string& variableName, const std::string& value) {
     m_dataset->setVariable(variableName, value);
+}
+
+const GeometryDataset& GeometryNode::dataset() const {
+    return *m_dataset;
 }

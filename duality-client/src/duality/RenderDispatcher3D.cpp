@@ -2,9 +2,9 @@
 
 #include "src/IVDA/GLFrameBufferObject.h"
 #include "src/IVDA/GLInclude.h"
-#include "src/duality/GeometryDataset.h"
+#include "src/duality/GeometryNode.h"
 #include "src/duality/GeometryRenderer3D.h"
-#include "src/duality/VolumeDataset.h"
+#include "src/duality/VolumeNode.h"
 #include "src/duality/VolumeRenderer3D.h"
 
 #include <OpenGLES/ES3/gl.h>
@@ -21,15 +21,15 @@ RenderDispatcher3D::RenderDispatcher3D(std::shared_ptr<GLFrameBufferObject> fbo,
 
 RenderDispatcher3D::~RenderDispatcher3D() = default;
 
-void RenderDispatcher3D::dispatch(GeometryDataset& dataset) {
+void RenderDispatcher3D::dispatch(GeometryNode& node) {
     if (m_redraw) {
-        m_geoRenderer->render(dataset, m_mvp);
+        m_geoRenderer->render(node.dataset(), m_mvp);
     }
 }
 
-void RenderDispatcher3D::dispatch(VolumeDataset& dataset) {
+void RenderDispatcher3D::dispatch(VolumeNode& node) {
     if (m_redraw) {
-        m_volumeRenderer->render(dataset, m_mvp);
+        m_volumeRenderer->render(node.dataset(), m_mvp, node.transferFunction());
     }
 }
 

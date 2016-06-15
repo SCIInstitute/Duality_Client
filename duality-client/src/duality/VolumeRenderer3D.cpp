@@ -35,7 +35,7 @@ VolumeRenderer3D::VolumeRenderer3D() {
 
 VolumeRenderer3D::~VolumeRenderer3D() = default;
 
-void VolumeRenderer3D::render(const VolumeDataset& dataset, const MVP3D& mvp) {
+void VolumeRenderer3D::render(const VolumeDataset& dataset, const MVP3D& mvp, const TransferFunction& tf) {
     updateStackDirection(static_cast<Mat4f>(mvp.mv()));
 
     GLShader& shader = determineActiveShader();
@@ -53,6 +53,7 @@ void VolumeRenderer3D::render(const VolumeDataset& dataset, const MVP3D& mvp) {
         size_t index = m_reverseStackOrdering ? (stackSize - 1 - slice) : slice;
         const auto& si = dataset.sliceInfos()[m_stackDirection][index];
 
+        tf.bindTexture();
         dataset.bindTextures(m_stackDirection, si.textureIndex1, si.textureIndex2);
 
         BoundingBox bb = dataset.boundingBox();

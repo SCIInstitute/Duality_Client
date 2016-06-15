@@ -38,7 +38,7 @@ VolumeRenderer2D::VolumeRenderer2D() {
 
 VolumeRenderer2D::~VolumeRenderer2D() = default;
 
-void VolumeRenderer2D::render(const VolumeDataset& dataset, const GLMatrix& mvp, CoordinateAxis axis, float slice) {
+void VolumeRenderer2D::render(const VolumeDataset& dataset, const GLMatrix& mvp, const TransferFunction& tf, CoordinateAxis axis, float slice) {
     float datasetRange = std::abs(dataset.boundingBox().max[axis] - dataset.boundingBox().min[axis]);
     size_t sliceIndex = std::min<size_t>((slice - dataset.boundingBox().min[axis]) / datasetRange * dataset.sliceInfos()[axis].size(),
                                          dataset.sliceInfos()[axis].size() - 1);
@@ -46,6 +46,7 @@ void VolumeRenderer2D::render(const VolumeDataset& dataset, const GLMatrix& mvp,
     size_t texIndex1 = sliceInfo.textureIndex1;
     size_t texIndex2 = sliceInfo.textureIndex2;
 
+    tf.bindTexture();
     dataset.bindTextures(axis, texIndex1, texIndex2);
     GL(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, m_vertices[axis].data()));
     GL(glEnableVertexAttribArray(0));

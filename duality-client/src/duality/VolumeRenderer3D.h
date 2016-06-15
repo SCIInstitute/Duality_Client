@@ -13,7 +13,7 @@ public:
     VolumeRenderer3D();
     ~VolumeRenderer3D();
 
-    void render(const VolumeDataset& dataset, const MVP3D& mvp);
+    void render(const VolumeDataset& dataset, const MVP3D& mvp, const TransferFunction& tf);
 
 private:
     GLShader& determineActiveShader() const;

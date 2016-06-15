@@ -1,7 +1,7 @@
 #include "src/duality/GeometryDataset.h"
 
 #include "src/duality/AbstractIO.h"
-#include "src/duality/DatasetDispatcher.h"
+#include "src/duality/NodeDispatcher.h"
 
 #include "IVDA/Vectors.h"
 #include "duality/Error.h"
@@ -12,10 +12,6 @@ GeometryDataset::GeometryDataset(std::unique_ptr<DataProvider> provider, std::ve
     : Dataset(std::move(provider))
     , m_transforms(transforms)
     , m_geometry(nullptr) {}
-
-void GeometryDataset::accept(DatasetDispatcher& dispatcher) {
-    dispatcher.dispatch(*this);
-}
 
 void GeometryDataset::readData(const std::vector<uint8_t>& data) {
     ReaderFromMemory reader(reinterpret_cast<const char*>(data.data()), data.size());

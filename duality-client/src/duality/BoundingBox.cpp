@@ -1,7 +1,7 @@
 #include "src/duality/BoundingBox.h"
 
-#include "src/duality/GeometryDataset.h"
-#include "src/duality/VolumeDataset.h"
+#include "src/duality/GeometryNode.h"
+#include "src/duality/VolumeNode.h"
 
 #include <limits>
 #include <cassert>
@@ -11,7 +11,8 @@ BoundingBoxCalculator::BoundingBoxCalculator() {
     m_max = IVDA::Vec3f(-std::numeric_limits<float>::max(), -std::numeric_limits<float>::max(), -std::numeric_limits<float>::max());
 }
 
-void BoundingBoxCalculator::dispatch(GeometryDataset& dataset) {
+void BoundingBoxCalculator::dispatch(GeometryNode& node) {
+    const auto& dataset = node.dataset();
     assert(dataset.geometry().positions != nullptr);
     for (size_t i = 0; i < dataset.geometry().info.numberIndices; ++i) {
         auto offset = 3 * dataset.geometry().indices[i];
@@ -22,7 +23,8 @@ void BoundingBoxCalculator::dispatch(GeometryDataset& dataset) {
     }
 }
 
-void BoundingBoxCalculator::dispatch(VolumeDataset& dataset) {
+void BoundingBoxCalculator::dispatch(VolumeNode& node) {
+    const auto& dataset = node.dataset();
     BoundingBox bb = dataset.boundingBox();
     m_min.StoreMin(bb.min);
     m_max.StoreMax(bb.max);

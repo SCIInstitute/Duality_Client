@@ -6,6 +6,7 @@
 
 #include "src/duality/Communication.h"
 #include "src/duality/Scene.h"
+#include "src/duality/TransferFunction.h"
 #include "src/duality/View.h"
 
 #include "jsoncpp/json.h"
@@ -23,14 +24,15 @@ public:
     static SceneMetadata parseMetadata(const JsonCpp::Value& root);
 
 private:
-    Visibility parseVisibility(const JsonCpp::Value &node);
-    
+    Visibility parseVisibility(const JsonCpp::Value& node);
+
     std::unique_ptr<SceneNode> parseGeometryNode(const JsonCpp::Value& node);
     std::unique_ptr<GeometryDataset> parseGeometryDataset(const JsonCpp::Value& node);
 
     std::unique_ptr<SceneNode> parseVolumeNode(const JsonCpp::Value& node);
     std::unique_ptr<VolumeDataset> parseVolumeDataset(const JsonCpp::Value& node);
-    
+    std::unique_ptr<TransferFunction> parseTransferFunction(const JsonCpp::Value& node);
+
     std::unique_ptr<DataProvider> parseProvider(const JsonCpp::Value& node);
     std::unique_ptr<DataProvider> parseDownload(const JsonCpp::Value& node);
     std::unique_ptr<DataProvider> parsePython(const JsonCpp::Value& node);

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "src/duality/DatasetDispatcher.h"
+#include "src/duality/NodeDispatcher.h"
 #include "IVDA/Vectors.h"
 
 struct BoundingBox {
@@ -8,12 +8,12 @@ struct BoundingBox {
     IVDA::Vec3f max;
 };
 
-class BoundingBoxCalculator : public DatasetDispatcher {
+class BoundingBoxCalculator : public NodeDispatcher {
 public:
     BoundingBoxCalculator();
     
-    void dispatch(GeometryDataset& dataset) override;
-    void dispatch(VolumeDataset& dataset) override;
+    void dispatch(GeometryNode& node) override;
+    void dispatch(VolumeNode& node) override;
 
     BoundingBox boundingBox() const;
     

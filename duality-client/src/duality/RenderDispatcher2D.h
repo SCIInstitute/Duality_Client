@@ -2,7 +2,7 @@
 
 #include "IVDA/Vectors.h"
 #include "duality/ScreenInfo.h"
-#include "src/duality/DatasetDispatcher.h"
+#include "src/duality/NodeDispatcher.h"
 #include "src/duality/MVP2D.h"
 #include "src/duality/GeometryRenderer2D.h"
 #include "src/duality/VolumeRenderer2D.h"
@@ -10,13 +10,13 @@
 class GLFrameBufferObject;
 class GeometryRenderer2D;
 
-class RenderDispatcher2D : public DatasetDispatcher {
+class RenderDispatcher2D : public NodeDispatcher {
 public:
     RenderDispatcher2D(std::shared_ptr<GLFrameBufferObject> fbo, const RenderParameters2D& initialParameters);
     ~RenderDispatcher2D();
 
-    void dispatch(GeometryDataset& dataset) override;
-    void dispatch(VolumeDataset& dataset) override;
+    void dispatch(GeometryNode& node) override;
+    void dispatch(VolumeNode& node) override;
     void startDraw();
     void finishDraw();
 

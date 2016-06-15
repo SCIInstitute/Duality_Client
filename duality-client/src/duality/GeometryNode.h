@@ -11,12 +11,14 @@ class GeometryNode : public SceneNode {
 public:
     GeometryNode(const std::string& name, Visibility visibility, std::unique_ptr<GeometryDataset> dataset);
 
+    void accept(NodeDispatcher& dispatcher) override;
     void updateDataset() override;
-    void dispatch(DatasetDispatcher& dispatcher) const override;
     std::vector<FloatVariableInfo> floatVariableInfos() const override;
     std::vector<EnumVariableInfo> enumVariableInfos() const override;
     void setVariable(const std::string& variableName, float value) override;
     void setVariable(const std::string& variableName, const std::string& value) override;
+
+    const GeometryDataset& dataset() const;
 
 private:
     std::unique_ptr<GeometryDataset> m_dataset;

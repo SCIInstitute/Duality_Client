@@ -20,7 +20,7 @@ public:
     void addNode(std::unique_ptr<SceneNode> node);
     const std::vector<std::unique_ptr<SceneNode>>& nodes() const;
 
-    void dispatch(DatasetDispatcher& dispatcher, View view) const;
+    void dispatch(NodeDispatcher& dispatcher, View view) const;
     void updateDatasets();
 
     VariableInfoMap variableInfoMap(View view);

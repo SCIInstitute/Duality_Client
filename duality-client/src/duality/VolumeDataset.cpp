@@ -7,7 +7,7 @@
 VolumeDataset::VolumeDataset(std::unique_ptr<DataProvider> provider)
     : Dataset(std::move(provider)) {}
 
-void VolumeDataset::accept(DatasetDispatcher& dispatcher) {
+void VolumeDataset::accept(NodeDispatcher& dispatcher) {
     dispatcher.dispatch(*this);
 }
 
@@ -20,7 +20,6 @@ BoundingBox VolumeDataset::boundingBox() const {
 }
 
 void VolumeDataset::bindTextures(size_t dir, size_t texIndex1, size_t texIndex2) const {
-    m_tf->bindWithUnit(0);
     m_textures[dir][texIndex1]->bindWithUnit(1);
     m_textures[dir][texIndex2]->bindWithUnit(2);
 }
@@ -29,7 +28,6 @@ void VolumeDataset::readData(const std::vector<uint8_t>& data) {
     ReaderFromMemory reader(reinterpret_cast<const char*>(data.data()), data.size());
     m_volume = std::make_unique<I3M::Volume>();
     I3M::read(reader, *m_volume);
-    initTransferFunction(duality::defaultTransferFunction());
     initSliceInfos();
     initTextures();
 }
@@ -102,16 +100,4 @@ void VolumeDataset::initTextures() {
 
 size_t VolumeDataset::texelIndexInVolume(size_t x, size_t y, size_t z) {
     return x + y * m_volume->info.size.x + z * m_volume->info.size.x * m_volume->info.size.y;
-}
-
-void VolumeDataset::initTransferFunction(const TransferFunction& tf) {
-    // apply opacity correction
-    TransferFunction correctedTf = tf;
-    float quality = 1.0f;
-    for (int i = 0; i < 256; i++) {
-        double alpha = correctedTf[i][3] / 255.0;
-        alpha = 1.0 - std::pow(1.0 - alpha, 1.0 / quality);
-        correctedTf[i][3] = static_cast<uint8_t>(255.0 * alpha);
-    }
-    m_tf = std::make_unique<GLTexture2D>(correctedTf.data(), GLTexture2D::TextureData::Color, 256, 1);
 }

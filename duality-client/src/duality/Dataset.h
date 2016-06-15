@@ -1,14 +1,12 @@
 #pragma once
 
-#include "src/duality/DatasetDispatcher.h"
+#include "src/duality/NodeDispatcher.h"
 #include "src/duality/View.h"
 #include "src/duality/DataProvider.h"
 
 class Dataset {
 public:
     Dataset(std::unique_ptr<DataProvider> provider);
-
-    virtual void accept(DatasetDispatcher& renderer) = 0;
     
     void fetch();
     std::vector<FloatVariableInfo> floatVariableInfos() const;

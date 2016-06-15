@@ -1,6 +1,6 @@
 #pragma once
 
-#include "src/duality/DatasetDispatcher.h"
+#include "src/duality/NodeDispatcher.h"
 #include "src/duality/View.h"
 
 #include "duality/VariableInfo.h"
@@ -14,8 +14,8 @@ public:
     std::string name() const;
     bool isVisibleInView(View view) const;
 
+    virtual void accept(NodeDispatcher& dispatcher) = 0;
     virtual void updateDataset() = 0;
-    virtual void dispatch(DatasetDispatcher& dispatcher) const = 0;
     virtual std::vector<FloatVariableInfo> floatVariableInfos() const = 0;
     virtual std::vector<EnumVariableInfo> enumVariableInfos() const = 0;
     virtual void setVariable(const std::string& variableName, float value) = 0;
