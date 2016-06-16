@@ -18,7 +18,7 @@ public:
     ~SceneController2DImpl();
 
     void updateScreenInfo(const ScreenInfo& screenInfo);
-
+    void setRedrawRequired();
     void render();
 
     void addTranslation(const IVDA::Vec2f& translation);

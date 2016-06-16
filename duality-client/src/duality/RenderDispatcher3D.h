@@ -22,6 +22,7 @@ public:
 
     void updateScreenInfo(const ScreenInfo& screenInfo);
     void updateBoundingBox(const BoundingBox& boundingBox);
+    void setRedrawRequired();
 
     void addTranslation(const IVDA::Vec2f& translation);
     void addRotation(const IVDA::Mat4f& rotation);

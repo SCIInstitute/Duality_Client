@@ -8,7 +8,7 @@ LazyRpcClient::LazyRpcClient(const mocca::net::Endpoint& endpoint)
 
 void LazyRpcClient::send(const std::string& method, const JsonCpp::Value& params) const {
     try {
-        if (m_rpcClient == nullptr) {
+        if (m_rpcClient == nullptr || !m_rpcClient->isConnected()) {
             m_rpcClient = std::make_unique<mocca::net::RpcClient>(m_endpoint);
         }
         m_rpcClient->send(method, params);
@@ -20,7 +20,7 @@ void LazyRpcClient::send(const std::string& method, const JsonCpp::Value& params
 
 mocca::net::RpcClient::ReturnType LazyRpcClient::receive() const {
     try {
-        if (m_rpcClient == nullptr) {
+        if (m_rpcClient == nullptr || !m_rpcClient->isConnected()) {
             m_rpcClient = std::make_unique<mocca::net::RpcClient>(m_endpoint);
         }
         return m_rpcClient->receive();

@@ -18,6 +18,10 @@ void SceneController3DImpl::updateScreenInfo(const ScreenInfo& screenInfo) {
     m_renderDispatcher->updateBoundingBox(boundingBox);
 }
 
+void SceneController3DImpl::setRedrawRequired() {
+    m_renderDispatcher->setRedrawRequired();
+}
+
 void SceneController3DImpl::addTranslation(const IVDA::Vec2f& translation) {
     m_renderDispatcher->addTranslation(translation);
 }

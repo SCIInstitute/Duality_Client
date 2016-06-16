@@ -78,3 +78,7 @@ void RenderDispatcher3D::updateBoundingBox(const BoundingBox& boundingBox) {
     m_mvp = MVP3D(m_screenInfo, m_boundingBox, m_parameters);
     m_redraw = true;
 }
+
+void RenderDispatcher3D::setRedrawRequired() {
+    m_redraw = true;
+}

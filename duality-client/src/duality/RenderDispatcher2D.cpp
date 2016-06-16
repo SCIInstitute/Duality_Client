@@ -62,6 +62,10 @@ void RenderDispatcher2D::updateBoundingBox(const BoundingBox& boundingBox) {
     m_redraw = true;
 }
 
+void RenderDispatcher2D::setRedrawRequired() {
+    m_redraw = true;
+}
+
 void RenderDispatcher2D::addTranslation(const IVDA::Vec2f& translation) {
     m_parameters.addTranslation(translation);
     m_mvp.updateParameters(m_parameters);
