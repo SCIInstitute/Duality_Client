@@ -49,5 +49,6 @@ private:
     std::shared_ptr<LazyRpcClient> m_rpc;
     std::string m_sceneName;
     std::string m_nodeName;
+    int m_varIndex;
     std::map<std::string, std::shared_ptr<Variables>> m_variables;
 };

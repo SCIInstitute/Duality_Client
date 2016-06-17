@@ -36,30 +36,6 @@ void TransferFunction::bindTexture() const {
     m_texture->bindWithUnit(0);
 }
 
-std::vector<FloatVariableInfo> TransferFunction::floatVariableInfos() const {
-    return m_provider->floatVariableInfos();
-}
-
-std::vector<EnumVariableInfo> TransferFunction::enumVariableInfos() const {
-    return m_provider->enumVariableInfos();
-}
-
-bool TransferFunction::hasFloatVariable(const std::string& variableName) const {
-    return m_provider->hasFloatVariable(variableName);
-}
-
-bool TransferFunction::hasEnumVariable(const std::string& variableName) const {
-    return m_provider->hasEnumVariable(variableName);
-}
-
-void TransferFunction::setVariable(const std::string& variableName, float value) {
-    m_provider->setVariable(variableName, value);
-}
-
-void TransferFunction::setVariable(const std::string& variableName, const std::string& value) {
-    m_provider->setVariable(variableName, value);
-}
-
 void TransferFunction::readData(const std::vector<uint8_t>& data) {
     std::string tfString(reinterpret_cast<const char*>(data.data()), data.size());
     std::stringstream stream(tfString);

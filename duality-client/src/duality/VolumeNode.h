@@ -14,10 +14,6 @@ public:
 
     void accept(NodeDispatcher& dispatcher) override;
     void updateDataset() override;
-    std::vector<FloatVariableInfo> floatVariableInfos() const override;
-    std::vector<EnumVariableInfo> enumVariableInfos() const override;
-    void setVariable(const std::string& variableName, float value) override;
-    void setVariable(const std::string& variableName, const std::string& value) override;
     
     const VolumeDataset& dataset() const;
     const TransferFunction& transferFunction() const;

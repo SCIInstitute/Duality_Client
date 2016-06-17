@@ -5,12 +5,14 @@
 #include <vector>
 
 struct FloatVariableInfo {
+    int index;
     float lowerBound;
     float upperBound;
     float stepSize;
 };
 
 struct EnumVariableInfo {
+    int index;
     std::vector<std::string> values;
 };
 

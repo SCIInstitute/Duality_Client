@@ -7,6 +7,7 @@
 class Dataset {
 public:
     Dataset(std::unique_ptr<DataProvider> provider);
+    virtual ~Dataset() {}
     
     void fetch();
 

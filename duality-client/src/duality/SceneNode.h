@@ -10,7 +10,8 @@
 class SceneNode {
 public:
     SceneNode(const std::string& name, Visibility visibility);
-
+    virtual ~SceneNode() {}
+    
     std::string name() const;
     bool isVisibleInView(View view) const;
 
