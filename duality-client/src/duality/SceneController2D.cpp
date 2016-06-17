@@ -55,7 +55,7 @@ std::string SceneController2D::labelForCurrentAxis(AxisLabelMode mode) const {
     return m_impl->labelForCurrentAxis(mode);
 }
 
-VariableInfoMap SceneController2D::variableInfoMap() const {
+VariableInfoMap SceneController2D::variableMap() const {
     return m_impl->variableInfoMap();
 }
 

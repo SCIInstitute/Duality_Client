@@ -67,8 +67,8 @@ std::string SceneController2DImpl::labelForCurrentAxis(SceneController2D::AxisLa
     return mapper[m_renderDispatcher->currentAxis()];
 }
 
-VariableInfoMap SceneController2DImpl::variableInfoMap() const {
-    return m_scene.variableInfoMap(View::View2D);
+VariableMap SceneController2DImpl::variableMap() const {
+    return m_scene.variableMap(View::View2D);
 }
 
 void SceneController2DImpl::setVariable(const std::string& objectName, const std::string& variableName, float value) {

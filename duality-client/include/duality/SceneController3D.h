@@ -2,7 +2,7 @@
 
 #include "IVDA/Vectors.h"
 #include "duality/ScreenInfo.h"
-#include "duality/VariableInfo.h"
+#include "duality/InputVariable.h"
 
 #include <memory>
 
@@ -21,7 +21,7 @@ public:
     void addRotation(const IVDA::Mat4f& rotation);
     void addZoom(const float zoom);
 
-    VariableInfoMap variableInfoMap() const;
+    VariableMap variableMap() const;
     void setVariable(const std::string& objectName, const std::string& variableName, float value);
     void setVariable(const std::string& objectName, const std::string& variableName, const std::string& value);
 

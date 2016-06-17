@@ -31,8 +31,8 @@ void SceneController3D::addZoom(const float zoom) {
     m_impl->setZoom(zoom);
 }
 
-VariableInfoMap SceneController3D::variableInfoMap() const {
-    return m_impl->variableInfoMap();
+VariableMap SceneController3D::variableMap() const {
+    return m_impl->variableMap();
 }
 
 void SceneController3D::setVariable(const std::string& objectName, const std::string& variableName, float value) {

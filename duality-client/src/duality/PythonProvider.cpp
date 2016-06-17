@@ -2,33 +2,30 @@
 
 #include "duality/Error.h"
 
+#include "mocca/base/StringTools.h"
+
 #include <algorithm>
 #include <cassert>
 
-PythonProvider::PythonProvider(const std::string& sceneName, const std::string& fileName, std::vector<FloatVariableInfo> floatInfos,
-                               std::vector<EnumVariableInfo> enumInfos, std::shared_ptr<LazyRpcClient> rpc)
+PythonProvider::PythonProvider(const std::string& sceneName, const std::string& fileName, std::shared_ptr<Variables> variables,
+                               std::shared_ptr<LazyRpcClient> rpc)
     : m_sceneName(sceneName)
     , m_fileName(fileName)
-    , m_rpc(rpc)
-    , m_dirty(true) {
-    for (const auto& info : floatInfos) {
-        m_floatVariables.emplace_back(info);
-    }
-    for (const auto& info : enumInfos) {
-        m_enumVariables.emplace_back(info);
-    }
-}
+    , m_variables(variables)
+    , m_currentVariables()
+    , m_rpc(rpc) {}
 
 std::shared_ptr<std::vector<uint8_t>> PythonProvider::fetch() {
-    if (!m_dirty)
+    if (!isFetchRequired()) {
         return nullptr;
+    }
 
     JsonCpp::Value values;
-    for (const auto& var : m_floatVariables) {
-        values[var.info().name] = var.value();
+    for (const auto& var : m_variables->floatVariables) {
+        values[var.name] = var.value;
     }
-    for (const auto& var : m_enumVariables) {
-        values[var.info().name] = var.value();
+    for (const auto& var : m_variables->enumVariables) {
+        values[var.name] = var.value;
     }
 
     JsonCpp::Value params;
@@ -38,57 +35,25 @@ std::shared_ptr<std::vector<uint8_t>> PythonProvider::fetch() {
     m_rpc->send("python", params);
     auto reply = m_rpc->receive();
     if (reply.second.empty()) {
-        throw Error("Python script filename '" + m_fileName + "' did not return any data", __FILE__, __LINE__);
+        throw Error(MAKE_STRING("Python script '" << m_fileName << "' did not return any data"), __FILE__, __LINE__);
     }
-    m_dirty = false;
+    m_currentVariables = *m_variables;
     return reply.second[0];
-}
-
-
-std::vector<FloatVariableInfo> PythonProvider::floatVariableInfos() const {
-    std::vector<FloatVariableInfo> result;
-    for (const auto& var : m_floatVariables) {
-        result.push_back(var.info());
-    }
-    return result;
-}
-
-std::vector<EnumVariableInfo> PythonProvider::enumVariableInfos() const {
-    std::vector<EnumVariableInfo> result;
-    for (const auto& var : m_enumVariables) {
-        result.push_back(var.info());
-    }
-    return result;
-}
-
-bool PythonProvider::hasFloatVariable(const std::string& variable) const {
-    auto it = std::find_if(begin(m_floatVariables), end(m_floatVariables),
-                           [&variable](const InputVariableFloat& var) { return var.info().name == variable; });
-    return it != end(m_floatVariables);
-}
-
-bool PythonProvider::hasEnumVariable(const std::string& variable) const {
-    auto it = std::find_if(begin(m_enumVariables), end(m_enumVariables),
-                           [&variable](const InputVariableEnum& var) { return var.info().name == variable; });
-    return it != end(m_enumVariables);
-}
-
-void PythonProvider::setVariable(const std::string& variable, float value) {
-    auto it = std::find_if(begin(m_floatVariables), end(m_floatVariables),
-                           [&variable](const InputVariableFloat& var) { return var.info().name == variable; });
-    assert(it != end(m_floatVariables));
-    it->setValue(value);
-    m_dirty = true;
-}
-
-void PythonProvider::setVariable(const std::string& variable, const std::string& value) {
-    auto it = std::find_if(begin(m_enumVariables), end(m_enumVariables),
-                           [&variable](const InputVariableEnum& var) { return var.info().name == variable; });
-    assert(it != end(m_enumVariables));
-    it->setValue(value);
-    m_dirty = true;
 }
 
 std::string PythonProvider::fileName() const {
     return m_fileName;
+}
+
+bool PythonProvider::isFetchRequired() const {
+    if (m_currentVariables.isNull()) {
+        return true;
+    }
+    const auto& current = m_currentVariables.get();
+    assert(current.floatVariables.size() == m_variables->floatVariables.size() &&
+           current.enumVariables.size() == m_variables->enumVariables.size());
+    return !std::equal(begin(current.floatVariables), end(current.floatVariables), begin(m_variables->floatVariables),
+                       [](const FloatVariable& lhs, const FloatVariable& rhs) { return lhs.value == rhs.value; }) ||
+           !std::equal(begin(current.enumVariables), end(current.enumVariables), begin(m_variables->enumVariables),
+                       [](const EnumVariable& lhs, const EnumVariable& rhs) { return lhs.value == rhs.value; });
 }

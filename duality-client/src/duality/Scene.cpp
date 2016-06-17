@@ -4,6 +4,8 @@
 #include "src/duality/SceneParser.h"
 #include "src/duality/View.h"
 
+#include "mocca/base/ContainerTools.h"
+
 using namespace IVDA;
 
 Scene::Scene(SceneMetadata metadata)
@@ -35,29 +37,36 @@ void Scene::updateDatasets() {
     }
 }
 
-VariableInfoMap Scene::variableInfoMap(View view) {
-    VariableInfoMap result;
+VariableMap Scene::variableMap(View view) {
+    VariableMap result;
     for (auto& node : m_nodes) {
         if (node->isVisibleInView(view)) {
-            result[node->name()].floatInfos = node->floatVariableInfos();
-            result[node->name()].enumInfos = node->enumVariableInfos();
+            auto name = node->name();
+            for (const auto& var : m_variables[name]->floatVariables) {
+                result[name].floatVariables.push_back(var);
+            }
+            for (const auto& var : m_variables[name]->enumVariables) {
+                result[name].enumVariables.push_back(var);
+            }
         }
     }
     return result;
 }
 
 void Scene::setVariable(const std::string& objectName, const std::string& variableName, float value) {
-    auto it = std::find_if(begin(m_nodes), end(m_nodes),
-                           [&objectName](const std::unique_ptr<SceneNode>& node) { return node->name() == objectName; });
+    assert(m_variables.count(objectName) != 0);
+    auto vars = m_variables[objectName]->floatVariables;
+    auto it = mocca::findMemberEqual(begin(vars), end(vars), &FloatVariable::name, variableName);
     assert(it != end(m_nodes));
-    (*it)->setVariable(variableName, value);
+    it->value = value;
 }
 
 void Scene::setVariable(const std::string& objectName, const std::string& variableName, const std::string& value) {
-    auto it = std::find_if(begin(m_nodes), end(m_nodes),
-                           [&objectName](const std::unique_ptr<SceneNode>& node) { return node->name() == objectName; });
+    assert(m_variables.count(objectName) != 0);
+    auto vars = m_variables[objectName]->enumVariables;
+    auto it = mocca::findMemberEqual(begin(vars), end(vars), &EnumVariable::name, variableName);
     assert(it != end(m_nodes));
-    (*it)->setVariable(variableName, value);
+    it->value = value;
 }
 
 BoundingBox duality::calculateSceneBoundingBox(const Scene& scene, View view) {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "duality/VariableInfo.h"
+#include "duality/InputVariable.h"
 #include "duality/SceneController2D.h"
 
 #include "src/duality/MVP2D.h"
@@ -32,7 +32,7 @@ public:
     std::pair<float, float> minMaxForCurrentAxis() const;
     std::string labelForCurrentAxis(SceneController2D::AxisLabelMode mode) const;
     
-    VariableInfoMap variableInfoMap() const;
+    VariableMap variableMap() const;
     void setVariable(const std::string& objectName, const std::string& variableName, float value);
     void setVariable(const std::string& objectName, const std::string& variableName, const std::string& value);
 

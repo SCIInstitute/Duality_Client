@@ -11,7 +11,7 @@ SET(DUALITY_HEADER_PUBLIC
 	include/duality/SceneLoader.h
 	include/duality/SceneMetadata.h
 	include/duality/ScreenInfo.h
-	include/duality/VariableInfo.h
+	include/duality/InputVariable.h
 
 	include/IVDA/GLMatrix.h
 	include/IVDA/StdDefines.h
@@ -29,7 +29,6 @@ SET(DUALITY_HEADER_PRIVATE
 	src/duality/VolumeRenderer3D.h
 	src/duality/GeometryUtil.h
 	src/duality/GeometryUtil.h
-	src/duality/InputVariable.h
 	src/duality/MVP2D.h
 	src/duality/MVP3D.h
 	src/duality/PythonProvider.h
@@ -109,7 +108,6 @@ SET (DUALITY_SOURCE
 	src/duality/RenderParameters2D.cpp
 	src/duality/RenderParameters3D.cpp
 	src/duality/PythonProvider.cpp
-	src/duality/InputVariable.cpp
 	src/duality/MVP2D.cpp
 	src/duality/MVP3D.cpp
 	src/duality/GLTexture2D.cpp

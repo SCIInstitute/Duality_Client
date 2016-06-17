@@ -1,10 +1,10 @@
 #pragma once
 
-#include "duality/VariableInfo.h"
-
 #include "src/duality/MVP3D.h"
 #include "src/duality/RenderParameters3D.h"
 #include "src/IVDA/GLFrameBufferObject.h"
+
+#include "duality/InputVariable.h"
 
 #include <memory>
 
@@ -24,7 +24,7 @@ public:
     void addRotation(const IVDA::Mat4f& rotation);
     void setZoom(const float zoom);
 
-    VariableInfoMap variableInfoMap() const;
+    VariableMap variableMap() const;
     void setVariable(const std::string& objectName, const std::string& variableName, float value);
     void setVariable(const std::string& objectName, const std::string& variableName, const std::string& value);
 

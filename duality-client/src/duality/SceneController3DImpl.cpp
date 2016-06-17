@@ -34,8 +34,8 @@ void SceneController3DImpl::setZoom(const float zoom) {
     m_renderDispatcher->addZoom(zoom);
 }
 
-VariableInfoMap SceneController3DImpl::variableInfoMap() const {
-    return m_scene.variableInfoMap(View::View3D);
+VariableMap SceneController3DImpl::variableMap() const {
+    return m_scene.variableMap(View::View3D);
 }
 
 void SceneController3DImpl::setVariable(const std::string& objectName, const std::string& variableName, float value) {

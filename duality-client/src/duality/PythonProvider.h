@@ -1,35 +1,31 @@
 #pragma once
 
-#include "duality/VariableInfo.h"
+#include "duality/InputVariable.h"
 
 #include "src/duality/Communication.h"
 #include "src/duality/DataProvider.h"
-#include "src/duality/InputVariable.h"
+
+#include "mocca/base/Nullable.h"
 
 #include <memory>
 #include <vector>
 
 class PythonProvider : public DataProvider {
 public:
-    PythonProvider(const std::string& sceneName, const std::string& fileName, std::vector<FloatVariableInfo> floatInfos,
-                   std::vector<EnumVariableInfo> enumUnfos, std::shared_ptr<LazyRpcClient> rpc);
+    PythonProvider(const std::string& sceneName, const std::string& fileName, std::shared_ptr<Variables> variables, std::shared_ptr<LazyRpcClient> rpc);
 
     // DataProvider interface
     std::shared_ptr<std::vector<uint8_t>> fetch() override;
-    std::vector<FloatVariableInfo> floatVariableInfos() const override;
-    std::vector<EnumVariableInfo> enumVariableInfos() const override;
-    bool hasFloatVariable(const std::string& variable) const override;
-    bool hasEnumVariable(const std::string& variable) const override;
-    void setVariable(const std::string& variable, float value) override;
-    void setVariable(const std::string& variable, const std::string& value) override;
 
     std::string fileName() const;
 
 private:
+    bool isFetchRequired() const;
+
+private:
     std::string m_sceneName;
     std::string m_fileName;
-    std::vector<InputVariableFloat> m_floatVariables;
-    std::vector<InputVariableEnum> m_enumVariables;
+    std::shared_ptr<Variables> m_variables;
+    mocca::Nullable<Variables> m_currentVariables;
     std::shared_ptr<LazyRpcClient> m_rpc;
-    bool m_dirty;
 };

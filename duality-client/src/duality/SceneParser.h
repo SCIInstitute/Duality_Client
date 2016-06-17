@@ -2,7 +2,7 @@
 
 #include "IVDA/Vectors.h"
 #include "duality/SceneMetadata.h"
-#include "duality/VariableInfo.h"
+#include "duality/InputVariable.h"
 
 #include "src/duality/Communication.h"
 #include "src/duality/Scene.h"
@@ -40,12 +40,14 @@ private:
     IVDA::Mat4f parseMatrix(const JsonCpp::Value& node);
     std::vector<IVDA::Mat4f> parseMatrices(const JsonCpp::Value& node);
 
-    void parseParams(const JsonCpp::Value& node, std::vector<FloatVariableInfo>& floatInfos, std::vector<EnumVariableInfo>& enumInfos);
-    FloatVariableInfo parseFloatVariable(const JsonCpp::Value& node, int index);
-    EnumVariableInfo parseEnumVariable(const JsonCpp::Value& node, int index);
+    void parseParams(const JsonCpp::Value& node);
+    void parseFloatVariable(const JsonCpp::Value& node);
+    void parseEnumVariable(const JsonCpp::Value& node);
 
 private:
     JsonCpp::Value m_root;
     std::shared_ptr<LazyRpcClient> m_rpc;
-    std::unique_ptr<Scene> m_scene;
+    std::string m_sceneName;
+    std::string m_nodeName;
+    std::map<std::string, std::shared_ptr<Variables>> m_variables;
 };

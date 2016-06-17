@@ -3,7 +3,7 @@
 #include "src/duality/NodeDispatcher.h"
 #include "src/duality/View.h"
 
-#include "duality/VariableInfo.h"
+#include "duality/InputVariable.h"
 
 #include <vector>
 
@@ -16,10 +16,6 @@ public:
 
     virtual void accept(NodeDispatcher& dispatcher) = 0;
     virtual void updateDataset() = 0;
-    virtual std::vector<FloatVariableInfo> floatVariableInfos() const = 0;
-    virtual std::vector<EnumVariableInfo> enumVariableInfos() const = 0;
-    virtual void setVariable(const std::string& variableName, float value) = 0;
-    virtual void setVariable(const std::string& variableName, const std::string& value) = 0;
 
 private:
     std::string m_name;

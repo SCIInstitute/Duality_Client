@@ -12,22 +12,6 @@ void GeometryNode::updateDataset() {
     m_dataset->fetch();
 }
 
-std::vector<FloatVariableInfo> GeometryNode::floatVariableInfos() const {
-    return m_dataset->floatVariableInfos();
-}
-
-std::vector<EnumVariableInfo> GeometryNode::enumVariableInfos() const {
-    return m_dataset->enumVariableInfos();
-}
-
-void GeometryNode::setVariable(const std::string& variableName, float value) {
-    m_dataset->setVariable(variableName, value);
-}
-
-void GeometryNode::setVariable(const std::string& variableName, const std::string& value) {
-    m_dataset->setVariable(variableName, value);
-}
-
 const GeometryDataset& GeometryNode::dataset() const {
     return *m_dataset;
 }

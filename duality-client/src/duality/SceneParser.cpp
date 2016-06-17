@@ -125,37 +125,34 @@ std::vector<IVDA::Mat4f> SceneParser::parseMatrices(const JsonCpp::Value& node) 
 }
 
 std::unique_ptr<DataProvider> SceneParser::parsePython(const JsonCpp::Value& node) {
-    std::vector<FloatVariableInfo> floatInfos;
-    std::vector<EnumVariableInfo> enumInfos;
     std::string fileName = node["filename"].asString();
-    parseParams(node["variables"], floatInfos, enumInfos);
-    return std::make_unique<PythonProvider>(m_scene->metadata().name(), fileName, std::move(floatInfos), std::move(enumInfos), m_rpc);
+    parseParams(node["variables"]);
+    return std::make_unique<PythonProvider>(m_sceneName, fileName, m_variables[m_sceneName], m_rpc);
 }
 
-void SceneParser::parseParams(const JsonCpp::Value& node, std::vector<FloatVariableInfo>& floatInfos,
-                              std::vector<EnumVariableInfo>& enumInfos) {
-    int index = 0;
-    for (auto it = node.begin(); it != node.end(); ++it, ++index) {
+void SceneParser::parseParams(const JsonCpp::Value& node) {
+    for (auto it = node.begin(); it != node.end(); ++it,) {
         auto paramNode = *it;
         if (paramNode["type"] == "float") {
-            floatInfos.push_back(parseFloatVariable(paramNode, index));
+            parseFloatVariable(paramNode);
         } else if (paramNode["type"] == "enum") {
-            enumInfos.push_back(parseEnumVariable(paramNode, index));
+            parseEnumVariable(paramNode);
         }
     }
 }
 
-FloatVariableInfo SceneParser::parseFloatVariable(const JsonCpp::Value& node, int index) {
+void SceneParser::parseFloatVariable(const JsonCpp::Value& node) {
     std::string name = node["name"].asString();
     float lowerBound = node["lowerBound"].asFloat();
     float upperBound = node["upperBound"].asFloat();
     float stepSize = node["stepSize"].asFloat();
     float defaultValue = node["defaultValue"].asFloat();
-    FloatVariableInfo info{std::move(name), index, lowerBound, upperBound, stepSize, defaultValue};
-    return info;
+    FloatVariableInfo info{lowerBound, upperBound, stepSize};
+    FloatVariable var{ name, info, defaultValue };
+    m_variables[m_nodeName]->floatVariables.push_back(var);
 }
 
-EnumVariableInfo SceneParser::parseEnumVariable(const JsonCpp::Value& node, int index) {
+void SceneParser::parseEnumVariable(const JsonCpp::Value& node) {
     std::string name = node["name"].asString();
     auto valuesNode = node["values"];
     std::vector<std::string> values;
@@ -163,6 +160,7 @@ EnumVariableInfo SceneParser::parseEnumVariable(const JsonCpp::Value& node, int 
         values.push_back(valIt->asString());
     }
     std::string defaultValue = node["defaultValue"].asString();
-    EnumVariableInfo info{std::move(name), index, std::move(values), std::move(defaultValue)};
-    return info;
+    EnumVariableInfo info{std::move(values)};
+    EnumVariable var{ name, info, defaultValue };
+    m_variables[m_nodeName]->enumVariables.push_back(var);
 }
