@@ -4,6 +4,8 @@
 
 #include "jsoncpp/json.h"
 
+#include <memory>
+
 class DataCache {
 public:
     DataCache(const mocca::fs::Path& cacheDir);
