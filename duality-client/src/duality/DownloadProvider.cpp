@@ -7,13 +7,9 @@
 DownloadProvider::DownloadProvider(std::string sceneName, std::string fileName, std::shared_ptr<LazyRpcClient> rpc)
     : m_sceneName(sceneName)
     , m_fileName(fileName)
-    , m_rpc(rpc)
-    , m_dirty(true) {}
+    , m_rpc(rpc) {}
 
 std::shared_ptr<std::vector<uint8_t>> DownloadProvider::fetch() {
-    if (!m_dirty) {
-        return nullptr;
-    }
     JsonCpp::Value params;
     params["scene"] = m_sceneName;
     params["filename"] = m_fileName;
@@ -22,8 +18,15 @@ std::shared_ptr<std::vector<uint8_t>> DownloadProvider::fetch() {
     if (reply.second.empty()) {
         throw Error("Could not download file '" + m_fileName + "'", __FILE__, __LINE__);
     }
-    m_dirty = false;
     return reply.second[0];
+}
+
+JsonCpp::Value DownloadProvider::cacheID() const {
+    JsonCpp::Value id;
+    id["type"] = "download";
+    id["scene"] = m_sceneName;
+    id["file"] = m_fileName;
+    return id;
 }
 
 std::string DownloadProvider::fileName() const {

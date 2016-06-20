@@ -18,6 +18,7 @@ SET(DUALITY_HEADER_PUBLIC
 	include/IVDA/Vectors.h)
 	
 SET(DUALITY_HEADER_PRIVATE
+	src/duality/CacheProvider.h
 	src/duality/DownloadProvider.h
 	src/duality/G3D.h
 	src/duality/I3M.h
@@ -79,6 +80,7 @@ SET (DUALITY_SOURCE
 	src/IVDA/GLShader.cpp
 	src/IVDA/GLFrameBufferObject.cpp
 
+	src/duality/CacheProvider.cpp
 	src/duality/CoordinateSystem.cpp
 	src/duality/GeometryRenderer2D.cpp
 	src/duality/GeometryRenderer3D.cpp

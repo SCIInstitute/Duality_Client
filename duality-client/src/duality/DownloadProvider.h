@@ -13,6 +13,7 @@ public:
 
     // DataProvider interface
     std::shared_ptr<std::vector<uint8_t>> fetch() override;
+    JsonCpp::Value cacheID() const override;
 
     std::string fileName() const;
 
@@ -20,5 +21,4 @@ private:
     std::string m_sceneName;
     std::string m_fileName;
     std::shared_ptr<LazyRpcClient> m_rpc;
-    bool m_dirty;
 };
