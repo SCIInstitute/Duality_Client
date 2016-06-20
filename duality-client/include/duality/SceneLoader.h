@@ -5,6 +5,7 @@
 #include "duality/SceneMetadata.h"
 #include "duality/ScreenInfo.h"
 
+#include "mocca/fs/Path.h"
 #include "mocca/net/Endpoint.h"
 
 #include <memory>
@@ -14,9 +15,9 @@ class SceneLoaderImpl;
 
 class SceneLoader {
 public:
-    SceneLoader(const mocca::net::Endpoint& endpoint);
+    SceneLoader(const mocca::net::Endpoint& endpoint, const mocca::fs::Path& cacheDir);
     ~SceneLoader();
-    
+
     void updateEndpoint(const mocca::net::Endpoint& endpoint);
 
     std::vector<SceneMetadata> listMetadata() const;

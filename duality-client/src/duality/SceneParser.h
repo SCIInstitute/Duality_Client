@@ -9,16 +9,19 @@
 #include "src/duality/TransferFunction.h"
 #include "src/duality/View.h"
 
+#include "mocca/fs/Path.h"
+
 #include "jsoncpp/json.h"
 
 class GeometryDataset;
 class VolumeDataset;
 class SceneNode;
 class DataProvider;
+class DataCache;
 
 class SceneParser {
 public:
-    SceneParser(const JsonCpp::Value& root, std::shared_ptr<LazyRpcClient> rpc);
+    SceneParser(const JsonCpp::Value& root, std::shared_ptr<LazyRpcClient> rpc, mocca::fs::Path& cacheDir);
 
     std::unique_ptr<Scene> parseScene();
     static SceneMetadata parseMetadata(const JsonCpp::Value& root);
@@ -47,6 +50,7 @@ private:
 private:
     JsonCpp::Value m_root;
     std::shared_ptr<LazyRpcClient> m_rpc;
+    std::shared_ptr<DataCache> m_dataCache;
     std::string m_sceneName;
     std::string m_nodeName;
     int m_varIndex;

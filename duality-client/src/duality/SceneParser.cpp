@@ -1,6 +1,7 @@
 #include "src/duality/SceneParser.h"
 
 #include "duality/Error.h"
+#include "src/duality/DataCache.h"
 #include "src/duality/DownloadProvider.h"
 #include "src/duality/GeometryDataset.h"
 #include "src/duality/GeometryNode.h"
@@ -12,9 +13,10 @@
 
 using namespace IVDA;
 
-SceneParser::SceneParser(const JsonCpp::Value& root, std::shared_ptr<LazyRpcClient> rpc)
+SceneParser::SceneParser(const JsonCpp::Value& root, std::shared_ptr<LazyRpcClient> rpc, mocca::fs::Path& cacheDir)
     : m_root(root)
     , m_rpc(rpc)
+    , m_dataCache(std::make_shared<DataCache>(cacheDir))
     , m_varIndex(0) {}
 
 SceneMetadata SceneParser::parseMetadata(const JsonCpp::Value& root) {
@@ -109,7 +111,7 @@ Visibility SceneParser::parseVisibility(const JsonCpp::Value& node) {
 }
 
 std::unique_ptr<DataProvider> SceneParser::parseDownload(const JsonCpp::Value& node) {
-    return std::make_unique<DownloadProvider>(m_sceneName, node["filename"].asString(), m_rpc);
+    return std::make_unique<DownloadProvider>(m_sceneName, node["filename"].asString(), m_rpc, m_dataCache);
 }
 
 Mat4f SceneParser::parseMatrix(const JsonCpp::Value& node) {
@@ -132,7 +134,7 @@ std::vector<IVDA::Mat4f> SceneParser::parseMatrices(const JsonCpp::Value& node) 
 std::unique_ptr<DataProvider> SceneParser::parsePython(const JsonCpp::Value& node) {
     std::string fileName = node["filename"].asString();
     parseParams(node["variables"]);
-    return std::make_unique<PythonProvider>(m_sceneName, fileName, m_variables[m_nodeName], m_rpc);
+    return std::make_unique<PythonProvider>(m_sceneName, fileName, m_variables[m_nodeName], m_rpc, m_dataCache);
 }
 
 void SceneParser::parseParams(const JsonCpp::Value& node) {

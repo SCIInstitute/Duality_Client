@@ -19,10 +19,10 @@ using namespace IVDA;
 
 class SceneLoaderImpl {
 public:
-    SceneLoaderImpl(const mocca::net::Endpoint& endpoint);
+    SceneLoaderImpl(const mocca::net::Endpoint& endpoint, const mocca::fs::Path& cacheDir);
 
     void updateEndpoint(const mocca::net::Endpoint& endpoint);
-    
+
     std::vector<SceneMetadata> listMetadata() const;
     void loadScene(const std::string& name);
     bool isSceneLoaded() const;
@@ -37,16 +37,18 @@ private:
 private:
     std::shared_ptr<LazyRpcClient> m_rpc;
     std::shared_ptr<GLFrameBufferObject> m_resultFbo;
+    mocca::fs::Path m_cacheDir;
     std::unique_ptr<Scene> m_scene;
     std::shared_ptr<SceneController2D> m_sceneController2D;
     std::shared_ptr<SceneController3D> m_sceneController3D;
 };
 
-SceneLoaderImpl::SceneLoaderImpl(const mocca::net::Endpoint& endpoint)
+SceneLoaderImpl::SceneLoaderImpl(const mocca::net::Endpoint& endpoint, const mocca::fs::Path& cacheDir)
     : m_rpc(std::make_shared<LazyRpcClient>(endpoint))
-    , m_resultFbo(std::make_shared<GLFrameBufferObject>()) {}
+    , m_resultFbo(std::make_shared<GLFrameBufferObject>())
+    , m_cacheDir(cacheDir) {}
 
-void SceneLoaderImpl::updateEndpoint(const mocca::net::Endpoint &endpoint) {
+void SceneLoaderImpl::updateEndpoint(const mocca::net::Endpoint& endpoint) {
     m_rpc = std::make_shared<LazyRpcClient>(endpoint);
 }
 
@@ -64,7 +66,7 @@ void SceneLoaderImpl::loadScene(const std::string& name) {
     m_rpc->send("listScenes", JsonCpp::Value());
     auto root = m_rpc->receive().first;
     for (auto it = root.begin(); it != root.end(); ++it) {
-        SceneParser parser(*it, m_rpc);
+        SceneParser parser(*it, m_rpc, m_cacheDir);
         auto metadata = SceneParser::parseMetadata(*it);
         if (metadata.name() == name) {
             m_scene = parser.parseScene();
@@ -95,21 +97,19 @@ std::weak_ptr<SceneController3D> SceneLoaderImpl::sceneController3D() {
 }
 
 void SceneLoaderImpl::createSceneController2D() {
-    m_scene->updateDatasets();
     RenderParameters2D initialParameters(Vec2f(0.0f, 0.0f), 0.0f, 1.0f, CoordinateAxis::X_Axis);
     auto impl = std::make_unique<SceneController2DImpl>(*m_scene, initialParameters, m_resultFbo);
     m_sceneController2D = std::make_shared<SceneController2D>(std::move(impl));
 }
 
 void SceneLoaderImpl::createSceneController3D() {
-    m_scene->updateDatasets();
     RenderParameters3D initialParameters(Vec3f(0.0f, 0.0f, -3.0f), Mat4f());
     auto impl = std::make_unique<SceneController3DImpl>(*m_scene, initialParameters, m_resultFbo);
     m_sceneController3D = std::make_shared<SceneController3D>(std::move(impl));
 }
 
-SceneLoader::SceneLoader(const mocca::net::Endpoint& endpoint)
-    : m_impl(std::make_unique<SceneLoaderImpl>(endpoint)) {}
+SceneLoader::SceneLoader(const mocca::net::Endpoint& endpoint, const mocca::fs::Path& cacheDir)
+    : m_impl(std::make_unique<SceneLoaderImpl>(endpoint, cacheDir)) {}
 
 SceneLoader::~SceneLoader() = default;
 
