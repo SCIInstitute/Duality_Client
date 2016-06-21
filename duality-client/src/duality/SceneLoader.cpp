@@ -1,6 +1,7 @@
 #include "duality/SceneLoader.h"
 
 #include "src/duality/Communication.h"
+#include "src/duality/DataCache.h"
 #include "src/duality/RenderDispatcher2D.h"
 #include "src/duality/RenderDispatcher3D.h"
 #include "src/duality/SceneController2DImpl.h"
@@ -22,7 +23,8 @@ public:
     SceneLoaderImpl(const mocca::net::Endpoint& endpoint, const mocca::fs::Path& cacheDir);
 
     void updateEndpoint(const mocca::net::Endpoint& endpoint);
-
+    void clearCache();
+    
     std::vector<SceneMetadata> listMetadata() const;
     void loadScene(const std::string& name);
     bool isSceneLoaded() const;
@@ -37,7 +39,7 @@ private:
 private:
     std::shared_ptr<LazyRpcClient> m_rpc;
     std::shared_ptr<GLFrameBufferObject> m_resultFbo;
-    mocca::fs::Path m_cacheDir;
+    std::shared_ptr<DataCache> m_dataCache;
     std::unique_ptr<Scene> m_scene;
     std::shared_ptr<SceneController2D> m_sceneController2D;
     std::shared_ptr<SceneController3D> m_sceneController3D;
@@ -46,10 +48,14 @@ private:
 SceneLoaderImpl::SceneLoaderImpl(const mocca::net::Endpoint& endpoint, const mocca::fs::Path& cacheDir)
     : m_rpc(std::make_shared<LazyRpcClient>(endpoint))
     , m_resultFbo(std::make_shared<GLFrameBufferObject>())
-    , m_cacheDir(cacheDir) {}
+    , m_dataCache(std::make_shared<DataCache>(cacheDir)) {}
 
 void SceneLoaderImpl::updateEndpoint(const mocca::net::Endpoint& endpoint) {
     m_rpc = std::make_shared<LazyRpcClient>(endpoint);
+}
+
+void SceneLoaderImpl::clearCache() {
+    m_dataCache->clear();
 }
 
 std::vector<SceneMetadata> SceneLoaderImpl::listMetadata() const {
@@ -66,7 +72,7 @@ void SceneLoaderImpl::loadScene(const std::string& name) {
     m_rpc->send("listScenes", JsonCpp::Value());
     auto root = m_rpc->receive().first;
     for (auto it = root.begin(); it != root.end(); ++it) {
-        SceneParser parser(*it, m_rpc, m_cacheDir);
+        SceneParser parser(*it, m_rpc, m_dataCache);
         auto metadata = SceneParser::parseMetadata(*it);
         if (metadata.name() == name) {
             m_scene = parser.parseScene();
@@ -115,6 +121,10 @@ SceneLoader::~SceneLoader() = default;
 
 void SceneLoader::updateEndpoint(const mocca::net::Endpoint& endpoint) {
     m_impl->updateEndpoint(endpoint);
+}
+
+void SceneLoader::clearCache() {
+    m_impl->clearCache();
 }
 
 std::vector<SceneMetadata> SceneLoader::listMetadata() const {

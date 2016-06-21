@@ -13,10 +13,10 @@
 
 using namespace IVDA;
 
-SceneParser::SceneParser(const JsonCpp::Value& root, std::shared_ptr<LazyRpcClient> rpc, mocca::fs::Path& cacheDir)
+SceneParser::SceneParser(const JsonCpp::Value& root, std::shared_ptr<LazyRpcClient> rpc, std::shared_ptr<DataCache> dataCache)
     : m_root(root)
     , m_rpc(rpc)
-    , m_dataCache(std::make_shared<DataCache>(cacheDir))
+    , m_dataCache(dataCache)
     , m_varIndex(0) {}
 
 SceneMetadata SceneParser::parseMetadata(const JsonCpp::Value& root) {

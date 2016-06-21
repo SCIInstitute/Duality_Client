@@ -12,6 +12,7 @@ public:
 
     std::shared_ptr<std::vector<uint8_t>> fetch(const JsonCpp::Value& cacheID);
     void write(const JsonCpp::Value& cacheID, const std::vector<uint8_t>& data);
+    void clear();
     
 private:
     mocca::fs::Path m_cacheDir;

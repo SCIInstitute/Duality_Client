@@ -21,7 +21,7 @@ class DataCache;
 
 class SceneParser {
 public:
-    SceneParser(const JsonCpp::Value& root, std::shared_ptr<LazyRpcClient> rpc, mocca::fs::Path& cacheDir);
+    SceneParser(const JsonCpp::Value& root, std::shared_ptr<LazyRpcClient> rpc, std::shared_ptr<DataCache> dataCache);
 
     std::unique_ptr<Scene> parseScene();
     static SceneMetadata parseMetadata(const JsonCpp::Value& root);

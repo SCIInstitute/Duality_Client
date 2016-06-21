@@ -53,3 +53,7 @@ void DataCache::write(const JsonCpp::Value& cacheID, const std::vector<uint8_t>&
     auto dataPath = newDir + "data.bin";
     mocca::fs::writeBinaryFile(dataPath, data);
 }
+
+void DataCache::clear() {
+    mocca::fs::removeDirectoryRecursive(m_cacheDir);
+}
