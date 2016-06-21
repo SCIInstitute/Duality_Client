@@ -2,6 +2,7 @@
 
 #include "duality/Error.h"
 
+#include "mocca/base/Compression.h"
 #include "mocca/base/StringTools.h"
 #include "mocca/fs/Filesystem.h"
 #include "mocca/log/LogManager.h"
@@ -11,7 +12,7 @@ DataCache::DataCache(const mocca::fs::Path& cacheDir)
 
 std::shared_ptr<std::vector<uint8_t>> DataCache::fetch(const JsonCpp::Value& cacheID) {
     auto sceneCacheDir = m_cacheDir + cacheID["scene"].asString();
-    if (!mocca::fs::exists(sceneCacheDir)){
+    if (!mocca::fs::exists(sceneCacheDir)) {
         return nullptr;
     }
     auto dirs = mocca::fs::directoryContents(sceneCacheDir);
@@ -27,7 +28,8 @@ std::shared_ptr<std::vector<uint8_t>> DataCache::fetch(const JsonCpp::Value& cac
         if (cacheID.toStyledString() == otherCacheID.toStyledString()) {
             LINFO("Cached object found");
             auto dataFile = dir + "data.bin";
-            return mocca::fs::readBinaryFile(dataFile);
+            auto uncompressedData = mocca::uncompressData(*mocca::fs::readBinaryFile(dataFile));
+            return std::shared_ptr<std::vector<uint8_t>>(uncompressedData.release());
         }
     }
     return nullptr;
@@ -51,7 +53,7 @@ void DataCache::write(const JsonCpp::Value& cacheID, const std::vector<uint8_t>&
 
     // write binary file
     auto dataPath = newDir + "data.bin";
-    mocca::fs::writeBinaryFile(dataPath, data);
+    mocca::fs::writeBinaryFile(dataPath, *mocca::compressData(data));
 }
 
 void DataCache::clear() {
