@@ -1,14 +1,17 @@
 #pragma once
 
 #include "IVDA/Vectors.h"
-#include "duality/SceneMetadata.h"
 #include "duality/InputVariable.h"
+#include "duality/SceneMetadata.h"
 
 #include "src/duality/Communication.h"
+#include "src/duality/RenderParameters2D.h"
+#include "src/duality/RenderParameters3D.h"
 #include "src/duality/Scene.h"
 #include "src/duality/TransferFunction.h"
 #include "src/duality/View.h"
 
+#include "mocca/base/Nullable.h"
 #include "mocca/fs/Path.h"
 
 #include "jsoncpp/json.h"
@@ -24,7 +27,9 @@ public:
     SceneParser(const JsonCpp::Value& root, std::shared_ptr<LazyRpcClient> rpc, std::shared_ptr<DataCache> dataCache);
 
     std::unique_ptr<Scene> parseScene();
-    static SceneMetadata parseMetadata(const JsonCpp::Value& root);
+    SceneMetadata parseMetadata();
+    mocca::Nullable<RenderParameters3D> initialParameters3D();
+    mocca::Nullable<RenderParameters2D> initialParameters2D();
 
 private:
     Visibility parseVisibility(const JsonCpp::Value& node);
@@ -40,6 +45,8 @@ private:
     std::unique_ptr<DataProvider> parseDownload(const JsonCpp::Value& node);
     std::unique_ptr<DataProvider> parsePython(const JsonCpp::Value& node);
 
+    IVDA::Vec3f parseVector3(const JsonCpp::Value& node);
+    IVDA::Vec2f parseVector2(const JsonCpp::Value& node);
     IVDA::Mat4f parseMatrix(const JsonCpp::Value& node);
     std::vector<IVDA::Mat4f> parseTransforms(const JsonCpp::Value& node);
 

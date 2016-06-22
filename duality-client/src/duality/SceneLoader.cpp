@@ -24,7 +24,7 @@ public:
 
     void updateEndpoint(const mocca::net::Endpoint& endpoint);
     void clearCache();
-    
+
     std::vector<SceneMetadata> listMetadata() const;
     void loadScene(const std::string& name);
     bool isSceneLoaded() const;
@@ -41,6 +41,8 @@ private:
     std::shared_ptr<GLFrameBufferObject> m_resultFbo;
     std::shared_ptr<DataCache> m_dataCache;
     std::unique_ptr<Scene> m_scene;
+    RenderParameters2D m_initialParameters2D;
+    RenderParameters3D m_initialParameters3D;
     std::shared_ptr<SceneController2D> m_sceneController2D;
     std::shared_ptr<SceneController3D> m_sceneController3D;
 };
@@ -63,7 +65,8 @@ std::vector<SceneMetadata> SceneLoaderImpl::listMetadata() const {
     auto root = m_rpc->receive().first;
     std::vector<SceneMetadata> result;
     for (auto it = root.begin(); it != root.end(); ++it) {
-        result.push_back(SceneParser::parseMetadata(*it));
+        SceneParser parser(*it);
+        result.push_back(parser.parseMetadata());
     }
     return result;
 }
@@ -73,9 +76,13 @@ void SceneLoaderImpl::loadScene(const std::string& name) {
     auto root = m_rpc->receive().first;
     for (auto it = root.begin(); it != root.end(); ++it) {
         SceneParser parser(*it, m_rpc, m_dataCache);
-        auto metadata = SceneParser::parseMetadata(*it);
+        auto metadata = parser.parseMetadata();
         if (metadata.name() == name) {
             m_scene = parser.parseScene();
+            RenderParameters3D default3D(Vec3f(0.0f, 0.0f, -3.0f), Mat4f());
+            m_initialParameters3D = parser.initialParameters3D().getOr(default3D);
+            RenderParameters2D default2D(Vec2f(0.0f, 0.0f), 0.0f, 1.0f, CoordinateAxis::X_Axis);
+            m_initialParameters2D = parser.initialParameters2D().getOr(default2D);
             m_sceneController2D = nullptr;
             m_sceneController3D = nullptr;
             return;
@@ -103,14 +110,12 @@ std::weak_ptr<SceneController3D> SceneLoaderImpl::sceneController3D() {
 }
 
 void SceneLoaderImpl::createSceneController2D() {
-    RenderParameters2D initialParameters(Vec2f(0.0f, 0.0f), 0.0f, 1.0f, CoordinateAxis::X_Axis);
     auto impl = std::make_unique<SceneController2DImpl>(*m_scene, initialParameters, m_resultFbo);
     m_sceneController2D = std::make_shared<SceneController2D>(std::move(impl));
 }
 
 void SceneLoaderImpl::createSceneController3D() {
-    RenderParameters3D initialParameters(Vec3f(0.0f, 0.0f, -3.0f), Mat4f());
-    auto impl = std::make_unique<SceneController3DImpl>(*m_scene, initialParameters, m_resultFbo);
+    auto impl = std::make_unique<SceneController3DImpl>(*m_scene, m_initialParameters3D, m_resultFbo);
     m_sceneController3D = std::make_shared<SceneController3D>(std::move(impl));
 }
 

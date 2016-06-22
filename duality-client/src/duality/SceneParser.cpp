@@ -19,14 +19,36 @@ SceneParser::SceneParser(const JsonCpp::Value& root, std::shared_ptr<LazyRpcClie
     , m_dataCache(dataCache)
     , m_varIndex(0) {}
 
-SceneMetadata SceneParser::parseMetadata(const JsonCpp::Value& root) {
-    std::string name = root["metadata"]["name"].asString();
-    std::string description = root["metadata"]["description"].asString();
+SceneMetadata SceneParser::parseMetadata() {
+    std::string name = m_root["metadata"]["name"].asString();
+    std::string description = m_root["metadata"]["description"].asString();
     return SceneMetadata(std::move(name), std::move(description));
 }
 
+mocca::Nullable<RenderParameters3D> SceneParser::initialParameters3D() {
+    if (m_root.isMember("initialViews") && m_root["initialViews"].isMember("3d")) {
+        auto node = m_root["initialViews"]["3d"];
+        Vec3f translation = parseVector3(node["translation"]);
+        Mat4f rotation = parseMatrix(node["rotation"]);
+        return RenderParameters3D(translation, rotation);
+    }
+    return mocca::Nullable<RenderParameters3D>();
+}
+
+mocca::Nullable<RenderParameters2D> SceneParser::initialParameters2D() {
+    if (m_root.isMember("initialViews") && m_root["initialViews"].isMember("2d")) {
+        auto node = m_root["initialViews"]["2d"];
+        Vec2f translation = parseVector2(node["translation"]);
+        float rotation = node["rotation"].asFloat();
+        float zoom = node["zoom"].asFloat();
+        CoordinateAxis axis = coordinateAxisMapper().getBySecond(node["axis"].asString());
+        return RenderParameters2D(translation, rotation, zoom, axis);
+    }
+    return mocca::Nullable<RenderParameters2D>();
+}
+
 std::unique_ptr<Scene> SceneParser::parseScene() {
-    auto metadata = parseMetadata(m_root);
+    auto metadata = parseMetadata();
     m_sceneName = metadata.name();
 
     if (m_root.isMember("transforms")) {
@@ -122,6 +144,20 @@ std::unique_ptr<DataProvider> SceneParser::parseDownload(const JsonCpp::Value& n
     return std::make_unique<DownloadProvider>(m_sceneName, node["filename"].asString(), m_rpc, m_dataCache);
 }
 
+Vec3f SceneParser::parseVector3(const JsonCpp::Value& node) {
+    if (node.size() != 3) {
+        throw Error("Invalid 3D vector definition in JSON", __FILE__, __LINE__);
+    }
+    return Vec3f(node[0].asFloat(), node[1].asFloat(), node[2].asFloat());
+}
+
+IVDA::Vec2f SceneParser::parseVector2(const JsonCpp::Value& node) {
+    if (node.size() != 2) {
+        throw Error("Invalid 2D vector definition in JSON", __FILE__, __LINE__);
+    }
+    return Vec2f(node[0].asFloat(), node[1].asFloat());
+}
+
 Mat4f SceneParser::parseMatrix(const JsonCpp::Value& node) {
     if (node.size() != 16) {
         throw Error("Invalid matrix definition in JSON", __FILE__, __LINE__);
@@ -131,7 +167,7 @@ Mat4f SceneParser::parseMatrix(const JsonCpp::Value& node) {
                  node[12].asFloat(), node[13].asFloat(), node[14].asFloat(), node[15].asFloat());
 }
 
-std::vector<IVDA::Mat4f> SceneParser::parseTransforms(const JsonCpp::Value& node) {
+std::vector<Mat4f> SceneParser::parseTransforms(const JsonCpp::Value& node) {
     std::vector<Mat4f> result;
     for (auto it = node.begin(); it != node.end(); ++it) {
         if (it->isArray()) {

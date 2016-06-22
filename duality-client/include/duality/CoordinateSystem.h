@@ -2,10 +2,21 @@
 
 #include "IVDA/Vectors.h"
 
+#include "mocca/base/BidirectionalMap.h"
+
 #include <array>
 #include <ostream>
 
 enum CoordinateAxis { X_Axis = 0, Y_Axis = 1, Z_Axis = 2 };
+const mocca::BidirectionalMap<CoordinateAxis, std::string>& coordinateAxisMapper() {
+    static mocca::BidirectionalMap<CoordinateAxis, std::string> mapper;
+    if (mapper.empty()) {
+        mapper.insert(X_Axis, "x");
+        mapper.insert(Y_Axis, "y");
+        mapper.insert(Z_Axis, "z");
+    }
+    return mapper;
+}
 
 enum CoordinateSystemType { CST_Invalid = 0, CST_Technical = 1, CST_Anatomical = 2 };
 
