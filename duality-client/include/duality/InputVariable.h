@@ -1,5 +1,7 @@
 #pragma once
 
+#include "mocca/base/Nullable.h"
+
 #include <map>
 #include <string>
 #include <vector>
@@ -18,12 +20,14 @@ struct EnumVariableInfo {
 
 struct FloatVariable {
     std::string name;
+    mocca::Nullable<std::string> label;
     FloatVariableInfo info;
     float value;
 };
 
 struct EnumVariable {
     std::string name;
+    mocca::Nullable<std::string> label;
     EnumVariableInfo info;
     std::string value;
 };

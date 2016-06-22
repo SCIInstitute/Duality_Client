@@ -167,17 +167,25 @@ void SceneParser::parseParams(const JsonCpp::Value& node) {
 
 void SceneParser::parseFloatVariable(const JsonCpp::Value& node) {
     std::string name = node["name"].asString();
+    mocca::Nullable<std::string> label;
+    if (node.isMember("label")) {
+        label = node["label"].asString();
+    }
     float lowerBound = node["lowerBound"].asFloat();
     float upperBound = node["upperBound"].asFloat();
     float stepSize = node["stepSize"].asFloat();
     float defaultValue = node["defaultValue"].asFloat();
     FloatVariableInfo info{m_varIndex, lowerBound, upperBound, stepSize};
-    FloatVariable var{name, info, defaultValue};
+    FloatVariable var{name, label, info, defaultValue};
     m_variables[m_nodeName]->floatVariables.push_back(var);
 }
 
 void SceneParser::parseEnumVariable(const JsonCpp::Value& node) {
     std::string name = node["name"].asString();
+    mocca::Nullable<std::string> label;
+    if (node.isMember("label")) {
+        label = node["label"].asString();
+    }
     auto valuesNode = node["values"];
     std::vector<std::string> values;
     for (auto valIt = valuesNode.begin(); valIt != valuesNode.end(); ++valIt) {
@@ -185,6 +193,6 @@ void SceneParser::parseEnumVariable(const JsonCpp::Value& node) {
     }
     std::string defaultValue = node["defaultValue"].asString();
     EnumVariableInfo info{m_varIndex, std::move(values)};
-    EnumVariable var{name, info, defaultValue};
+    EnumVariable var{name, label, info, defaultValue};
     m_variables[m_nodeName]->enumVariables.push_back(var);
 }
