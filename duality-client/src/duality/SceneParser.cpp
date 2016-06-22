@@ -28,6 +28,14 @@ SceneMetadata SceneParser::parseMetadata(const JsonCpp::Value& root) {
 std::unique_ptr<Scene> SceneParser::parseScene() {
     auto metadata = parseMetadata(m_root);
     m_sceneName = metadata.name();
+
+    if (m_root.isMember("transforms")) {
+        auto transformsJson = m_root["transforms"];
+        for (auto it = transformsJson.begin(); it != transformsJson.end(); ++it) {
+            m_transforms[it.key().asString()] = parseMatrix(*it);
+        }
+    }
+
     auto sceneJson = m_root["scene"];
     std::vector<std::unique_ptr<SceneNode>> nodes;
     for (auto it = sceneJson.begin(); it != sceneJson.end(); ++it) {
@@ -56,7 +64,7 @@ std::unique_ptr<GeometryDataset> SceneParser::parseGeometryDataset(const JsonCpp
     auto provider = parseProvider(node["source"]);
     std::vector<Mat4f> transforms;
     if (node.isMember("transforms")) {
-        transforms = parseMatrices(node["transforms"]);
+        transforms = parseTransforms(node["transforms"]);
     }
     return std::make_unique<GeometryDataset>(std::move(provider), std::move(transforms));
 }
@@ -123,10 +131,18 @@ Mat4f SceneParser::parseMatrix(const JsonCpp::Value& node) {
                  node[12].asFloat(), node[13].asFloat(), node[14].asFloat(), node[15].asFloat());
 }
 
-std::vector<IVDA::Mat4f> SceneParser::parseMatrices(const JsonCpp::Value& node) {
+std::vector<IVDA::Mat4f> SceneParser::parseTransforms(const JsonCpp::Value& node) {
     std::vector<Mat4f> result;
     for (auto it = node.begin(); it != node.end(); ++it) {
-        result.push_back(parseMatrix(*it));
+        if (it->isArray()) {
+            result.push_back(parseMatrix(*it));
+        } else {
+            std::string refName = it->asString();
+            if (!m_transforms.count(refName)) {
+                throw Error("Transform '" + refName + "' does not exist", __FILE__, __LINE__);
+            }
+            result.push_back(m_transforms[refName]);
+        }
     }
     return result;
 }

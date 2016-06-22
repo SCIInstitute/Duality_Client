@@ -41,7 +41,7 @@ private:
     std::unique_ptr<DataProvider> parsePython(const JsonCpp::Value& node);
 
     IVDA::Mat4f parseMatrix(const JsonCpp::Value& node);
-    std::vector<IVDA::Mat4f> parseMatrices(const JsonCpp::Value& node);
+    std::vector<IVDA::Mat4f> parseTransforms(const JsonCpp::Value& node);
 
     void parseParams(const JsonCpp::Value& node);
     void parseFloatVariable(const JsonCpp::Value& node);
@@ -52,6 +52,7 @@ private:
     std::shared_ptr<LazyRpcClient> m_rpc;
     std::shared_ptr<DataCache> m_dataCache;
     std::string m_sceneName;
+    std::map<std::string, IVDA::Mat4f> m_transforms;
     std::string m_nodeName;
     int m_varIndex;
     std::map<std::string, std::shared_ptr<Variables>> m_variables;
