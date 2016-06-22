@@ -87,7 +87,6 @@ std::unique_ptr<GeometryDataset> SceneParser::parseGeometryDataset(const JsonCpp
     auto provider = parseProvider(node["source"]);
     std::vector<Mat4f> transforms;
     if (node.isMember("transforms")) {
-        std::vector<Mat4f> transforms;
         for (const auto& transform : node["transforms"]) {
             transforms.push_back(parseTransform(transform));
         }
