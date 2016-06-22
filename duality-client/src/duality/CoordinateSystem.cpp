@@ -4,6 +4,16 @@
 
 using namespace IVDA;
 
+const mocca::BidirectionalMap<CoordinateAxis, std::string>& coordinateAxisMapper() {
+    static mocca::BidirectionalMap<CoordinateAxis, std::string> mapper;
+    if (mapper.empty()) {
+        mapper.insert(X_Axis, "x");
+        mapper.insert(Y_Axis, "y");
+        mapper.insert(Z_Axis, "z");
+    }
+    return mapper;
+}
+
 Axis::Axis()
     : coordinateAxis(X_Axis)
     , positive(true) {}

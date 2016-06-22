@@ -8,11 +8,12 @@ RenderParameters2D::RenderParameters2D()
     , m_slice(0.0f) {}
 
 RenderParameters2D::RenderParameters2D(const IVDA::Vec2f& initialTranslation, const float initialRotationAngle, const float initialZoom,
-                                       CoordinateAxis initialAxis)
+                                       CoordinateAxis initialAxis, float initialSlice)
     : m_translation(initialTranslation)
     , m_rotationAngle(initialRotationAngle)
     , m_zoom(initialZoom)
-    , m_axis(initialAxis) {}
+    , m_axis(initialAxis)
+    , m_slice(initialSlice) {}
 
 const IVDA::Vec2f& RenderParameters2D::transation() const noexcept {
     return m_translation;

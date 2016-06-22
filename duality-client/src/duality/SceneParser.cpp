@@ -17,46 +17,47 @@ SceneParser::SceneParser(const JsonCpp::Value& root, std::shared_ptr<LazyRpcClie
     : m_root(root)
     , m_rpc(rpc)
     , m_dataCache(dataCache)
-    , m_varIndex(0) {}
+    , m_varIndex(0) {
+        if (m_root.isMember("transforms")) {
+            auto transformsJson = m_root["transforms"];
+            for (auto it = transformsJson.begin(); it != transformsJson.end(); ++it) {
+                m_transforms[it.key().asString()] = parseMatrix(*it);
+            }
+        }
+    }
 
-SceneMetadata SceneParser::parseMetadata() {
-    std::string name = m_root["metadata"]["name"].asString();
-    std::string description = m_root["metadata"]["description"].asString();
+SceneMetadata SceneParser::parseMetadata(const JsonCpp::Value& root) {
+    std::string name = root["metadata"]["name"].asString();
+    std::string description = root["metadata"]["description"].asString();
     return SceneMetadata(std::move(name), std::move(description));
 }
 
 mocca::Nullable<RenderParameters3D> SceneParser::initialParameters3D() {
-    if (m_root.isMember("initialViews") && m_root["initialViews"].isMember("3d")) {
-        auto node = m_root["initialViews"]["3d"];
+    if (m_root.isMember("initialView") && m_root["initialView"].isMember("3d")) {
+        auto node = m_root["initialView"]["3d"];
         Vec3f translation = parseVector3(node["translation"]);
-        Mat4f rotation = parseMatrix(node["rotation"]);
+        Mat4f rotation = parseTransform(node["rotation"]);
         return RenderParameters3D(translation, rotation);
     }
     return mocca::Nullable<RenderParameters3D>();
 }
 
 mocca::Nullable<RenderParameters2D> SceneParser::initialParameters2D() {
-    if (m_root.isMember("initialViews") && m_root["initialViews"].isMember("2d")) {
-        auto node = m_root["initialViews"]["2d"];
+    if (m_root.isMember("initialView") && m_root["initialView"].isMember("2d")) {
+        auto node = m_root["initialView"]["2d"];
         Vec2f translation = parseVector2(node["translation"]);
         float rotation = node["rotation"].asFloat();
         float zoom = node["zoom"].asFloat();
         CoordinateAxis axis = coordinateAxisMapper().getBySecond(node["axis"].asString());
-        return RenderParameters2D(translation, rotation, zoom, axis);
+        float slice = node["slice"].asFloat();
+        return RenderParameters2D(translation, rotation, zoom, axis, slice);
     }
     return mocca::Nullable<RenderParameters2D>();
 }
 
 std::unique_ptr<Scene> SceneParser::parseScene() {
-    auto metadata = parseMetadata();
+    auto metadata = parseMetadata(m_root);
     m_sceneName = metadata.name();
-
-    if (m_root.isMember("transforms")) {
-        auto transformsJson = m_root["transforms"];
-        for (auto it = transformsJson.begin(); it != transformsJson.end(); ++it) {
-            m_transforms[it.key().asString()] = parseMatrix(*it);
-        }
-    }
 
     auto sceneJson = m_root["scene"];
     std::vector<std::unique_ptr<SceneNode>> nodes;
@@ -86,7 +87,10 @@ std::unique_ptr<GeometryDataset> SceneParser::parseGeometryDataset(const JsonCpp
     auto provider = parseProvider(node["source"]);
     std::vector<Mat4f> transforms;
     if (node.isMember("transforms")) {
-        transforms = parseTransforms(node["transforms"]);
+        std::vector<Mat4f> transforms;
+        for (const auto& transform : node["transforms"]) {
+            transforms.push_back(parseTransform(transform));
+        }
     }
     return std::make_unique<GeometryDataset>(std::move(provider), std::move(transforms));
 }
@@ -167,20 +171,16 @@ Mat4f SceneParser::parseMatrix(const JsonCpp::Value& node) {
                  node[12].asFloat(), node[13].asFloat(), node[14].asFloat(), node[15].asFloat());
 }
 
-std::vector<Mat4f> SceneParser::parseTransforms(const JsonCpp::Value& node) {
-    std::vector<Mat4f> result;
-    for (auto it = node.begin(); it != node.end(); ++it) {
-        if (it->isArray()) {
-            result.push_back(parseMatrix(*it));
-        } else {
-            std::string refName = it->asString();
-            if (!m_transforms.count(refName)) {
-                throw Error("Transform '" + refName + "' does not exist", __FILE__, __LINE__);
-            }
-            result.push_back(m_transforms[refName]);
+Mat4f SceneParser::parseTransform(const JsonCpp::Value& node) {
+    if (node.isArray()) {
+        return parseMatrix(node);
+    } else {
+        std::string refName = node.asString();
+        if (!m_transforms.count(refName)) {
+            throw Error("Transform '" + refName + "' does not exist", __FILE__, __LINE__);
         }
+        return m_transforms[refName];
     }
-    return result;
 }
 
 std::unique_ptr<DataProvider> SceneParser::parsePython(const JsonCpp::Value& node) {

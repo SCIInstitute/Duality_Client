@@ -27,7 +27,7 @@ public:
     SceneParser(const JsonCpp::Value& root, std::shared_ptr<LazyRpcClient> rpc, std::shared_ptr<DataCache> dataCache);
 
     std::unique_ptr<Scene> parseScene();
-    SceneMetadata parseMetadata();
+    static SceneMetadata parseMetadata(const JsonCpp::Value& root);
     mocca::Nullable<RenderParameters3D> initialParameters3D();
     mocca::Nullable<RenderParameters2D> initialParameters2D();
 
@@ -48,7 +48,7 @@ private:
     IVDA::Vec3f parseVector3(const JsonCpp::Value& node);
     IVDA::Vec2f parseVector2(const JsonCpp::Value& node);
     IVDA::Mat4f parseMatrix(const JsonCpp::Value& node);
-    std::vector<IVDA::Mat4f> parseTransforms(const JsonCpp::Value& node);
+    IVDA::Mat4f parseTransform(const JsonCpp::Value& node);
 
     void parseParams(const JsonCpp::Value& node);
     void parseFloatVariable(const JsonCpp::Value& node);

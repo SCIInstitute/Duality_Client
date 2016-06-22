@@ -65,8 +65,7 @@ std::vector<SceneMetadata> SceneLoaderImpl::listMetadata() const {
     auto root = m_rpc->receive().first;
     std::vector<SceneMetadata> result;
     for (auto it = root.begin(); it != root.end(); ++it) {
-        SceneParser parser(*it);
-        result.push_back(parser.parseMetadata());
+        result.push_back(SceneParser::parseMetadata(*it));
     }
     return result;
 }
@@ -76,12 +75,12 @@ void SceneLoaderImpl::loadScene(const std::string& name) {
     auto root = m_rpc->receive().first;
     for (auto it = root.begin(); it != root.end(); ++it) {
         SceneParser parser(*it, m_rpc, m_dataCache);
-        auto metadata = parser.parseMetadata();
+        auto metadata = SceneParser::parseMetadata(*it);
         if (metadata.name() == name) {
             m_scene = parser.parseScene();
             RenderParameters3D default3D(Vec3f(0.0f, 0.0f, -3.0f), Mat4f());
             m_initialParameters3D = parser.initialParameters3D().getOr(default3D);
-            RenderParameters2D default2D(Vec2f(0.0f, 0.0f), 0.0f, 1.0f, CoordinateAxis::X_Axis);
+            RenderParameters2D default2D(Vec2f(0.0f, 0.0f), 0.0f, 1.0f, CoordinateAxis::X_Axis, 0.0f);
             m_initialParameters2D = parser.initialParameters2D().getOr(default2D);
             m_sceneController2D = nullptr;
             m_sceneController3D = nullptr;
@@ -110,7 +109,7 @@ std::weak_ptr<SceneController3D> SceneLoaderImpl::sceneController3D() {
 }
 
 void SceneLoaderImpl::createSceneController2D() {
-    auto impl = std::make_unique<SceneController2DImpl>(*m_scene, initialParameters, m_resultFbo);
+    auto impl = std::make_unique<SceneController2DImpl>(*m_scene, m_initialParameters2D, m_resultFbo);
     m_sceneController2D = std::make_shared<SceneController2D>(std::move(impl));
 }
 
