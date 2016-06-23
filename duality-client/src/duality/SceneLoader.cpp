@@ -24,6 +24,7 @@ public:
 
     void updateEndpoint(const mocca::net::Endpoint& endpoint);
     void clearCache();
+    void setCachingEnabled(bool enabled);
 
     std::vector<SceneMetadata> listMetadata() const;
     void loadScene(const std::string& name);
@@ -58,6 +59,10 @@ void SceneLoaderImpl::updateEndpoint(const mocca::net::Endpoint& endpoint) {
 
 void SceneLoaderImpl::clearCache() {
     m_dataCache->clear();
+}
+
+void SceneLoaderImpl::setCachingEnabled(bool enabled) {
+    m_dataCache->setMode(enabled ? DataCache::Mode::Enabled : DataCache::Mode::Disabled);
 }
 
 std::vector<SceneMetadata> SceneLoaderImpl::listMetadata() const {
@@ -129,6 +134,10 @@ void SceneLoader::updateEndpoint(const mocca::net::Endpoint& endpoint) {
 
 void SceneLoader::clearCache() {
     m_impl->clearCache();
+}
+
+void SceneLoader::setCachingEnabled(bool enabled) {
+    m_impl->setCachingEnabled(enabled);
 }
 
 std::vector<SceneMetadata> SceneLoader::listMetadata() const {

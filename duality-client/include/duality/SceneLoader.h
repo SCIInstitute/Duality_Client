@@ -20,6 +20,7 @@ public:
 
     void updateEndpoint(const mocca::net::Endpoint& endpoint);
     void clearCache();
+    void setCachingEnabled(bool enabled);
     
     std::vector<SceneMetadata> listMetadata() const;
     void loadScene(const std::string& name);

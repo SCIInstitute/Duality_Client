@@ -7,10 +7,19 @@
 #include "mocca/fs/Filesystem.h"
 #include "mocca/log/LogManager.h"
 
-DataCache::DataCache(const mocca::fs::Path& cacheDir)
-    : m_cacheDir(cacheDir) {}
+DataCache::DataCache(const mocca::fs::Path& cacheDir, Mode mode)
+    : m_cacheDir(cacheDir)
+    , m_mode(mode) {}
+
+void DataCache::setMode(Mode mode) {
+    m_mode = mode;
+}
 
 std::shared_ptr<std::vector<uint8_t>> DataCache::fetch(const JsonCpp::Value& cacheID) {
+    if (m_mode == Mode::Disabled) {
+        return nullptr;
+    }
+
     auto sceneCacheDir = m_cacheDir + cacheID["scene"].asString();
     if (!mocca::fs::exists(sceneCacheDir)) {
         return nullptr;
@@ -36,6 +45,10 @@ std::shared_ptr<std::vector<uint8_t>> DataCache::fetch(const JsonCpp::Value& cac
 }
 
 void DataCache::write(const JsonCpp::Value& cacheID, const std::vector<uint8_t>& data) {
+    if (m_mode == Mode::Disabled) {
+        return;
+    }
+
     // create new directory with unique name
     auto sceneCacheDir = m_cacheDir + cacheID["scene"].asString();
     int i = 1;
