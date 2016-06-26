@@ -19,8 +19,33 @@ public:
 private:
     void readData(const std::vector<uint8_t>& data) override;
 
+    void presortIndices();
+    template <int32_t size> void presortIndices() {
+        for (int32_t i = 0; i < m_geometry->indices.size(); i += size) {
+
+            bool isTransparent = false;
+            for (int32_t j = 0; j < size; ++j) {
+                if (m_geometry->colors[(i + j) * 4 + 3] <= 0.95f) {
+                    isTransparent = true;
+                    break;
+                }
+            }
+
+            if (isTransparent) {
+                for (int32_t k = 0; k < size; ++k) {
+                    m_indicesTransparent.push_back(i + k);
+                }
+            } else {
+                for (int32_t k = 0; k < size; ++k) {
+                    m_indicesOpaque.push_back(i + k);
+                }
+            }
+        }
+    }
+
 private:
     std::unique_ptr<G3D::GeometrySoA> m_geometry;
     std::vector<IVDA::Mat4f> m_transforms;
-
+    std::vector<uint32_t> m_indicesOpaque;
+    std::vector<uint32_t> m_indicesTransparent;
 };
