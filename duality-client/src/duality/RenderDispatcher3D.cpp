@@ -21,20 +21,29 @@ RenderDispatcher3D::RenderDispatcher3D(std::shared_ptr<GLFrameBufferObject> fbo,
 
 RenderDispatcher3D::~RenderDispatcher3D() = default;
 
+void RenderDispatcher3D::nextPass() {
+    m_pass = static_cast<RenderPass>(m_pass + 1);
+}
+
+RenderDispatcher3D::RenderPass RenderDispatcher3D::renderPass() const {
+    return m_pass;
+}
+
 void RenderDispatcher3D::dispatch(GeometryNode& node) {
-    if (m_redraw) {
+    if (m_pass == RenderPass::GeometryPass && m_redraw) {
         m_geoRenderer->render(node.dataset(), m_mvp);
     }
 }
 
 void RenderDispatcher3D::dispatch(VolumeNode& node) {
-    if (m_redraw) {
+    if (m_pass == RenderPass::VolumePass && m_redraw) {
         m_volumeRenderer->render(node.dataset(), m_mvp, node.transferFunction());
     }
 }
 
 void RenderDispatcher3D::startDraw() {
     if (m_redraw) {
+        m_pass = RenderPass::FirstPass;
         GL(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
         GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
     }

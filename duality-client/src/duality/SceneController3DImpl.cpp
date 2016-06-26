@@ -54,6 +54,9 @@ void SceneController3DImpl::setVariable(const std::string& objectName, const std
 
 void SceneController3DImpl::render() {
     m_renderDispatcher->startDraw();
-    m_scene.dispatch(*m_renderDispatcher, View::View3D);
+    while (m_renderDispatcher->renderPass() < RenderDispatcher3D::LastPass) {
+        m_scene.dispatch(*m_renderDispatcher, View::View3D);
+        m_renderDispatcher->nextPass();
+    }
     m_renderDispatcher->finishDraw();
 }

@@ -15,6 +15,10 @@ public:
     RenderDispatcher3D(std::shared_ptr<GLFrameBufferObject> fbo, const RenderParameters3D& initialParameters);
     ~RenderDispatcher3D();
 
+    enum RenderPass { FirstPass = 0, GeometryPass = 0, VolumePass = 1, LastPass = 2 };
+    void nextPass();
+    RenderPass renderPass() const;
+    
     void dispatch(GeometryNode& node) override;
     void dispatch(VolumeNode& node) override;
     void startDraw();
@@ -30,6 +34,7 @@ public:
     
 private:
     std::shared_ptr<GLFrameBufferObject> m_fbo;
+    RenderPass m_pass;
     std::unique_ptr<GeometryRenderer3D> m_geoRenderer;
     std::unique_ptr<VolumeRenderer3D> m_volumeRenderer;
     RenderParameters3D m_parameters;
