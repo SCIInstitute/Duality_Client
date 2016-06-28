@@ -35,6 +35,19 @@ public:
         bool isOpaque;
 
         std::vector<uint32_t> attributeSemantics;
+
+        int32_t indicesPerPrimitive() const {
+            switch (primitiveType) {
+            case Point:
+                return 1;
+            case Line:
+                return 2;
+            case Triangle:
+                return 3;
+            default:
+                assert(false);
+            }
+        }
     };
 
     struct Geometry {
@@ -119,7 +132,7 @@ private:
     static void readContent(AbstractReader& reader, GeometrySoA& geometry);
 
     static void assignShortcutPointers(G3D::GeometrySoA& geometry);
-    
+
     static std::vector<float> convertVertices(const std::vector<std::vector<float>>& vertexAttributes, const GeometryInfo& info);
     static std::vector<std::vector<float>> convertVertices(const std::vector<float>& vertices, const GeometryInfo& info);
 };

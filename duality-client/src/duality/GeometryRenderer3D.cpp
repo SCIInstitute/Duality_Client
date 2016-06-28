@@ -84,7 +84,24 @@ void GeometryRenderer3D::renderOpaque(const GeometryDataset& dataset, const MVP3
 }
 
 void GeometryRenderer3D::renderTransparent(const GeometryDataset& dataset, const MVP3D& mvp) {
-    // TODO: implement
+    // FIXME: Code duplication
+
+    auto& shader = determineActiveShader(dataset);
+    shader.Enable();
+
+    shader.SetValue("mvpMatrix", static_cast<IVDA::Mat4f>(mvp.mvp()));
+
+    GL(glEnable(GL_DEPTH_TEST));
+
+    int attributeCount = enableAttributeArrays(dataset);
+
+    int primitiveType = primitiveTypeGL(dataset);
+    const auto& indices = dataset.indicesTransparentSorted(static_cast<IVDA::Mat4f>(mvp.mvp()));
+    GL(glDrawElements(primitiveType, (GLsizei)indices.size(), GL_UNSIGNED_INT, indices.data()));
+
+    for (int i = 0; i < attributeCount; ++i) {
+        GL(glDisableVertexAttribArray(i));
+    }
 }
 
 int GeometryRenderer3D::primitiveTypeGL(const GeometryDataset& dataset) {

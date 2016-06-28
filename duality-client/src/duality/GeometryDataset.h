@@ -18,7 +18,7 @@ public:
     GeometryDataset(std::unique_ptr<DataProvider> provider, std::vector<IVDA::Mat4f> transforms = {});
 
     const std::vector<uint32_t>& indicesOpaque() const;
-    const std::vector<uint32_t>& indicesTransparent() const;
+    std::vector<uint32_t> indicesTransparentSorted(const IVDA::Mat4f& mvp) const;
 
     const G3D::GeometrySoA& geometry() const;
 
@@ -27,7 +27,7 @@ private:
 
     void presortIndices();
     template <int32_t size> void presortIndices() {
-        for (int32_t i = 0; i < m_geometry->indices.size(); i += size) {
+        for (size_t i = 0; i < m_geometry->indices.size(); i += size) {
 
             bool isTransparent = false;
             for (int32_t j = 0; j < size; ++j) {
@@ -51,13 +51,22 @@ private:
 
     void computeCentroids();
     template <int32_t size> void computeCentroids() {
-        for (int32_t i = 0; i < m_indicesTransparent.size(); i += size) {
+        for (size_t i = 0; i < m_indicesTransparent.size(); i += size) {
             std::array<IVDA::Vec3f, size> pos;
             for (int32_t j = 0; j < size; ++j) {
                 pos[j] = IVDA::Vec3f(m_geometry->positions + (m_indicesTransparent[i + j] * size));
             }
             IVDA::Vec3f centroid = std::accumulate(begin(pos), end(pos), IVDA::Vec3f()) / static_cast<float>(size);
             m_centroids.push_back(centroid);
+        }
+    }
+
+    std::vector<uint32_t> permuteIndicesTransparent(const std::vector<int32_t>& permutation) const;
+    template <int32_t size> void applyPermutation(const std::vector<int32_t>& permutation, const std::vector<uint32_t>& source, std::vector<uint32_t>& target) const {
+        for (size_t i = 0; i < permutation.size(); ++i) {
+            for (size_t j = 0; j < size; ++j) {
+                target[i*size + j] = source[permutation[i] * size + j];
+            }
         }
     }
 
