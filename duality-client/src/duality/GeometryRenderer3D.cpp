@@ -1,8 +1,8 @@
 #include "src/duality/GeometryRenderer3D.h"
 
+#include "duality/Error.h"
 #include "src/IVDA/GLInclude.h"
 #include "src/IVDA/GLShader.h"
-#include "duality/Error.h"
 
 #include <OpenGLES/ES3/gl.h>
 
@@ -64,7 +64,7 @@ GeometryRenderer3D::GeometryRenderer3D() {
 
 GeometryRenderer3D::~GeometryRenderer3D() = default;
 
-void GeometryRenderer3D::render(const GeometryDataset& dataset, const MVP3D& mvp) {
+void GeometryRenderer3D::renderOpaque(const GeometryDataset& dataset, const MVP3D& mvp) {
     auto& shader = determineActiveShader(dataset);
     shader.Enable();
 
@@ -75,12 +75,16 @@ void GeometryRenderer3D::render(const GeometryDataset& dataset, const MVP3D& mvp
     int attributeCount = enableAttributeArrays(dataset);
 
     int primitiveType = primitiveTypeGL(dataset);
-    size_t numIndices = dataset.geometry().indices.size();
-    GL(glDrawElements(primitiveType, (GLsizei)numIndices, GL_UNSIGNED_INT, dataset.geometry().indices.data()));
+    const auto& indices = dataset.indicesOpaque();
+    GL(glDrawElements(primitiveType, (GLsizei)indices.size(), GL_UNSIGNED_INT, indices.data()));
 
     for (int i = 0; i < attributeCount; ++i) {
         GL(glDisableVertexAttribArray(i));
     }
+}
+
+void GeometryRenderer3D::renderTransparent(const GeometryDataset& dataset, const MVP3D& mvp) {
+    // TODO: implement
 }
 
 int GeometryRenderer3D::primitiveTypeGL(const GeometryDataset& dataset) {
@@ -92,7 +96,7 @@ int GeometryRenderer3D::primitiveTypeGL(const GeometryDataset& dataset) {
     case G3D::Triangle:
         return GL_TRIANGLES;
     case G3D::TriangleAdj:
-        return GL_TRIANGLES; // FIXME: is this corrent?
+        return GL_TRIANGLES; // FIXME: is this correct?
     default:
         assert("Invalid primitive type");
         return 0;

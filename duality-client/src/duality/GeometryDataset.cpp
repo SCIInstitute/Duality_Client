@@ -13,6 +13,14 @@ GeometryDataset::GeometryDataset(std::unique_ptr<DataProvider> provider, std::ve
     , m_transforms(transforms)
     , m_geometry(nullptr) {}
 
+const std::vector<uint32_t>& GeometryDataset::indicesOpaque() const {
+    return m_indicesOpaque;
+}
+
+const std::vector<uint32_t>& GeometryDataset::indicesTransparent() const {
+    return m_indicesTransparent;
+}
+
 void GeometryDataset::readData(const std::vector<uint8_t>& data) {
     ReaderFromMemory reader(reinterpret_cast<const char*>(data.data()), data.size());
     m_geometry = std::make_unique<G3D::GeometrySoA>();
@@ -21,6 +29,7 @@ void GeometryDataset::readData(const std::vector<uint8_t>& data) {
         G3D::applyTransform(*m_geometry, transform);
     }
     presortIndices();
+    computeCentroids();
 }
 
 void GeometryDataset::presortIndices() {
@@ -33,6 +42,17 @@ void GeometryDataset::presortIndices() {
         presortIndices<2>();
     } else if (m_geometry->info.primitiveType == G3D::Triangle) {
         presortIndices<3>();
+    }
+}
+
+void GeometryDataset::computeCentroids() {
+    m_centroids.clear();
+    if (m_geometry->info.primitiveType == G3D::Point) {
+        computeCentroids<1>();
+    } else if (m_geometry->info.primitiveType == G3D::Line) {
+        computeCentroids<2>();
+    } else if (m_geometry->info.primitiveType == G3D::Triangle) {
+        computeCentroids<3>();
     }
 }
 

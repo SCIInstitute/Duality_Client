@@ -31,7 +31,7 @@ RenderDispatcher3D::RenderPass RenderDispatcher3D::renderPass() const {
 
 void RenderDispatcher3D::dispatch(GeometryNode& node) {
     if (m_pass == RenderPass::GeometryPass && m_redraw) {
-        m_geoRenderer->render(node.dataset(), m_mvp);
+        m_geoRenderer->renderOpaque(node.dataset(), m_mvp);
     }
 }
 
