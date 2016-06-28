@@ -40,7 +40,7 @@ void RenderDispatcher3D::dispatch(GeometryNode& node) {
 
 void RenderDispatcher3D::dispatch(VolumeNode& node) {
     if (m_pass == RenderPass::VolumePass && m_redraw) {
-        m_volumeRenderer->render(node.dataset(), m_mvp, node.transferFunction());
+       m_volumeRenderer->render(node.dataset(), m_mvp, node.transferFunction());
     }
 }
 

@@ -76,6 +76,8 @@ void GeometryRenderer3D::renderOpaque(const GeometryDataset& dataset, const MVP3
 
     int primitiveType = primitiveTypeGL(dataset);
     const auto& indices = dataset.indicesOpaque();
+    if (indices.empty()) return;
+    
     GL(glDrawElements(primitiveType, (GLsizei)indices.size(), GL_UNSIGNED_INT, indices.data()));
 
     for (int i = 0; i < attributeCount; ++i) {
@@ -90,18 +92,29 @@ void GeometryRenderer3D::renderTransparent(const GeometryDataset& dataset, const
     shader.Enable();
 
     shader.SetValue("mvpMatrix", static_cast<IVDA::Mat4f>(mvp.mvp()));
-
+    
+    // disable depth write
+    //GL(glDepthMask(GL_FALSE));
+    // enable alpha blending
+    GL(glEnable(GL_BLEND));
     GL(glEnable(GL_DEPTH_TEST));
 
     int attributeCount = enableAttributeArrays(dataset);
 
     int primitiveType = primitiveTypeGL(dataset);
-    const auto& indices = dataset.indicesTransparentSorted(static_cast<IVDA::Mat4f>(mvp.mvp()));
+    auto indices = dataset.indicesTransparentSorted(static_cast<IVDA::Mat4f>(mvp.mvp()));
+    if (indices.empty()) return;
+    
     GL(glDrawElements(primitiveType, (GLsizei)indices.size(), GL_UNSIGNED_INT, indices.data()));
 
     for (int i = 0; i < attributeCount; ++i) {
         GL(glDisableVertexAttribArray(i));
     }
+    
+    // disable depth write
+    //GL(glDepthMask(GL_FALSE));
+    // enable alpha blending
+    GL(glEnable(GL_BLEND));
 }
 
 int GeometryRenderer3D::primitiveTypeGL(const GeometryDataset& dataset) {

@@ -26,24 +26,24 @@ private:
     void readData(const std::vector<uint8_t>& data) override;
 
     void presortIndices();
-    template <int32_t size> void presortIndices() {
-        for (size_t i = 0; i < m_geometry->indices.size(); i += size) {
+    template <uint32_t size> void presortIndices() {
+        for (uint32_t i = 0; i < m_geometry->indices.size(); i += size) {
 
             bool isTransparent = false;
             for (int32_t j = 0; j < size; ++j) {
-                if (m_geometry->colors[(i + j) * 4 + 3] <= 0.95f) {
+                if (m_geometry->colors[(m_geometry->indices[i + j]) * 4 + 3] <= 0.95f) {
                     isTransparent = true;
                     break;
                 }
             }
 
             if (isTransparent) {
-                for (int32_t k = 0; k < size; ++k) {
-                    m_indicesTransparent.push_back(i + k);
+                for (uint32_t k = 0; k < size; ++k) {
+                    m_indicesTransparent.push_back(m_geometry->indices[i + k]);
                 }
             } else {
-                for (int32_t k = 0; k < size; ++k) {
-                    m_indicesOpaque.push_back(i + k);
+                for (uint32_t k = 0; k < size; ++k) {
+                    m_indicesOpaque.push_back(m_geometry->indices[i + k]);
                 }
             }
         }
@@ -62,10 +62,12 @@ private:
     }
 
     std::vector<uint32_t> permuteIndicesTransparent(const std::vector<int32_t>& permutation) const;
-    template <int32_t size> void applyPermutation(const std::vector<int32_t>& permutation, const std::vector<uint32_t>& source, std::vector<uint32_t>& target) const {
+    template <int32_t size>
+    void applyPermutation(const std::vector<int32_t>& permutation, const std::vector<uint32_t>& source,
+                          std::vector<uint32_t>& target) const {
         for (size_t i = 0; i < permutation.size(); ++i) {
             for (size_t j = 0; j < size; ++j) {
-                target[i*size + j] = source[permutation[i] * size + j];
+                target[i * size + j] = source[permutation[i] * size + j];
             }
         }
     }

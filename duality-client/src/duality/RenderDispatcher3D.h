@@ -15,7 +15,7 @@ public:
     RenderDispatcher3D(std::shared_ptr<GLFrameBufferObject> fbo, const RenderParameters3D& initialParameters);
     ~RenderDispatcher3D();
 
-    enum RenderPass { FirstPass = 0, OpaqueGeometryPass = 0, TransparentGeometryPass = 1, VolumePass = 2, LastPass = 2 };
+    enum RenderPass { FirstPass = 0, OpaqueGeometryPass = 0, TransparentGeometryPass = 1, VolumePass = 2, LastPass = 3 };
     void nextPass();
     RenderPass renderPass() const;
     
