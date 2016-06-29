@@ -18,18 +18,22 @@ SceneParser::SceneParser(const JsonCpp::Value& root, std::shared_ptr<LazyRpcClie
     , m_rpc(rpc)
     , m_dataCache(dataCache)
     , m_varIndex(0) {
-        if (m_root.isMember("transforms")) {
-            auto transformsJson = m_root["transforms"];
-            for (auto it = transformsJson.begin(); it != transformsJson.end(); ++it) {
-                m_transforms[it.key().asString()] = parseMatrix(*it);
-            }
+    if (m_root.isMember("transforms")) {
+        auto transformsJson = m_root["transforms"];
+        for (auto it = transformsJson.begin(); it != transformsJson.end(); ++it) {
+            m_transforms[it.key().asString()] = parseMatrix(*it);
         }
     }
+}
 
 SceneMetadata SceneParser::parseMetadata(const JsonCpp::Value& root) {
     std::string name = root["metadata"]["name"].asString();
     std::string description = root["metadata"]["description"].asString();
-    return SceneMetadata(std::move(name), std::move(description));
+    std::string url;
+    if (root["metadata"].isMember("url")) {
+        url = root["metadata"]["url"].asString();
+    }
+    return SceneMetadata(std::move(name), std::move(description), std::move(url));
 }
 
 mocca::Nullable<RenderParameters3D> SceneParser::initialParameters3D() {
