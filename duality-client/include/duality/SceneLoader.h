@@ -25,7 +25,8 @@ public:
     std::vector<SceneMetadata> listMetadata() const;
     void loadScene(const std::string& name);
     bool isSceneLoaded() const;
-    SceneMetadata currentMetadata() const;
+    SceneMetadata metadata() const;
+    std::string webViewURL() const;
     
     std::weak_ptr<SceneController2D> sceneController2D();
     std::weak_ptr<SceneController3D> sceneController3D();

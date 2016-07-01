@@ -14,9 +14,10 @@
 class Scene {
 public:
     Scene(SceneMetadata metadata, std::vector<std::unique_ptr<SceneNode>> nodes,
-          std::map<std::string, std::shared_ptr<Variables>> variables);
-    
+          std::map<std::string, std::shared_ptr<Variables>> variables, const std::string& webViewURL);
+
     SceneMetadata metadata() const;
+    std::string webViewURL() const;
 
     const std::vector<std::unique_ptr<SceneNode>>& nodes() const;
 
@@ -31,6 +32,7 @@ private:
     SceneMetadata m_metadata;
     std::vector<std::unique_ptr<SceneNode>> m_nodes;
     std::map<std::string, std::shared_ptr<Variables>> m_variables;
+    std::string m_webViewURL;
 };
 
 namespace duality {

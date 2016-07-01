@@ -29,11 +29,7 @@ SceneParser::SceneParser(const JsonCpp::Value& root, std::shared_ptr<LazyRpcClie
 SceneMetadata SceneParser::parseMetadata(const JsonCpp::Value& root) {
     std::string name = root["metadata"]["name"].asString();
     std::string description = root["metadata"]["description"].asString();
-    std::string url;
-    if (root["metadata"].isMember("url")) {
-        url = root["metadata"]["url"].asString();
-    }
-    return SceneMetadata(std::move(name), std::move(description), std::move(url));
+    return SceneMetadata(std::move(name), std::move(description));
 }
 
 mocca::Nullable<RenderParameters3D> SceneParser::initialParameters3D() {
@@ -63,6 +59,11 @@ std::unique_ptr<Scene> SceneParser::parseScene() {
     auto metadata = parseMetadata(m_root);
     m_sceneName = metadata.name();
 
+    std::string url;
+    if (m_root.isMember("webViewURL")) {
+        url = m_root["webViewURL"].asString();
+    }
+    
     auto sceneJson = m_root["scene"];
     std::vector<std::unique_ptr<SceneNode>> nodes;
     for (auto it = sceneJson.begin(); it != sceneJson.end(); ++it) {
@@ -77,7 +78,7 @@ std::unique_ptr<Scene> SceneParser::parseScene() {
             throw Error("Invalid node type: " + type, __FILE__, __LINE__);
         }
     }
-    return std::make_unique<Scene>(metadata, std::move(nodes), std::move(m_variables));
+    return std::make_unique<Scene>(metadata, std::move(nodes), std::move(m_variables), url);
 }
 
 std::unique_ptr<SceneNode> SceneParser::parseGeometryNode(const JsonCpp::Value& node) {

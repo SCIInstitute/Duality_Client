@@ -9,13 +9,18 @@
 using namespace IVDA;
 
 Scene::Scene(SceneMetadata metadata, std::vector<std::unique_ptr<SceneNode>> nodes,
-             std::map<std::string, std::shared_ptr<Variables>> variables)
+             std::map<std::string, std::shared_ptr<Variables>> variables, const std::string& webViewURL)
     : m_metadata(std::move(metadata))
     , m_nodes(std::move(nodes))
-    , m_variables(std::move(variables)) {}
+    , m_variables(std::move(variables))
+    , m_webViewURL(webViewURL) {}
 
 SceneMetadata Scene::metadata() const {
     return m_metadata;
+}
+
+std::string Scene::webViewURL() const {
+    return m_webViewURL;
 }
 
 const std::vector<std::unique_ptr<SceneNode>>& Scene::nodes() const {

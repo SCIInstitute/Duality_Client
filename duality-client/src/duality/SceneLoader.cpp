@@ -29,7 +29,8 @@ public:
     std::vector<SceneMetadata> listMetadata() const;
     void loadScene(const std::string& name);
     bool isSceneLoaded() const;
-    SceneMetadata currentMetadata() const;
+    SceneMetadata metadata() const;
+    std::string webViewURL() const;
 
     std::weak_ptr<SceneController2D> sceneController2D();
     std::weak_ptr<SceneController3D> sceneController3D();
@@ -100,9 +101,16 @@ bool SceneLoaderImpl::isSceneLoaded() const {
     return m_scene != nullptr;
 }
 
-SceneMetadata SceneLoaderImpl::currentMetadata() const {
+SceneMetadata SceneLoaderImpl::metadata() const {
     if (m_scene != nullptr) {
         return m_scene->metadata();
+    }
+    throw Error("No scene loaded", __FILE__, __LINE__);
+}
+
+std::string SceneLoaderImpl::webViewURL() const {
+    if (m_scene != nullptr) {
+        return m_scene->webViewURL();
     }
     throw Error("No scene loaded", __FILE__, __LINE__);
 }
@@ -160,8 +168,12 @@ bool SceneLoader::isSceneLoaded() const {
     return m_impl->isSceneLoaded();
 }
 
-SceneMetadata SceneLoader::currentMetadata() const {
-    return m_impl->currentMetadata();
+SceneMetadata SceneLoader::metadata() const {
+    return m_impl->metadata();
+}
+
+std::string SceneLoader::webViewURL() const {
+    return m_impl->webViewURL();
 }
 
 std::weak_ptr<SceneController2D> SceneLoader::sceneController2D() {
