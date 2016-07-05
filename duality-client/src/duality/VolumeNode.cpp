@@ -15,6 +15,10 @@ void VolumeNode::updateDataset() {
     m_tf->fetch();
 }
 
+BoundingBox VolumeNode::boundingBox() const {
+    return m_dataset->boundingBox();
+}
+
 const VolumeDataset& VolumeNode::dataset() const {
     return *m_dataset;
 }

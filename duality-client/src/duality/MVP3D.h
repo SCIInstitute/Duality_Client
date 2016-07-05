@@ -1,6 +1,7 @@
 #pragma once
 
 #include "IVDA/GLMatrix.h"
+#include "IVDA/Vectors.h"
 #include "duality/ScreenInfo.h"
 #include "src/duality/BoundingBox.h"
 #include "src/duality/RenderParameters3D.h"
@@ -14,6 +15,8 @@ public:
     const GLMatrix& mv() const;
     const GLMatrix& mvp() const;
 
+    IVDA::Vec3f eyePos() const;
+    
 private:
     void createDefaultModelView(const BoundingBox& boudningBox);
     void createProjection(const ScreenInfo& screenInfo);

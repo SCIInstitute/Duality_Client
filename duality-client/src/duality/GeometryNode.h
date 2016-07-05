@@ -14,6 +14,7 @@ public:
     void accept(NodeDispatcher& dispatcher) override;
     void updateDataset() override;
 
+    BoundingBox boundingBox() const override;
     const GeometryDataset& dataset() const;
 
 private:

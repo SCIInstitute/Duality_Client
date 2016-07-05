@@ -15,6 +15,7 @@ public:
     void accept(NodeDispatcher& dispatcher) override;
     void updateDataset() override;
     
+    BoundingBox boundingBox() const override;
     const VolumeDataset& dataset() const;
     const TransferFunction& transferFunction() const;
 

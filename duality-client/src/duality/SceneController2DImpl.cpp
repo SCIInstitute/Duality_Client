@@ -86,7 +86,5 @@ void SceneController2DImpl::setVariable(const std::string& objectName, const std
 }
 
 void SceneController2DImpl::render() {
-    m_renderDispatcher->startDraw();
-    m_scene.dispatch(*m_renderDispatcher, View::View2D);
-    m_renderDispatcher->finishDraw();
+    m_scene.render(*m_renderDispatcher);
 }

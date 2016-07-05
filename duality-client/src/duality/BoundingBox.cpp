@@ -13,14 +13,9 @@ BoundingBoxCalculator::BoundingBoxCalculator() {
 
 void BoundingBoxCalculator::dispatch(GeometryNode& node) {
     const auto& dataset = node.dataset();
-    assert(dataset.geometry().positions != nullptr);
-    for (size_t i = 0; i < dataset.geometry().info.numberIndices; ++i) {
-        auto offset = 3 * dataset.geometry().indices[i];
-        const auto positions = dataset.geometry().positions;
-        IVDA::Vec3f pos(positions[offset + 0], positions[offset + 1], positions[offset + 2]);
-        m_min.StoreMin(pos);
-        m_max.StoreMax(pos);
-    }
+    BoundingBox bb = dataset.boundingBox();
+    m_min.StoreMin(bb.min);
+    m_max.StoreMax(bb.max);
 }
 
 void BoundingBoxCalculator::dispatch(VolumeNode& node) {

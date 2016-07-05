@@ -3,6 +3,7 @@
 #include "src/duality/G3D.h"
 
 #include "src/duality/Dataset.h"
+#include "src/duality/BoundingBox.h"
 
 #include "IVDA/GLMatrix.h"
 #include "IVDA/Vectors.h"
@@ -18,8 +19,9 @@ public:
     GeometryDataset(std::unique_ptr<DataProvider> provider, std::vector<IVDA::Mat4f> transforms = {});
 
     const std::vector<uint32_t>& indicesOpaque() const;
-    std::vector<uint32_t> indicesTransparentSorted(const IVDA::Mat4f& mvp) const;
+    std::vector<uint32_t> indicesTransparentSorted(const IVDA::Vec3f& eyePos) const;
 
+    BoundingBox boundingBox() const;
     const G3D::GeometrySoA& geometry() const;
 
 private:

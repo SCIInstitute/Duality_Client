@@ -17,14 +17,10 @@ const std::vector<uint32_t>& GeometryDataset::indicesOpaque() const {
     return m_indicesOpaque;
 }
 
-std::vector<uint32_t> GeometryDataset::indicesTransparentSorted(const Mat4f& mvp) const {
-    Vec4f eyePos(0, 0, 0, 1);
-    eyePos = eyePos * mvp.inverse();
-    Vec3f transformedEyePos = eyePos.dehomo();
-
+std::vector<uint32_t> GeometryDataset::indicesTransparentSorted(const Vec3f& eyePos) const {
     auto sorter = [&](size_t index1, size_t index2) {
-        float dist1 = (m_centroids[index1] - transformedEyePos).sqLength();
-        float dist2 = (m_centroids[index2] - transformedEyePos).sqLength();
+        float dist1 = (m_centroids[index1] - eyePos).sqLength();
+        float dist2 = (m_centroids[index2] - eyePos).sqLength();
         return dist1 > dist2;
     };
 
@@ -82,6 +78,18 @@ void GeometryDataset::computeCentroids() {
     } else if (m_geometry->info.primitiveType == G3D::Triangle) {
         computeCentroids<3>();
     }
+}
+
+BoundingBox GeometryDataset::boundingBox() const {
+    BoundingBox boundingBox;
+    for (size_t i = 0; i < m_geometry->info.numberIndices; ++i) {
+        auto offset = 3 * m_geometry->indices[i];
+        const auto positions = m_geometry->positions;
+        IVDA::Vec3f pos(positions[offset + 0], positions[offset + 1], positions[offset + 2]);
+        boundingBox.min.StoreMin(pos);
+        boundingBox.max.StoreMax(pos);
+    }
+    return boundingBox;
 }
 
 const G3D::GeometrySoA& GeometryDataset::geometry() const {

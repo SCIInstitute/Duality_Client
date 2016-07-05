@@ -102,7 +102,7 @@ void GeometryRenderer3D::renderTransparent(const GeometryDataset& dataset, const
     int attributeCount = enableAttributeArrays(dataset);
 
     int primitiveType = primitiveTypeGL(dataset);
-    auto indices = dataset.indicesTransparentSorted(static_cast<IVDA::Mat4f>(mvp.mvp()));
+    auto indices = dataset.indicesTransparentSorted(mvp.eyePos());
     if (indices.empty()) return;
     
     GL(glDrawElements(primitiveType, (GLsizei)indices.size(), GL_UNSIGNED_INT, indices.data()));

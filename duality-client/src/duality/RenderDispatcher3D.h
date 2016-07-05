@@ -5,6 +5,7 @@
 #include "src/duality/BoundingBox.h"
 #include "src/duality/NodeDispatcher.h"
 #include "src/duality/MVP3D.h"
+#include "src/duality/SceneNode.h"
 
 class GLFrameBufferObject;
 class GeometryRenderer3D;
@@ -18,6 +19,8 @@ public:
     enum RenderPass { FirstPass = 0, OpaqueGeometryPass = 0, TransparentGeometryPass = 1, VolumePass = 2, LastPass = 3 };
     void nextPass();
     RenderPass renderPass() const;
+    
+    std::vector<SceneNode*> sortNodes(const std::vector<std::unique_ptr<SceneNode>>& nodes);
     
     void dispatch(GeometryNode& node) override;
     void dispatch(VolumeNode& node) override;

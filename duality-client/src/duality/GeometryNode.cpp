@@ -12,6 +12,10 @@ void GeometryNode::updateDataset() {
     m_dataset->fetch();
 }
 
+BoundingBox GeometryNode::boundingBox() const {
+    return m_dataset->boundingBox();
+}
+
 const GeometryDataset& GeometryNode::dataset() const {
     return *m_dataset;
 }

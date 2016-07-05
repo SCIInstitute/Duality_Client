@@ -44,3 +44,9 @@ void MVP3D::createProjection(const ScreenInfo& screenInfo) {
     m_projection.loadIdentity();
     m_projection.frustum(-frustSize, frustSize, -frustSize * aspectRatio, frustSize * aspectRatio, zNear, zFar);
 }
+
+IVDA::Vec3f MVP3D::eyePos() const {
+    Vec4f eyePos(0, 0, 0, 1);
+    eyePos = eyePos * static_cast<Mat4f>(m_mvp).inverse();
+    return eyePos.dehomo();
+}

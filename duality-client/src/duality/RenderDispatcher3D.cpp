@@ -29,6 +29,23 @@ RenderDispatcher3D::RenderPass RenderDispatcher3D::renderPass() const {
     return m_pass;
 }
 
+std::vector<SceneNode*> RenderDispatcher3D::sortNodes(const std::vector<std::unique_ptr<SceneNode>>& nodes) {
+    std::vector<SceneNode*> sortedNodes;
+    for (const auto& node : nodes) {
+        sortedNodes.push_back(node.get());
+    }
+    
+    auto sorter = [&](const SceneNode* lhs, const SceneNode* rhs) {
+        auto lhsBB = lhs->boundingBox();
+        auto lhsCenterEye = (((lhsBB.max - lhsBB.min) / 2) - m_mvp.eyePos());
+        auto rhsBB = rhs->boundingBox();
+        auto rhsCenterEye = (((rhsBB.max - rhsBB.min) / 2) - m_mvp.eyePos());
+        return lhsCenterEye.sqLength() > rhsCenterEye.sqLength();
+    };
+    std::sort(begin(sortedNodes), end(sortedNodes), sorter);
+    return sortedNodes;
+}
+
 void RenderDispatcher3D::dispatch(GeometryNode& node) {
     if (m_pass == RenderPass::OpaqueGeometryPass && m_redraw) {
         m_geoRenderer->renderOpaque(node.dataset(), m_mvp);
