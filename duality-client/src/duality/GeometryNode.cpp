@@ -20,6 +20,14 @@ BoundingBox GeometryNode::boundingBox() const {
     return m_dataset->boundingBox();
 }
 
+bool GeometryNode::intersects(const BoundingBox& box) const {
+    return m_dataset->intersects(box);
+}
+
 const GeometryDataset& GeometryNode::dataset() const {
     return *m_dataset;
+}
+
+bool GeometryNode::isTransparent() const {
+    return m_dataset->isTransparent();
 }

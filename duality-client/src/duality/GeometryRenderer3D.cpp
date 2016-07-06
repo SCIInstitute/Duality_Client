@@ -76,7 +76,6 @@ void GeometryRenderer3D::renderOpaque(const GeometryDataset& dataset, const MVP3
 
     int primitiveType = primitiveTypeGL(dataset);
     const auto& indices = dataset.indicesOpaque();
-    if (indices.empty()) return;
     
     GL(glDrawElements(primitiveType, (GLsizei)indices.size(), GL_UNSIGNED_INT, indices.data()));
 
@@ -103,7 +102,6 @@ void GeometryRenderer3D::renderTransparent(const GeometryDataset& dataset, const
 
     int primitiveType = primitiveTypeGL(dataset);
     auto indices = dataset.indicesTransparentSorted(mvp.eyePos());
-    if (indices.empty()) return;
     
     GL(glDrawElements(primitiveType, (GLsizei)indices.size(), GL_UNSIGNED_INT, indices.data()));
 

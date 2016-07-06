@@ -18,11 +18,13 @@ class GeometryDataset : public Dataset {
 public:
     GeometryDataset(std::unique_ptr<DataProvider> provider, std::vector<IVDA::Mat4f> transforms = {});
 
+    bool isTransparent() const;
     const std::vector<uint32_t>& indicesOpaque() const;
     std::vector<uint32_t> indicesTransparentSorted(const IVDA::Vec3f& eyePos) const;
 
     BoundingBox boundingBox() const;
     const G3D::GeometrySoA& geometry() const;
+    bool intersects(const BoundingBox& box) const;
 
 private:
     void readData(const std::vector<uint8_t>& data) override;

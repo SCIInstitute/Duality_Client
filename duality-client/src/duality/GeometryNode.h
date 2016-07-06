@@ -16,8 +16,11 @@ public:
     void updateDataset() override;
 
     BoundingBox boundingBox() const override;
+    bool intersects(const BoundingBox& box) const;
     const GeometryDataset& dataset() const;
 
+    bool isTransparent() const;
+    
 private:
     std::unique_ptr<GeometryDataset> m_dataset;
 };

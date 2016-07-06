@@ -12,6 +12,10 @@ GeometryDataset::GeometryDataset(std::unique_ptr<DataProvider> provider, std::ve
     , m_transforms(transforms)
     , m_geometry(nullptr) {}
 
+bool GeometryDataset::isTransparent() const {
+    return !m_indicesTransparent.empty();
+}
+
 const std::vector<uint32_t>& GeometryDataset::indicesOpaque() const {
     return m_indicesOpaque;
 }
@@ -89,6 +93,16 @@ BoundingBox GeometryDataset::boundingBox() const {
         boundingBox.max.StoreMax(pos);
     }
     return boundingBox;
+}
+
+bool GeometryDataset::intersects(const BoundingBox& box) const {
+    for (const auto& centroid : m_centroids) {
+        if (centroid.x >= box.min.x && centroid.y >= box.min.y && centroid.z >= box.min.z &&
+            centroid.x <= box.max.x && centroid.y <= box.max.y && centroid.z <= box.max.z) {
+            return true;
+        }
+    }
+    return false;
 }
 
 const G3D::GeometrySoA& GeometryDataset::geometry() const {

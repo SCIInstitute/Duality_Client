@@ -4,10 +4,12 @@
 #include "duality/ScreenInfo.h"
 #include "src/duality/BoundingBox.h"
 #include "src/duality/MVP3D.h"
+#include "src/duality/RenderableConcept.h"
 
 class GLFrameBufferObject;
 class GeometryRenderer3D;
 class VolumeRenderer3D;
+class InterleavingRenderer3D;
 class GeometryNode;
 class VolumeNode;
 class SceneNode;
@@ -31,14 +33,26 @@ public:
     void addZoom(const float zoom);
 
 private:
-    std::vector<SceneNode*> sortNodes(const std::vector<std::unique_ptr<SceneNode>>& nodes);
+    struct IntersectingNode {
+        VolumeNode* volumeNode;
+        std::vector<GeometryNode*> geometryNodes;
+        
+        void render(RenderDispatcher3D& dispatcher);
+        BoundingBox boundingBox() const;
+    };
+    
+private:
+    std::vector<Renderable> sortRenderables(const std::vector<Renderable>& renderables);
+    std::vector<Renderable> calculateRenderables(const std::vector<std::unique_ptr<SceneNode>>& nodes);
     void startDraw();
     void finishDraw();
+    void dispatch(IntersectingNode& node);
     
 private:
     std::shared_ptr<GLFrameBufferObject> m_fbo;
     std::unique_ptr<GeometryRenderer3D> m_geoRenderer;
     std::unique_ptr<VolumeRenderer3D> m_volumeRenderer;
+    std::unique_ptr<InterleavingRenderer3D> m_interleavingRenderer;
     RenderParameters3D m_parameters;
     ScreenInfo m_screenInfo;
     BoundingBox m_boundingBox;
