@@ -41,24 +41,11 @@ BoundingBox Scene::boundingBox(View view) const {
 }
 
 void Scene::render(RenderDispatcher2D& dispatcher) const {
-    if (dispatcher.startDraw()) {
-        for (auto& node : m_nodes) {
-            if (node->isVisibleInView(View::View2D)) {
-                node->render(dispatcher);
-            }
-        }
-        dispatcher.finishDraw();
-    }
+    dispatcher.render(m_nodes);
 }
 
 void Scene::render(RenderDispatcher3D& dispatcher) const {
-    if (dispatcher.startDraw()) {
-        auto renderables = dispatcher.createRenderables(m_nodes);
-        for (auto& renderable : renderables) {
-            renderable.render(dispatcher);
-        }
-        dispatcher.finishDraw();
-    }
+    dispatcher.render(m_nodes);
 }
 
 void Scene::updateDatasets() {

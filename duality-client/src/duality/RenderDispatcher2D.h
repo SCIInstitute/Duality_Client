@@ -10,16 +10,17 @@ class GLFrameBufferObject;
 class GeometryRenderer2D;
 class GeometryNode;
 class VolumeNode;
+class SceneNode;
 
 class RenderDispatcher2D {
 public:
     RenderDispatcher2D(std::shared_ptr<GLFrameBufferObject> fbo, const RenderParameters2D& initialParameters);
     ~RenderDispatcher2D();
 
+    void render(const std::vector<std::unique_ptr<SceneNode>>& nodes);
+    
     void dispatch(GeometryNode& node);
     void dispatch(VolumeNode& node);
-    bool startDraw();
-    void finishDraw();
 
     void updateScreenInfo(const ScreenInfo& screenInfo);
     void updateBoundingBox(const BoundingBox& boundingBox);
@@ -33,6 +34,10 @@ public:
     
     float slice() const;
     CoordinateAxis currentAxis() const;
+
+private:
+    bool startDraw();
+    void finishDraw();
     
 private:
     std::shared_ptr<GLFrameBufferObject> m_fbo;

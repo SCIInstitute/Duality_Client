@@ -22,7 +22,7 @@ RenderDispatcher3D::RenderDispatcher3D(std::shared_ptr<GLFrameBufferObject> fbo,
 
 RenderDispatcher3D::~RenderDispatcher3D() = default;
 
-std::vector<Renderable> RenderDispatcher3D::createRenderables(const std::vector<std::unique_ptr<SceneNode>>& nodes) {
+std::vector<SceneNode*> RenderDispatcher3D::sortNodes(const std::vector<std::unique_ptr<SceneNode>>& nodes) {
     std::vector<SceneNode*> sortedNodes;
     for (const auto& node : nodes) {
         if (node->isVisibleInView(View::View3D)) {
@@ -39,34 +39,33 @@ std::vector<Renderable> RenderDispatcher3D::createRenderables(const std::vector<
         return lhsCenterEye.sqLength() > rhsCenterEye.sqLength();
     };
     std::sort(begin(sortedNodes), end(sortedNodes), sorter);
+    return sortedNodes;
+}
 
-    std::vector<Renderable> renderables;
-    for (const auto& node : sortedNodes) {
-        renderables.push_back(Renderable(node));
+void RenderDispatcher3D::render(const std::vector<std::unique_ptr<SceneNode>>& nodes) {
+    if (!m_redraw) {
+        return;
     }
-
-    return renderables;
+    auto sortedNodes = sortNodes(nodes);
+    startDraw();
+    for (const auto& node : sortedNodes) {
+        node->render(*this);
+    }
+    finishDraw();
 }
 
 void RenderDispatcher3D::dispatch(GeometryNode& node) {
-    if (m_redraw) {
-        m_geoRenderer->renderOpaque(node.dataset(), m_mvp);
-        m_geoRenderer->renderTransparent(node.dataset(), m_mvp);
-    }
+    m_geoRenderer->renderOpaque(node.dataset(), m_mvp);
+    m_geoRenderer->renderTransparent(node.dataset(), m_mvp);
 }
 
 void RenderDispatcher3D::dispatch(VolumeNode& node) {
-    if (m_redraw) {
-        m_volumeRenderer->render(node.dataset(), m_mvp, node.transferFunction());
-    }
+    m_volumeRenderer->render(node.dataset(), m_mvp, node.transferFunction());
 }
 
-bool RenderDispatcher3D::startDraw() {
-    if (m_redraw) {
-        GL(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
-        GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-    }
-    return m_redraw;
+void RenderDispatcher3D::startDraw() {
+    GL(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
+    GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 }
 
 void RenderDispatcher3D::finishDraw() {

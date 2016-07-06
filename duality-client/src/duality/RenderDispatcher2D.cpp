@@ -20,6 +20,20 @@ RenderDispatcher2D::RenderDispatcher2D(std::shared_ptr<GLFrameBufferObject> fbo,
 
 RenderDispatcher2D::~RenderDispatcher2D() = default;
 
+void RenderDispatcher2D::render(const std::vector<std::unique_ptr<SceneNode>>& nodes) {
+    if (!m_redraw) {
+        return;
+    }
+    
+    startDraw();
+    for (const auto& node : nodes) {
+        if (node->isVisibleInView(View::View2D)) {
+            node->render(*this);
+        }
+    }
+    finishDraw();
+}
+
 void RenderDispatcher2D::dispatch(GeometryNode& node) {
     if (m_redraw) {
         m_geoRenderer->render(node.dataset(), m_mvp.mvp(), m_parameters.axis(), m_parameters.slice());
