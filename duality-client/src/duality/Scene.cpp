@@ -36,27 +36,26 @@ void Scene::dispatch(NodeDispatcher& dispatcher, View view) const {
 }
 
 void Scene::render(RenderDispatcher2D& dispatcher) const {
-    dispatcher.startDraw();
-    for (auto& node : m_nodes) {
-        if (node->isVisibleInView(View::View2D)) {
-            node->accept(dispatcher);
+    if (dispatcher.startDraw()) {
+        for (auto& node : m_nodes) {
+            if (node->isVisibleInView(View::View2D)) {
+                node->accept(dispatcher);
+            }
         }
+        dispatcher.finishDraw();
     }
-    dispatcher.finishDraw();
 }
 
 void Scene::render(RenderDispatcher3D& dispatcher) const {
-    auto sortedNodes = dispatcher.sortNodes(m_nodes);
-    dispatcher.startDraw();
-    while (dispatcher.renderPass() < RenderDispatcher3D::LastPass) {
+    if (dispatcher.startDraw()) {
+        auto sortedNodes = dispatcher.sortNodes(m_nodes);
         for (auto& node : sortedNodes) {
             if (node->isVisibleInView(View::View3D)) {
                 node->accept(dispatcher);
             }
         }
-        dispatcher.nextPass();
+        dispatcher.finishDraw();
     }
-    dispatcher.finishDraw();
 }
 
 void Scene::updateDatasets() {

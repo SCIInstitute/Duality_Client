@@ -21,14 +21,6 @@ RenderDispatcher3D::RenderDispatcher3D(std::shared_ptr<GLFrameBufferObject> fbo,
 
 RenderDispatcher3D::~RenderDispatcher3D() = default;
 
-void RenderDispatcher3D::nextPass() {
-    m_pass = static_cast<RenderPass>(m_pass + 1);
-}
-
-RenderDispatcher3D::RenderPass RenderDispatcher3D::renderPass() const {
-    return m_pass;
-}
-
 std::vector<SceneNode*> RenderDispatcher3D::sortNodes(const std::vector<std::unique_ptr<SceneNode>>& nodes) {
     std::vector<SceneNode*> sortedNodes;
     for (const auto& node : nodes) {
@@ -36,10 +28,11 @@ std::vector<SceneNode*> RenderDispatcher3D::sortNodes(const std::vector<std::uni
     }
     
     auto sorter = [&](const SceneNode* lhs, const SceneNode* rhs) {
+        IVDA::Vec3f eyePos = m_mvp.eyePos();
         auto lhsBB = lhs->boundingBox();
-        auto lhsCenterEye = (((lhsBB.max - lhsBB.min) / 2) - m_mvp.eyePos());
+        auto lhsCenterEye = ((lhsBB.min + (lhsBB.max - lhsBB.min) / 2) - eyePos);
         auto rhsBB = rhs->boundingBox();
-        auto rhsCenterEye = (((rhsBB.max - rhsBB.min) / 2) - m_mvp.eyePos());
+        auto rhsCenterEye = ((rhsBB.min + (rhsBB.max - rhsBB.min) / 2) - eyePos);
         return lhsCenterEye.sqLength() > rhsCenterEye.sqLength();
     };
     std::sort(begin(sortedNodes), end(sortedNodes), sorter);
@@ -47,26 +40,24 @@ std::vector<SceneNode*> RenderDispatcher3D::sortNodes(const std::vector<std::uni
 }
 
 void RenderDispatcher3D::dispatch(GeometryNode& node) {
-    if (m_pass == RenderPass::OpaqueGeometryPass && m_redraw) {
+    if (m_redraw) {
         m_geoRenderer->renderOpaque(node.dataset(), m_mvp);
-    }
-    else if (m_pass == RenderPass::TransparentGeometryPass && m_redraw) {
         m_geoRenderer->renderTransparent(node.dataset(), m_mvp);
     }
 }
 
 void RenderDispatcher3D::dispatch(VolumeNode& node) {
-    if (m_pass == RenderPass::VolumePass && m_redraw) {
+    if (m_redraw) {
        m_volumeRenderer->render(node.dataset(), m_mvp, node.transferFunction());
     }
 }
 
-void RenderDispatcher3D::startDraw() {
+bool RenderDispatcher3D::startDraw() {
     if (m_redraw) {
-        m_pass = RenderPass::FirstPass;
         GL(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
         GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
     }
+    return m_redraw;
 }
 
 void RenderDispatcher3D::finishDraw() {

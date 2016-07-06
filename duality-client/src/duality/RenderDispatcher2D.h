@@ -17,7 +17,7 @@ public:
 
     void dispatch(GeometryNode& node) override;
     void dispatch(VolumeNode& node) override;
-    void startDraw();
+    bool startDraw();
     void finishDraw();
 
     void updateScreenInfo(const ScreenInfo& screenInfo);

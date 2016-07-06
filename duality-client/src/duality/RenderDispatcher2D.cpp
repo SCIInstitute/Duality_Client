@@ -32,11 +32,12 @@ void RenderDispatcher2D::dispatch(VolumeNode& node) {
     }
 }
 
-void RenderDispatcher2D::startDraw() {
+bool RenderDispatcher2D::startDraw() {
     if (m_redraw) {
         GL(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
         GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
     }
+    return m_redraw;
 }
 
 void RenderDispatcher2D::finishDraw() {
