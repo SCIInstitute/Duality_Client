@@ -15,7 +15,7 @@ SceneController2DImpl::~SceneController2DImpl() = default;
 
 void SceneController2DImpl::updateScreenInfo(const ScreenInfo& screenInfo) {
     m_renderDispatcher->updateScreenInfo(screenInfo);
-    BoundingBox boundingBox = duality::calculateSceneBoundingBox(m_scene, View::View2D);
+    BoundingBox boundingBox = m_scene.boundingBox(View::View2D);
     m_renderDispatcher->updateBoundingBox(boundingBox);
 }
 
@@ -48,7 +48,7 @@ void SceneController2DImpl::toggleAxis() {
 }
 
 std::pair<float, float> SceneController2DImpl::minMaxForCurrentAxis() const {
-    BoundingBox boundingBox = duality::calculateSceneBoundingBox(m_scene, View::View2D);
+    BoundingBox boundingBox = m_scene.boundingBox(View::View2D);
     auto axis = m_renderDispatcher->currentAxis();
     return std::make_pair(boundingBox.min[axis], boundingBox.max[axis]);
 }
@@ -74,14 +74,14 @@ VariableMap SceneController2DImpl::variableMap() const {
 void SceneController2DImpl::setVariable(const std::string& objectName, const std::string& variableName, float value) {
     m_scene.setVariable(objectName, variableName, value);
     m_scene.updateDatasets();
-    BoundingBox boundingBox = duality::calculateSceneBoundingBox(m_scene, View::View2D);
+    BoundingBox boundingBox = m_scene.boundingBox(View::View2D);
     m_renderDispatcher->updateBoundingBox(boundingBox);
 }
 
 void SceneController2DImpl::setVariable(const std::string& objectName, const std::string& variableName, const std::string& value) {
     m_scene.setVariable(objectName, variableName, value);
     m_scene.updateDatasets();
-    BoundingBox boundingBox = duality::calculateSceneBoundingBox(m_scene, View::View2D);
+    BoundingBox boundingBox = m_scene.boundingBox(View::View2D);
     m_renderDispatcher->updateBoundingBox(boundingBox);
 }
 

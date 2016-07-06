@@ -11,7 +11,8 @@ class GeometryNode : public SceneNode {
 public:
     GeometryNode(const std::string& name, Visibility visibility, std::unique_ptr<GeometryDataset> dataset);
 
-    void accept(NodeDispatcher& dispatcher) override;
+    void render(RenderDispatcher2D& dispatcher) override;
+    void render(RenderDispatcher3D& dispatcher) override;
     void updateDataset() override;
 
     BoundingBox boundingBox() const override;

@@ -1,12 +1,9 @@
 #pragma once
 
-#include "src/duality/NodeDispatcher.h"
 #include "src/duality/View.h"
-#include "src/duality/BoundingBox.h" 
-
-#include "duality/InputVariable.h"
-
-#include <vector>
+#include "src/duality/BoundingBox.h"
+#include "src/duality/RenderDispatcher2D.h"
+#include "src/duality/RenderDispatcher3D.h"
 
 class SceneNode {
 public:
@@ -16,8 +13,9 @@ public:
     std::string name() const;
     bool isVisibleInView(View view) const;
 
+    virtual void render(RenderDispatcher2D& dispatcher) = 0;
+    virtual void render(RenderDispatcher3D& dispatcher) = 0;
     virtual BoundingBox boundingBox() const = 0;
-    virtual void accept(NodeDispatcher& dispatcher) = 0;
     virtual void updateDataset() = 0;
 
 private:

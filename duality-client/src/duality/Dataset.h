@@ -1,6 +1,5 @@
 #pragma once
 
-#include "src/duality/NodeDispatcher.h"
 #include "src/duality/View.h"
 #include "src/duality/DataProvider.h"
 

@@ -14,7 +14,7 @@ SceneController3DImpl::~SceneController3DImpl() = default;
 
 void SceneController3DImpl::updateScreenInfo(const ScreenInfo& screenInfo) {
     m_renderDispatcher->updateScreenInfo(screenInfo);
-    BoundingBox boundingBox = duality::calculateSceneBoundingBox(m_scene, View::View3D);
+    BoundingBox boundingBox = m_scene.boundingBox(View::View3D);
     m_renderDispatcher->updateBoundingBox(boundingBox);
 }
 
@@ -41,14 +41,14 @@ VariableMap SceneController3DImpl::variableMap() const {
 void SceneController3DImpl::setVariable(const std::string& objectName, const std::string& variableName, float value) {
     m_scene.setVariable(objectName, variableName, value);
     m_scene.updateDatasets();
-    BoundingBox boundingBox = duality::calculateSceneBoundingBox(m_scene, View::View3D);
+    BoundingBox boundingBox = m_scene.boundingBox(View::View3D);
     m_renderDispatcher->updateBoundingBox(boundingBox);
 }
 
 void SceneController3DImpl::setVariable(const std::string& objectName, const std::string& variableName, const std::string& value) {
     m_scene.setVariable(objectName, variableName, value);
     m_scene.updateDatasets();
-    BoundingBox boundingBox = duality::calculateSceneBoundingBox(m_scene, View::View3D);
+    BoundingBox boundingBox = m_scene.boundingBox(View::View3D);
     m_renderDispatcher->updateBoundingBox(boundingBox);
 }
 

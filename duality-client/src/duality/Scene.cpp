@@ -27,19 +27,24 @@ const std::vector<std::unique_ptr<SceneNode>>& Scene::nodes() const {
     return m_nodes;
 }
 
-void Scene::dispatch(NodeDispatcher& dispatcher, View view) const {
-    for (auto& node : m_nodes) {
+BoundingBox Scene::boundingBox(View view) const {
+    IVDA::Vec3f vMin(std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), std::numeric_limits<float>::max());
+    IVDA::Vec3f vMax(-std::numeric_limits<float>::max(), -std::numeric_limits<float>::max(), -std::numeric_limits<float>::max());
+    for (const auto& node : m_nodes) {
         if (node->isVisibleInView(view)) {
-            node->accept(dispatcher);
+            BoundingBox bb = node->boundingBox();
+            vMin.StoreMin(bb.min);
+            vMax.StoreMax(bb.max);
         }
     }
+    return BoundingBox{vMin, vMax};
 }
 
 void Scene::render(RenderDispatcher2D& dispatcher) const {
     if (dispatcher.startDraw()) {
         for (auto& node : m_nodes) {
             if (node->isVisibleInView(View::View2D)) {
-                node->accept(dispatcher);
+                node->render(dispatcher);
             }
         }
         dispatcher.finishDraw();
@@ -48,11 +53,9 @@ void Scene::render(RenderDispatcher2D& dispatcher) const {
 
 void Scene::render(RenderDispatcher3D& dispatcher) const {
     if (dispatcher.startDraw()) {
-        auto sortedNodes = dispatcher.sortNodes(m_nodes);
-        for (auto& node : sortedNodes) {
-            if (node->isVisibleInView(View::View3D)) {
-                node->accept(dispatcher);
-            }
+        auto renderables = dispatcher.createRenderables(m_nodes);
+        for (auto& renderable : renderables) {
+            renderable.render(dispatcher);
         }
         dispatcher.finishDraw();
     }
@@ -94,10 +97,4 @@ void Scene::setVariable(const std::string& objectName, const std::string& variab
     auto it = mocca::findMemberEqual(begin(vars), end(vars), &EnumVariable::name, variableName);
     assert(it != end(vars));
     it->value = value;
-}
-
-BoundingBox duality::calculateSceneBoundingBox(const Scene& scene, View view) {
-    BoundingBoxCalculator bbCalc;
-    scene.dispatch(bbCalc, view);
-    return bbCalc.boundingBox();
 }

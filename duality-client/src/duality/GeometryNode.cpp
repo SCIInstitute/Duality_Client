@@ -4,7 +4,11 @@ GeometryNode::GeometryNode(const std::string& name, Visibility visibility, std::
     : SceneNode(name, visibility)
     , m_dataset(std::move(dataset)) {}
 
-void GeometryNode::accept(NodeDispatcher& dispatcher) {
+void GeometryNode::render(RenderDispatcher2D& dispatcher) {
+    dispatcher.dispatch(*this);
+}
+
+void GeometryNode::render(RenderDispatcher3D& dispatcher) {
     dispatcher.dispatch(*this);
 }
 

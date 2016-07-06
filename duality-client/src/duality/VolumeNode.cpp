@@ -6,7 +6,11 @@ VolumeNode::VolumeNode(const std::string& name, Visibility visibility, std::uniq
     , m_dataset(std::move(dataset))
     , m_tf(std::move(tf)) {}
 
-void VolumeNode::accept(NodeDispatcher& dispatcher) {
+void VolumeNode::render(RenderDispatcher2D& dispatcher) {
+    dispatcher.dispatch(*this);
+}
+
+void VolumeNode::render(RenderDispatcher3D& dispatcher) {
     dispatcher.dispatch(*this);
 }
 

@@ -12,7 +12,8 @@ class VolumeNode : public SceneNode {
 public:
     VolumeNode(const std::string& name, Visibility visibility, std::unique_ptr<VolumeDataset> dataset, std::unique_ptr<TransferFunction> tf);
 
-    void accept(NodeDispatcher& dispatcher) override;
+    void render(RenderDispatcher2D& dispatcher) override;
+    void render(RenderDispatcher3D& dispatcher) override;
     void updateDataset() override;
     
     BoundingBox boundingBox() const override;

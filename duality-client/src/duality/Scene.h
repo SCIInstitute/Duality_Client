@@ -22,9 +22,10 @@ public:
 
     const std::vector<std::unique_ptr<SceneNode>>& nodes() const;
 
-    void dispatch(NodeDispatcher& dispatcher, View view) const;
     void updateDatasets();
 
+    BoundingBox boundingBox(View view) const;
+    
     void render(RenderDispatcher2D& dispatcher) const;
     void render(RenderDispatcher3D& dispatcher) const;
     
@@ -38,7 +39,3 @@ private:
     std::map<std::string, std::shared_ptr<Variables>> m_variables;
     std::string m_webViewURL;
 };
-
-namespace duality {
-BoundingBox calculateSceneBoundingBox(const Scene& scene, View view);
-}

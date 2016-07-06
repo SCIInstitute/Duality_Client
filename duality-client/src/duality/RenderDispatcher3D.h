@@ -3,23 +3,25 @@
 #include "IVDA/Vectors.h"
 #include "duality/ScreenInfo.h"
 #include "src/duality/BoundingBox.h"
-#include "src/duality/NodeDispatcher.h"
 #include "src/duality/MVP3D.h"
-#include "src/duality/SceneNode.h"
+#include "src/duality/RenderableConcept.h"
 
 class GLFrameBufferObject;
 class GeometryRenderer3D;
 class VolumeRenderer3D;
+class GeometryNode;
+class VolumeNode;
+class SceneNode;
 
-class RenderDispatcher3D : public NodeDispatcher {
+class RenderDispatcher3D {
 public:
     RenderDispatcher3D(std::shared_ptr<GLFrameBufferObject> fbo, const RenderParameters3D& initialParameters);
     ~RenderDispatcher3D();
 
-    std::vector<SceneNode*> sortNodes(const std::vector<std::unique_ptr<SceneNode>>& nodes);
-    
-    void dispatch(GeometryNode& node) override;
-    void dispatch(VolumeNode& node) override;
+    std::vector<Renderable> createRenderables(const std::vector<std::unique_ptr<SceneNode>>& nodes);
+
+    void dispatch(GeometryNode& node);
+    void dispatch(VolumeNode& node);
     bool startDraw();
     void finishDraw();
 
@@ -30,7 +32,7 @@ public:
     void addTranslation(const IVDA::Vec2f& translation);
     void addRotation(const IVDA::Mat4f& rotation);
     void addZoom(const float zoom);
-    
+
 private:
     std::shared_ptr<GLFrameBufferObject> m_fbo;
     std::unique_ptr<GeometryRenderer3D> m_geoRenderer;

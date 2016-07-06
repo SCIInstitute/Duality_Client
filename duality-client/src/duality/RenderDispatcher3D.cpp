@@ -4,6 +4,7 @@
 #include "src/IVDA/GLInclude.h"
 #include "src/duality/GeometryNode.h"
 #include "src/duality/GeometryRenderer3D.h"
+#include "src/duality/View.h"
 #include "src/duality/VolumeNode.h"
 #include "src/duality/VolumeRenderer3D.h"
 
@@ -21,12 +22,14 @@ RenderDispatcher3D::RenderDispatcher3D(std::shared_ptr<GLFrameBufferObject> fbo,
 
 RenderDispatcher3D::~RenderDispatcher3D() = default;
 
-std::vector<SceneNode*> RenderDispatcher3D::sortNodes(const std::vector<std::unique_ptr<SceneNode>>& nodes) {
+std::vector<Renderable> RenderDispatcher3D::createRenderables(const std::vector<std::unique_ptr<SceneNode>>& nodes) {
     std::vector<SceneNode*> sortedNodes;
     for (const auto& node : nodes) {
-        sortedNodes.push_back(node.get());
+        if (node->isVisibleInView(View::View3D)) {
+            sortedNodes.push_back(node.get());
+        }
     }
-    
+
     auto sorter = [&](const SceneNode* lhs, const SceneNode* rhs) {
         IVDA::Vec3f eyePos = m_mvp.eyePos();
         auto lhsBB = lhs->boundingBox();
@@ -36,7 +39,13 @@ std::vector<SceneNode*> RenderDispatcher3D::sortNodes(const std::vector<std::uni
         return lhsCenterEye.sqLength() > rhsCenterEye.sqLength();
     };
     std::sort(begin(sortedNodes), end(sortedNodes), sorter);
-    return sortedNodes;
+
+    std::vector<Renderable> renderables;
+    for (const auto& node : sortedNodes) {
+        renderables.push_back(Renderable(node));
+    }
+
+    return renderables;
 }
 
 void RenderDispatcher3D::dispatch(GeometryNode& node) {
@@ -48,7 +57,7 @@ void RenderDispatcher3D::dispatch(GeometryNode& node) {
 
 void RenderDispatcher3D::dispatch(VolumeNode& node) {
     if (m_redraw) {
-       m_volumeRenderer->render(node.dataset(), m_mvp, node.transferFunction());
+        m_volumeRenderer->render(node.dataset(), m_mvp, node.transferFunction());
     }
 }
 
