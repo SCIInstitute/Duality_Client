@@ -18,6 +18,7 @@ RenderDispatcher3D::RenderDispatcher3D(std::shared_ptr<GLFrameBufferObject> fbo,
     : m_fbo(fbo)
     , m_geoRenderer(std::make_unique<GeometryRenderer3D>())
     , m_volumeRenderer(std::make_unique<VolumeRenderer3D>())
+    , m_interleavingRenderer(std::make_unique<InterleavingRenderer3D>())
     , m_parameters(initialParameters)
     , m_screenInfo()
     , m_boundingBox()
@@ -54,7 +55,7 @@ std::vector<Renderable> RenderDispatcher3D::calculateRenderables(const std::vect
             geometryNodes.push_back(geometryNode);
         }
     }
-    
+
     // group intersecting volume nodes and geometry nodes into IntersectingNodes
     std::vector<Renderable> result;
     auto volIt = begin(volumeNodes);
@@ -62,9 +63,8 @@ std::vector<Renderable> RenderDispatcher3D::calculateRenderables(const std::vect
         IntersectingNode node;
         VolumeNode* volumeNode = *volIt;
         node.volumeNode = volumeNode;
-        auto it = std::partition(begin(geometryNodes), end(geometryNodes), [&](const GeometryNode* n) {
-            return !n->intersects(volumeNode->boundingBox());
-        });
+        auto it = std::partition(begin(geometryNodes), end(geometryNodes),
+                                 [&](const GeometryNode* n) { return !n->intersects(volumeNode->boundingBox()); });
         if (it != end(geometryNodes)) {
             std::copy(it, end(geometryNodes), std::back_inserter(node.geometryNodes));
             geometryNodes.erase(it, end(geometryNodes));
@@ -74,11 +74,11 @@ std::vector<Renderable> RenderDispatcher3D::calculateRenderables(const std::vect
             ++volIt;
         }
     }
-    
+
     // insert remaining geometry and volume nodes
     std::copy(begin(geometryNodes), end(geometryNodes), std::back_inserter(result));
     std::copy(begin(volumeNodes), end(volumeNodes), std::back_inserter(result));
-    
+
     return result;
 }
 
@@ -107,7 +107,11 @@ void RenderDispatcher3D::dispatch(VolumeNode& node) {
 }
 
 void RenderDispatcher3D::dispatch(IntersectingNode& node) {
-    m_interleavingRenderer->render(node.volumeNode, node.geometryNodes);
+    std::vector<const GeometryDataset*> geoDatasets;
+    for (auto geoNode : node.geometryNodes) {
+        geoDatasets.push_back(&geoNode->dataset());
+    }
+    m_interleavingRenderer->render(node.volumeNode->dataset(), geoDatasets, m_mvp, node.volumeNode->transferFunction());
 }
 
 void RenderDispatcher3D::startDraw() {

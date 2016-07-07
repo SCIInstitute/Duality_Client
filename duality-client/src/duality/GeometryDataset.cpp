@@ -16,6 +16,10 @@ bool GeometryDataset::isTransparent() const {
     return !m_indicesTransparent.empty();
 }
 
+const std::vector<IVDA::Vec3f>& GeometryDataset::centroids() const {
+    return m_centroids;
+}
+
 const std::vector<uint32_t>& GeometryDataset::indicesOpaque() const {
     return m_indicesOpaque;
 }

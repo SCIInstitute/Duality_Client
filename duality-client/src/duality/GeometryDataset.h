@@ -22,6 +22,7 @@ public:
     const std::vector<uint32_t>& indicesOpaque() const;
     std::vector<uint32_t> indicesTransparentSorted(const IVDA::Vec3f& eyePos) const;
 
+    const std::vector<IVDA::Vec3f>& centroids() const;
     BoundingBox boundingBox() const;
     const G3D::GeometrySoA& geometry() const;
     bool intersects(const BoundingBox& box) const;
