@@ -36,64 +36,70 @@ VolumeRenderer3D::VolumeRenderer3D() {
 VolumeRenderer3D::~VolumeRenderer3D() = default;
 
 void VolumeRenderer3D::render(const VolumeDataset& dataset, const MVP3D& mvp, const TransferFunction& tf) {
-    updateStackDirection(static_cast<Mat4f>(mvp.mv()));
+    StackDirection stackDir = duality::determineStackDirection(static_cast<Mat4f>(mvp.mv()));
+    size_t stackSize = dataset.sliceInfos()[stackDir.direction].size();
+    for (size_t slice = 0; slice < stackSize; ++slice) {
+        renderPartial(dataset, mvp, tf, stackDir, slice);
+    }
+}
 
+void VolumeRenderer3D::renderPartial(const VolumeDataset& dataset, const MVP3D& mvp, const TransferFunction& tf, const StackDirection& stackDir, size_t slice) {
     GLShader& shader = determineActiveShader();
     shader.Enable();
     shader.SetValue("mMVP", static_cast<IVDA::Mat4f>(mvp.mvp()));
-
+    
     GL(glDepthMask(GL_FALSE));
     GL(glEnable(GL_BLEND));
     
     GL(glEnableVertexAttribArray(0));
     GL(glEnableVertexAttribArray(1));
-
-    size_t stackSize = dataset.sliceInfos()[m_stackDirection].size();
-    for (size_t slice = 0; slice < stackSize; ++slice) {
-        size_t index = m_reverseStackOrdering ? (stackSize - 1 - slice) : slice;
-        const auto& si = dataset.sliceInfos()[m_stackDirection][index];
-
-        tf.bindTexture();
-        dataset.bindTextures(m_stackDirection, si.textureIndex1, si.textureIndex2);
-
-        BoundingBox bb = dataset.boundingBox();
-        switch (m_stackDirection) {
+    
+    size_t stackSize = dataset.sliceInfos()[stackDir.direction].size();
+    size_t index = stackDir.reverse ? (stackSize - 1 - slice) : slice;
+    const auto& si = dataset.sliceInfos()[stackDir.direction][index];
+    
+    tf.bindTexture();
+    dataset.bindTextures(stackDir.direction, si.textureIndex1, si.textureIndex2);
+    
+    BoundingBox bb = dataset.boundingBox();
+    switch (stackDir.direction) {
         case 0: {
             std::array<Vec3f, 4> vertices = {Vec3f(si.depth, bb.min.y, bb.min.z), Vec3f(si.depth, bb.min.y, bb.max.z),
-                                             Vec3f(si.depth, bb.max.y, bb.min.z), Vec3f(si.depth, bb.max.y, bb.max.z)};
+                Vec3f(si.depth, bb.max.y, bb.min.z), Vec3f(si.depth, bb.max.y, bb.max.z)};
             GL(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, &vertices[0]));
         } break;
         case 1: {
             std::array<Vec3f, 4> vertices = {Vec3f(bb.min.x, si.depth, bb.min.z), Vec3f(bb.min.x, si.depth, bb.max.z),
-                                             Vec3f(bb.max.x, si.depth, bb.min.z), Vec3f(bb.max.x, si.depth, bb.max.z)};
+                Vec3f(bb.max.x, si.depth, bb.min.z), Vec3f(bb.max.x, si.depth, bb.max.z)};
             GL(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, &vertices[0]));
-
+            
         } break;
         case 2: {
             std::array<Vec3f, 4> vertices = {Vec3f(bb.min.x, bb.min.y, si.depth), Vec3f(bb.min.x, bb.max.y, si.depth),
-                                             Vec3f(bb.max.x, bb.min.y, si.depth), Vec3f(bb.max.x, bb.max.y, si.depth)};
+                Vec3f(bb.max.x, bb.min.y, si.depth), Vec3f(bb.max.x, bb.max.y, si.depth)};
             GL(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, &vertices[0]));
         } break;
-        }
-
-        const std::array<Vec2f, 4> texCoords = {Vec2f(0, 0), Vec2f(0, 1), Vec2f(1, 0), Vec2f(1, 1)};
-        GL(glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, &texCoords[0]));
-
-        const std::array<GLshort, 6> indices = {0, 1, 2, 2, 1, 3};
-        GL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, &indices[0]));
     }
+    
+    const std::array<Vec2f, 4> texCoords = {Vec2f(0, 0), Vec2f(0, 1), Vec2f(1, 0), Vec2f(1, 1)};
+    GL(glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, &texCoords[0]));
+    
+    const std::array<GLshort, 6> indices = {0, 1, 2, 2, 1, 3};
+    GL(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, &indices[0]));
 
+    
     GL(glDepthMask(GL_TRUE));
     GL(glDisable(GL_BLEND));
     GL(glDisableVertexAttribArray(0));
     GL(glDisableVertexAttribArray(1));
 }
 
+
 GLShader& VolumeRenderer3D::determineActiveShader() const {
     return *m_shaderL;
 }
 
-void VolumeRenderer3D::updateStackDirection(const IVDA::Mat4f& mv) {
+StackDirection duality::determineStackDirection(const IVDA::Mat4f& mv) {
     Vec4f vertex0(-0.5f, -0.5f, 0.5f, 1.0f);
     Vec4f vertex1(0.5f, -0.5f, 0.5f, 1.0f);
     Vec4f vertex3(-0.5f, 0.5f, 0.5f, 1.0f);
@@ -122,16 +128,17 @@ void VolumeRenderer3D::updateStackDirection(const IVDA::Mat4f& mv) {
     float cosY = center ^ coordFrame[1];
     float cosZ = center ^ coordFrame[2];
 
-    m_stackDirection = 1;
-    m_reverseStackOrdering = cosZ < 0;
+    StackDirection result{CoordinateAxis::Y_Axis, cosZ < 0};
 
     if (fabs(cosX) > fabs(cosY) && fabs(cosX) > fabs(cosZ)) {
-        m_stackDirection = 0;
-        m_reverseStackOrdering = cosX < 0;
+        result.direction = CoordinateAxis::X_Axis;
+        result.reverse = cosX < 0;
     } else {
         if (fabs(cosY) > fabs(cosX) && fabs(cosY) > fabs(cosZ)) {
-            m_stackDirection = 2;
-            m_reverseStackOrdering = cosY > 0;
+            result.direction = CoordinateAxis::Z_Axis;
+            result.reverse = cosY > 0;
         }
     }
+    
+    return result;
 }

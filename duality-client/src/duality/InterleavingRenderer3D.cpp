@@ -16,8 +16,8 @@ InterleavingRenderer3D::~InterleavingRenderer3D() = default;
 
 void InterleavingRenderer3D::render(const VolumeDataset& volumeDataset, const std::vector<const GeometryDataset*>& geometryDatasets,
                                     const MVP3D& mvp, const TransferFunction& tf) {
-    CoordinateAxis stackDirection = CoordinateAxis::Z_Axis; // FIXME!!!
-    const auto& sliceInfos = volumeDataset.sliceInfos()[stackDirection];
+    StackDirection stackDir = duality::determineStackDirection(static_cast<IVDA::Mat4f>(mvp.mv()));
+    const auto& sliceInfos = volumeDataset.sliceInfos()[stackDir.direction];
     float minDepth = sliceInfos[0].depth;
     float maxDepth = sliceInfos[sliceInfos.size() - 1].depth;
     float stackDepth = maxDepth - minDepth;
@@ -47,9 +47,8 @@ void InterleavingRenderer3D::render(const VolumeDataset& volumeDataset, const st
 
         for (size_t centroidIndex = 0; centroidIndex < sortedCentroids.size(); ++centroidIndex) {
             const auto& centroid = sortedCentroids[centroidIndex];
-            float centroidDepth = centroid[stackDirection];
+            float centroidDepth = centroid[stackDir.direction];
 
-            // FIXME: hard coded 3
             size_t slapIndex;
             if (centroidDepth <= minDepth) {
                 slapIndex = 0;
@@ -60,15 +59,24 @@ void InterleavingRenderer3D::render(const VolumeDataset& volumeDataset, const st
                                                      std::max<int>(0, int((numSlices - 1) * (centroidDepth - minDepth) / stackDepth))));
             }
 
+            // FIXME: hard coded 3
             auto indexStart = begin(indicesSorted) + 3 * centroidIndex;
             auto indexEnd = indexStart + 3;
             std::copy(indexStart, indexEnd, std::back_inserter(slapAssignments[geoIndex][slapIndex]));
         }
-        
-        for (size_t i = 0; i <= numSlices; ++i) {
-            if (slapAssignments[geoIndex].count(i)) {
-                m_geoRenderer->renderTransparentPartial(ds, mvp, slapAssignments[geoIndex][i]);
+    }
+
+    for (size_t i = 0; i <= numSlices; ++i) {
+        const size_t renderIndex = stackDir.reverse ? numSlices - i : i;
+        for (size_t geoIndex = 0; geoIndex < geometryDatasets.size(); ++geoIndex) {
+            if (slapAssignments[geoIndex].count(renderIndex)) {
+                const auto& ds = *geometryDatasets[geoIndex];
+                m_geoRenderer->renderTransparentPartial(ds, mvp, slapAssignments[geoIndex][renderIndex]);
             }
+        }
+        
+        if (i < numSlices ) {
+            m_volRenderer->renderPartial(volumeDataset, mvp, tf, stackDir, i);
         }
     }
 }
