@@ -20,9 +20,9 @@ public:
 
     bool isTransparent() const;
     const std::vector<uint32_t>& indicesOpaque() const;
-    std::vector<uint32_t> indicesTransparentSorted(const IVDA::Vec3f& eyePos) const;
-
+    const std::vector<uint32_t>& indicesTransparent() const;
     const std::vector<IVDA::Vec3f>& centroids() const;
+    
     BoundingBox boundingBox() const;
     const G3D::GeometrySoA& geometry() const;
     bool intersects(const BoundingBox& box) const;
@@ -63,17 +63,6 @@ private:
             }
             IVDA::Vec3f centroid = std::accumulate(begin(pos), end(pos), IVDA::Vec3f()) / static_cast<float>(size);
             m_centroids.push_back(centroid);
-        }
-    }
-
-    std::vector<uint32_t> permuteIndicesTransparent(const std::vector<int32_t>& permutation) const;
-    template <int32_t size>
-    void applyPermutation(const std::vector<int32_t>& permutation, const std::vector<uint32_t>& source,
-                          std::vector<uint32_t>& target) const {
-        for (size_t i = 0; i < permutation.size(); ++i) {
-            for (size_t j = 0; j < size; ++j) {
-                target[i * size + j] = source[permutation[i] * size + j];
-            }
         }
     }
 

@@ -16,7 +16,7 @@ InterleavingRenderer3D::~InterleavingRenderer3D() = default;
 
 void InterleavingRenderer3D::render(const VolumeDataset& volumeDataset, const std::vector<const GeometryDataset*>& geometryDatasets,
                                     const MVP3D& mvp, const TransferFunction& tf) {
-    CoordinateAxis stackDirection = CoordinateAxis::X_Axis; // FIXME!!!
+    /*CoordinateAxis stackDirection = CoordinateAxis::X_Axis; // FIXME!!!
     const auto& sliceInfos = volumeDataset.sliceInfos()[stackDirection];
     float minDepth = sliceInfos[0].depth;
     float maxDepth = sliceInfos[sliceInfos.size() - 1].depth;
@@ -49,5 +49,5 @@ void InterleavingRenderer3D::render(const VolumeDataset& volumeDataset, const st
             auto indexEnd = indexStart + 3;
             std::copy(indexStart, indexEnd, std::back_inserter(slapAssignments[geoIndex][slapIndex]));
         }
-    }
+    }*/
 }

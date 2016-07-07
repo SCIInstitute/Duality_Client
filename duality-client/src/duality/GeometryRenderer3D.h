@@ -1,8 +1,9 @@
 #pragma once
 
+#include "IVDA/Vectors.h"
+#include "duality/ScreenInfo.h"
 #include "src/duality/GeometryDataset.h"
 #include "src/duality/MVP3D.h"
-#include "duality/ScreenInfo.h"
 
 class GLShader;
 
@@ -28,3 +29,17 @@ private:
     std::unique_ptr<GLShader> m_normTexShader;
     std::unique_ptr<GLShader> m_texShader;
 };
+
+namespace duality {
+std::vector<int32_t> backToFrontPermutation(const std::vector<IVDA::Vec3f>& points, const IVDA::Vec3f& refPoint);
+
+template <int stride, typename T>
+void applyPermutation(const std::vector<int32_t> permutation, const std::vector<T>& source, std::vector<T>& target) {
+    target.resize(source.size());
+    for (size_t i = 0; i < permutation.size(); ++i) {
+        for (size_t j = 0; j < stride; ++j) {
+            target[i * stride + j] = source[permutation[i] * stride + j];
+        }
+    }
+}
+}

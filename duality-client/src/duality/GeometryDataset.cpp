@@ -24,32 +24,8 @@ const std::vector<uint32_t>& GeometryDataset::indicesOpaque() const {
     return m_indicesOpaque;
 }
 
-std::vector<uint32_t> GeometryDataset::indicesTransparentSorted(const Vec3f& eyePos) const {
-    auto sorter = [&](size_t index1, size_t index2) {
-        float dist1 = (m_centroids[index1] - eyePos).sqLength();
-        float dist2 = (m_centroids[index2] - eyePos).sqLength();
-        return dist1 > dist2;
-    };
-
-    std::vector<int32_t> permutation(m_centroids.size());
-    std::iota(begin(permutation), end(permutation), 0);
-    std::sort(begin(permutation), end(permutation), sorter);
-
-    return permuteIndicesTransparent(permutation);
-}
-
-std::vector<uint32_t> GeometryDataset::permuteIndicesTransparent(const std::vector<int32_t>& permutation) const {
-    std::vector<uint32_t> result(m_indicesTransparent.size());
-    if (m_geometry->info.primitiveType == G3D::Point) {
-        applyPermutation<1>(permutation, m_indicesTransparent, result);
-    }
-    else if (m_geometry->info.primitiveType == G3D::Line) {
-        applyPermutation<2>(permutation, m_indicesTransparent, result);
-    }
-    else if (m_geometry->info.primitiveType == G3D::Triangle) {
-        applyPermutation<3>(permutation, m_indicesTransparent, result);
-    }
-    return result;
+const std::vector<uint32_t>& GeometryDataset::indicesTransparent() const {
+    return m_indicesTransparent;
 }
 
 void GeometryDataset::readData(const std::vector<uint8_t>& data) {
