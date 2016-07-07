@@ -16,7 +16,7 @@ InterleavingRenderer3D::~InterleavingRenderer3D() = default;
 
 void InterleavingRenderer3D::render(const VolumeDataset& volumeDataset, const std::vector<const GeometryDataset*>& geometryDatasets,
                                     const MVP3D& mvp, const TransferFunction& tf) {
-    /*CoordinateAxis stackDirection = CoordinateAxis::X_Axis; // FIXME!!!
+    CoordinateAxis stackDirection = CoordinateAxis::Z_Axis; // FIXME!!!
     const auto& sliceInfos = volumeDataset.sliceInfos()[stackDirection];
     float minDepth = sliceInfos[0].depth;
     float maxDepth = sliceInfos[sliceInfos.size() - 1].depth;
@@ -28,10 +28,25 @@ void InterleavingRenderer3D::render(const VolumeDataset& volumeDataset, const st
 
     for (size_t geoIndex = 0; geoIndex < geometryDatasets.size(); ++geoIndex) {
         const auto& ds = *geometryDatasets[geoIndex];
-        auto sortedIndices = ds.indicesTransparentSorted(mvp.eyePos());
         const auto& centroids = ds.centroids();
-        for (size_t centroidIndex = 0; centroidIndex < centroids.size(); ++centroidIndex) {
-            const auto& centroid = centroids[centroidIndex]; // FIXME: use sorted centroids
+        const auto& indices = ds.indicesTransparent();
+
+        auto permutation = duality::backToFrontPermutation(centroids, mvp.eyePos());
+
+        std::vector<IVDA::Vec3f> sortedCentroids;
+        duality::applyPermutation<1>(permutation, centroids, sortedCentroids);
+
+        std::vector<uint32_t> indicesSorted;
+        if (ds.geometry().info.primitiveType == G3D::Point) {
+            duality::applyPermutation<1>(permutation, indices, indicesSorted);
+        } else if (ds.geometry().info.primitiveType == G3D::Line) {
+            duality::applyPermutation<2>(permutation, indices, indicesSorted);
+        } else if (ds.geometry().info.primitiveType == G3D::Triangle) {
+            duality::applyPermutation<3>(permutation, indices, indicesSorted);
+        }
+
+        for (size_t centroidIndex = 0; centroidIndex < sortedCentroids.size(); ++centroidIndex) {
+            const auto& centroid = sortedCentroids[centroidIndex];
             float centroidDepth = centroid[stackDirection];
 
             // FIXME: hard coded 3
@@ -45,9 +60,15 @@ void InterleavingRenderer3D::render(const VolumeDataset& volumeDataset, const st
                                                      std::max<int>(0, int((numSlices - 1) * (centroidDepth - minDepth) / stackDepth))));
             }
 
-            auto indexStart = begin(sortedIndices) + 3 * centroidIndex;
+            auto indexStart = begin(indicesSorted) + 3 * centroidIndex;
             auto indexEnd = indexStart + 3;
             std::copy(indexStart, indexEnd, std::back_inserter(slapAssignments[geoIndex][slapIndex]));
         }
-    }*/
+        
+        for (size_t i = 0; i <= numSlices; ++i) {
+            if (slapAssignments[geoIndex].count(i)) {
+                m_geoRenderer->renderTransparentPartial(ds, mvp, slapAssignments[geoIndex][i]);
+            }
+        }
+    }
 }

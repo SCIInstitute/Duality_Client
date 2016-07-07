@@ -76,7 +76,7 @@ void GeometryRenderer3D::renderOpaque(const GeometryDataset& dataset, const MVP3
 
     int primitiveType = primitiveTypeGL(dataset);
     const auto& indices = dataset.indicesOpaque();
-    
+
     GL(glDrawElements(primitiveType, (GLsizei)indices.size(), GL_UNSIGNED_INT, indices.data()));
 
     for (int i = 0; i < attributeCount; ++i) {
@@ -85,33 +85,35 @@ void GeometryRenderer3D::renderOpaque(const GeometryDataset& dataset, const MVP3
 }
 
 void GeometryRenderer3D::renderTransparent(const GeometryDataset& dataset, const MVP3D& mvp) {
+    std::vector<IVDA::Vec3f> centroids(dataset.centroids());
+    auto permutation = duality::backToFrontPermutation(dataset.centroids(), mvp.eyePos());
+
+    const auto& indices = dataset.indicesTransparent();
+    std::vector<uint32_t> indicesSorted(indices.size());
+    if (dataset.geometry().info.primitiveType == G3D::Point) {
+        duality::applyPermutation<1>(permutation, indices, indicesSorted);
+    } else if (dataset.geometry().info.primitiveType == G3D::Line) {
+        duality::applyPermutation<2>(permutation, indices, indicesSorted);
+    } else if (dataset.geometry().info.primitiveType == G3D::Triangle) {
+        duality::applyPermutation<3>(permutation, indices, indicesSorted);
+    }
+
+    renderTransparentPartial(dataset, mvp, indicesSorted);
+}
+
+void GeometryRenderer3D::renderTransparentPartial(const GeometryDataset& dataset, const MVP3D& mvp, const std::vector<uint32_t>& indices) {
     auto& shader = determineActiveShader(dataset);
     shader.Enable();
     shader.SetValue("mvpMatrix", static_cast<IVDA::Mat4f>(mvp.mvp()));
     
     GL(glEnable(GL_BLEND));
     GL(glEnable(GL_DEPTH_TEST));
-
+    
     int attributeCount = enableAttributeArrays(dataset);
     int primitiveType = primitiveTypeGL(dataset);
     
-    std::vector<IVDA::Vec3f> centroids(dataset.centroids());
-    auto permutation = duality::backToFrontPermutation(dataset.centroids(), mvp.eyePos());
+    GL(glDrawElements(primitiveType, (GLsizei)indices.size(), GL_UNSIGNED_INT, indices.data()));
     
-    const auto& indices = dataset.indicesTransparent();
-    std::vector<uint32_t> indicesSorted(indices.size());
-    if (dataset.geometry().info.primitiveType == G3D::Point) {
-        duality::applyPermutation<1>(permutation, indices, indicesSorted);
-    }
-    else if (dataset.geometry().info.primitiveType == G3D::Line) {
-        duality::applyPermutation<2>(permutation, indices, indicesSorted);
-    }
-    else if (dataset.geometry().info.primitiveType == G3D::Triangle) {
-        duality::applyPermutation<3>(permutation, indices, indicesSorted);
-    }
-    
-    GL(glDrawElements(primitiveType, (GLsizei)indicesSorted.size(), GL_UNSIGNED_INT, indicesSorted.data()));
-
     for (int i = 0; i < attributeCount; ++i) {
         GL(glDisableVertexAttribArray(i));
     }
@@ -194,10 +196,10 @@ std::vector<int32_t> duality::backToFrontPermutation(const std::vector<IVDA::Vec
         float dist2 = (points[index2] - refPoint).sqLength();
         return dist1 > dist2;
     };
-    
+
     std::vector<int32_t> permutation(points.size());
     std::iota(begin(permutation), end(permutation), 0);
     std::sort(begin(permutation), end(permutation), sorter);
-    
+
     return permutation;
 }

@@ -14,6 +14,7 @@ public:
 
     void renderOpaque(const GeometryDataset& dataset, const MVP3D& mvp);
     void renderTransparent(const GeometryDataset& dataset, const MVP3D& mvp);
+    void renderTransparentPartial(const GeometryDataset& dataset, const MVP3D& mvp, const std::vector<uint32_t>& indices);
 
 private:
     static int primitiveTypeGL(const GeometryDataset& dataset);
