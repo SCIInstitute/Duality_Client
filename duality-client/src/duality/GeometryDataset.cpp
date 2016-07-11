@@ -5,6 +5,8 @@
 #include "IVDA/Vectors.h"
 #include "duality/Error.h"
 
+#include <cassert>
+
 using namespace IVDA;
 
 GeometryDataset::GeometryDataset(std::unique_ptr<DataProvider> provider, std::vector<Mat4f> transforms)
@@ -87,4 +89,17 @@ bool GeometryDataset::intersects(const BoundingBox& box) const {
 
 const G3D::GeometrySoA& GeometryDataset::geometry() const {
     return *m_geometry;
+}
+
+size_t duality::indicesPerPrimitive(const GeometryDataset& dataset) {
+    switch (dataset.geometry().info.primitiveType) {
+        case G3D::PrimitiveType::Point:
+            return 1;
+        case G3D::PrimitiveType::Line:
+            return 2;
+        case G3D::PrimitiveType::Triangle:
+            return 3;
+        default:
+            assert(false);
+    }
 }

@@ -73,3 +73,7 @@ private:
     std::vector<uint32_t> m_indicesTransparent;
     std::vector<IVDA::Vec3f> m_centroids;
 };
+
+namespace duality {
+    size_t indicesPerPrimitive(const GeometryDataset& dataset);
+}

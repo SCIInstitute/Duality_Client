@@ -3,10 +3,6 @@
 #include "duality/CoordinateSystem.h"
 #include "src/duality/GeometryDataset.h"
 #include "src/duality/GeometryRenderer3D.h"
-#include "src/duality/VolumeDataset.h"
-#include "src/duality/VolumeRenderer3D.h"
-
-#include <unordered_map>
 
 InterleavingRenderer3D::InterleavingRenderer3D()
     : m_geoRenderer(std::make_unique<GeometryRenderer3D>())
@@ -16,14 +12,33 @@ InterleavingRenderer3D::~InterleavingRenderer3D() = default;
 
 void InterleavingRenderer3D::render(const VolumeDataset& volumeDataset, const std::vector<const GeometryDataset*>& geometryDatasets,
                                     const MVP3D& mvp, const TransferFunction& tf) {
+    // sort primitives in between slices
     StackDirection stackDir = duality::determineStackDirection(static_cast<IVDA::Mat4f>(mvp.mv()));
+    std::vector<SlapAssignment> slapAssignments = calculateSlapAssignments(volumeDataset, geometryDatasets, stackDir, mvp);
+
+    // alternate rendering of slices and geometries between slices
+    const auto& sliceInfos = volumeDataset.sliceInfos()[stackDir.direction];
+    size_t numSlices = sliceInfos.size();
+    for (size_t i = 0; i < numSlices; ++i) {
+        const size_t sliceIndex = stackDir.reverse ? numSlices - i : i;
+        renderGeometries(geometryDatasets, mvp, sliceIndex, slapAssignments);
+        m_volRenderer->renderPartial(volumeDataset, mvp, tf, stackDir, i);
+    }
+    // render geometries in front of  / behind last slice
+    const size_t sliceIndex = stackDir.reverse ? 0 : numSlices;
+    renderGeometries(geometryDatasets, mvp, sliceIndex, slapAssignments);
+}
+
+std::vector<InterleavingRenderer3D::SlapAssignment>
+InterleavingRenderer3D::calculateSlapAssignments(const VolumeDataset& volumeDataset,
+                                                 const std::vector<const GeometryDataset*>& geometryDatasets,
+                                                 const StackDirection& stackDir, const MVP3D& mvp) {
     const auto& sliceInfos = volumeDataset.sliceInfos()[stackDir.direction];
     float minDepth = sliceInfos[0].depth;
     float maxDepth = sliceInfos[sliceInfos.size() - 1].depth;
     float stackDepth = maxDepth - minDepth;
     size_t numSlices = sliceInfos.size();
 
-    using SlapAssignment = std::map<size_t, std::vector<uint32_t>>;
     std::vector<SlapAssignment> slapAssignments(geometryDatasets.size());
 
     for (size_t geoIndex = 0; geoIndex < geometryDatasets.size(); ++geoIndex) {
@@ -32,7 +47,7 @@ void InterleavingRenderer3D::render(const VolumeDataset& volumeDataset, const st
         const auto& indices = ds.indicesTransparent();
 
         auto permutation = duality::backToFrontPermutation(centroids, mvp.eyePos());
-
+        
         std::vector<IVDA::Vec3f> sortedCentroids;
         duality::applyPermutation<1>(permutation, centroids, sortedCentroids);
 
@@ -59,24 +74,22 @@ void InterleavingRenderer3D::render(const VolumeDataset& volumeDataset, const st
                                                      std::max<int>(0, int((numSlices - 1) * (centroidDepth - minDepth) / stackDepth))));
             }
 
-            // FIXME: hard coded 3
-            auto indexStart = begin(indicesSorted) + 3 * centroidIndex;
-            auto indexEnd = indexStart + 3;
+            size_t ipp = duality::indicesPerPrimitive(ds);
+            auto indexStart = begin(indicesSorted) + ipp * centroidIndex;
+            auto indexEnd = indexStart + ipp;
             std::copy(indexStart, indexEnd, std::back_inserter(slapAssignments[geoIndex][slapIndex]));
         }
     }
+    return slapAssignments;
+}
 
-    for (size_t i = 0; i <= numSlices; ++i) {
-        const size_t renderIndex = stackDir.reverse ? numSlices - i : i;
-        for (size_t geoIndex = 0; geoIndex < geometryDatasets.size(); ++geoIndex) {
-            if (slapAssignments[geoIndex].count(renderIndex)) {
-                const auto& ds = *geometryDatasets[geoIndex];
-                m_geoRenderer->renderTransparentPartial(ds, mvp, slapAssignments[geoIndex][renderIndex]);
-            }
-        }
-        
-        if (i < numSlices ) {
-            m_volRenderer->renderPartial(volumeDataset, mvp, tf, stackDir, i);
+void InterleavingRenderer3D::renderGeometries(const std::vector<const GeometryDataset*>& geometryDatasets, const MVP3D& mvp,
+                                              const size_t sliceIndex, const std::vector<SlapAssignment>& slapAssignments) {
+    for (size_t geoIndex = 0; geoIndex < geometryDatasets.size(); ++geoIndex) {
+        if (slapAssignments[geoIndex].count(sliceIndex)) {
+            const auto& ds = *geometryDatasets[geoIndex];
+            const std::vector<uint32_t>& indices = slapAssignments[geoIndex].find(sliceIndex)->second;
+            m_geoRenderer->renderTransparentPartial(ds, mvp, indices);
         }
     }
 }
