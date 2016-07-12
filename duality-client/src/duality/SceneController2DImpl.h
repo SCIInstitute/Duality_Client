@@ -2,10 +2,11 @@
 
 #include "duality/InputVariable.h"
 #include "duality/SceneController2D.h"
+#include "duality/Settings.h"
 
+#include "src/IVDA/GLFrameBufferObject.h"
 #include "src/duality/MVP2D.h"
 #include "src/duality/RenderParameters2D.h"
-#include "src/IVDA/GLFrameBufferObject.h"
 
 #include <memory>
 
@@ -14,7 +15,8 @@ class RenderDispatcher2D;
 
 class SceneController2DImpl {
 public:
-    SceneController2DImpl(Scene& scene, const RenderParameters2D& initialParameters, std::shared_ptr<GLFrameBufferObject> fbo);
+    SceneController2DImpl(Scene& scene, const RenderParameters2D& initialParameters, std::shared_ptr<GLFrameBufferObject> fbo,
+                          std::shared_ptr<Settings> settings);
     ~SceneController2DImpl();
 
     void updateScreenInfo(const ScreenInfo& screenInfo);
@@ -31,7 +33,7 @@ public:
     void toggleAxis();
     std::pair<float, float> minMaxForCurrentAxis() const;
     std::string labelForCurrentAxis(SceneController2D::AxisLabelMode mode) const;
-    
+
     VariableMap variableMap() const;
     void setVariable(const std::string& objectName, const std::string& variableName, float value);
     void setVariable(const std::string& objectName, const std::string& variableName, const std::string& value);
@@ -39,4 +41,5 @@ public:
 private:
     Scene& m_scene;
     std::unique_ptr<RenderDispatcher2D> m_renderDispatcher;
+    std::shared_ptr<Settings> m_settings;
 };

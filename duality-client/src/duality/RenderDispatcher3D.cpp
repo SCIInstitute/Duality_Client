@@ -14,12 +14,14 @@
 
 #include <algorithm>
 
-RenderDispatcher3D::RenderDispatcher3D(std::shared_ptr<GLFrameBufferObject> fbo, const RenderParameters3D& initialParameters)
+RenderDispatcher3D::RenderDispatcher3D(std::shared_ptr<GLFrameBufferObject> fbo, const RenderParameters3D& initialParameters,
+                                       std::shared_ptr<Settings> settings)
     : m_fbo(fbo)
     , m_geoRenderer(std::make_unique<GeometryRenderer3D>())
     , m_volumeRenderer(std::make_unique<VolumeRenderer3D>())
     , m_interleavingRenderer(std::make_unique<InterleavingRenderer3D>())
     , m_parameters(initialParameters)
+    , m_settings(settings)
     , m_screenInfo()
     , m_boundingBox()
     , m_mvp()
@@ -115,7 +117,8 @@ void RenderDispatcher3D::dispatch(IntersectingNode& node) {
 }
 
 void RenderDispatcher3D::startDraw() {
-    GL(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
+    std::array<float, 3> backgroundColor = m_settings->backgroundColor();
+    GL(glClearColor(backgroundColor[0], backgroundColor[1], backgroundColor[2], 1.0f));
     GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 }
 

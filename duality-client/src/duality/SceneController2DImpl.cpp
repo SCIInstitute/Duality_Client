@@ -5,10 +5,11 @@
 #include "src/duality/Scene.h"
 
 SceneController2DImpl::SceneController2DImpl(Scene& scene, const RenderParameters2D& initialParameters,
-                                             std::shared_ptr<GLFrameBufferObject> fbo)
-    : m_scene(scene) {
+                                             std::shared_ptr<GLFrameBufferObject> fbo, std::shared_ptr<Settings> settings)
+    : m_scene(scene)
+    , m_renderDispatcher(std::make_unique<RenderDispatcher2D>(fbo, initialParameters, settings))
+    , m_settings(settings) {
     m_scene.updateDatasets();
-    m_renderDispatcher = std::make_unique<RenderDispatcher2D>(fbo, initialParameters);
 }
 
 SceneController2DImpl::~SceneController2DImpl() = default;

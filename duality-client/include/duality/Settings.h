@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <array>
 
 class Settings {
 public:
@@ -23,4 +24,9 @@ public:
         return true;
     }
     virtual void setCachingEnabled(bool enabled) {}
+    
+    virtual std::array<float, 3> backgroundColor() const {
+        return {0.0f, 0.0f, 0.0f};
+    }
+    virtual void setBackgroundColor(const std::array<float, 3>& color) {}
 };

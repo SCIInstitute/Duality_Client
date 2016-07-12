@@ -3,16 +3,18 @@
 #include "src/IVDA/GLFrameBufferObject.h"
 #include "src/IVDA/GLInclude.h"
 #include "src/duality/GeometryNode.h"
-#include "src/duality/VolumeNode.h"
 #include "src/duality/GeometryRenderer2D.h"
+#include "src/duality/VolumeNode.h"
 
 #include <OpenGLES/ES3/gl.h>
 
-RenderDispatcher2D::RenderDispatcher2D(std::shared_ptr<GLFrameBufferObject> fbo, const RenderParameters2D& initialParameters)
+RenderDispatcher2D::RenderDispatcher2D(std::shared_ptr<GLFrameBufferObject> fbo, const RenderParameters2D& initialParameters,
+                                       std::shared_ptr<Settings> settings)
     : m_fbo(fbo)
     , m_geoRenderer(std::make_unique<GeometryRenderer2D>())
     , m_volRenderer(std::make_unique<VolumeRenderer2D>())
     , m_parameters(initialParameters)
+    , m_settings(settings)
     , m_screenInfo()
     , m_boundingBox()
     , m_mvp()
@@ -24,7 +26,7 @@ void RenderDispatcher2D::render(const std::vector<std::unique_ptr<SceneNode>>& n
     if (!m_redraw) {
         return;
     }
-    
+
     startDraw();
     for (const auto& node : nodes) {
         if (node->isVisibleInView(View::View2D)) {
@@ -35,30 +37,22 @@ void RenderDispatcher2D::render(const std::vector<std::unique_ptr<SceneNode>>& n
 }
 
 void RenderDispatcher2D::dispatch(GeometryNode& node) {
-    if (m_redraw) {
-        m_geoRenderer->render(node.dataset(), m_mvp.mvp(), m_parameters.axis(), m_parameters.slice());
-    }
+    m_geoRenderer->render(node.dataset(), m_mvp.mvp(), m_parameters.axis(), m_parameters.slice());
 }
 
 void RenderDispatcher2D::dispatch(VolumeNode& node) {
-    if (m_redraw) {
-        m_volRenderer->render(node.dataset(), m_mvp.mvp(), node.transferFunction(), m_parameters.axis(), m_parameters.slice());
-    }
+    m_volRenderer->render(node.dataset(), m_mvp.mvp(), node.transferFunction(), m_parameters.axis(), m_parameters.slice());
 }
 
-bool RenderDispatcher2D::startDraw() {
-    if (m_redraw) {
-        GL(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
-        GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-    }
-    return m_redraw;
+void RenderDispatcher2D::startDraw() {
+    std::array<float, 3> backgroundColor = m_settings->backgroundColor();
+    GL(glClearColor(backgroundColor[0], backgroundColor[1], backgroundColor[2], 1.0f));
+    GL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 }
 
 void RenderDispatcher2D::finishDraw() {
-    if (m_redraw) {
-        m_fbo->Read(0);
-        m_redraw = false;
-    }
+    m_fbo->Read(0);
+    m_redraw = false;
 }
 void RenderDispatcher2D::updateScreenInfo(const ScreenInfo& screenInfo) {
     m_fbo->Resize(static_cast<unsigned int>(screenInfo.width / screenInfo.standardDownSampleFactor),
@@ -71,7 +65,7 @@ void RenderDispatcher2D::updateScreenInfo(const ScreenInfo& screenInfo) {
 void RenderDispatcher2D::updateBoundingBox(const BoundingBox& boundingBox) {
     m_boundingBox = boundingBox;
     if (m_parameters == RenderParameters2D()) {
-         m_parameters.setSlice((boundingBox.min[m_parameters.axis()] + boundingBox.max[m_parameters.axis()]) / 2);
+        m_parameters.setSlice((boundingBox.min[m_parameters.axis()] + boundingBox.max[m_parameters.axis()]) / 2);
     }
     m_mvp = MVP2D(m_screenInfo, m_boundingBox, m_parameters);
     m_redraw = true;

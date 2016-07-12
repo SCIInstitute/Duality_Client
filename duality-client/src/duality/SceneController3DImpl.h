@@ -1,8 +1,9 @@
 #pragma once
 
+#include "duality/Settings.h"
+#include "src/IVDA/GLFrameBufferObject.h"
 #include "src/duality/MVP3D.h"
 #include "src/duality/RenderParameters3D.h"
-#include "src/IVDA/GLFrameBufferObject.h"
 
 #include "duality/InputVariable.h"
 
@@ -13,7 +14,8 @@ class RenderDispatcher3D;
 
 class SceneController3DImpl {
 public:
-    SceneController3DImpl(Scene& scene, const RenderParameters3D& initialParameters, std::shared_ptr<GLFrameBufferObject> fbo);
+    SceneController3DImpl(Scene& scene, const RenderParameters3D& initialParameters, std::shared_ptr<GLFrameBufferObject> fbo,
+                          std::shared_ptr<Settings> settings);
     ~SceneController3DImpl();
 
     void updateScreenInfo(const ScreenInfo& screenInfo);
@@ -31,4 +33,5 @@ public:
 private:
     Scene& m_scene;
     std::unique_ptr<RenderDispatcher3D> m_renderDispatcher;
+    std::shared_ptr<Settings> m_settings;
 };

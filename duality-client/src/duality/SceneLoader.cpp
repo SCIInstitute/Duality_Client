@@ -133,12 +133,12 @@ std::weak_ptr<SceneController3D> SceneLoaderImpl::sceneController3D() {
 }
 
 void SceneLoaderImpl::createSceneController2D() {
-    auto impl = std::make_unique<SceneController2DImpl>(*m_scene, m_initialParameters2D, m_resultFbo);
+    auto impl = std::make_unique<SceneController2DImpl>(*m_scene, m_initialParameters2D, m_resultFbo, m_settings);
     m_sceneController2D = std::make_shared<SceneController2D>(std::move(impl));
 }
 
 void SceneLoaderImpl::createSceneController3D() {
-    auto impl = std::make_unique<SceneController3DImpl>(*m_scene, m_initialParameters3D, m_resultFbo);
+    auto impl = std::make_unique<SceneController3DImpl>(*m_scene, m_initialParameters3D, m_resultFbo, m_settings);
     m_sceneController3D = std::make_shared<SceneController3D>(std::move(impl));
 }
 
