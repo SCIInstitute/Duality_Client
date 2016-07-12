@@ -1,5 +1,7 @@
 #pragma once
 
+#include "duality/Settings.h"
+
 #include "mocca/fs/Path.h"
 
 #include "jsoncpp/json.h"
@@ -8,15 +10,13 @@
 
 class DataCache {
 public:
-    enum class Mode { Enabled, Disabled };
-    DataCache(const mocca::fs::Path& cacheDir, Mode mode = Mode::Enabled);
+    DataCache(const mocca::fs::Path& cacheDir, std::shared_ptr<Settings> settings);
 
-    void setMode(Mode mode);
     std::shared_ptr<std::vector<uint8_t>> fetch(const JsonCpp::Value& cacheID);
     void write(const JsonCpp::Value& cacheID, const std::vector<uint8_t>& data);
     void clear();
     
 private:
     mocca::fs::Path m_cacheDir;
-    Mode m_mode;
+    std::shared_ptr<Settings> m_settings;
 };

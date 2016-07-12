@@ -7,16 +7,12 @@
 #include "mocca/fs/Filesystem.h"
 #include "mocca/log/LogManager.h"
 
-DataCache::DataCache(const mocca::fs::Path& cacheDir, Mode mode)
+DataCache::DataCache(const mocca::fs::Path& cacheDir, std::shared_ptr<Settings> settings)
     : m_cacheDir(cacheDir)
-    , m_mode(mode) {}
-
-void DataCache::setMode(Mode mode) {
-    m_mode = mode;
-}
+    , m_settings(settings) {}
 
 std::shared_ptr<std::vector<uint8_t>> DataCache::fetch(const JsonCpp::Value& cacheID) {
-    if (m_mode == Mode::Disabled) {
+    if (!m_settings->cachingEnabled()) {
         return nullptr;
     }
 
@@ -45,7 +41,7 @@ std::shared_ptr<std::vector<uint8_t>> DataCache::fetch(const JsonCpp::Value& cac
 }
 
 void DataCache::write(const JsonCpp::Value& cacheID, const std::vector<uint8_t>& data) {
-    if (m_mode == Mode::Disabled) {
+    if (!m_settings->cachingEnabled()) {
         return;
     }
 

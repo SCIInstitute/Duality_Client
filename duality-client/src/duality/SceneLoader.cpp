@@ -20,11 +20,11 @@ using namespace IVDA;
 
 class SceneLoaderImpl {
 public:
-    SceneLoaderImpl(const mocca::net::Endpoint& endpoint, const mocca::fs::Path& cacheDir);
+    SceneLoaderImpl(const mocca::fs::Path& cacheDir, std::shared_ptr<Settings> settings);
 
-    void updateEndpoint(const mocca::net::Endpoint& endpoint);
+    std::shared_ptr<Settings> settings();
+    void updateEndpoint();
     void clearCache();
-    void setCachingEnabled(bool enabled);
 
     std::vector<SceneMetadata> listMetadata() const;
     void loadScene(const std::string& name);
@@ -40,6 +40,7 @@ private:
     void createSceneController3D();
 
 private:
+    std::shared_ptr<Settings> m_settings;
     std::shared_ptr<LazyRpcClient> m_rpc;
     std::shared_ptr<GLFrameBufferObject> m_resultFbo;
     std::shared_ptr<DataCache> m_dataCache;
@@ -50,21 +51,23 @@ private:
     std::shared_ptr<SceneController3D> m_sceneController3D;
 };
 
-SceneLoaderImpl::SceneLoaderImpl(const mocca::net::Endpoint& endpoint, const mocca::fs::Path& cacheDir)
-    : m_rpc(std::make_shared<LazyRpcClient>(endpoint))
+SceneLoaderImpl::SceneLoaderImpl(const mocca::fs::Path& cacheDir, std::shared_ptr<Settings> settings)
+    : m_settings(settings)
+    , m_rpc(std::make_shared<LazyRpcClient>(mocca::net::Endpoint("tcp.prefixed", settings->serverIP(), settings->serverPort())))
     , m_resultFbo(std::make_shared<GLFrameBufferObject>())
-    , m_dataCache(std::make_shared<DataCache>(cacheDir)) {}
+    , m_dataCache(std::make_shared<DataCache>(cacheDir, m_settings)) {}
 
-void SceneLoaderImpl::updateEndpoint(const mocca::net::Endpoint& endpoint) {
-    m_rpc = std::make_shared<LazyRpcClient>(endpoint);
+std::shared_ptr<Settings> SceneLoaderImpl::settings() {
+    return m_settings;
+}
+
+void SceneLoaderImpl::updateEndpoint() {
+    mocca::net::Endpoint ep("tcp.prefixed", m_settings->serverIP(), m_settings->serverPort());
+    m_rpc = std::make_shared<LazyRpcClient>(ep);
 }
 
 void SceneLoaderImpl::clearCache() {
     m_dataCache->clear();
-}
-
-void SceneLoaderImpl::setCachingEnabled(bool enabled) {
-    m_dataCache->setMode(enabled ? DataCache::Mode::Enabled : DataCache::Mode::Disabled);
 }
 
 std::vector<SceneMetadata> SceneLoaderImpl::listMetadata() const {
@@ -139,21 +142,21 @@ void SceneLoaderImpl::createSceneController3D() {
     m_sceneController3D = std::make_shared<SceneController3D>(std::move(impl));
 }
 
-SceneLoader::SceneLoader(const mocca::net::Endpoint& endpoint, const mocca::fs::Path& cacheDir)
-    : m_impl(std::make_unique<SceneLoaderImpl>(endpoint, cacheDir)) {}
+SceneLoader::SceneLoader(const mocca::fs::Path& cacheDir, std::shared_ptr<Settings> settings)
+    : m_impl(std::make_unique<SceneLoaderImpl>(cacheDir, settings)) {}
 
 SceneLoader::~SceneLoader() = default;
 
-void SceneLoader::updateEndpoint(const mocca::net::Endpoint& endpoint) {
-    m_impl->updateEndpoint(endpoint);
+std::shared_ptr<Settings> SceneLoader::settings() {
+    return m_impl->settings();
+}
+
+void SceneLoader::updateEndpoint() {
+    m_impl->updateEndpoint();
 }
 
 void SceneLoader::clearCache() {
     m_impl->clearCache();
-}
-
-void SceneLoader::setCachingEnabled(bool enabled) {
-    m_impl->setCachingEnabled(enabled);
 }
 
 std::vector<SceneMetadata> SceneLoader::listMetadata() const {

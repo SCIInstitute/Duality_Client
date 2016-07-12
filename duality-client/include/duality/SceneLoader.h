@@ -4,6 +4,7 @@
 #include "duality/SceneController3D.h"
 #include "duality/SceneMetadata.h"
 #include "duality/ScreenInfo.h"
+#include "duality/Settings.h"
 
 #include "mocca/fs/Path.h"
 #include "mocca/net/Endpoint.h"
@@ -15,12 +16,12 @@ class SceneLoaderImpl;
 
 class SceneLoader {
 public:
-    SceneLoader(const mocca::net::Endpoint& endpoint, const mocca::fs::Path& cacheDir);
+    SceneLoader(const mocca::fs::Path& cacheDir, std::shared_ptr<Settings> settings);
     ~SceneLoader();
 
-    void updateEndpoint(const mocca::net::Endpoint& endpoint);
+    std::shared_ptr<Settings> settings();    
+    void updateEndpoint();
     void clearCache();
-    void setCachingEnabled(bool enabled);
     
     std::vector<SceneMetadata> listMetadata() const;
     void loadScene(const std::string& name);
