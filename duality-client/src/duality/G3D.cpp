@@ -31,7 +31,7 @@ std::unique_ptr<G3D::GeometrySoA> G3D::createLineGeometry(std::vector<uint32_t> 
     geometry->vertexAttributes.push_back(std::move(colors));
 
     assignShortcutPointers(*geometry);
-    
+
     return geometry;
 }
 
@@ -131,7 +131,7 @@ G3D::GeometryInfo G3D::readHeader(AbstractReader& reader) {
         std::vector<uint32_t> buffer(numberSemantics * sizeof(uint32_t));
         reader.read((char*)buffer.data(), numberSemantics * sizeof(uint32_t));
         for (uint32_t i = 0; i < numberSemantics; ++i) {
-            info.attributeSemantics.push_back(buffer[i]);
+            info.attributeSemantics.push_back(static_cast<AttributeSemantic>(buffer[i]));
         }
     } else
         info.numberVertices = 0;
@@ -161,7 +161,8 @@ std::vector<float> G3D::convertVertices(const std::vector<std::vector<float>>& v
     for (uint32_t i = 0; i < info.numberVertices; ++i) {
         uint32_t offset = 0;
         uint32_t attributeIndex = 0;
-        for (std::vector<uint32_t>::const_iterator it = info.attributeSemantics.begin(); it != info.attributeSemantics.end(); ++it) {
+        for (std::vector<AttributeSemantic>::const_iterator it = info.attributeSemantics.begin(); it != info.attributeSemantics.end();
+             ++it) {
             uint32_t attributeFloats = floats(*it);
             for (uint32_t j = 0; j < attributeFloats; ++j)
                 vertices[j + offset + (i * vertexFloats)] = vertexAttributes[attributeIndex][j + (i * attributeFloats)];
@@ -215,7 +216,8 @@ std::vector<std::vector<float>> G3D::convertVertices(const std::vector<float>& v
     for (uint32_t i = 0; i < info.numberVertices; ++i) {
         uint32_t offset = 0;
         uint32_t attributeIndex = 0;
-        for (std::vector<uint32_t>::const_iterator it = info.attributeSemantics.begin(); it != info.attributeSemantics.end(); ++it) {
+        for (std::vector<AttributeSemantic>::const_iterator it = info.attributeSemantics.begin(); it != info.attributeSemantics.end();
+             ++it) {
             uint32_t attributeFloats = floats(*it);
             for (uint32_t j = 0; j < attributeFloats; ++j)
                 vertexAttributes[attributeIndex][j + (i * attributeFloats)] = vertices[j + offset + (i * vertexFloats)];
@@ -247,27 +249,27 @@ void G3D::readSoA(AbstractReader& reader, G3D::GeometrySoA& geometry) {
 void G3D::assignShortcutPointers(G3D::GeometrySoA& geometry) {
     for (size_t i = 0; i < geometry.info.attributeSemantics.size(); ++i) {
         switch (geometry.info.attributeSemantics[i]) {
-        case G3D::Position: {
+        case AttributeSemantic::Position: {
             geometry.positions = geometry.vertexAttributes.at(i).data();
             break;
         }
-        case G3D::Normal: {
+        case AttributeSemantic::Normal: {
             geometry.normals = geometry.vertexAttributes.at(i).data();
             break;
         }
-        case G3D::Tangent: {
+        case AttributeSemantic::Tangent: {
             geometry.tangents = geometry.vertexAttributes.at(i).data();
             break;
         }
-        case G3D::Color: {
+        case AttributeSemantic::Color: {
             geometry.colors = geometry.vertexAttributes.at(i).data();
             break;
         }
-        case G3D::Tex: {
+        case AttributeSemantic::Tex: {
             geometry.texcoords = geometry.vertexAttributes.at(i).data();
             break;
         }
-        case G3D::Float: {
+        case AttributeSemantic::Float: {
             geometry.alphas = geometry.vertexAttributes.at(i).data();
             break;
         }
@@ -316,6 +318,34 @@ void G3D::applyTransform(G3D::GeometrySoA& geometry, const IVDA::Mat4f& matrix) 
     }
 }
 
+void G3D::overrideColor(G3D::GeometrySoA& geometry, const Color& color) {
+    uint32_t numVertices = geometry.info.numberVertices;
+    if (geometry.colors != nullptr) {
+        // if the object already has colors, override them
+        float* colors = const_cast<float*>(geometry.colors);
+        for (uint32_t i = 0; i < numVertices; ++i, colors += 4) {
+            colors[0] = color.red;
+            colors[1] = color.green;
+            colors[2] = color.blue;
+            colors[3] = color.alpha;
+        }
+    } else {
+        // otherwise, create a new vertex attribute
+        geometry.info.attributeSemantics.push_back(AttributeSemantic::Color);
+        uint32_t stride = floats(AttributeSemantic::Color);
+        std::vector<float> colors(stride * numVertices);
+        for (uint32_t i = 0; i < numVertices; i++) {
+            colors[stride * i + 0] = color.red;
+            colors[stride * i + 1] = color.green;
+            colors[stride * i + 2] = color.blue;
+            colors[stride * i + 3] = color.alpha;
+        }
+        geometry.vertexAttributes.push_back(colors);
+        geometry.colors = geometry.vertexAttributes.back().data();
+        geometry.info.vertexSize += stride * sizeof(float);
+    }
+}
+
 std::string G3D::printPrimitiveType(const Geometry& geometry) {
     return ((geometry.info.primitiveType == Point) ? "Point" : (geometry.info.primitiveType == Line)
                                                                    ? "Line"
@@ -336,12 +366,16 @@ std::string G3D::printAttributeSemantics(const Geometry& geometry) {
         if (i)
             as.append(", ");
         auto const& it = geometry.info.attributeSemantics[i];
-        as.append(((it) == Position)
+        as.append(((it) == AttributeSemantic::Position)
                       ? "Position"
-                      : ((it) == Normal) ? "Normal"
-                                         : ((it) == Tangent)
-                                               ? "Tangent"
-                                               : ((it) == Color) ? "Color" : ((it) == Tex) ? "Tex" : ((it) == Float) ? "Float" : "Unknown");
+                      : ((it) == AttributeSemantic::Normal) ? "Normal" : ((it) == AttributeSemantic::Tangent)
+                                                                             ? "Tangent"
+                                                                             : ((it) == AttributeSemantic::Color)
+                                                                                   ? "Color"
+                                                                                   : ((it) == AttributeSemantic::Tex)
+                                                                                         ? "Tex"
+                                                                                         : ((it) == AttributeSemantic::Float) ? "Float"
+                                                                                                                              : "Unknown");
         as.append(" (" + std::to_string(floats(it)) + "f)");
     }
     return as;

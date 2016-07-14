@@ -1,5 +1,7 @@
 #pragma once
 
+#include "src/duality/Color.h"
+
 #include "IVDA/Vectors.h"
 
 #include <cstdint>
@@ -12,7 +14,7 @@ class AbstractWriter;
 
 class G3D {
 public:
-    enum AttributeSemantic { Position = 0, Normal = 1, Tangent = 2, Color = 3, Tex = 4, Float = 5 };
+    enum class AttributeSemantic { Position = 0, Normal = 1, Tangent = 2, Color = 3, Tex = 4, Float = 5 };
     enum PrimitiveType { Point, Line, Triangle, TriangleAdj };
     enum VertexType { SoA, AoS };
     struct GeometryInfo {
@@ -34,7 +36,7 @@ public:
         uint32_t indexSize;
         bool isOpaque;
 
-        std::vector<uint32_t> attributeSemantics;
+        std::vector<AttributeSemantic> attributeSemantics;
 
         int32_t indicesPerPrimitive() const {
             switch (primitiveType) {
@@ -84,19 +86,19 @@ public:
         float* alphas;
     };
 
-    static uint32_t floats(uint32_t semantic) {
+    static uint32_t floats(AttributeSemantic semantic) {
         switch (semantic) {
-        case Position:
+        case AttributeSemantic::Position:
             return 3;
-        case Normal:
+        case AttributeSemantic::Normal:
             return 3;
-        case Tangent:
+        case AttributeSemantic::Tangent:
             return 3;
-        case Color:
+        case AttributeSemantic::Color:
             return 4;
-        case Tex:
+        case AttributeSemantic::Tex:
             return 2;
-        case Float:
+        case AttributeSemantic::Float:
             return 1;
         }
         return 0;
@@ -105,6 +107,7 @@ public:
     static std::unique_ptr<GeometrySoA> createLineGeometry(std::vector<uint32_t> indices, std::vector<float> positions,
                                                            std::vector<float> colors);
     static void applyTransform(G3D::GeometrySoA& geometry, const IVDA::Mat4f& matrix);
+    static void overrideColor(G3D::GeometrySoA& geometry, const Color& color);
 
     static void write(AbstractWriter& writer, const GeometryAoS& geometry, uint32_t vertexType = AoS);
     static void write(AbstractWriter& writer, const GeometrySoA& geometry, uint32_t vertexType = SoA);

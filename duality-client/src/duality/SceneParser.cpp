@@ -9,6 +9,7 @@
 #include "src/duality/VolumeDataset.h"
 #include "src/duality/VolumeNode.h"
 
+#include "mocca/base/Nullable.h"
 #include "mocca/log/LogManager.h"
 
 using namespace IVDA;
@@ -63,7 +64,7 @@ std::unique_ptr<Scene> SceneParser::parseScene() {
     if (m_root.isMember("webViewURL")) {
         url = m_root["webViewURL"].asString();
     }
-    
+
     auto sceneJson = m_root["scene"];
     std::vector<std::unique_ptr<SceneNode>> nodes;
     for (auto it = sceneJson.begin(); it != sceneJson.end(); ++it) {
@@ -96,7 +97,11 @@ std::unique_ptr<GeometryDataset> SceneParser::parseGeometryDataset(const JsonCpp
             transforms.push_back(parseTransform(transform));
         }
     }
-    return std::make_unique<GeometryDataset>(std::move(provider), std::move(transforms));
+    mocca::Nullable<Color> color;
+    if (node.isMember("color")) {
+        color = parseColor(node["color"]);
+    }
+    return std::make_unique<GeometryDataset>(std::move(provider), std::move(transforms), std::move(color));
 }
 
 std::unique_ptr<SceneNode> SceneParser::parseVolumeNode(const JsonCpp::Value& node) {
@@ -185,6 +190,13 @@ Mat4f SceneParser::parseTransform(const JsonCpp::Value& node) {
         }
         return m_transforms[refName];
     }
+}
+
+Color SceneParser::parseColor(const JsonCpp::Value& node) {
+    if (!node.isArray() || !(node.size() == 4)) {
+        throw Error("Invalid color", __FILE__, __LINE__);
+    }
+    return Color(node[0].asFloat(), node[1].asFloat(), node[2].asFloat(), node[3].asFloat());
 }
 
 std::unique_ptr<DataProvider> SceneParser::parsePython(const JsonCpp::Value& node) {

@@ -2,11 +2,14 @@
 
 #include "src/duality/G3D.h"
 
-#include "src/duality/Dataset.h"
 #include "src/duality/BoundingBox.h"
+#include "src/duality/Color.h"
+#include "src/duality/Dataset.h"
 
 #include "IVDA/GLMatrix.h"
 #include "IVDA/Vectors.h"
+
+#include "mocca/base/Nullable.h"
 
 #include <array>
 #include <numeric>
@@ -16,13 +19,14 @@ class NodeDispatcher;
 
 class GeometryDataset : public Dataset {
 public:
-    GeometryDataset(std::unique_ptr<DataProvider> provider, std::vector<IVDA::Mat4f> transforms = {});
+    GeometryDataset(std::unique_ptr<DataProvider> provider, std::vector<IVDA::Mat4f> transforms = {},
+                    mocca::Nullable<Color> color = mocca::Nullable<Color>());
 
     bool isTransparent() const;
     const std::vector<uint32_t>& indicesOpaque() const;
     const std::vector<uint32_t>& indicesTransparent() const;
     const std::vector<IVDA::Vec3f>& centroids() const;
-    
+
     BoundingBox boundingBox() const;
     const G3D::GeometrySoA& geometry() const;
     bool intersects(const BoundingBox& box) const;
@@ -69,11 +73,12 @@ private:
 private:
     std::unique_ptr<G3D::GeometrySoA> m_geometry;
     std::vector<IVDA::Mat4f> m_transforms;
+    mocca::Nullable<Color> m_color;
     std::vector<uint32_t> m_indicesOpaque;
     std::vector<uint32_t> m_indicesTransparent;
     std::vector<IVDA::Vec3f> m_centroids;
 };
 
 namespace duality {
-    size_t indicesPerPrimitive(const GeometryDataset& dataset);
+size_t indicesPerPrimitive(const GeometryDataset& dataset);
 }

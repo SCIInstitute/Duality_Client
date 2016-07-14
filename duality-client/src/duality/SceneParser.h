@@ -4,6 +4,7 @@
 #include "duality/InputVariable.h"
 #include "duality/SceneMetadata.h"
 
+#include "src/duality/Color.h"
 #include "src/duality/Communication.h"
 #include "src/duality/RenderParameters2D.h"
 #include "src/duality/RenderParameters3D.h"
@@ -50,6 +51,8 @@ private:
     IVDA::Mat4f parseMatrix(const JsonCpp::Value& node);
     IVDA::Mat4f parseTransform(const JsonCpp::Value& node);
 
+    Color parseColor(const JsonCpp::Value& node);
+    
     void parseParams(const JsonCpp::Value& node);
     void parseFloatVariable(const JsonCpp::Value& node);
     void parseEnumVariable(const JsonCpp::Value& node);

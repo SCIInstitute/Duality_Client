@@ -9,9 +9,10 @@
 
 using namespace IVDA;
 
-GeometryDataset::GeometryDataset(std::unique_ptr<DataProvider> provider, std::vector<Mat4f> transforms)
+GeometryDataset::GeometryDataset(std::unique_ptr<DataProvider> provider, std::vector<Mat4f> transforms, mocca::Nullable<Color> color)
     : Dataset(std::move(provider))
-    , m_transforms(transforms)
+    , m_transforms(std::move(transforms))
+    , m_color(std::move(color))
     , m_geometry(nullptr) {}
 
 bool GeometryDataset::isTransparent() const {
@@ -36,6 +37,9 @@ void GeometryDataset::readData(const std::vector<uint8_t>& data) {
     G3D::readSoA(reader, *m_geometry);
     for (const auto& transform : m_transforms) {
         G3D::applyTransform(*m_geometry, transform);
+    }
+    if (!m_color.isNull()) {
+        G3D::overrideColor(*m_geometry, m_color);
     }
     presortIndices();
     computeCentroids();
@@ -79,8 +83,8 @@ BoundingBox GeometryDataset::boundingBox() const {
 
 bool GeometryDataset::intersects(const BoundingBox& box) const {
     for (const auto& centroid : m_centroids) {
-        if (centroid.x >= box.min.x && centroid.y >= box.min.y && centroid.z >= box.min.z &&
-            centroid.x <= box.max.x && centroid.y <= box.max.y && centroid.z <= box.max.z) {
+        if (centroid.x >= box.min.x && centroid.y >= box.min.y && centroid.z >= box.min.z && centroid.x <= box.max.x &&
+            centroid.y <= box.max.y && centroid.z <= box.max.z) {
             return true;
         }
     }
@@ -93,13 +97,13 @@ const G3D::GeometrySoA& GeometryDataset::geometry() const {
 
 size_t duality::indicesPerPrimitive(const GeometryDataset& dataset) {
     switch (dataset.geometry().info.primitiveType) {
-        case G3D::PrimitiveType::Point:
-            return 1;
-        case G3D::PrimitiveType::Line:
-            return 2;
-        case G3D::PrimitiveType::Triangle:
-            return 3;
-        default:
-            assert(false);
+    case G3D::PrimitiveType::Point:
+        return 1;
+    case G3D::PrimitiveType::Line:
+        return 2;
+    case G3D::PrimitiveType::Triangle:
+        return 3;
+    default:
+        assert(false);
     }
 }
