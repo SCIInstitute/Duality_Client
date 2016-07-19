@@ -21,9 +21,12 @@ public:
     void addRotation(const float rotationAngle);
     void addZoom(const float zoom);
     
-    std::pair<float, float> minMaxForCurrentAxis() const;
-    void setSlice(float slice);
-    float slice() const;
+    bool supportsSlices() const;
+    int numSlicesForCurrentAxis() const;
+    void setSlice(int slice);
+    
+    std::pair<float, float> boundsForCurrentAxis() const;
+    void setDepth(float depth);
 
     void toggleAxis();
     enum class AxisLabelMode { Mathematical, Anatomical };

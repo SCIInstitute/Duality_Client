@@ -10,6 +10,7 @@ SceneController2DImpl::SceneController2DImpl(Scene& scene, const RenderParameter
     , m_renderDispatcher(std::make_unique<RenderDispatcher2D>(fbo, initialParameters, settings))
     , m_settings(settings) {
     m_scene.updateDatasets();
+    m_sliderCalculator = std::make_unique<SliderParameterCalculator>(m_scene);
 }
 
 SceneController2DImpl::~SceneController2DImpl() = default;
@@ -36,22 +37,31 @@ void SceneController2DImpl::addZoom(const float zoom) {
     m_renderDispatcher->addZoom(zoom);
 }
 
-void SceneController2DImpl::setSlice(float slice) {
-    m_renderDispatcher->setSlice(slice);
+bool SceneController2DImpl::supportsSlices() const {
+    return m_sliderCalculator->supportsSlice();
 }
 
-float SceneController2DImpl::slice() const {
-    return m_renderDispatcher->slice();
+int SceneController2DImpl::numSlicesForCurrentAxis() const {
+    return m_sliderCalculator->numSlicesForAxis(m_renderDispatcher->currentAxis());
+}
+
+void SceneController2DImpl::setSlice(int slice) {
+    assert(m_sliderCalculator->supportsSlice());
+    auto sliderParameter = m_sliderCalculator->parameterForSlice(slice, m_renderDispatcher->currentAxis());
+    m_renderDispatcher->setSliderParameter(sliderParameter);
+}
+
+std::pair<float, float> SceneController2DImpl::boundsForCurrentAxis() const {
+    return m_sliderCalculator->boundsForAxis(m_renderDispatcher->currentAxis());
+}
+
+void SceneController2DImpl::setDepth(float depth) {
+    auto sliderParameter = m_sliderCalculator->parameterForDepth(depth, m_renderDispatcher->currentAxis());
+    m_renderDispatcher->setSliderParameter(sliderParameter);
 }
 
 void SceneController2DImpl::toggleAxis() {
     m_renderDispatcher->toggleAxis();
-}
-
-std::pair<float, float> SceneController2DImpl::minMaxForCurrentAxis() const {
-    BoundingBox boundingBox = m_scene.boundingBox(View::View2D);
-    auto axis = m_renderDispatcher->currentAxis();
-    return std::make_pair(boundingBox.min[axis], boundingBox.max[axis]);
 }
 
 std::string SceneController2DImpl::labelForCurrentAxis(SceneController2D::AxisLabelMode mode) const {

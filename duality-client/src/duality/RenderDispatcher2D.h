@@ -5,6 +5,7 @@
 #include "duality/Settings.h"
 #include "src/duality/GeometryRenderer2D.h"
 #include "src/duality/MVP2D.h"
+#include "src/duality/SliderParameter.h"
 #include "src/duality/VolumeRenderer2D.h"
 
 class GLFrameBufferObject;
@@ -31,10 +32,9 @@ public:
     void addTranslation(const IVDA::Vec2f& translation);
     void addRotation(const float rotationAngle);
     void addZoom(const float zoom);
-    void setSlice(float slice);
+    void setSliderParameter(const SliderParameter& sliderParameter);
     void toggleAxis();
 
-    float slice() const;
     CoordinateAxis currentAxis() const;
 
 private:

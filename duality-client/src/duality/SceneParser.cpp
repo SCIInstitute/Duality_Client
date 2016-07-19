@@ -50,8 +50,9 @@ mocca::Nullable<RenderParameters2D> SceneParser::initialParameters2D() {
         float rotation = node["rotation"].asFloat();
         float zoom = node["zoom"].asFloat();
         CoordinateAxis axis = coordinateAxisMapper().getBySecond(node["axis"].asString());
-        float slice = node["slice"].asFloat();
-        return RenderParameters2D(translation, rotation, zoom, axis, slice);
+        float depth = node["depth"].asFloat();
+        SliderParameter sliderParameter(0, depth);
+        return RenderParameters2D(translation, rotation, zoom, axis, sliderParameter);
     }
     return mocca::Nullable<RenderParameters2D>();
 }

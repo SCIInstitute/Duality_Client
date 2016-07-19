@@ -37,11 +37,26 @@ void RenderDispatcher2D::render(const std::vector<std::unique_ptr<SceneNode>>& n
 }
 
 void RenderDispatcher2D::dispatch(GeometryNode& node) {
-    m_geoRenderer->render(node.dataset(), m_mvp.mvp(), m_parameters.axis(), m_parameters.slice());
+    float depth = m_parameters.sliderParameter().depth();
+    m_geoRenderer->render(node.dataset(), m_mvp.mvp(), m_parameters.axis(), depth);
 }
 
 void RenderDispatcher2D::dispatch(VolumeNode& node) {
-    m_volRenderer->render(node.dataset(), m_mvp.mvp(), node.transferFunction(), m_parameters.axis(), m_parameters.slice());
+    auto sliderParameter = m_parameters.sliderParameter();
+    CoordinateAxis axis = m_parameters.axis();
+    int slice;
+    if (sliderParameter.hasSlice()) {
+        slice = sliderParameter.slice();
+    } else {
+        BoundingBox bb = node.boundingBox();
+        int numSlices = static_cast<int>(node.dataset().sliceInfos()[axis].size());
+        float range = std::abs(bb.max[axis] - bb.min[axis]);
+        slice = std::min<int>((sliderParameter.depth() - bb.min[axis]) / range * numSlices, numSlices - 1);
+        if (slice < 0 || slice >= numSlices) {
+            return;
+        }
+    }
+    m_volRenderer->render(node.dataset(), m_mvp.mvp(), node.transferFunction(), axis, slice);
 }
 
 void RenderDispatcher2D::startDraw() {
@@ -64,9 +79,9 @@ void RenderDispatcher2D::updateScreenInfo(const ScreenInfo& screenInfo) {
 
 void RenderDispatcher2D::updateBoundingBox(const BoundingBox& boundingBox) {
     m_boundingBox = boundingBox;
-    if (m_parameters == RenderParameters2D()) {
+    /*if (m_parameters == RenderParameters2D()) {
         m_parameters.setSlice((boundingBox.min[m_parameters.axis()] + boundingBox.max[m_parameters.axis()]) / 2);
-    }
+    }*/ // FIXME
     m_mvp = MVP2D(m_screenInfo, m_boundingBox, m_parameters);
     m_redraw = true;
 }
@@ -93,8 +108,8 @@ void RenderDispatcher2D::addZoom(const float zoom) {
     m_redraw = true;
 }
 
-void RenderDispatcher2D::setSlice(float slice) {
-    m_parameters.setSlice(slice);
+void RenderDispatcher2D::setSliderParameter(const SliderParameter& sliderParameter) {
+    m_parameters.setSliderParameter(sliderParameter);
     m_mvp.updateParameters(m_parameters);
     m_redraw = true;
 }
@@ -103,10 +118,6 @@ void RenderDispatcher2D::toggleAxis() {
     m_parameters.toggleAxis();
     m_mvp.updateParameters(m_parameters);
     m_redraw = true;
-}
-
-float RenderDispatcher2D::slice() const {
-    return m_parameters.slice();
 }
 
 CoordinateAxis RenderDispatcher2D::currentAxis() const {

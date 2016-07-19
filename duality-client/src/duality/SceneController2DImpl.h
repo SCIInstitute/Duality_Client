@@ -6,12 +6,13 @@
 
 #include "src/IVDA/GLFrameBufferObject.h"
 #include "src/duality/MVP2D.h"
-#include "src/duality/RenderParameters2D.h"
+#include "src/duality/SliderParameterCalculator.h"
 
 #include <memory>
 
 class Scene;
 class RenderDispatcher2D;
+class RenderParameters2D;
 
 class SceneController2DImpl {
 public:
@@ -27,11 +28,14 @@ public:
     void addRotation(const float rotationAngle);
     void addZoom(const float zoom);
 
-    void setSlice(float slice);
-    float slice() const;
+    bool supportsSlices() const;
+    int numSlicesForCurrentAxis() const;
+    void setSlice(int slice);
+    
+    std::pair<float, float> boundsForCurrentAxis() const;
+    void setDepth(float depth);
 
     void toggleAxis();
-    std::pair<float, float> minMaxForCurrentAxis() const;
     std::string labelForCurrentAxis(SceneController2D::AxisLabelMode mode) const;
 
     VariableMap variableMap() const;
@@ -40,6 +44,7 @@ public:
 
 private:
     Scene& m_scene;
+    std::unique_ptr<SliderParameterCalculator> m_sliderCalculator;
     std::unique_ptr<RenderDispatcher2D> m_renderDispatcher;
     std::shared_ptr<Settings> m_settings;
 };

@@ -5,15 +5,15 @@ RenderParameters2D::RenderParameters2D()
     , m_rotationAngle(0.0f)
     , m_zoom(0.0f)
     , m_axis(CoordinateAxis::X_Axis)
-    , m_slice(0.0f) {}
+    , m_sliderParameter(0, 0.0f) {}
 
 RenderParameters2D::RenderParameters2D(const IVDA::Vec2f& initialTranslation, const float initialRotationAngle, const float initialZoom,
-                                       CoordinateAxis initialAxis, float initialSlice)
+                                       CoordinateAxis initialAxis, const SliderParameter& initialSliderParameter)
     : m_translation(initialTranslation)
     , m_rotationAngle(initialRotationAngle)
     , m_zoom(initialZoom)
     , m_axis(initialAxis)
-    , m_slice(initialSlice) {}
+    , m_sliderParameter(initialSliderParameter) {}
 
 const IVDA::Vec2f& RenderParameters2D::transation() const noexcept {
     return m_translation;
@@ -47,12 +47,12 @@ void RenderParameters2D::addZoom(const float zoom) {
     m_zoom += (m_zoom * zoom);
 }
 
-void RenderParameters2D::setSlice(float slice) {
-    m_slice = slice;
+void RenderParameters2D::setSliderParameter(const SliderParameter& sliderParameter) {
+    m_sliderParameter = sliderParameter;
 }
 
-float RenderParameters2D::slice() const noexcept {
-    return m_slice;
+SliderParameter RenderParameters2D::sliderParameter() const noexcept {
+    return m_sliderParameter;
 }
 
 void RenderParameters2D::toggleAxis() {
@@ -65,7 +65,7 @@ CoordinateAxis RenderParameters2D::axis() const noexcept {
 
 bool operator==(const RenderParameters2D& lhs, const RenderParameters2D& rhs) {
     return lhs.transation() == rhs.transation() && lhs.rotationAngle() == rhs.rotationAngle() && lhs.zoom() == rhs.zoom() &&
-           lhs.axis() == rhs.axis() && lhs.slice() == rhs.slice();
+           lhs.axis() == rhs.axis() && lhs.sliderParameter() == rhs.sliderParameter();
 }
 
 bool operator!=(const RenderParameters2D& lhs, const RenderParameters2D& rhs) {

@@ -13,7 +13,7 @@ public:
     GeometryRenderer2D();
     ~GeometryRenderer2D();
 
-    void render(const GeometryDataset& dataset, const GLMatrix& mvp, CoordinateAxis axis, float slice);
+    void render(const GeometryDataset& dataset, const GLMatrix& mvp, CoordinateAxis axis, float depth);
 
 private:
     std::unique_ptr<GLShader> m_shader;

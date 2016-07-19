@@ -35,16 +35,24 @@ void SceneController2D::addZoom(const float zoom) {
     m_impl->addZoom(zoom);
 }
 
-std::pair<float, float> SceneController2D::minMaxForCurrentAxis() const {
-    return m_impl->minMaxForCurrentAxis();
+bool SceneController2D::supportsSlices() const {
+    return m_impl->supportsSlices();
 }
 
-void SceneController2D::setSlice(float slice) {
+int SceneController2D::numSlicesForCurrentAxis() const {
+    return m_impl->numSlicesForCurrentAxis();
+}
+
+void SceneController2D::setSlice(int slice) {
     m_impl->setSlice(slice);
 }
 
-float SceneController2D::slice() const {
-    return m_impl->slice();
+std::pair<float, float> SceneController2D::boundsForCurrentAxis() const {
+    return m_impl->boundsForCurrentAxis();
+}
+
+void SceneController2D::setDepth(float depth) {
+    m_impl->setDepth(depth);
 }
 
 void SceneController2D::toggleAxis() {

@@ -3,6 +3,7 @@
 #include "src/IVDA/GLInclude.h"
 #include "src/IVDA/GLShader.h"
 #include "src/duality/GeometryUtil.h"
+#include "src/duality/SliderParameter.h"
 
 #include <OpenGLES/ES3/gl.h>
 
@@ -16,8 +17,8 @@ GeometryRenderer2D::GeometryRenderer2D() {
 
 GeometryRenderer2D::~GeometryRenderer2D() = default;
 
-void GeometryRenderer2D::render(const GeometryDataset& dataset, const GLMatrix& mvp, CoordinateAxis axis, float slice) {
-    auto lines = GeometryUtil::clipGeometry(dataset.geometry(), axis, slice);
+void GeometryRenderer2D::render(const GeometryDataset& dataset, const GLMatrix& mvp, CoordinateAxis axis, float depth) {
+    auto lines = GeometryUtil::clipGeometry(dataset.geometry(), axis, depth);
 
     if (lines->positions) {
         GL(glVertexAttribPointer(0, 3, GL_FLOAT, 0, 0, lines->positions));

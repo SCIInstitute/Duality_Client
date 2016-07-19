@@ -90,7 +90,8 @@ void SceneLoaderImpl::loadScene(const std::string& name) {
             m_scene = parser.parseScene();
             RenderParameters3D default3D(Vec3f(0.0f, 0.0f, -3.0f), Mat4f());
             m_initialParameters3D = parser.initialParameters3D().getOr(default3D);
-            RenderParameters2D default2D(Vec2f(0.0f, 0.0f), 0.0f, 1.0f, CoordinateAxis::X_Axis, 0.0f);
+            SliderParameter sliderParameter(0, 0.0f);
+            RenderParameters2D default2D(Vec2f(0.0f, 0.0f), 0.0f, 1.0f, CoordinateAxis::X_Axis, sliderParameter);
             m_initialParameters2D = parser.initialParameters2D().getOr(default2D);
             m_sceneController2D = nullptr;
             m_sceneController3D = nullptr;
