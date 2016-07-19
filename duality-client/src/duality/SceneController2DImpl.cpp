@@ -13,6 +13,10 @@ SceneController2DImpl::SceneController2DImpl(Scene& scene, const RenderParameter
     , m_renderDispatcher(std::make_unique<RenderDispatcher2D>(fbo, settings)) {
     m_scene.updateDatasets();
     m_sliderCalculator = std::make_unique<SliderParameterCalculator>(m_scene);
+    if (m_parameters == RenderParameters2D()) {
+        auto middle = (m_boundingBox.min[m_parameters.axis()] + m_boundingBox.max[m_parameters.axis()]) / 2;
+        m_parameters.setSliderParameter(m_sliderCalculator->parameterForDepth(middle, m_parameters.axis()));
+    }
 }
 
 SceneController2DImpl::~SceneController2DImpl() = default;
@@ -72,6 +76,10 @@ void SceneController2DImpl::setDepth(float depth) {
     m_parameters.setSliderParameter(sliderParameter);
     m_mvp.updateParameters(m_parameters);
     m_renderDispatcher->setRedrawRequired();
+}
+
+SliderParameter SceneController2DImpl::sliderParameter() const {
+    return m_parameters.sliderParameter();
 }
 
 void SceneController2DImpl::toggleAxis() {

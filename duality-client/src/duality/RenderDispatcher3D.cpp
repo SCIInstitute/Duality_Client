@@ -5,6 +5,7 @@
 #include "src/duality/GeometryNode.h"
 #include "src/duality/GeometryRenderer3D.h"
 #include "src/duality/InterleavingRenderer3D.h"
+#include "src/duality/MVP3d.h"
 #include "src/duality/SceneNode.h"
 #include "src/duality/View.h"
 #include "src/duality/VolumeNode.h"

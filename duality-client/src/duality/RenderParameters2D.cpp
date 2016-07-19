@@ -3,9 +3,9 @@
 RenderParameters2D::RenderParameters2D()
     : m_translation()
     , m_rotationAngle(0.0f)
-    , m_zoom(0.0f)
+    , m_zoom(1.0f)
     , m_axis(CoordinateAxis::X_Axis)
-    , m_sliderParameter(0, 0.0f) {}
+    , m_sliderParameter(0.0f) {}
 
 RenderParameters2D::RenderParameters2D(const IVDA::Vec2f& initialTranslation, const float initialRotationAngle, const float initialZoom,
                                        CoordinateAxis initialAxis, const SliderParameter& initialSliderParameter)

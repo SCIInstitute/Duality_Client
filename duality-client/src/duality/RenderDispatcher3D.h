@@ -1,10 +1,7 @@
 #pragma once
 
 #include "IVDA/Vectors.h"
-#include "duality/ScreenInfo.h"
 #include "duality/Settings.h"
-#include "src/duality/BoundingBox.h"
-#include "src/duality/MVP3D.h"
 #include "src/duality/RenderableConcept.h"
 
 class GLFrameBufferObject;
@@ -14,6 +11,7 @@ class InterleavingRenderer3D;
 class GeometryNode;
 class VolumeNode;
 class SceneNode;
+class MVP3D;
 
 class RenderDispatcher3D {
 public:

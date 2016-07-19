@@ -2,7 +2,7 @@
 
 #include "IVDA/Vectors.h"
 #include "duality/CoordinateSystem.h"
-#include "src/duality/SliderParameter.h"
+#include "duality/SliderParameter.h"
 
 class RenderParameters2D {
 public:

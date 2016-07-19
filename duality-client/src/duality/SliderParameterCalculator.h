@@ -1,7 +1,7 @@
 #pragma once
 
 #include "duality/CoordinateSystem.h"
-#include "src/duality/SliderParameter.h"
+#include "duality/SliderParameter.h"
 
 #include <array>
 

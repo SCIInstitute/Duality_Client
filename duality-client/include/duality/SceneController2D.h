@@ -3,6 +3,7 @@
 #include "IVDA/Vectors.h"
 #include "duality/ScreenInfo.h"
 #include "duality/InputVariable.h"
+#include "duality/SliderParameter.h"
 
 #include <memory>
 
@@ -24,9 +25,9 @@ public:
     bool supportsSlices() const;
     int numSlicesForCurrentAxis() const;
     void setSlice(int slice);
-    
     std::pair<float, float> boundsForCurrentAxis() const;
     void setDepth(float depth);
+    SliderParameter sliderParameter() const;
 
     void toggleAxis();
     enum class AxisLabelMode { Mathematical, Anatomical };

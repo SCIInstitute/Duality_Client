@@ -1,11 +1,9 @@
 #pragma once
 
 #include "IVDA/Vectors.h"
-#include "duality/ScreenInfo.h"
 #include "duality/Settings.h"
+#include "duality/SliderParameter.h"
 #include "src/duality/GeometryRenderer2D.h"
-#include "src/duality/MVP2D.h"
-#include "src/duality/SliderParameter.h"
 #include "src/duality/VolumeRenderer2D.h"
 
 class GLFrameBufferObject;
@@ -13,6 +11,7 @@ class GeometryRenderer2D;
 class GeometryNode;
 class VolumeNode;
 class SceneNode;
+class MVP2D;
 
 class RenderDispatcher2D {
 public:

@@ -3,7 +3,6 @@
 #include "src/IVDA/GLInclude.h"
 #include "src/IVDA/GLShader.h"
 #include "src/duality/GeometryUtil.h"
-#include "src/duality/SliderParameter.h"
 
 #include <OpenGLES/ES3/gl.h>
 

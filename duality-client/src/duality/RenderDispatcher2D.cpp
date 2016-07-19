@@ -4,6 +4,7 @@
 #include "src/IVDA/GLInclude.h"
 #include "src/duality/GeometryNode.h"
 #include "src/duality/GeometryRenderer2D.h"
+#include "src/duality/MVP2D.h"
 #include "src/duality/VolumeNode.h"
 
 #include <OpenGLES/ES3/gl.h>
@@ -13,7 +14,7 @@ RenderDispatcher2D::RenderDispatcher2D(std::shared_ptr<GLFrameBufferObject> fbo,
     , m_geoRenderer(std::make_unique<GeometryRenderer2D>())
     , m_volRenderer(std::make_unique<VolumeRenderer2D>())
     , m_settings(settings)
-    , m_sliderParameter(SliderParameter(0, 0.0f))
+    , m_sliderParameter(SliderParameter(0.0f))
     , m_redraw(true) {}
 
 RenderDispatcher2D::~RenderDispatcher2D() = default;

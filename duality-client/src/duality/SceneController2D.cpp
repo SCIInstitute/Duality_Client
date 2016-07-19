@@ -55,6 +55,10 @@ void SceneController2D::setDepth(float depth) {
     m_impl->setDepth(depth);
 }
 
+SliderParameter SceneController2D::sliderParameter() const {
+    return m_impl->sliderParameter();
+}
+
 void SceneController2D::toggleAxis() {
     m_impl->toggleAxis();
 }

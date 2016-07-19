@@ -1,4 +1,4 @@
-#include "src/duality/SliderParameter.h"
+#include "duality/SliderParameter.h"
 
 SliderParameter::SliderParameter(int slice, float depth)
     : m_hasSlice(true)
@@ -23,7 +23,7 @@ float SliderParameter::depth() const {
 }
 
 bool operator==(const SliderParameter& lhs, const SliderParameter& rhs) {
-    return lhs.slice() == rhs.slice() && lhs.depth() == rhs.depth();
+    return lhs.hasSlice() == rhs.hasSlice() && lhs.slice() == rhs.slice() && lhs.depth() == rhs.depth();
 }
 
 bool operator!=(const SliderParameter& lhs, const SliderParameter& rhs) {

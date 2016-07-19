@@ -31,9 +31,9 @@ public:
     bool supportsSlices() const;
     int numSlicesForCurrentAxis() const;
     void setSlice(int slice);
-    
     std::pair<float, float> boundsForCurrentAxis() const;
     void setDepth(float depth);
+    SliderParameter sliderParameter() const;
 
     void toggleAxis();
     std::string labelForCurrentAxis(SceneController2D::AxisLabelMode mode) const;
