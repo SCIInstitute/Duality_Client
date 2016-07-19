@@ -29,4 +29,9 @@ public:
         return {0.0f, 0.0f, 0.0f};
     }
     virtual void setBackgroundColor(const std::array<float, 3>& color) {}
+    
+    virtual bool useSliceIndices() const {
+        return false;
+    }
+    virtual void setUseSliceIndices(bool use) {}
 };
