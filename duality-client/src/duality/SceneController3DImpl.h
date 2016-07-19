@@ -32,6 +32,11 @@ public:
 
 private:
     Scene& m_scene;
-    std::unique_ptr<RenderDispatcher3D> m_renderDispatcher;
+    RenderParameters3D m_parameters;
     std::shared_ptr<Settings> m_settings;
+    std::shared_ptr<GLFrameBufferObject> m_fbo;
+    std::unique_ptr<RenderDispatcher3D> m_renderDispatcher;
+    ScreenInfo m_screenInfo;
+    BoundingBox m_boundingBox;
+    MVP3D m_mvp;
 };

@@ -16,26 +16,15 @@ class SceneNode;
 
 class RenderDispatcher2D {
 public:
-    RenderDispatcher2D(std::shared_ptr<GLFrameBufferObject> fbo, const RenderParameters2D& initialParameters,
-                       std::shared_ptr<Settings> settings);
+    RenderDispatcher2D(std::shared_ptr<GLFrameBufferObject> fbo, std::shared_ptr<Settings> settings);
     ~RenderDispatcher2D();
 
-    void render(const std::vector<std::unique_ptr<SceneNode>>& nodes);
+    void render(const std::vector<std::unique_ptr<SceneNode>>& nodes, const MVP2D& mvp, CoordinateAxis axis,
+                const SliderParameter& sliderParameter);
+    void setRedrawRequired();
 
     void dispatch(GeometryNode& node);
     void dispatch(VolumeNode& node);
-
-    void updateScreenInfo(const ScreenInfo& screenInfo);
-    void updateBoundingBox(const BoundingBox& boundingBox);
-    void setRedrawRequired();
-
-    void addTranslation(const IVDA::Vec2f& translation);
-    void addRotation(const float rotationAngle);
-    void addZoom(const float zoom);
-    void setSliderParameter(const SliderParameter& sliderParameter);
-    void toggleAxis();
-
-    CoordinateAxis currentAxis() const;
 
 private:
     void startDraw();
@@ -45,10 +34,9 @@ private:
     std::shared_ptr<GLFrameBufferObject> m_fbo;
     std::unique_ptr<GeometryRenderer2D> m_geoRenderer;
     std::unique_ptr<VolumeRenderer2D> m_volRenderer;
-    RenderParameters2D m_parameters;
     std::shared_ptr<Settings> m_settings;
-    ScreenInfo m_screenInfo;
-    BoundingBox m_boundingBox;
-    MVP2D m_mvp;
+    const MVP2D* m_mvp;
+    CoordinateAxis m_axis;
+    SliderParameter m_sliderParameter;
     bool m_redraw;
 };

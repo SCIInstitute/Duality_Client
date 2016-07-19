@@ -64,14 +64,6 @@ BoundingBox Scene::boundingBox(View view) const {
     return BoundingBox{vMin, vMax};
 }
 
-void Scene::render(RenderDispatcher2D& dispatcher) const {
-    dispatcher.render(m_nodes);
-}
-
-void Scene::render(RenderDispatcher3D& dispatcher) const {
-    dispatcher.render(m_nodes);
-}
-
 void Scene::updateDatasets() {
     for (auto& node : m_nodes) {
         node->updateDataset();

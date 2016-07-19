@@ -43,8 +43,16 @@ public:
     void setVariable(const std::string& objectName, const std::string& variableName, const std::string& value);
 
 private:
+    void updateBoundingBox();
+    
+private:
     Scene& m_scene;
-    std::unique_ptr<SliderParameterCalculator> m_sliderCalculator;
-    std::unique_ptr<RenderDispatcher2D> m_renderDispatcher;
+    RenderParameters2D m_parameters;
+    std::shared_ptr<GLFrameBufferObject> m_fbo;
     std::shared_ptr<Settings> m_settings;
+    std::unique_ptr<RenderDispatcher2D> m_renderDispatcher;
+    std::unique_ptr<SliderParameterCalculator> m_sliderCalculator;
+    ScreenInfo m_screenInfo;
+    BoundingBox m_boundingBox;
+    MVP2D m_mvp;
 };

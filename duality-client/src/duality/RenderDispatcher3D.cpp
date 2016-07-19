@@ -14,17 +14,12 @@
 
 #include <algorithm>
 
-RenderDispatcher3D::RenderDispatcher3D(std::shared_ptr<GLFrameBufferObject> fbo, const RenderParameters3D& initialParameters,
-                                       std::shared_ptr<Settings> settings)
+RenderDispatcher3D::RenderDispatcher3D(std::shared_ptr<GLFrameBufferObject> fbo, std::shared_ptr<Settings> settings)
     : m_fbo(fbo)
     , m_geoRenderer(std::make_unique<GeometryRenderer3D>())
     , m_volumeRenderer(std::make_unique<VolumeRenderer3D>())
     , m_interleavingRenderer(std::make_unique<InterleavingRenderer3D>())
-    , m_parameters(initialParameters)
     , m_settings(settings)
-    , m_screenInfo()
-    , m_boundingBox()
-    , m_mvp()
     , m_redraw(true) {}
 
 RenderDispatcher3D::~RenderDispatcher3D() = default;
@@ -32,7 +27,7 @@ RenderDispatcher3D::~RenderDispatcher3D() = default;
 std::vector<Renderable> RenderDispatcher3D::sortRenderables(const std::vector<Renderable>& renderables) {
     std::vector<Renderable> result = renderables;
     auto sorter = [&](const Renderable& lhs, const Renderable& rhs) {
-        IVDA::Vec3f eyePos = m_mvp.eyePos();
+        IVDA::Vec3f eyePos = m_mvp->eyePos();
         auto lhsBB = lhs.boundingBox();
         auto lhsCenterEye = ((lhsBB.min + (lhsBB.max - lhsBB.min) / 2) - eyePos);
         auto rhsBB = rhs.boundingBox();
@@ -84,10 +79,13 @@ std::vector<Renderable> RenderDispatcher3D::calculateRenderables(const std::vect
     return result;
 }
 
-void RenderDispatcher3D::render(const std::vector<std::unique_ptr<SceneNode>>& nodes) {
+void RenderDispatcher3D::render(const std::vector<std::unique_ptr<SceneNode>>& nodes, const MVP3D& mvp) {
     if (!m_redraw) {
         return;
     }
+
+    m_mvp = &mvp;
+
     auto renderables = calculateRenderables(nodes); // FIXME: cache renderables
     auto sortedRenderables = sortRenderables(renderables);
     startDraw();
@@ -98,14 +96,14 @@ void RenderDispatcher3D::render(const std::vector<std::unique_ptr<SceneNode>>& n
 }
 
 void RenderDispatcher3D::dispatch(GeometryNode& node) {
-    m_geoRenderer->renderOpaque(node.dataset(), m_mvp);
+    m_geoRenderer->renderOpaque(node.dataset(), *m_mvp);
     if (node.isTransparent()) {
-        m_geoRenderer->renderTransparent(node.dataset(), m_mvp);
+        m_geoRenderer->renderTransparent(node.dataset(), *m_mvp);
     }
 }
 
 void RenderDispatcher3D::dispatch(VolumeNode& node) {
-    m_volumeRenderer->render(node.dataset(), m_mvp, node.transferFunction());
+    m_volumeRenderer->render(node.dataset(), *m_mvp, node.transferFunction());
 }
 
 void RenderDispatcher3D::dispatch(IntersectingNode& node) {
@@ -113,7 +111,7 @@ void RenderDispatcher3D::dispatch(IntersectingNode& node) {
     for (auto geoNode : node.geometryNodes) {
         geoDatasets.push_back(&geoNode->dataset());
     }
-    m_interleavingRenderer->render(node.volumeNode->dataset(), geoDatasets, m_mvp, node.volumeNode->transferFunction());
+    m_interleavingRenderer->render(node.volumeNode->dataset(), geoDatasets, *m_mvp, node.volumeNode->transferFunction());
 }
 
 void RenderDispatcher3D::startDraw() {
@@ -128,39 +126,6 @@ void RenderDispatcher3D::finishDraw() {
         m_redraw = false;
     }
 }
-
-void RenderDispatcher3D::addTranslation(const IVDA::Vec2f& translation) {
-    m_parameters.addTranslation(translation);
-    m_mvp.updateParameters(m_parameters);
-    m_redraw = true;
-}
-
-void RenderDispatcher3D::addRotation(const IVDA::Mat4f& rotation) {
-    m_parameters.addRotation(rotation);
-    m_mvp.updateParameters(m_parameters);
-    m_redraw = true;
-}
-
-void RenderDispatcher3D::addZoom(const float zoom) {
-    m_parameters.addZoom(zoom);
-    m_mvp.updateParameters(m_parameters);
-    m_redraw = true;
-}
-
-void RenderDispatcher3D::updateScreenInfo(const ScreenInfo& screenInfo) {
-    m_fbo->Resize(static_cast<unsigned int>(screenInfo.width / screenInfo.standardDownSampleFactor),
-                  static_cast<unsigned int>(screenInfo.height / screenInfo.standardDownSampleFactor), true);
-    m_screenInfo = screenInfo;
-    m_mvp = MVP3D(m_screenInfo, m_boundingBox, m_parameters);
-    m_redraw = true;
-}
-
-void RenderDispatcher3D::updateBoundingBox(const BoundingBox& boundingBox) {
-    m_boundingBox = boundingBox;
-    m_mvp = MVP3D(m_screenInfo, m_boundingBox, m_parameters);
-    m_redraw = true;
-}
-
 void RenderDispatcher3D::setRedrawRequired() {
     m_redraw = true;
 }

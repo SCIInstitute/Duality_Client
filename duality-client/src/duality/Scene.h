@@ -28,9 +28,6 @@ public:
 
     BoundingBox boundingBox(View view) const;
     
-    void render(RenderDispatcher2D& dispatcher) const;
-    void render(RenderDispatcher3D& dispatcher) const;
-    
     VariableMap variableMap(View view);
     void setVariable(const std::string& objectName, const std::string& variableName, float value);
     void setVariable(const std::string& objectName, const std::string& variableName, const std::string& value);

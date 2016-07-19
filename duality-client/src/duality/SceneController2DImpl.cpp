@@ -7,8 +7,10 @@
 SceneController2DImpl::SceneController2DImpl(Scene& scene, const RenderParameters2D& initialParameters,
                                              std::shared_ptr<GLFrameBufferObject> fbo, std::shared_ptr<Settings> settings)
     : m_scene(scene)
-    , m_renderDispatcher(std::make_unique<RenderDispatcher2D>(fbo, initialParameters, settings))
-    , m_settings(settings) {
+    , m_parameters(initialParameters)
+    , m_fbo(fbo)
+    , m_settings(settings)
+    , m_renderDispatcher(std::make_unique<RenderDispatcher2D>(fbo, settings)) {
     m_scene.updateDatasets();
     m_sliderCalculator = std::make_unique<SliderParameterCalculator>(m_scene);
 }
@@ -16,9 +18,11 @@ SceneController2DImpl::SceneController2DImpl(Scene& scene, const RenderParameter
 SceneController2DImpl::~SceneController2DImpl() = default;
 
 void SceneController2DImpl::updateScreenInfo(const ScreenInfo& screenInfo) {
-    m_renderDispatcher->updateScreenInfo(screenInfo);
-    BoundingBox boundingBox = m_scene.boundingBox(View::View2D);
-    m_renderDispatcher->updateBoundingBox(boundingBox);
+    m_fbo->Resize(static_cast<unsigned int>(screenInfo.width / screenInfo.standardDownSampleFactor),
+                  static_cast<unsigned int>(screenInfo.height / screenInfo.standardDownSampleFactor), true);
+    m_screenInfo = screenInfo;
+    m_boundingBox = m_scene.boundingBox(View::View2D);
+    m_mvp = MVP2D(m_screenInfo, m_boundingBox, m_parameters);
 }
 
 void SceneController2DImpl::setRedrawRequired() {
@@ -26,15 +30,21 @@ void SceneController2DImpl::setRedrawRequired() {
 }
 
 void SceneController2DImpl::addTranslation(const IVDA::Vec2f& translation) {
-    m_renderDispatcher->addTranslation(translation);
+    m_parameters.addTranslation(translation);
+    m_mvp.updateParameters(m_parameters);
+    m_renderDispatcher->setRedrawRequired();
 }
 
 void SceneController2DImpl::addRotation(const float rotationAngle) {
-    m_renderDispatcher->addRotation(rotationAngle);
+    m_parameters.addRotation(rotationAngle);
+    m_mvp.updateParameters(m_parameters);
+    m_renderDispatcher->setRedrawRequired();
 }
 
 void SceneController2DImpl::addZoom(const float zoom) {
-    m_renderDispatcher->addZoom(zoom);
+    m_parameters.addZoom(zoom);
+    m_mvp.updateParameters(m_parameters);
+    m_renderDispatcher->setRedrawRequired();
 }
 
 bool SceneController2DImpl::supportsSlices() const {
@@ -42,26 +52,32 @@ bool SceneController2DImpl::supportsSlices() const {
 }
 
 int SceneController2DImpl::numSlicesForCurrentAxis() const {
-    return m_sliderCalculator->numSlicesForAxis(m_renderDispatcher->currentAxis());
+    return m_sliderCalculator->numSlicesForAxis(m_parameters.axis());
 }
 
 void SceneController2DImpl::setSlice(int slice) {
     assert(m_sliderCalculator->supportsSlice());
-    auto sliderParameter = m_sliderCalculator->parameterForSlice(slice, m_renderDispatcher->currentAxis());
-    m_renderDispatcher->setSliderParameter(sliderParameter);
+    auto sliderParameter = m_sliderCalculator->parameterForSlice(slice, m_parameters.axis());
+    m_parameters.setSliderParameter(sliderParameter);
+    m_mvp.updateParameters(m_parameters);
+    m_renderDispatcher->setRedrawRequired();
 }
 
 std::pair<float, float> SceneController2DImpl::boundsForCurrentAxis() const {
-    return m_sliderCalculator->boundsForAxis(m_renderDispatcher->currentAxis());
+    return m_sliderCalculator->boundsForAxis(m_parameters.axis());
 }
 
 void SceneController2DImpl::setDepth(float depth) {
-    auto sliderParameter = m_sliderCalculator->parameterForDepth(depth, m_renderDispatcher->currentAxis());
-    m_renderDispatcher->setSliderParameter(sliderParameter);
+    auto sliderParameter = m_sliderCalculator->parameterForDepth(depth, m_parameters.axis());
+    m_parameters.setSliderParameter(sliderParameter);
+    m_mvp.updateParameters(m_parameters);
+    m_renderDispatcher->setRedrawRequired();
 }
 
 void SceneController2DImpl::toggleAxis() {
-    m_renderDispatcher->toggleAxis();
+    m_parameters.toggleAxis();
+    m_mvp.updateParameters(m_parameters);
+    m_renderDispatcher->setRedrawRequired();
 }
 
 std::string SceneController2DImpl::labelForCurrentAxis(SceneController2D::AxisLabelMode mode) const {
@@ -75,7 +91,7 @@ std::string SceneController2DImpl::labelForCurrentAxis(SceneController2D::AxisLa
         mapper[CoordinateAxis::Y_Axis] = "axial";
         mapper[CoordinateAxis::Z_Axis] = "coronal";
     }
-    return mapper[m_renderDispatcher->currentAxis()];
+    return mapper[m_parameters.axis()];
 }
 
 VariableMap SceneController2DImpl::variableMap() const {
@@ -85,17 +101,22 @@ VariableMap SceneController2DImpl::variableMap() const {
 void SceneController2DImpl::setVariable(const std::string& objectName, const std::string& variableName, float value) {
     m_scene.setVariable(objectName, variableName, value);
     m_scene.updateDatasets();
-    BoundingBox boundingBox = m_scene.boundingBox(View::View2D);
-    m_renderDispatcher->updateBoundingBox(boundingBox);
+    updateBoundingBox();
+    m_renderDispatcher->setRedrawRequired();
 }
 
 void SceneController2DImpl::setVariable(const std::string& objectName, const std::string& variableName, const std::string& value) {
     m_scene.setVariable(objectName, variableName, value);
     m_scene.updateDatasets();
-    BoundingBox boundingBox = m_scene.boundingBox(View::View2D);
-    m_renderDispatcher->updateBoundingBox(boundingBox);
+    updateBoundingBox();
+    m_renderDispatcher->setRedrawRequired();
 }
 
 void SceneController2DImpl::render() {
-    m_scene.render(*m_renderDispatcher);
+    m_renderDispatcher->render(m_scene.nodes(), m_mvp, m_parameters.axis(), m_parameters.sliderParameter());
+}
+
+void SceneController2DImpl::updateBoundingBox() {
+    m_boundingBox = m_scene.boundingBox(View::View2D);
+    m_mvp = MVP2D(m_screenInfo, m_boundingBox, m_parameters);
 }
