@@ -1,8 +1,10 @@
 #include "src/duality/Scene.h"
 
 #include "IVDA/Vectors.h"
+#include "src/duality/GeometryNode.h"
 #include "src/duality/SceneParser.h"
 #include "src/duality/View.h"
+#include "src/duality/VolumeNode.h"
 
 #include "mocca/base/ContainerTools.h"
 
@@ -25,6 +27,28 @@ std::string Scene::webViewURL() const {
 
 const std::vector<std::unique_ptr<SceneNode>>& Scene::nodes() const {
     return m_nodes;
+}
+
+std::vector<const GeometryNode*> Scene::geometryNodes() const {
+    std::vector<const GeometryNode*> nodes;
+    for (const auto& node : m_nodes) {
+        const auto geo = dynamic_cast<const GeometryNode*>(node.get());
+        if (geo != nullptr) {
+            nodes.push_back(geo);
+        }
+    }
+    return nodes;
+}
+
+std::vector<const VolumeNode*> Scene::volumeNodes() const {
+    std::vector<const VolumeNode*> nodes;
+    for (const auto& node : m_nodes) {
+        const auto geo = dynamic_cast<const VolumeNode*>(node.get());
+        if (geo != nullptr) {
+            nodes.push_back(geo);
+        }
+    }
+    return nodes;
 }
 
 BoundingBox Scene::boundingBox(View view) const {

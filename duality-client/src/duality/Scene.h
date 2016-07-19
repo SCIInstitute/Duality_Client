@@ -21,6 +21,8 @@ public:
     std::string webViewURL() const;
 
     const std::vector<std::unique_ptr<SceneNode>>& nodes() const;
+    std::vector<const GeometryNode*> geometryNodes() const;
+    std::vector<const VolumeNode*> volumeNodes() const;
 
     void updateDatasets();
 

@@ -9,6 +9,9 @@ struct BoundingBox {
     IVDA::Vec3f max;
 };
 
+bool operator==(const BoundingBox& lhs, const BoundingBox& rhs);
+bool operator!=(const BoundingBox& lhs, const BoundingBox& rhs);
+
 namespace duality {
 namespace impl {
 template <typename T> BoundingBox boundingBoxImpl(T obj, std::true_type) {
