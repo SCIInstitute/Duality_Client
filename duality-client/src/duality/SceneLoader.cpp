@@ -121,14 +121,14 @@ std::weak_ptr<SceneController2D> SceneLoaderImpl::sceneController2D() {
     if (m_sceneController2D == nullptr) {
         createSceneController2D();
     }
-    return m_sceneController2D;
+    return std::weak_ptr<SceneController2D>(m_sceneController2D);
 }
 
 std::weak_ptr<SceneController3D> SceneLoaderImpl::sceneController3D() {
     if (m_sceneController3D == nullptr) {
         createSceneController3D();
     }
-    return m_sceneController3D;
+    return std::weak_ptr<SceneController3D>(m_sceneController3D);
 }
 
 void SceneLoaderImpl::createSceneController2D() {

@@ -52,7 +52,7 @@ void SceneController2DImpl::addZoom(const float zoom) {
 }
 
 bool SceneController2DImpl::supportsSlices() const {
-    return m_sliderCalculator->supportsSlice();
+    return m_settings->useSliceIndices() && m_sliderCalculator->supportsSlice();
 }
 
 int SceneController2DImpl::numSlicesForCurrentAxis() const {
