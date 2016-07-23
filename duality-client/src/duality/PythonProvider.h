@@ -18,6 +18,7 @@ public:
 
     // DataProvider interface
     std::shared_ptr<std::vector<uint8_t>> fetch() override;
+    void notify() override;
 
     std::string fileName() const;
 

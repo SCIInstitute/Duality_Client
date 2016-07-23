@@ -29,6 +29,10 @@ void SceneController2DImpl::updateScreenInfo(const ScreenInfo& screenInfo) {
     m_mvp = MVP2D(m_screenInfo, m_boundingBox, m_parameters);
 }
 
+void SceneController2DImpl::updateDatasets() {
+    m_scene.updateDatasets();
+}
+
 void SceneController2DImpl::setRedrawRequired() {
     m_renderDispatcher->setRedrawRequired();
 }

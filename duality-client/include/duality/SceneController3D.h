@@ -14,6 +14,7 @@ public:
     ~SceneController3D();
     
     void updateScreenInfo(const ScreenInfo& screenInfo);
+    void updateDatasets();
     void setRedrawRequired();
     void render();
 

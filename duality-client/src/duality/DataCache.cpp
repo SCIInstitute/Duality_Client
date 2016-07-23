@@ -2,6 +2,8 @@
 
 #include "duality/Error.h"
 
+#include "src/duality/DataProvider.h"
+
 #include "mocca/base/Compression.h"
 #include "mocca/base/StringTools.h"
 #include "mocca/fs/Filesystem.h"
@@ -67,4 +69,19 @@ void DataCache::write(const JsonCpp::Value& cacheID, const std::vector<uint8_t>&
 
 void DataCache::clear() {
     mocca::fs::removeDirectoryRecursive(m_cacheDir);
+    notifyObservers();
+}
+
+void DataCache::registerObserver(DataProvider* observer) {
+    m_observers.push_back(observer);
+}
+
+void DataCache::clearObservers() {
+    m_observers.clear();
+}
+
+void DataCache::notifyObservers() {
+    for (auto observer : m_observers) {
+        observer->notify();
+    }
 }

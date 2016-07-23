@@ -83,6 +83,7 @@ std::vector<SceneMetadata> SceneLoaderImpl::listMetadata() const {
 void SceneLoaderImpl::loadScene(const std::string& name) {
     m_rpc->send("listScenes", JsonCpp::Value());
     auto root = m_rpc->receive().first;
+    m_dataCache->clearObservers();
     for (auto it = root.begin(); it != root.end(); ++it) {
         SceneParser parser(*it, m_rpc, m_dataCache);
         auto metadata = SceneParser::parseMetadata(*it);

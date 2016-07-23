@@ -10,20 +10,22 @@ DownloadProvider::DownloadProvider(std::string sceneName, std::string fileName, 
     , m_fileName(fileName)
     , m_rpc(rpc)
     , m_cache(cache)
-    , m_dirty(true) {}
+    , m_dirty(true) {
+    m_cache->registerObserver(this);
+}
 
 std::shared_ptr<std::vector<uint8_t>> DownloadProvider::fetch() {
     if (!m_dirty) {
         return nullptr;
     }
-    
+
     m_dirty = false;
-    
+
     auto cachedData = m_cache->fetch(cacheID());
     if (cachedData != nullptr) {
         return cachedData;
     }
-    
+
     JsonCpp::Value params;
     params["scene"] = m_sceneName;
     params["filename"] = m_fileName;
@@ -32,10 +34,14 @@ std::shared_ptr<std::vector<uint8_t>> DownloadProvider::fetch() {
     if (reply.second.empty()) {
         throw Error("Could not download file '" + m_fileName + "'", __FILE__, __LINE__);
     }
-    
+
     m_cache->write(cacheID(), *reply.second[0]);
-    
+
     return reply.second[0];
+}
+
+void DownloadProvider::notify() {
+    m_dirty = true;
 }
 
 JsonCpp::Value DownloadProvider::cacheID() const {

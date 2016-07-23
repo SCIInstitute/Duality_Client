@@ -23,6 +23,10 @@ void SceneController3DImpl::updateScreenInfo(const ScreenInfo& screenInfo) {
     m_mvp = MVP3D(m_screenInfo, m_boundingBox, m_parameters);
 }
 
+void SceneController3DImpl::updateDatasets() {
+    m_scene.updateDatasets();
+}
+
 void SceneController3DImpl::setRedrawRequired() {
     m_renderDispatcher->setRedrawRequired();
 }

@@ -7,6 +7,9 @@
 #include "jsoncpp/json.h"
 
 #include <memory>
+#include <vector>
+
+class DataProvider;
 
 class DataCache {
 public:
@@ -16,7 +19,14 @@ public:
     void write(const JsonCpp::Value& cacheID, const std::vector<uint8_t>& data);
     void clear();
     
+    void registerObserver(DataProvider* observer);
+    void clearObservers();
+    
+private:
+    void notifyObservers();
+    
 private:
     mocca::fs::Path m_cacheDir;
     std::shared_ptr<Settings> m_settings;
+    std::vector<DataProvider*> m_observers;
 };

@@ -11,6 +11,10 @@ void SceneController3D::updateScreenInfo(const ScreenInfo& screenInfo) {
     m_impl->updateScreenInfo(screenInfo);
 }
 
+void SceneController3D::updateDatasets() {
+    m_impl->updateDatasets();
+}
+
 void SceneController3D::setRedrawRequired() {
     m_impl->setRedrawRequired();
 }

@@ -14,13 +14,15 @@ PythonProvider::PythonProvider(const std::string& sceneName, const std::string& 
     , m_variables(variables)
     , m_currentVariables()
     , m_rpc(rpc)
-    , m_cache(cache) {}
+    , m_cache(cache) {
+    m_cache->registerObserver(this);
+}
 
 std::shared_ptr<std::vector<uint8_t>> PythonProvider::fetch() {
     if (!isFetchRequired()) {
         return nullptr;
     }
-    
+
     m_currentVariables = *m_variables;
 
     auto cachedData = m_cache->fetch(cacheID());
@@ -45,10 +47,14 @@ std::shared_ptr<std::vector<uint8_t>> PythonProvider::fetch() {
     if (reply.second.empty()) {
         throw Error(MAKE_STRING("Python script '" << m_fileName << "' did not return any data"), __FILE__, __LINE__);
     }
-    
+
     m_cache->write(cacheID(), *reply.second[0]);
-    
+
     return reply.second[0];
+}
+
+void PythonProvider::notify() {
+    m_currentVariables = mocca::Nullable<Variables>();
 }
 
 std::string PythonProvider::fileName() const {

@@ -15,6 +15,7 @@ public:
     ~SceneController2D();
 
     void updateScreenInfo(const ScreenInfo& screenInfo);
+    void updateDatasets();
     void setRedrawRequired();
     void render();
 
