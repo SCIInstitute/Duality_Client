@@ -10,7 +10,7 @@
 using namespace IVDA;
 
 GeometryDataset::GeometryDataset(std::unique_ptr<DataProvider> provider, std::vector<Mat4f> transforms, mocca::Nullable<Color> color)
-    : Dataset(std::move(provider))
+    : m_provider(std::move(provider))
     , m_transforms(std::move(transforms))
     , m_color(std::move(color))
     , m_geometry(nullptr) {}
@@ -31,10 +31,16 @@ const std::vector<uint32_t>& GeometryDataset::indicesTransparent() const {
     return m_indicesTransparent;
 }
 
-void GeometryDataset::readData(const std::vector<uint8_t>& data) {
-    ReaderFromMemory reader(reinterpret_cast<const char*>(data.data()), data.size());
-    m_geometry = std::make_unique<G3D::GeometrySoA>();
-    G3D::readSoA(reader, *m_geometry);
+void GeometryDataset::updateDataset() {
+    auto data = m_provider->fetch();
+    if (data != nullptr) {
+        ReaderFromMemory reader(reinterpret_cast<const char*>(data->data()), data->size());
+        m_geometry = std::make_unique<G3D::GeometrySoA>();
+        G3D::readSoA(reader, *m_geometry);
+    }
+}
+
+void GeometryDataset::initializeDataset() {
     for (const auto& transform : m_transforms) {
         G3D::applyTransform(*m_geometry, transform);
     }

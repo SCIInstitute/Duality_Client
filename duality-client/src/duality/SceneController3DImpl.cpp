@@ -9,9 +9,7 @@ SceneController3DImpl::SceneController3DImpl(Scene& scene, const RenderParameter
     , m_parameters(initialParameters)
     , m_fbo(fbo)
     , m_settings(settings)
-    , m_renderDispatcher(std::make_unique<RenderDispatcher3D>(fbo, settings)) {
-    m_scene.updateDatasets();
-}
+    , m_renderDispatcher(std::make_unique<RenderDispatcher3D>(fbo, settings)) {}
 
 SceneController3DImpl::~SceneController3DImpl() = default;
 
@@ -25,6 +23,14 @@ void SceneController3DImpl::updateScreenInfo(const ScreenInfo& screenInfo) {
 
 void SceneController3DImpl::updateDatasets() {
     m_scene.updateDatasets();
+}
+
+void SceneController3DImpl::initializeDatasets() {
+    m_scene.initializeDatasets();
+}
+
+void SceneController3DImpl::setUpdateDatasetCallback(std::function<void(int,int,const std::string&)> callback) {
+    m_scene.setUpdateDatasetCallback(callback);
 }
 
 void SceneController3DImpl::setRedrawRequired() {
@@ -56,6 +62,7 @@ VariableMap SceneController3DImpl::variableMap() const {
 void SceneController3DImpl::setVariable(const std::string& objectName, const std::string& variableName, float value) {
     m_scene.setVariable(objectName, variableName, value);
     m_scene.updateDatasets();
+    m_scene.initializeDatasets();
     m_boundingBox = m_scene.boundingBox(View::View3D);
     m_mvp = MVP3D(m_screenInfo, m_boundingBox, m_parameters);
     m_renderDispatcher->setRedrawRequired();
@@ -64,6 +71,7 @@ void SceneController3DImpl::setVariable(const std::string& objectName, const std
 void SceneController3DImpl::setVariable(const std::string& objectName, const std::string& variableName, const std::string& value) {
     m_scene.setVariable(objectName, variableName, value);
     m_scene.updateDatasets();
+    m_scene.initializeDatasets();
     m_boundingBox = m_scene.boundingBox(View::View3D);
     m_mvp = MVP3D(m_screenInfo, m_boundingBox, m_parameters);
     m_renderDispatcher->setRedrawRequired();

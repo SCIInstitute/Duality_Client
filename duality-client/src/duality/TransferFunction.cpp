@@ -20,7 +20,7 @@ TransferFunctionData duality::defaultTransferFunctionData() {
 TransferFunction::TransferFunction(std::unique_ptr<DataProvider> provider)
     : m_provider(std::move(provider)) {}
 
-void TransferFunction::fetch() {
+void TransferFunction::update() {
     if (m_provider != nullptr) {
         auto data = m_provider->fetch();
         if (data != nullptr) {
@@ -29,7 +29,6 @@ void TransferFunction::fetch() {
     } else {
         m_data = duality::defaultTransferFunctionData();
     }
-    initTexture();
 }
 
 void TransferFunction::bindTexture() const {

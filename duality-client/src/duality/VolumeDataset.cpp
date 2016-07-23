@@ -5,7 +5,21 @@
 #include <cmath>
 
 VolumeDataset::VolumeDataset(std::unique_ptr<DataProvider> provider)
-    : Dataset(std::move(provider)) {}
+    : m_provider(std::move(provider)) {}
+
+void VolumeDataset::updateDataset() {
+    auto data = m_provider->fetch();
+    if (data != nullptr) {
+        ReaderFromMemory reader(reinterpret_cast<const char*>(data->data()), data->size());
+        m_volume = std::make_unique<I3M::Volume>();
+        I3M::read(reader, *m_volume);
+    }
+}
+
+void VolumeDataset::initializeDataset() {
+    initSliceInfos();
+    initTextures();
+}
 
 const std::array<std::vector<VolumeDataset::SliceInfo>, 3>& VolumeDataset::sliceInfos() const {
     return m_sliceInfos;
@@ -18,14 +32,6 @@ BoundingBox VolumeDataset::boundingBox() const {
 void VolumeDataset::bindTextures(size_t dir, size_t texIndex1, size_t texIndex2) const {
     m_textures[dir][texIndex1]->bindWithUnit(1);
     m_textures[dir][texIndex2]->bindWithUnit(2);
-}
-
-void VolumeDataset::readData(const std::vector<uint8_t>& data) {
-    ReaderFromMemory reader(reinterpret_cast<const char*>(data.data()), data.size());
-    m_volume = std::make_unique<I3M::Volume>();
-    I3M::read(reader, *m_volume);
-    initSliceInfos();
-    initTextures();
 }
 
 void VolumeDataset::initSliceInfos() {

@@ -9,8 +9,11 @@
 #include "src/duality/RenderDispatcher3D.h"
 #include "src/duality/SceneNode.h"
 
+#include "mocca/base/Nullable.h"
+
 #include <memory>
 #include <string>
+#include <functional>
 
 class Scene {
 public:
@@ -25,6 +28,8 @@ public:
     std::vector<const VolumeNode*> volumeNodes() const;
 
     void updateDatasets();
+    void initializeDatasets();
+    void setUpdateDatasetCallback(std::function<void(int,int,const std::string&)> callback);
 
     BoundingBox boundingBox(View view) const;
     
@@ -37,4 +42,5 @@ private:
     std::vector<std::unique_ptr<SceneNode>> m_nodes;
     std::map<std::string, std::shared_ptr<Variables>> m_variables;
     std::string m_webViewURL;
+    mocca::Nullable<std::function<void(int,int,const std::string&)>> m_updateDatasetCallback;
 };

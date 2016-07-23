@@ -14,7 +14,11 @@ public:
     ~SceneController3D();
     
     void updateScreenInfo(const ScreenInfo& screenInfo);
+    
     void updateDatasets();
+    void initializeDatasets();
+    void setUpdateDatasetCallback(std::function<void(int,int,const std::string&)> callback);    
+    
     void setRedrawRequired();
     void render();
 

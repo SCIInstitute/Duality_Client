@@ -11,8 +11,16 @@ void SceneController3D::updateScreenInfo(const ScreenInfo& screenInfo) {
     m_impl->updateScreenInfo(screenInfo);
 }
 
+void SceneController3D::initializeDatasets() {
+    m_impl->initializeDatasets();
+}
+
 void SceneController3D::updateDatasets() {
     m_impl->updateDatasets();
+}
+
+void SceneController3D::setUpdateDatasetCallback(std::function<void(int,int,const std::string&)> callback) {
+    m_impl->setUpdateDatasetCallback(callback);
 }
 
 void SceneController3D::setRedrawRequired() {

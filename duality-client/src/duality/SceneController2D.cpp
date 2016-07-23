@@ -19,6 +19,14 @@ void SceneController2D::updateDatasets() {
     m_impl->updateDatasets();
 }
 
+void SceneController2D::initializeDatasets() {
+    m_impl->initializeDatasets();
+}
+
+void SceneController2D::setUpdateDatasetCallback(std::function<void(int,int,const std::string&)> callback) {
+    m_impl->setUpdateDatasetCallback(callback);
+}
+
 void SceneController2D::setRedrawRequired() {
     m_impl->setRedrawRequired();
 }

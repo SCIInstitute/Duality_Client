@@ -4,7 +4,7 @@
 
 #include "src/duality/BoundingBox.h"
 #include "src/duality/Color.h"
-#include "src/duality/Dataset.h"
+#include "src/duality/DataProvider.h"
 
 #include "IVDA/GLMatrix.h"
 #include "IVDA/Vectors.h"
@@ -17,10 +17,13 @@
 class DataProvider;
 class NodeDispatcher;
 
-class GeometryDataset : public Dataset {
+class GeometryDataset {
 public:
     GeometryDataset(std::unique_ptr<DataProvider> provider, std::vector<IVDA::Mat4f> transforms = {},
                     mocca::Nullable<Color> color = mocca::Nullable<Color>());
+
+    void updateDataset();
+    void initializeDataset();
 
     bool isTransparent() const;
     const std::vector<uint32_t>& indicesOpaque() const;
@@ -32,8 +35,6 @@ public:
     bool intersects(const BoundingBox& box) const;
 
 private:
-    void readData(const std::vector<uint8_t>& data) override;
-
     void presortIndices();
     template <uint32_t size> void presortIndices() {
         for (uint32_t i = 0; i < m_geometry->indices.size(); i += size) {
@@ -71,6 +72,7 @@ private:
     }
 
 private:
+    std::unique_ptr<DataProvider> m_provider;
     std::unique_ptr<G3D::GeometrySoA> m_geometry;
     std::vector<IVDA::Mat4f> m_transforms;
     mocca::Nullable<Color> m_color;

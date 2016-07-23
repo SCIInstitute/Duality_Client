@@ -65,9 +65,24 @@ BoundingBox Scene::boundingBox(View view) const {
 }
 
 void Scene::updateDatasets() {
+    int count = 0;
     for (auto& node : m_nodes) {
+        if (!m_updateDatasetCallback.isNull()) {
+            m_updateDatasetCallback.get()(count, static_cast<int>(m_nodes.size()), node->name());
+        }
         node->updateDataset();
+        ++count;
     }
+}
+
+void Scene::initializeDatasets() {
+    for (auto& node : m_nodes) {
+        node->initializeDataset();
+    }
+}
+
+void Scene::setUpdateDatasetCallback(std::function<void(int,int,const std::string&)> callback) {
+    m_updateDatasetCallback = callback;
 }
 
 VariableMap Scene::variableMap(View view) {

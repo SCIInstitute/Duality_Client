@@ -15,8 +15,13 @@ void VolumeNode::render(RenderDispatcher3D& dispatcher) {
 }
 
 void VolumeNode::updateDataset() {
-    m_dataset->fetch();
-    m_tf->fetch();
+    m_dataset->updateDataset();
+    m_tf->update();
+}
+
+void VolumeNode::initializeDataset() {
+    m_dataset->initializeDataset();
+    m_tf->initTexture();
 }
 
 BoundingBox VolumeNode::boundingBox() const {

@@ -15,6 +15,7 @@ public:
     void render(RenderDispatcher2D& dispatcher) override;
     void render(RenderDispatcher3D& dispatcher) override;
     void updateDataset() override;
+    void initializeDataset() override;
     
     BoundingBox boundingBox() const override;
     const VolumeDataset& dataset() const;

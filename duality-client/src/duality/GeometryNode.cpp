@@ -13,7 +13,11 @@ void GeometryNode::render(RenderDispatcher3D& dispatcher) {
 }
 
 void GeometryNode::updateDataset() {
-    m_dataset->fetch();
+    m_dataset->updateDataset();
+}
+
+void GeometryNode::initializeDataset() {
+    m_dataset->initializeDataset();
 }
 
 BoundingBox GeometryNode::boundingBox() const {

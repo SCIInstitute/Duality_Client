@@ -11,6 +11,7 @@
 
 #include <memory>
 #include <vector>
+#include <functional>
 
 class SceneLoaderImpl;
 
@@ -18,7 +19,7 @@ class SceneLoader {
 public:
     SceneLoader(const mocca::fs::Path& cacheDir, std::shared_ptr<Settings> settings);
     ~SceneLoader();
-
+    
     std::shared_ptr<Settings> settings();    
     void updateEndpoint();
     void clearCache();

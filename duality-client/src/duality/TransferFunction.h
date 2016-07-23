@@ -12,12 +12,12 @@ class TransferFunction {
 public:
     TransferFunction(std::unique_ptr<DataProvider> provider);
 
-    void fetch();
+    void update();
+    void initTexture();
     void bindTexture() const;
 
 private:
     void readData(const std::vector<uint8_t>& data);
-    void initTexture();
 
 private:
     std::unique_ptr<DataProvider> m_provider;
