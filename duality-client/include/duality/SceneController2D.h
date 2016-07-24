@@ -4,6 +4,7 @@
 #include "duality/ScreenInfo.h"
 #include "duality/InputVariable.h"
 #include "duality/SliderParameter.h"
+#include "duality/Settings.h"
 
 #include <memory>
 
@@ -13,12 +14,14 @@ class SceneController2D {
 public:
     SceneController2D(std::unique_ptr<SceneController2DImpl> impl);
     ~SceneController2D();
-
+    
+    std::shared_ptr<Settings> settings() const;
+    
     void updateScreenInfo(const ScreenInfo& screenInfo);
     
     void updateDatasets();
+    void initializeSliderCalculator();
     void initializeDatasets();
-    void setUpdateDatasetCallback(std::function<void(int,int,const std::string&)> callback);
     
     void setRedrawRequired();
     void render();

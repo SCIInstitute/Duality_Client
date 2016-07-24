@@ -5,12 +5,20 @@
 #include "src/duality/Scene.h"
 
 SceneController2DImpl::SceneController2DImpl(Scene& scene, const RenderParameters2D& initialParameters,
+                                             std::function<void(int, int, const std::string&)> updateDatasetCallback,
                                              std::shared_ptr<GLFrameBufferObject> fbo, std::shared_ptr<Settings> settings)
     : m_scene(scene)
     , m_parameters(initialParameters)
     , m_fbo(fbo)
     , m_settings(settings)
     , m_renderDispatcher(std::make_unique<RenderDispatcher2D>(fbo, settings)) {
+    m_scene.setUpdateDatasetCallback(updateDatasetCallback);
+}
+
+SceneController2DImpl::~SceneController2DImpl() = default;
+
+void SceneController2DImpl::initializeSliderCalculator() {
+    m_scene.updateDatasets();
     m_sliderCalculator = std::make_unique<SliderParameterCalculator>(m_scene);
     if (m_parameters == RenderParameters2D()) {
         auto middle = (m_boundingBox.min[m_parameters.axis()] + m_boundingBox.max[m_parameters.axis()]) / 2;
@@ -18,7 +26,9 @@ SceneController2DImpl::SceneController2DImpl(Scene& scene, const RenderParameter
     }
 }
 
-SceneController2DImpl::~SceneController2DImpl() = default;
+std::shared_ptr<Settings> SceneController2DImpl::settings() const {
+    return m_settings;
+}
 
 void SceneController2DImpl::updateScreenInfo(const ScreenInfo& screenInfo) {
     m_fbo->Resize(static_cast<unsigned int>(screenInfo.width / screenInfo.standardDownSampleFactor),
@@ -34,10 +44,6 @@ void SceneController2DImpl::updateDatasets() {
 
 void SceneController2DImpl::initializeDatasets() {
     m_scene.initializeDatasets();
-}
-
-void SceneController2DImpl::setUpdateDatasetCallback(std::function<void(int,int,const std::string&)> callback) {
-    m_scene.setUpdateDatasetCallback(callback);
 }
 
 void SceneController2DImpl::setRedrawRequired() {

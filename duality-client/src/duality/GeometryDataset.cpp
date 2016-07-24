@@ -11,6 +11,7 @@ using namespace IVDA;
 
 GeometryDataset::GeometryDataset(std::unique_ptr<DataProvider> provider, std::vector<Mat4f> transforms, mocca::Nullable<Color> color)
     : m_provider(std::move(provider))
+    , m_initRequired(true)
     , m_transforms(std::move(transforms))
     , m_color(std::move(color))
     , m_geometry(nullptr) {}
@@ -37,10 +38,15 @@ void GeometryDataset::updateDataset() {
         ReaderFromMemory reader(reinterpret_cast<const char*>(data->data()), data->size());
         m_geometry = std::make_unique<G3D::GeometrySoA>();
         G3D::readSoA(reader, *m_geometry);
+        m_initRequired = true;
     }
 }
 
 void GeometryDataset::initializeDataset() {
+    if (!m_initRequired) {
+        return;
+    }
+    
     for (const auto& transform : m_transforms) {
         G3D::applyTransform(*m_geometry, transform);
     }
@@ -49,6 +55,7 @@ void GeometryDataset::initializeDataset() {
     }
     presortIndices();
     computeCentroids();
+    m_initRequired = false;
 }
 
 void GeometryDataset::presortIndices() {

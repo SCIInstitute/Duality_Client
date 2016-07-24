@@ -4,12 +4,15 @@
 #include "src/duality/Scene.h"
 
 SceneController3DImpl::SceneController3DImpl(Scene& scene, const RenderParameters3D& initialParameters,
+                                             std::function<void(int, int, const std::string&)> updateDatasetCallback,
                                              std::shared_ptr<GLFrameBufferObject> fbo, std::shared_ptr<Settings> settings)
     : m_scene(scene)
     , m_parameters(initialParameters)
     , m_fbo(fbo)
     , m_settings(settings)
-    , m_renderDispatcher(std::make_unique<RenderDispatcher3D>(fbo, settings)) {}
+    , m_renderDispatcher(std::make_unique<RenderDispatcher3D>(fbo, settings)) {
+    m_scene.setUpdateDatasetCallback(updateDatasetCallback);
+}
 
 SceneController3DImpl::~SceneController3DImpl() = default;
 
@@ -27,10 +30,6 @@ void SceneController3DImpl::updateDatasets() {
 
 void SceneController3DImpl::initializeDatasets() {
     m_scene.initializeDatasets();
-}
-
-void SceneController3DImpl::setUpdateDatasetCallback(std::function<void(int,int,const std::string&)> callback) {
-    m_scene.setUpdateDatasetCallback(callback);
 }
 
 void SceneController3DImpl::setRedrawRequired() {

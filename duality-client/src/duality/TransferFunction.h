@@ -21,6 +21,7 @@ private:
 
 private:
     std::unique_ptr<DataProvider> m_provider;
+    bool m_initRequired;
     TransferFunctionData m_data;
     std::unique_ptr<GLTexture2D> m_texture;
 };

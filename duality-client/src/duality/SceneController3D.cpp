@@ -19,10 +19,6 @@ void SceneController3D::updateDatasets() {
     m_impl->updateDatasets();
 }
 
-void SceneController3D::setUpdateDatasetCallback(std::function<void(int,int,const std::string&)> callback) {
-    m_impl->setUpdateDatasetCallback(callback);
-}
-
 void SceneController3D::setRedrawRequired() {
     m_impl->setRedrawRequired();
 }

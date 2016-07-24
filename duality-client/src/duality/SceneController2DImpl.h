@@ -16,16 +16,20 @@ class RenderParameters2D;
 
 class SceneController2DImpl {
 public:
-    SceneController2DImpl(Scene& scene, const RenderParameters2D& initialParameters, std::shared_ptr<GLFrameBufferObject> fbo,
-                          std::shared_ptr<Settings> settings);
+    SceneController2DImpl(Scene& scene, const RenderParameters2D& initialParameters,
+                          std::function<void(int, int, const std::string&)> updateDatasetCallback,
+                          std::shared_ptr<GLFrameBufferObject> fbo, std::shared_ptr<Settings> settings);
     ~SceneController2DImpl();
 
+    void initializeSliderCalculator();
+    
+    std::shared_ptr<Settings> settings() const;
+    
     void updateScreenInfo(const ScreenInfo& screenInfo);
 
     void updateDatasets();
     void initializeDatasets();
-    void setUpdateDatasetCallback(std::function<void(int,int,const std::string&)> callback);
-    
+
     void setRedrawRequired();
     void render();
 
@@ -49,7 +53,7 @@ public:
 
 private:
     void updateBoundingBox();
-    
+
 private:
     Scene& m_scene;
     RenderParameters2D m_parameters;

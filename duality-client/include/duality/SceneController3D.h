@@ -17,7 +17,6 @@ public:
     
     void updateDatasets();
     void initializeDatasets();
-    void setUpdateDatasetCallback(std::function<void(int,int,const std::string&)> callback);    
     
     void setRedrawRequired();
     void render();

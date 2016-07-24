@@ -14,16 +14,16 @@ class RenderDispatcher3D;
 
 class SceneController3DImpl {
 public:
-    SceneController3DImpl(Scene& scene, const RenderParameters3D& initialParameters, std::shared_ptr<GLFrameBufferObject> fbo,
+    SceneController3DImpl(Scene& scene, const RenderParameters3D& initialParameters,
+                          std::function<void(int, int, const std::string&)> updateDatasetCallback, std::shared_ptr<GLFrameBufferObject> fbo,
                           std::shared_ptr<Settings> settings);
     ~SceneController3DImpl();
 
     void updateScreenInfo(const ScreenInfo& screenInfo);
-    
+
     void updateDatasets();
     void initializeDatasets();
-    void setUpdateDatasetCallback(std::function<void(int,int,const std::string&)> callback);    
-    
+
     void setRedrawRequired();
     void render();
 

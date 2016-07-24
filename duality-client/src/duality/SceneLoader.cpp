@@ -32,12 +32,12 @@ public:
     SceneMetadata metadata() const;
     std::string webViewURL() const;
 
-    std::weak_ptr<SceneController2D> sceneController2D();
-    std::weak_ptr<SceneController3D> sceneController3D();
+    std::shared_ptr<SceneController2D> sceneController2D(std::function<void(int, int, const std::string&)> updateDatasetCallback);
+    std::shared_ptr<SceneController3D> sceneController3D(std::function<void(int, int, const std::string&)> updateDatasetCallback);
 
 private:
-    void createSceneController2D();
-    void createSceneController3D();
+    void createSceneController2D(std::function<void(int, int, const std::string&)> updateDatasetCallback);
+    void createSceneController3D(std::function<void(int, int, const std::string&)> updateDatasetCallback);
 
 private:
     std::shared_ptr<Settings> m_settings;
@@ -118,27 +118,29 @@ std::string SceneLoaderImpl::webViewURL() const {
     throw Error("No scene loaded", __FILE__, __LINE__);
 }
 
-std::weak_ptr<SceneController2D> SceneLoaderImpl::sceneController2D() {
+std::shared_ptr<SceneController2D>
+SceneLoaderImpl::sceneController2D(std::function<void(int, int, const std::string&)> updateDatasetCallback) {
     if (m_sceneController2D == nullptr) {
-        createSceneController2D();
+        createSceneController2D(updateDatasetCallback);
     }
-    return std::weak_ptr<SceneController2D>(m_sceneController2D);
+    return m_sceneController2D;
 }
 
-std::weak_ptr<SceneController3D> SceneLoaderImpl::sceneController3D() {
+std::shared_ptr<SceneController3D>
+SceneLoaderImpl::sceneController3D(std::function<void(int, int, const std::string&)> updateDatasetCallback) {
     if (m_sceneController3D == nullptr) {
-        createSceneController3D();
+        createSceneController3D(updateDatasetCallback);
     }
-    return std::weak_ptr<SceneController3D>(m_sceneController3D);
+    return m_sceneController3D;
 }
 
-void SceneLoaderImpl::createSceneController2D() {
-    auto impl = std::make_unique<SceneController2DImpl>(*m_scene, m_initialParameters2D, m_resultFbo, m_settings);
+void SceneLoaderImpl::createSceneController2D(std::function<void(int, int, const std::string&)> updateDatasetCallback) {
+    auto impl = std::make_unique<SceneController2DImpl>(*m_scene, m_initialParameters2D, updateDatasetCallback, m_resultFbo, m_settings);
     m_sceneController2D = std::make_shared<SceneController2D>(std::move(impl));
 }
 
-void SceneLoaderImpl::createSceneController3D() {
-    auto impl = std::make_unique<SceneController3DImpl>(*m_scene, m_initialParameters3D, m_resultFbo, m_settings);
+void SceneLoaderImpl::createSceneController3D(std::function<void(int, int, const std::string&)> updateDatasetCallback) {
+    auto impl = std::make_unique<SceneController3DImpl>(*m_scene, m_initialParameters3D, updateDatasetCallback, m_resultFbo, m_settings);
     m_sceneController3D = std::make_shared<SceneController3D>(std::move(impl));
 }
 
@@ -179,10 +181,10 @@ std::string SceneLoader::webViewURL() const {
     return m_impl->webViewURL();
 }
 
-std::weak_ptr<SceneController2D> SceneLoader::sceneController2D() {
-    return m_impl->sceneController2D();
+std::shared_ptr<SceneController2D> SceneLoader::sceneController2D(std::function<void(int, int, const std::string&)> updateDatasetCallback) {
+    return m_impl->sceneController2D(updateDatasetCallback);
 }
 
-std::weak_ptr<SceneController3D> SceneLoader::sceneController3D() {
-    return m_impl->sceneController3D();
+std::shared_ptr<SceneController3D> SceneLoader::sceneController3D(std::function<void(int, int, const std::string&)> updateDatasetCallback) {
+    return m_impl->sceneController3D(updateDatasetCallback);
 }

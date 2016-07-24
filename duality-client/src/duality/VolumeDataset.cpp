@@ -5,7 +5,8 @@
 #include <cmath>
 
 VolumeDataset::VolumeDataset(std::unique_ptr<DataProvider> provider)
-    : m_provider(std::move(provider)) {}
+    : m_provider(std::move(provider))
+    , m_initRequired(true) {}
 
 void VolumeDataset::updateDataset() {
     auto data = m_provider->fetch();
@@ -13,12 +14,18 @@ void VolumeDataset::updateDataset() {
         ReaderFromMemory reader(reinterpret_cast<const char*>(data->data()), data->size());
         m_volume = std::make_unique<I3M::Volume>();
         I3M::read(reader, *m_volume);
+        m_initRequired = true;
     }
 }
 
 void VolumeDataset::initializeDataset() {
+    if (!m_initRequired) {
+        return;
+    }
+    
     initSliceInfos();
     initTextures();
+    m_initRequired = false;
 }
 
 const std::array<std::vector<VolumeDataset::SliceInfo>, 3>& VolumeDataset::sliceInfos() const {

@@ -18,16 +18,19 @@ TransferFunctionData duality::defaultTransferFunctionData() {
 }
 
 TransferFunction::TransferFunction(std::unique_ptr<DataProvider> provider)
-    : m_provider(std::move(provider)) {}
+    : m_provider(std::move(provider))
+    , m_initRequired(true) {}
 
 void TransferFunction::update() {
     if (m_provider != nullptr) {
         auto data = m_provider->fetch();
         if (data != nullptr) {
             readData(*data);
+            m_initRequired = true;
         }
     } else {
         m_data = duality::defaultTransferFunctionData();
+        m_initRequired = true;
     }
 }
 
@@ -56,6 +59,10 @@ void TransferFunction::readData(const std::vector<uint8_t>& data) {
 }
 
 void TransferFunction::initTexture() {
+    if (!m_initRequired) {
+        return;
+    }
+    
     // apply opacity correction
     TransferFunctionData correctedTf = m_data;
     float quality = 1.0f;
@@ -65,4 +72,5 @@ void TransferFunction::initTexture() {
         correctedTf[i][3] = static_cast<uint8_t>(255.0 * alpha);
     }
     m_texture = std::make_unique<GLTexture2D>(correctedTf.data(), GLTexture2D::TextureData::Color, 256, 1);
+    m_initRequired = false;
 }

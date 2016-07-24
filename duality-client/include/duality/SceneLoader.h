@@ -30,8 +30,8 @@ public:
     SceneMetadata metadata() const;
     std::string webViewURL() const;
     
-    std::weak_ptr<SceneController2D> sceneController2D();
-    std::weak_ptr<SceneController3D> sceneController3D();
+    std::shared_ptr<SceneController2D> sceneController2D(std::function<void(int, int, const std::string&)> updateDatasetCallback);
+    std::shared_ptr<SceneController3D> sceneController3D(std::function<void(int, int, const std::string&)> updateDatasetCallback);
 
 private:
     std::unique_ptr<SceneLoaderImpl> m_impl;

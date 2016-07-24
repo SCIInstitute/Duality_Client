@@ -11,6 +11,14 @@ SceneController2D::SceneController2D(std::unique_ptr<SceneController2DImpl> impl
 
 SceneController2D::~SceneController2D() = default;
 
+void SceneController2D::initializeSliderCalculator() {
+    m_impl->initializeSliderCalculator();
+}
+
+std::shared_ptr<Settings> SceneController2D::settings() const {
+    return m_impl->settings();
+}
+
 void SceneController2D::updateScreenInfo(const ScreenInfo& screenInfo) {
     m_impl->updateScreenInfo(screenInfo);
 }
@@ -21,10 +29,6 @@ void SceneController2D::updateDatasets() {
 
 void SceneController2D::initializeDatasets() {
     m_impl->initializeDatasets();
-}
-
-void SceneController2D::setUpdateDatasetCallback(std::function<void(int,int,const std::string&)> callback) {
-    m_impl->setUpdateDatasetCallback(callback);
 }
 
 void SceneController2D::setRedrawRequired() {

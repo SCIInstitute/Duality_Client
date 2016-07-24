@@ -33,6 +33,7 @@ private:
 
 private:
     std::unique_ptr<DataProvider> m_provider;
+    bool m_initRequired;
     std::unique_ptr<I3M::Volume> m_volume;
     std::array<std::vector<SliceInfo>, 3> m_sliceInfos;
     std::array<std::vector<std::unique_ptr<GLTexture2D>>, 3> m_textures;

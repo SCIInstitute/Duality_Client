@@ -73,6 +73,7 @@ private:
 
 private:
     std::unique_ptr<DataProvider> m_provider;
+    bool m_initRequired;
     std::unique_ptr<G3D::GeometrySoA> m_geometry;
     std::vector<IVDA::Mat4f> m_transforms;
     mocca::Nullable<Color> m_color;
