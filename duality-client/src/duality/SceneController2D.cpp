@@ -1,13 +1,13 @@
 #include "duality/SceneController2D.h"
 
-#include "src/duality/SceneController2DImpl.h"
-#include "src/duality/RenderDispatcher2D.h"
 #include "src/duality/BoundingBox.h"
+#include "src/duality/RenderDispatcher2D.h"
+#include "src/duality/SceneController2DImpl.h"
 
 using namespace IVDA;
 
 SceneController2D::SceneController2D(std::unique_ptr<SceneController2DImpl> impl)
-: m_impl(std::move(impl)) {}
+    : m_impl(std::move(impl)) {}
 
 SceneController2D::~SceneController2D() = default;
 
@@ -21,6 +21,10 @@ std::shared_ptr<Settings> SceneController2D::settings() const {
 
 void SceneController2D::updateScreenInfo(const ScreenInfo& screenInfo) {
     m_impl->updateScreenInfo(screenInfo);
+}
+
+void SceneController2D::setNodeUpdateEnabled(const std::string& name, bool enabled) {
+    m_impl->setNodeUpdateEnabled(name, enabled);
 }
 
 void SceneController2D::updateDatasets() {

@@ -15,6 +15,10 @@ void SceneController3D::initializeDatasets() {
     m_impl->initializeDatasets();
 }
 
+void SceneController3D::setNodeUpdateEnabled(const std::string &name, bool enabled) {
+    m_impl->setNodeUpdateEnabled(name, enabled);
+}
+
 void SceneController3D::updateDatasets() {
     m_impl->updateDatasets();
 }

@@ -4,7 +4,8 @@ VolumeNode::VolumeNode(const std::string& name, Visibility visibility, std::uniq
                        std::unique_ptr<TransferFunction> tf)
     : SceneNode(name, visibility)
     , m_dataset(std::move(dataset))
-    , m_tf(std::move(tf)) {}
+    , m_tf(std::move(tf))
+    , m_updateEnabled(true) {}
 
 void VolumeNode::render(RenderDispatcher2D& dispatcher) {
     dispatcher.dispatch(*this);
@@ -14,14 +15,22 @@ void VolumeNode::render(RenderDispatcher3D& dispatcher) {
     dispatcher.dispatch(*this);
 }
 
+void VolumeNode::setUpdateEnabled(bool enabled) {
+    m_updateEnabled = enabled;
+}
+
 void VolumeNode::updateDataset() {
-    m_dataset->updateDataset();
-    m_tf->update();
+    if (m_updateEnabled) {
+        m_dataset->updateDataset();
+        m_tf->update();
+    }
 }
 
 void VolumeNode::initializeDataset() {
-    m_dataset->initializeDataset();
-    m_tf->initTexture();
+    if (m_updateEnabled) {
+        m_dataset->initializeDataset();
+        m_tf->initTexture();
+    }
 }
 
 BoundingBox VolumeNode::boundingBox() const {

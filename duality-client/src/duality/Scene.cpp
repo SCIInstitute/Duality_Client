@@ -64,6 +64,18 @@ BoundingBox Scene::boundingBox(View view) const {
     return BoundingBox{vMin, vMax};
 }
 
+void Scene::setNodeUpdateEnabled(const std::string& name, bool enabled) {
+    auto nodeIt = std::find_if(begin(m_nodes), end(m_nodes), [&](const std::unique_ptr<SceneNode>& node) {
+        return node->name() == name;
+    });
+    assert(nodeIt != end(m_nodes));
+    (*nodeIt)->setUpdateEnabled(enabled);
+    if (enabled) {
+        updateDatasets();
+        initializeDatasets();
+    }
+}
+
 void Scene::updateDatasets() {
     int count = 0;
     for (auto& node : m_nodes) {

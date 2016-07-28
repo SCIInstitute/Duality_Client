@@ -38,6 +38,11 @@ void SceneController2DImpl::updateScreenInfo(const ScreenInfo& screenInfo) {
     m_mvp = MVP2D(m_screenInfo, m_boundingBox, m_parameters);
 }
 
+void SceneController2DImpl::setNodeUpdateEnabled(const std::string& name, bool enabled) {
+    m_scene.setNodeUpdateEnabled(name, enabled);
+    m_renderDispatcher->setRedrawRequired();
+}
+
 void SceneController2DImpl::updateDatasets() {
     m_scene.updateDatasets();
 }

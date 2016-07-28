@@ -27,6 +27,7 @@ public:
     std::vector<const GeometryNode*> geometryNodes() const;
     std::vector<const VolumeNode*> volumeNodes() const;
 
+    void setNodeUpdateEnabled(const std::string& name, bool enabled);
     void updateDatasets();
     void initializeDatasets();
     void setUpdateDatasetCallback(std::function<void(int,int,const std::string&)> callback);

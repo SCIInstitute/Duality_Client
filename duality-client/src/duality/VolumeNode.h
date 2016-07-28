@@ -14,6 +14,8 @@ public:
 
     void render(RenderDispatcher2D& dispatcher) override;
     void render(RenderDispatcher3D& dispatcher) override;
+    
+    void setUpdateEnabled(bool enabled) override;
     void updateDataset() override;
     void initializeDataset() override;
     
@@ -24,4 +26,5 @@ public:
 private:
     std::unique_ptr<VolumeDataset> m_dataset;
     std::unique_ptr<TransferFunction> m_tf;
+    bool m_updateEnabled;
 };

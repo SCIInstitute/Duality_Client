@@ -2,7 +2,8 @@
 
 GeometryNode::GeometryNode(const std::string& name, Visibility visibility, std::unique_ptr<GeometryDataset> dataset)
     : SceneNode(name, visibility)
-    , m_dataset(std::move(dataset)) {}
+    , m_dataset(std::move(dataset))
+    , m_updateEnabled(true) {}
 
 void GeometryNode::render(RenderDispatcher2D& dispatcher) {
     dispatcher.dispatch(*this);
@@ -12,12 +13,20 @@ void GeometryNode::render(RenderDispatcher3D& dispatcher) {
     dispatcher.dispatch(*this);
 }
 
+void GeometryNode::setUpdateEnabled(bool enabled) {
+    m_updateEnabled = enabled;
+}
+
 void GeometryNode::updateDataset() {
-    m_dataset->updateDataset();
+    if (m_updateEnabled) {
+        m_dataset->updateDataset();
+    }
 }
 
 void GeometryNode::initializeDataset() {
-    m_dataset->initializeDataset();
+    if (m_updateEnabled) {
+        m_dataset->initializeDataset();
+    }
 }
 
 BoundingBox GeometryNode::boundingBox() const {

@@ -20,7 +20,8 @@ public:
     ~SceneController3DImpl();
 
     void updateScreenInfo(const ScreenInfo& screenInfo);
-
+    
+    void setNodeUpdateEnabled(const std::string& name, bool enabled);
     void updateDatasets();
     void initializeDatasets();
 

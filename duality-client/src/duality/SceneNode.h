@@ -16,6 +16,7 @@ public:
     virtual void render(RenderDispatcher2D& dispatcher) = 0;
     virtual void render(RenderDispatcher3D& dispatcher) = 0;
     virtual BoundingBox boundingBox() const = 0;
+    virtual void setUpdateEnabled(bool enabled) = 0;
     virtual void updateDataset() = 0;
     virtual void initializeDataset() = 0;
 

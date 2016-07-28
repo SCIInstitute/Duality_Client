@@ -15,6 +15,7 @@ public:
     
     void updateScreenInfo(const ScreenInfo& screenInfo);
     
+    void setNodeUpdateEnabled(const std::string& name, bool enabled);
     void updateDatasets();
     void initializeDatasets();
     

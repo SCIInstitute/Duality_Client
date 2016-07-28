@@ -24,6 +24,11 @@ void SceneController3DImpl::updateScreenInfo(const ScreenInfo& screenInfo) {
     m_mvp = MVP3D(m_screenInfo, m_boundingBox, m_parameters);
 }
 
+void SceneController3DImpl::setNodeUpdateEnabled(const std::string& name, bool enabled) {
+    m_scene.setNodeUpdateEnabled(name, enabled);
+    m_renderDispatcher->setRedrawRequired();
+}
+
 void SceneController3DImpl::updateDatasets() {
     m_scene.updateDatasets();
 }
