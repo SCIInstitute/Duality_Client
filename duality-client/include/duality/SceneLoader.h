@@ -26,6 +26,7 @@ public:
     
     std::vector<SceneMetadata> listMetadata() const;
     void loadScene(const std::string& name);
+    void unloadScene();
     bool isSceneLoaded() const;
     SceneMetadata metadata() const;
     std::string webViewURL() const;

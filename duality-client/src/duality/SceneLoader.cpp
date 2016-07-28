@@ -28,6 +28,7 @@ public:
 
     std::vector<SceneMetadata> listMetadata() const;
     void loadScene(const std::string& name);
+    void unloadScene();
     bool isSceneLoaded() const;
     SceneMetadata metadata() const;
     std::string webViewURL() const;
@@ -100,6 +101,12 @@ void SceneLoaderImpl::loadScene(const std::string& name) {
     throw Error("Scene named '" + name + "' does not exist", __FILE__, __LINE__);
 }
 
+void SceneLoaderImpl::unloadScene() {
+    m_scene = nullptr;
+    m_sceneController2D = nullptr;
+    m_sceneController3D = nullptr;
+}
+
 bool SceneLoaderImpl::isSceneLoaded() const {
     return m_scene != nullptr;
 }
@@ -167,6 +174,10 @@ std::vector<SceneMetadata> SceneLoader::listMetadata() const {
 
 void SceneLoader::loadScene(const std::string& name) {
     m_impl->loadScene(name);
+}
+
+void SceneLoader::unloadScene() {
+    m_impl->unloadScene();
 }
 
 bool SceneLoader::isSceneLoaded() const {
